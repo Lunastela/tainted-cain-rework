@@ -548,7 +548,7 @@ function inventoryHelper.resultItemFromRecipe(recipe, includeCount)
             Count = (includeCount and recipe.Results.Count) or 1
         }
         if recipe.Results.Collectible then
-            fakeResultItem.ComponentData = {[InventoryItemComponentData.COLLECTIBLE_ITEM] = recipe.Results.Collectible}
+            fakeResultItem.ComponentData = inventoryHelper.generateCollectibleData(recipe.Results.Collectible)
         end
         return fakeResultItem
     end
@@ -577,15 +577,36 @@ end
 local dummySprite = Sprite()
 dummySprite:Load("gfx/items/inventoryitem.anm2", false)
 local spriteLookupTable = {}
+local interval = 4
 function inventoryHelper.generateCollectibleData(collectibleType)
     -- try to obtain sprite if it exists
     local itemConfig = Isaac.GetItemConfig():GetCollectible(collectibleType)
     local lastIndex = string.find(itemConfig.GfxFileName, "/[^/]*$")
-    local spritesheetPath = (itemConfig.GfxFileName:sub(lastIndex + 1))
-    dummySprite:ReplaceSpritesheet(0, "gfx/isaac/items/" .. spritesheetPath)
-    dummySprite:LoadGraphics()
+    local spritesheetPath = string.lower(itemConfig.GfxFileName:sub(lastIndex + 1))
 
-    return {[InventoryItemComponentData.COLLECTIBLE_ITEM] = collectibleType}
+    local spriteFullPath = "gfx/isaac/items/" .. spritesheetPath
+    if not spriteLookupTable[spritesheetPath] then
+        dummySprite:ReplaceSpritesheet(0, spriteFullPath)
+        dummySprite:LoadGraphics()
+        dummySprite:SetFrame("Idle", 0)
+        for i = -16, 16, interval do
+            for j = -16, 16, interval do
+                local positionVector = Vector(i, j)
+                local result = dummySprite:GetTexel(positionVector, Vector.Zero, 1, 0)
+                if (result.Red ~= 0 or result.Green ~= 0 
+                or result.Blue ~= 0 or result.Alpha ~= 0) then
+                    spriteLookupTable[spritesheetPath] = spriteFullPath
+                    goto spriteFound
+                end
+            end
+        end
+        spriteLookupTable[spritesheetPath] = -1
+        ::spriteFound::
+    end
+    return {
+        [InventoryItemComponentData.CUSTOM_GFX] = ((spriteLookupTable[spritesheetPath] ~= -1) and spriteLookupTable[spritesheetPath]) or nil,
+        [InventoryItemComponentData.COLLECTIBLE_ITEM] = collectibleType
+    }
 end
 
 local recipeLookupIndex = require('scripts.tcainrework.stored.name_to_recipe')
@@ -676,7 +697,9 @@ itemSprite3d:SetCustomShader("shaders/item_renderer")
 
 function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, elapsedTime)
     local renderType = inventoryHelper.getItemRenderType(itemToDisplay.Type)
-    local renderFallback = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] 
+    local renderFallback = (itemToDisplay.ComponentData 
+        and (itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] 
+        and (not itemToDisplay.ComponentData[InventoryItemComponentData.CUSTOM_GFX])))
     if renderFallback then
         renderType = renderTypes.Collectible
     end

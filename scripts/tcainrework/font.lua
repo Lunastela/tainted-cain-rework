@@ -13,6 +13,7 @@ minecraftFont.FontType = {
     ITALIC = 2,
     BOLD = 3
 }
+
 local fontType = minecraftFont.FontType
 minecraftFont.FontList = {
     [fontType.DEFAULT] = Font(modPath .. "resources/font/minecraftseven.fnt"),
