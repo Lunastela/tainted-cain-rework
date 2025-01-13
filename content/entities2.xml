@@ -1,0 +1,14 @@
+<entities anm2root="gfx/" version="5">
+    <entity anm2path="minecraftitem.anm2" 
+        id="5" 
+        name="MinecraftItem" 
+        variant="25565" 
+        collisionDamage="0" 
+        collisionMass="3" 
+        collisionRadius="16" 
+        shadowSize="8"
+        friction="1" 
+        numGridCollisionPoints="6">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+</entities>

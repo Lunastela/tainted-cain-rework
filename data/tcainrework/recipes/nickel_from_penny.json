@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "tcainrework:penny",
+    "tcainrework:penny",
+    "tcainrework:penny",
+    "tcainrework:penny",
+    "tcainrework:penny"
+  ],
+  "result": {
+    "count": 1,
+    "id": "tcainrework:nickel"
+  }
+}

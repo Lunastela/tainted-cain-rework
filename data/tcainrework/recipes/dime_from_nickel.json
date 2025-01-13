@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "tcainrework:nickel",
+    "tcainrework:nickel"
+  ],
+  "result": {
+    "count": 1,
+    "id": "tcainrework:dime"
+  }
+}

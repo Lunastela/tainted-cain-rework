@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "X": "Iron Bar",
+    "#": "minecraft:stick"
+  },
+  "pattern": [
+    "XXX",
+    " # ",
+    " # "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Notched Axe"
+  }
+}

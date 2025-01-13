@@ -1,0 +1,18 @@
+<sounds root="sfx/">
+	<!-- UI -->
+	<sound name="Toast_InventoryIn">
+		<sample weight="1" path="ui/In.wav" />
+	</sound>
+	<sound name="Toast_InventoryOut">
+		<sample weight="1" path="ui/Out.wav" />
+	</sound>
+	<sound name="Toast_InventoryLoud">
+		<sample weight="1" path="ui/Challenge_complete.wav" />
+	</sound>
+	<sound name="Minecraft_Pop">
+		<sample weight="1" path="ui/Pop.wav" />
+	</sound>
+	<sound name="Minecraft_Click">
+		<sample weight="1" path="ui/Click.wav" />
+	</sound>
+</sounds>

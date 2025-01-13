@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:poop",
+    "P": "tcainrework:poop_block"
+  },
+  "pattern": [
+    "###",
+    "#P#",
+    "###"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Poop"
+  }
+}

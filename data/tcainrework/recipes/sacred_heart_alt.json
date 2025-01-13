@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "F": "minecraft:fire",
+    "H": "tcainrework:heart"
+  },
+  "pattern": [
+    "F",
+    "H"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Sacred Heart"
+  },
+  "show_notification": false
+}

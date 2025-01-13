@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:cracked_key",
+    "tcainrework:cracked_key",
+    "tcainrework:cracked_key",
+    "tcainrework:cracked_key",
+    "tcainrework:cracked_key",
+    "tcainrework:cracked_key",
+    "tcainrework:cracked_key",
+    "tcainrework:cracked_key"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Red Key"
+  }
+}

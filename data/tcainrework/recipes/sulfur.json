@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "M": "The Mark",
+    "#": "tcainrework:black_heart"
+  },
+  "pattern": [
+    " # ",
+    "#M#",
+    " # "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Sulfur"
+  }
+}
