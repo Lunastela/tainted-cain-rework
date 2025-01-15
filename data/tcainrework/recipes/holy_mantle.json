@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "H": "tcainrework:holy_card",
+    "S": "tcainrework:soul_heart",
+    "#": "tcainrework:eternal_heart"
+  },
+  "pattern": [
+    " # ",
+    "HSH",
+    " # "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Holy Mantle"
+  }
+}

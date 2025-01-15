@@ -83,6 +83,7 @@ InventoryItemComponentData = {
     CUSTOM_DESC = "custom_desc",
     CUSTOM_NAME = "custom_name",
     COLLECTIBLE_ITEM = "collectible_item",
+    COLLECTIBLE_CHARGES = "collectible_charges",
     ENCHANTMENT_OVERRIDE = "enchanted",
 }
 

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Robo-Baby"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Robo-Baby 2.0"
+  }
+}

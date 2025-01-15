@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "D": "Sacrificial Dagger",
+    "G": "Goat Head",
+    "A": "Sacrificial Altar"
+  },
+  "pattern": [
+    "D",
+    "G",
+    "A"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Mega Blast"
+  }
+}

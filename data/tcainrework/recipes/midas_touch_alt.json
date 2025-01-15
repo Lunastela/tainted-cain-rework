@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients":[
+    "Iron Bar",
+    "#tcainrework:golden"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Midas' Touch"
+  }
+}

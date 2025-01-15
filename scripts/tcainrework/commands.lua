@@ -3,19 +3,22 @@ local mod = TCainRework
 local saveManager = require("scripts.save_manager")
 local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
 mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, function(_, command, arguments)
+    local argList = {}
+    for char in string.gmatch(arguments, "[^%s]+") do
+        table.insert(argList, char)
+    end
     if command == "reloadregistry" or command == "reloadregistries" then
         mod:reloadRegistries()
     elseif command == "unlockrecipes" then
         local runSave = saveManager.GetRunSave()
         runSave.unlockedRecipes = {}
         for recipeName in pairs(recipeLookupIndex) do
-            table.insert(runSave.unlockedRecipes, recipeName)
+            if argList[1] == "forced"
+            or recipeLookupIndex[recipeName].DisplayRecipe then
+                table.insert(runSave.unlockedRecipes, recipeName)
+            end
         end
     elseif command == "inventoryadd" then
-        local argList = {}
-        for char in string.gmatch(arguments, "[^%s]+") do
-            table.insert(argList, char)
-        end
         if #argList >= 1 then
             local itemID = argList[1]
             if require("scripts.tcainrework.stored.id_to_iteminfo")[itemID] then

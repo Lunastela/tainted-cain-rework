@@ -1,13 +1,10 @@
 return {
     Properties = {
-        DisplayName = "Collectible",
-        GFX = "gfx/item/.png",
+        DisplayName = "Iron Axe",
+        GFX = "gfx/minecraft/items/iron_axe.png",
         RenderModel = InventoryItemRenderType.Default,
-        StackSize = 16,
+        StackSize = 1,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false
-    },
-    ObtainedFrom = {
-        "5.100"
     }
 }

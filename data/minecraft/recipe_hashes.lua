@@ -1,5 +1,5 @@
 return {
-    ["8d1c654bf54365cddb1116cb838db90ddcc58ca4"] = {
+    ["e3c5526e6452984587d4aeeb798ae3f2d93a4ab6"] = {
         {
             RecipeName = "minecraft:bowl",
             Category = "misc",
@@ -12,7 +12,7 @@ return {
             DisplayRecipe = false
         },
     },
-    ["2674ffe5b24cf3986e505869d97e6214cededb86"] = {
+    ["17b43ca59cc2279bbd8fb58974a49350d8c35ad3"] = {
         {
             RecipeName = "minecraft:crafting_table",
             Category = "misc",
@@ -25,7 +25,46 @@ return {
             DisplayRecipe = false
         },
     },
-    ["bdc54356543677b0b666b95ca3a61104a83c6416"] = {
+    ["69c2162ab075f3bbf3f3989d6023c82e5f36d895"] = {
+        {
+            RecipeName = "minecraft:furnace",
+            Category = "misc",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", nil, "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", },
+            Results = {
+                Type = "minecraft:furnace",
+                Count = 1
+            },
+            DisplayRecipe = false
+        },
+    },
+    ["8c236058fa618e10ba50f50df586c5fa3f1c07c8"] = {
+        {
+            RecipeName = "minecraft:iron_axe",
+            Category = "equipment",
+            RecipeSize = Vector(2, 3),
+            ConditionTable = {"Iron Bar", "Iron Bar", "Iron Bar", "minecraft:stick", nil, "minecraft:stick", },
+            Results = {
+                Type = "minecraft:iron_axe",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+    },
+    ["85f1ae3dcaf3a6c5984fbf8db91065c0489ade1a"] = {
+        {
+            RecipeName = "minecraft:iron_shovel",
+            Category = "equipment",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"Iron Bar", "minecraft:stick", "minecraft:stick", },
+            Results = {
+                Type = "minecraft:iron_shovel",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+    },
+    ["93572b414e21721b85aa52ce823174d3bf4603ae"] = {
         {
             RecipeName = "minecraft:oak_boat",
             Category = "misc",
@@ -38,7 +77,7 @@ return {
             DisplayRecipe = false
         },
     },
-    ["14908b21346a2681cb1c26cfb387db08e49d7f7e"] = {
+    ["d6202ba69ed604b9d9ce657c38dc924b7bfb4897"] = {
         {
             RecipeName = "minecraft:oak_door",
             Category = "redstone",
@@ -51,7 +90,7 @@ return {
             DisplayRecipe = false
         },
     },
-    ["8e50dad231393aed985d3086c8b1a982967fca84"] = {
+    ["1a621652a564abf23fcfb87339d59b0da6ff174e"] = {
         {
             RecipeName = "minecraft:oak_sign",
             Category = "misc",
@@ -64,7 +103,7 @@ return {
             DisplayRecipe = false
         },
     },
-    ["a72eef5ee28b9422721c320dac47b61c981c01c9"] = {
+    ["774e6a979489881d43d415aff7bf7f7946e9e84a"] = {
         {
             RecipeName = "minecraft:stick",
             Category = "misc",

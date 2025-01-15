@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:iron_axe",
+    "tcainrework:heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Meat Cleaver"
+  }
+}

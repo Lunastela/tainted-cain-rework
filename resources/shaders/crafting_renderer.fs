@@ -136,18 +136,22 @@ void main(void)
 		vec2 uv;
 		vec3 lighting = vec3(1.);
 		if (abs(normal.x) > 0.99) {
-			uv = pos.zy / cubeSize.zy * vec2(.125, 0.25) + vec2(0.125, 0.25);
+			uv = pos.zy / cubeSize.zy * vec2(.125, .25) + vec2(0.5 + 0.125, 0.25);
 			uv = (vec2(1.) - uv.xy);
-            if (sign(normal.x) == -1.)
+            if (sign(normal.x) == -1.) {
                 uv.x = 1. - uv.x;
+                uv.x += 0.25;
+            }
 		} else if (abs(normal.y) > 0.99) {
 			uv = pos.zx / cubeSize.xz * vec2(.125, .25) + vec2(0.625, 0.25);
             uv.x = 1. - uv.x;
 		} else if (abs(normal.z) > 0.99) {
-			uv = pos.xy / cubeSize.xy * vec2(.125, .25) + vec2(0.125, 0.25);
+			uv = (pos.xy / cubeSize.xy * vec2(.125, .25)) + vec2(0.25 - 0.125, 0.25);
 			uv.y = 1. - uv.y;
-            if (sign(normal.z) == -1.)
+            if (sign(normal.z) == -1.) {
+                uv.x += 0.25;
                 uv.x = 1. - uv.x;
+            }
 		}
       
 		vec3 textureColor = (enchantmentGlint(uv, ColorizeOut.a) * 0.65) + texture(Texture0, uv).rgb;

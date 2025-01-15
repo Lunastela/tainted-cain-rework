@@ -270,12 +270,17 @@ local function renderBagOfCrafting(player, offset)
                                             SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
                                             Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 2, entity.Position, Vector.Zero, pickup)
                                             player:SalvageCollectible(pickup)
-                                            pickup:TriggerTheresOptionsPickup()
+                                            Isaac.CreateTimer(function(_) 
+                                                pickup:TriggerTheresOptionsPickup()
+                                            end, 8, 1, true)
                                         end
                                     end
                                     if not (pickup and pickup.Variant == mod.minecraftItemID) then
                                         local knockbackVelocity = ((math.max(1, player.Velocity:Length() / 3) * knockbackDirection) * math.max(20, 40 / entity.Mass))
                                         entity.Velocity = entity.Velocity + knockbackVelocity
+                                        if entity:ToProjectile() then
+                                            entity:ToProjectile():AddProjectileFlags(ProjectileFlags.HIT_ENEMIES)
+                                        end
                                     end
                                 else -- DESTROY item
                                     generateGenericEffect(entity)

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "M": "The Mind",
+    "S": "The Soul",
+    "B": "The Body",
+    "#": "tcainrework:eternal_heart"
+  },
+  "pattern": [
+    "M#S",
+    " B "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Godhead"
+  }
+}

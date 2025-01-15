@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:golden"
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Midas' Touch"
+  }
+}

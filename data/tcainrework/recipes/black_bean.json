@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "The Bean",
+    "tcainrework:black_heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Black Bean"
+  }
+}

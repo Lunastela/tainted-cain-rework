@@ -33,6 +33,7 @@ end
 local itemDescriptions = require("scripts.tcainrework.stored.id_to_iteminfo")
 local numberToItems = require("scripts.tcainrework.stored.num_to_id")
 local entityToItemConversions = require("scripts.tcainrework.stored.entityid_to_id")
+local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items")
 -- Recipes
 local recipeStorage = require("scripts.tcainrework.stored.recipe_hashmap")
 local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
@@ -54,6 +55,17 @@ function mod:loadRegistry(curLoad)
                         Type = registryName, 
                         Amount = entity.Amount or 1
                     }
+                end
+            end
+            local currentItemTags = foundData.Properties.ItemTags
+            if currentItemTags then
+                for i, itemTag in ipairs(currentItemTags) do
+                    if not itemTagLookup[itemTag] then
+                        itemTagLookup[itemTag] = {}
+                    end
+                    if not utility.tableContains(itemTagLookup[itemTag], registryName) then
+                        table.insert(itemTagLookup[itemTag], registryName)
+                    end
                 end
             end
         else

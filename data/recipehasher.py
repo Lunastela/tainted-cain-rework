@@ -32,8 +32,6 @@ for entry in os.listdir(localPath):
 
                         # Gather pattern and translate it to Recipe Hash
                         totalRecipeString = ""
-                        uniqueElements = {}
-                        replacementIndex = 1
                         Height = 0
                         for i in range(len(data['pattern'])):
                             patternLine = data['pattern'][i]
@@ -41,10 +39,7 @@ for entry in os.listdir(localPath):
                             for char in patternLine:
                                 recipeCondition.append(keyReplacements[char])
                                 if char != " ":
-                                    if not uniqueElements.get(char):
-                                        uniqueElements[char] = replacementIndex
-                                        replacementIndex += 1
-                                    totalRecipeString += str(uniqueElements[char])
+                                    totalRecipeString += str("#")
                                 else:
                                     totalRecipeString += " "
                                 Width += 1
@@ -56,15 +51,10 @@ for entry in os.listdir(localPath):
                         shapeHash = hashlib.sha1(totalRecipeString.encode()).hexdigest()
                     elif data['type'] == "minecraft:crafting_shapeless":
                         recipeCondition = []
-                        uniqueElements = {}
-                        uniqueElementCount = 1
                         for i in range(len(data['ingredients'])):
                             typeName = data['ingredients'][i]
                             recipeCondition.append(typeName)
-                            if not uniqueElements.get(typeName):
-                                uniqueElementCount += 1
-                                uniqueElements[typeName] = True
-                        totalRecipeString = "count_" + str(len(recipeCondition)) + "_unique_" + str(uniqueElementCount)
+                        totalRecipeString = "count_" + str(len(recipeCondition)) 
                         shapeHash = "shapeless_" + hashlib.sha1(totalRecipeString.encode()).hexdigest()
 
                     # Get Recipe Results

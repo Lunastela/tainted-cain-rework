@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "The Poop",
+    "tcainrework:bone_heart",
+    "tcainrework:soul_heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Forever alone"
+  }
+}

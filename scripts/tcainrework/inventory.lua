@@ -129,9 +129,7 @@ local function checkRecipes()
         bottomRight.X, bottomRight.Y = math.max(bottomRight.X, x), math.max(bottomRight.Y, y)
     end
 
-    local combinedString, trueCombinedString = "", ""
-    local localTypes = {}
-    local replacementIndex = 1
+    local combinedString, itemTagCombinedString, trueCombinedString = "", "", ""
     local recipeIngredientCount = 0
     for k = topLeft.Y, bottomRight.Y do
         for l = topLeft.X, bottomRight.X do
@@ -143,14 +141,9 @@ local function checkRecipes()
                 if itemCollectibleData then
                     craftingType = craftingType .. itemCollectibleData
                 end
-
                 recipeIngredientCount = recipeIngredientCount + 1
-                if (not localTypes[craftingType]) then
-                    localTypes[craftingType] = replacementIndex
-                    replacementIndex = replacementIndex + 1
-                end
             end
-            combinedString = combinedString .. ((craftingInventory[craftingIndex] and tostring(localTypes[craftingType])) or " ")
+            combinedString = combinedString .. ((craftingInventory[craftingIndex] and "#") or " ")
             trueCombinedString = trueCombinedString .. ((craftingInventory[craftingIndex] and craftingInventory[craftingIndex].Type) or " ")
         end
         if k < bottomRight.Y then
@@ -162,7 +155,7 @@ local function checkRecipes()
     if trueCombinedString ~= lastCombinedString then
         -- hash current string and update recipe
         local recipeHash = utility.sha1(combinedString)
-        local shapelessHash = "shapeless_" .. utility.sha1("count_" .. tostring(recipeIngredientCount) .. "_unique_" .. tostring(replacementIndex))
+        local shapelessHash = "shapeless_" .. utility.sha1("count_" .. tostring(recipeIngredientCount))
         local recipeOutput = inventoryHelper.checkRecipeConditional(craftingInventory, recipeHashmap[recipeHash], topLeft, bottomRight)
             or inventoryHelper.checkRecipeConditional(craftingInventory, recipeHashmap[shapelessHash], topLeft, bottomRight, true)
         local outputInventory = inventoryHelper.getInventory(InventoryTypes.OUTPUT)
@@ -190,17 +183,14 @@ local function finalizeOutputs()
     local outputInventory = inventoryHelper.getInventory(InventoryTypes.OUTPUT)
     if outputSlotOccupied and outputInventory[1] == nil then
         if lastOutputItem then
-            inventoryHelper.runUnlockItemType(
+            inventoryHelper.unlockItemBatchType(
                 lastOutputItem.Type,
                 (lastOutputItem.ComponentData and lastOutputItem.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
             )
             lastOutputItem = nil
         end
         for i in pairs(craftingInventory) do
-            craftingInventory[i].Count = craftingInventory[i].Count - 1
-            if craftingInventory[i].Count <= 0 then
-                craftingInventory[i] = nil
-            end
+            inventoryHelper.removePossibleAmount(craftingInventory, i, 1)
         end
         outputSlotOccupied = false
         lastCombinedString = ""
@@ -258,6 +248,31 @@ local function inventoryShiftClick(inventorySet, itemInventory, itemIndex)
     end
 end
 
+local function getConditionalFromAnyRecipe(recipe, inventory, index)
+    if recipe.RecipeSize then
+        return inventoryHelper.conditionalItemFromShapedRecipe(recipe, inventory, index)
+    elseif recipe.ConditionTable[index] then
+        return inventoryHelper.conditionalItemFromRecipe(recipe, index)
+    end
+    return nil
+end
+
+local function getRecipeItemList(recipe)
+    local itemsNeeded = {}
+    local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
+    local inventoryWidth = inventoryHelper.getInventoryWidth(craftingInventory) - 1
+    local inventoryHeight = inventoryHelper.getInventoryHeight(craftingInventory) - 1
+    for j = 0, inventoryHeight do
+        for i = 0, inventoryWidth do
+            local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
+            local getItem = getConditionalFromAnyRecipe(recipe, craftingInventory, currentItemIndex)
+            itemsNeeded[currentItemIndex] = getItem
+        end
+    end
+    return itemsNeeded
+end
+
+local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items") 
 local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLMBPress, isRMBPress, isLMBReleased, isRMBReleased, held)
     local myItem = held or inventory[itemIndex]
     local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
@@ -275,6 +290,50 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
         and mousePosition.X < inventoryPosition.X + CELL_SIZE - 1
         and mousePosition.Y >= inventoryPosition.Y - 1
         and mousePosition.Y < inventoryPosition.Y + CELL_SIZE - 1
+
+    -- render background box
+    local fakeDisplayRecipe, recipeIngredientDisplay = false, nil
+    blackBG.Scale = Vector.One * 16
+    local cellOffset = Vector.Zero
+    if curDisplayingRecipe then
+        local isOutput = inventory == inventoryHelper.getInventory(InventoryTypes.OUTPUT)
+        local isCrafting = inventory == inventoryHelper.getInventory(InventoryTypes.CRAFTING)
+        if (isOutput or isCrafting) and (mouseover and ((cursorHeldItem and (isLMBReleased or isRMBReleased)) 
+        or (not cursorHeldItem and (isLMBPress or isRMBPress)))) then
+            cancelRecipeOverlay = true
+        elseif not held then
+            if (isOutput or isCrafting) then
+                if not ((#cursorSnaking[inventory] > 1) and utility.tableContains(cursorSnaking[inventory], itemIndex)) then
+                    if isOutput then
+                        fakeDisplayRecipe = true
+                        recipeIngredientDisplay = inventoryHelper.resultItemFromRecipe(curDisplayingRecipe)
+                        blackBG.Color = cellColorRed
+                        blackBG.Scale = Vector.One * 24
+                        cellOffset = -Vector(4, 4)
+                    elseif isCrafting then
+                        recipeIngredientDisplay = getConditionalFromAnyRecipe(curDisplayingRecipe, inventory, itemIndex)
+                        if recipeIngredientDisplay and itemTagLookup[recipeIngredientDisplay.Type] then
+                            local itemTagTable = itemTagLookup[recipeIngredientDisplay.Type]
+                            recipeIngredientDisplay.Type = itemTagTable[math.floor((Isaac.GetTime() / 1000) % (#itemTagTable)) + 1]
+                        end
+                        fakeDisplayRecipe = (recipeIngredientDisplay ~= nil)
+                    end
+                    if fakeDisplayRecipe then
+                        blackBG.Color = cellColorRed
+                        blackBG:Render(inventoryPosition + cellOffset)
+                    end
+
+                    -- Shift click any items out of the crafting slots
+                    if inventory[itemIndex] and inventoryHelper.isValidInventory(inventory) then
+                        inventoryShiftClick(
+                            activeInventories[inventoryState],
+                            inventory, itemIndex
+                        )
+                    end
+                end
+            end
+        end
+    end
 
     if not held and mouseover then
         if (not inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_1)
@@ -403,63 +462,6 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
         currentTooltipInformation = {Index = itemIndex, Inventory = inventory}
         myItem = inventory[itemIndex]
     end
-
-    -- render background box
-    local fakeDisplayRecipe, recipeIngredientDisplay = false, nil
-    blackBG.Scale = Vector.One * 16
-    local cellOffset = Vector.Zero
-    if (curDisplayingRecipe and not held) then
-        local isOutput = inventory == inventoryHelper.getInventory(InventoryTypes.OUTPUT)
-        local isCrafting = inventory == inventoryHelper.getInventory(InventoryTypes.CRAFTING)
-        if (isOutput or isCrafting) then
-            if not ((#cursorSnaking[inventory] > 1) and utility.tableContains(cursorSnaking[inventory], itemIndex)) then
-                if isOutput then
-                    fakeDisplayRecipe = true
-                    recipeIngredientDisplay = inventoryHelper.resultItemFromRecipe(curDisplayingRecipe)
-                    blackBG.Color = cellColorRed
-                    blackBG.Scale = Vector.One * 24
-                    cellOffset = -Vector(4, 4)
-                elseif isCrafting then
-                    if curDisplayingRecipe.RecipeSize then
-                        local x, y = (((itemIndex - 1) % inventoryHelper.getInventoryWidth(inventory)) + 1), 
-                            (math.floor((itemIndex - 1) / inventoryHelper.getInventoryHeight(inventory)) + 1)
-                        x = x + math.floor((curDisplayingRecipe.RecipeSize.X - inventoryHelper.getInventoryWidth(inventory)) / 2)
-                        y = y + (curDisplayingRecipe.RecipeSize.Y - inventoryHelper.getInventoryHeight(inventory))
-                        if (x > 0 and x <= curDisplayingRecipe.RecipeSize.X)
-                        and (y > 0 and y <= curDisplayingRecipe.RecipeSize.Y) then
-                            local offsetIndex = x + ((y - 1) * curDisplayingRecipe.RecipeSize.X)
-                            if curDisplayingRecipe.ConditionTable[offsetIndex] then
-                                fakeDisplayRecipe = true
-                                recipeIngredientDisplay = inventoryHelper.conditionalItemFromRecipe(curDisplayingRecipe, offsetIndex)
-                            end
-                        end
-                    else
-                        if curDisplayingRecipe.ConditionTable[itemIndex] then
-                            fakeDisplayRecipe = true
-                            recipeIngredientDisplay = inventoryHelper.conditionalItemFromRecipe(curDisplayingRecipe, itemIndex)
-                        end
-                    end
-                end
-                if fakeDisplayRecipe then
-                    blackBG.Color = cellColorRed
-                    blackBG:Render(inventoryPosition + cellOffset)
-                end
-
-                -- Shift click any items out of the crafting slots
-                if inventory[itemIndex] then
-                    inventoryShiftClick(
-                        activeInventories[inventoryState],
-                        inventory, itemIndex
-                    )
-                end
-            end
-
-            if (mouseover and ((cursorHeldItem and (isLMBReleased or isRMBReleased)) 
-            or (not cursorHeldItem and (isLMBPress or isRMBPress)))) then
-                cancelRecipeOverlay = true
-            end
-        end
-    end
     
     if ((not (held or fakeDisplayRecipe)) 
     and (mouseover or utility.tableContains(cursorSnaking[inventory], itemIndex))) then
@@ -585,7 +587,7 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
         end
     end
     if addedAny then
-        inventoryHelper.runUnlockItemType(
+        inventoryHelper.unlockItemBatchType(
             pickupType,
             (optionalComponentData and optionalComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
         )
@@ -606,12 +608,14 @@ local selectedPage = 0
 local function resetRecipeBook()
     curDisplayingRecipe = nil
     searchBarSelected = false
-    searchBarText = ""
+    if searchBarText ~= "" then
+        searchBarText = ""
+    end
     selectedTab = 1
     selectedPage = 0
 end
 
-mod:AddCallback(ModCallbacks.MC_HUD_RENDER, function(_)
+mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
     if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     and inventoryHelper.getUnlockedInventory() then
         activeInventories = getInventories()
@@ -668,16 +672,16 @@ mod:AddCallback(ModCallbacks.MC_HUD_RENDER, function(_)
             if cursorGatherAll > 0 then
                 cursorGatherAll = cursorGatherAll - 1
             end
+                
+            local lmbTrigger = inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_1)
+            local rmbTrigger = inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_2)
+        
+            local lmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_1)
+            local rmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_2)
 
             if inventoryState ~= InventoryStates.CLOSED then
                 -- Cache Mouse Information
                 local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
-                
-                local lmbTrigger = inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_1)
-                local rmbTrigger = inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_2)
-            
-                local lmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_1)
-                local rmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_2)
 
                 blackBG.Scale = screenSize
                 blackBG.Color = blackColor
@@ -743,6 +747,7 @@ mod:AddCallback(ModCallbacks.MC_HUD_RENDER, function(_)
                         if hoveringOver and lmbTrigger then
                             recipeBookFilter = inventoryHelper.setRecipeBookFilter(not recipeBookFilter)
                             SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
+                            selectedPage = 0
                         end
                     end
                     local searchLayer = craftingInterface:GetLayer("search_bar_highlight")
@@ -818,7 +823,8 @@ mod:AddCallback(ModCallbacks.MC_HUD_RENDER, function(_)
                             local recipeName = chosenList[i + pageDisplacement]
                             local recipeFromName = recipeName and recipeLookupIndex[recipeName]
                             if recipeFromName then
-                                recipeBookUI:SetFrame("CraftingSlot", 1 - ((utility.tableContains(craftableRecipes, recipeName) and 1) or 0))
+                                local isCraftableRecipe = utility.tableContains(craftableRecipes, recipeName)
+                                recipeBookUI:SetFrame("CraftingSlot", 1 - ((isCraftableRecipe and 1) or 0))
                                 recipeBookUI:Render(recipeDisplayDisplacement + recipeDisplacement)
                                 
                                 local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
@@ -828,10 +834,84 @@ mod:AddCallback(ModCallbacks.MC_HUD_RENDER, function(_)
                                     if lmbTrigger then
                                         SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
                                         -- attempt to craft recipe
-
-                                        -- otherwise just display recipe
-                                        curDisplayingRecipe = recipeFromName
-                                        cancelRecipeOverlay = false
+                                        if isCraftableRecipe then
+                                            local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
+                                            local itemsNeeded = getRecipeItemList(recipeFromName)
+                                            -- Clear Crafting Inventory First
+                                            local inventoryWidth = inventoryHelper.getInventoryWidth(craftingInventory) - 1
+                                            local inventoryHeight = inventoryHelper.getInventoryHeight(craftingInventory) - 1
+                                            for j = 0, inventoryHeight do
+                                                for i = 0, inventoryWidth do
+                                                    local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
+                                                    if (craftingInventory[currentItemIndex] and ((not itemsNeeded[currentItemIndex])
+                                                    or (not inventoryHelper.itemCanStackWith(craftingInventory[currentItemIndex], itemsNeeded[currentItemIndex])))) then
+                                                        inventoryShiftClick(inventorySet, craftingInventory, currentItemIndex)
+                                                    end
+                                                end
+                                            end
+                                            local times = 1
+                                            if inputHelper.isShiftHeld() then
+                                                times = 64
+                                                for i, item in pairs(itemsNeeded) do
+                                                    if item and item.Type then
+                                                        times = math.min(times, inventoryHelper.getMaxStackFor(item.Type) + 1)
+                                                    end
+                                                end
+                                            end
+                                            while times > 0 do
+                                                if inventoryHelper.checkRecipeCraftable(recipeFromName, inventoryHelper.getInventoryItemList(inventorySet, {craftingInventory})) then
+                                                    itemsNeeded = getRecipeItemList(recipeFromName)
+                                                    for i, inventory in ipairs(inventorySet) do
+                                                        if (inventory ~= craftingInventory
+                                                        and inventoryHelper.isValidInventory(inventory)) then
+                                                            local lowestNumber, highestAllowedNumber = nil, nil
+                                                            for k, item2 in pairs(itemsNeeded) do
+                                                                local currentAmount = (craftingInventory[k] and craftingInventory[k].Count) or 0
+                                                                local currentMaxStack = (craftingInventory[k] and inventoryHelper.getMaxStackFor(craftingInventory[k].Type)) or 9999
+                                                                lowestNumber = math.min(currentAmount, ((lowestNumber ~= nil) and lowestNumber) or currentAmount)
+                                                                highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
+                                                            end
+                                                            lowestNumber = (lowestNumber or 0) + 1
+                                                            for j, item in pairs(inventory) do
+                                                                local recipeFinished = true
+                                                                for k, item2 in pairs(itemsNeeded) do
+                                                                    recipeFinished = false
+                                                                    if inventoryHelper.itemCanStackWith(item, item2) and ((not craftingInventory[k]) 
+                                                                    or (inventoryHelper.itemCanStackWith(item, craftingInventory[k]) 
+                                                                    and craftingInventory[k].Count <= lowestNumber))
+                                                                    and (lowestNumber <= highestAllowedNumber) then
+                                                                        local lastItemData = item.ComponentData
+                                                                        local removeAmount = inventoryHelper.removePossibleAmount(inventory, j, 1)
+                                                                        if removeAmount > 0 then
+                                                                            craftingInventory[k] = {
+                                                                                Type = item.Type,
+                                                                                Count = ((craftingInventory[k] and craftingInventory[k].Count) or 0) + removeAmount,
+                                                                                ComponentData = lastItemData
+                                                                            }
+                                                                            itemsNeeded[k] = nil
+                                                                        end
+                                                                    end
+                                                                end
+                                                                if recipeFinished then
+                                                                    goto recipeFinished
+                                                                end
+                                                            end
+                                                        end
+                                                    end
+                                                    ::recipeFinished::
+                                                else
+                                                    times = 0
+                                                    goto endRecipes
+                                                end
+                                                times = times - 1
+                                            end
+                                            ::endRecipes::
+                                            curDisplayingRecipe = nil
+                                        else
+                                            -- otherwise just display recipe
+                                            curDisplayingRecipe = recipeFromName
+                                            cancelRecipeOverlay = false
+                                        end
                                     end
                                 end
 
@@ -997,10 +1077,33 @@ mod:AddCallback(ModCallbacks.MC_HUD_RENDER, function(_)
                     cancelRecipeOverlay = false
                 end
                 -- Update Inputs
-                inputHelper.Update()
             else
                 resetRecipeBook()
+
+                -- Hotbar Usage
+                if hotbarInventory[hotbarSlotSelected]
+                and hotbarInventory[hotbarSlotSelected].Type then
+                    -- if collectible item
+                    if hotbarInventory[hotbarSlotSelected].ComponentData
+                    and hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
+                        local collectibleType = hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
+                        -- Well aware this doesn't work with multiplayer. won't fix yet
+                        local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+                        if rmbTrigger and player then
+                            player:AnimateCollectible(collectibleType)
+                            local configItem = Isaac.GetItemConfig():GetCollectible(collectibleType)
+                            player:QueueItem(configItem)
+                            SFXManager():Play(SoundEffect.SOUND_POWERUP_SPEWER)
+                            Isaac.CreateTimer(function(_) 
+                                Game():GetHUD():ShowItemText(player, configItem)
+                            end, 1, 1, true)
+                            inventoryHelper.removePossibleAmount(hotbarInventory, hotbarSlotSelected, 1)
+                        end
+                    end
+                end
+
             end
+            inputHelper.Update()
         end
         -- print(Isaac.GetTime() - currentTime)
     end

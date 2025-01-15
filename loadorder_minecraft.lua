@@ -9,8 +9,11 @@ return {
         bowl
         stick
         fire
+        iron_shovel
+        iron_axe
         cobblestone
         crafting_table
+        furnace
         monster_spawner
     ]]
 }

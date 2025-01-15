@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Dr. Fetus",
+    "Marked"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Epic Fetus"
+  }
+}

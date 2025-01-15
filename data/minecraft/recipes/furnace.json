@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": "minecraft:fire"
+    "#": "minecraft:cobblestone"
   },
   "pattern": [
-    "## ",
-    "## ",
-    "# #"
+    "###",
+    "# #",
+    "###"
   ],
   "result": {
-    "id": "tcainrework:repentogon"
+    "count": 1,
+    "id": "minecraft:furnace"
   },
   "show_notification": false
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "<3",
+    "Isaac's Heart",
+    "Candy Heart",
+    "Immaculate Heart",
+    "tcainrework:eternal_heart",
+    "tcainrework:eternal_heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Sacred Heart"
+  }
+}

@@ -1,13 +1,10 @@
 return {
     Properties = {
-        DisplayName = "Collectible",
-        GFX = "gfx/item/.png",
+        DisplayName = "Iron Shovel",
+        GFX = "gfx/minecraft/items/iron_shovel.png",
         RenderModel = InventoryItemRenderType.Default,
-        StackSize = 16,
+        StackSize = 1,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false
-    },
-    ObtainedFrom = {
-        "5.100"
     }
 }
