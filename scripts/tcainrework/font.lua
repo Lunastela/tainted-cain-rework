@@ -65,7 +65,13 @@ function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, R
                 local obfuscatedString = ""
                 for i = 1, string.len(substring.String) do
                     local stringPosition = math.random(1, #charset)
-                    obfuscatedString = obfuscatedString .. charset:sub(stringPosition, stringPosition)
+                    if minecraftFont:GetStringWidth(obfuscatedString) < minecraftFont:GetStringWidth(substring.String) then
+                        if string.sub(substring.String, i, i) == " " then
+                            obfuscatedString = obfuscatedString .. " "
+                        else
+                            obfuscatedString = obfuscatedString .. charset:sub(stringPosition, stringPosition)
+                        end
+                    end
                 end
                 substring.String = obfuscatedString
             end

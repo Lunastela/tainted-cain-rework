@@ -103,7 +103,7 @@ local function renderTooltip(mousePosition, currentItemTooltip)
     utility.renderNineSlice(tooltipBackground, textboxPosition, nineSliceSize)
     for i, subString in ipairs(stringTable) do
         inventoryHelper.renderMinecraftText(subString.String, textboxPosition 
-            + Vector(2, (lineSep * ((i - 1) - (#stringTable / 2)))), subString.Rarity, true)
+            + Vector(2, (lineSep * ((i - 1) - (#stringTable / 2)))), subString.Rarity, true, true)
     end
     utility.renderNineSlice(tooltipFrame, textboxPosition, nineSliceSize)
 end

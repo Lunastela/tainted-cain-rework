@@ -362,7 +362,7 @@ local function getComponentCount(pickup)
     return totalComponentCount
 end
 
-local debugStats = true
+local debugStats = false
 local pillColorNames = require("scripts.tcainrework.inventory.color_to_name")
 local itemTypeTable = {
     [ItemType.ITEM_PASSIVE] = "Passive Item",
@@ -370,9 +370,14 @@ local itemTypeTable = {
     [ItemType.ITEM_FAMILIAR] = "Familiar",
 }
 function inventoryHelper.itemGetFullName(pickup)
+    local blindTextAppend = ""
+    if pickup.ComponentData and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
+        local level = Game():GetLevel() -- todo cache and store this bla bla blah, ensure this is how to properly check flag
+        blindTextAppend = ((level:GetCurses() & LevelCurse.CURSE_OF_BLIND ~= 0) and "§k") or ""
+    end
     local nameTable = {}
     table.insert(nameTable, {
-        String = inventoryHelper.getNameFor(pickup), 
+        String = blindTextAppend .. inventoryHelper.getNameFor(pickup), 
         Rarity = inventoryHelper.getItemRarity(pickup)
     })
     if pickup.ComponentData then
@@ -415,7 +420,7 @@ function inventoryHelper.itemGetFullName(pickup)
                 })
             end
             table.insert(nameTable, {
-                String = utility.getLocalizedString("Items", itemConfig.Description),
+                String = blindTextAppend .. utility.getLocalizedString("Items", itemConfig.Description),
                 Rarity = InventoryItemRarity.SUBTEXT
             })
             if debugStats and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] then
