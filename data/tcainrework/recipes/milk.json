@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "Breakfast",
+    "B": "minecraft:bucket"
+  },
+  "pattern": [
+    "#",
+    "B"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Milk!"
+  }
+}

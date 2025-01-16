@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients":[
+    "tcainrework:giga_bomb"
+  ],
+  "result": {
+    "count": 9,
+    "id": "tcainrework:bomb"
+  }
+}

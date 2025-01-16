@@ -1,18 +1,14 @@
 return {
     Properties = {
-        DisplayName = "Bomb",
-        GFX = "gfx/items/bomb.png",
+        DisplayName = "Lil' Battery",
+        GFX = "gfx/items/lil_battery.png",
         RenderModel = InventoryItemRenderType.Default,
-        ItemTags = {"#tcainrework:bomb"},
+        ItemTags = {"#tcainrework:battery"},
         StackSize = 16,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false
     },
     ObtainedFrom = {
-        "5.40.1",
-        {
-            EntityID = "5.40.2", 
-            Amount = 2
-        }
+        "5.90.1"
     }
 }

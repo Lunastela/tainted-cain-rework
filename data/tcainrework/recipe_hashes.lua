@@ -48,6 +48,28 @@ return {
             DisplayRecipe = true
         },
         {
+            RecipeName = "tcainrework:chocolate_milk",
+            Category = "collectible",
+            ConditionTable = {"Milk!", "tcainrework:mega_battery", "tcainrework:poop_block", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = Isaac.GetItemIdByName("Chocolate Milk")
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:dead_cat",
+            Category = "collectible",
+            ConditionTable = {"Guppy's Head", "Guppy's Paw", "Guppy's Tail", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = Isaac.GetItemIdByName("Dead Cat")
+            },
+            DisplayRecipe = true
+        },
+        {
             RecipeName = "tcainrework:forever_alone",
             Category = "collectible",
             ConditionTable = {"The Poop", "tcainrework:bone_heart", "tcainrework:soul_heart", },
@@ -115,6 +137,17 @@ return {
             DisplayRecipe = true
         },
         {
+            RecipeName = "tcainrework:midas_touch",
+            Category = "collectible",
+            ConditionTable = {"#tcainrework:golden", "#tcainrework:golden", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = Isaac.GetItemIdByName("Midas' Touch")
+            },
+            DisplayRecipe = true
+        },
+        {
             RecipeName = "tcainrework:midas_touch_alt",
             Category = "collectible",
             ConditionTable = {"Iron Bar", "#tcainrework:golden", },
@@ -126,21 +159,73 @@ return {
             DisplayRecipe = true
         },
     },
-    ["1750d7f41f6d582bb32ad15a3c76c121fd1eee86"] = {
+    ["shapeless_cc630251aba90c8217236a47f7db67cf5dae30d4"] = {
         {
-            RecipeName = "tcainrework:godhead",
+            RecipeName = "tcainrework:bomb_from_giga_bomb",
+            Category = "misc",
+            ConditionTable = {"tcainrework:giga_bomb", },
+            Results = {
+                Type = "tcainrework:bomb",
+                Count = 9
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:nickel_from_dime",
+            Category = "misc",
+            ConditionTable = {"tcainrework:dime", },
+            Results = {
+                Type = "tcainrework:nickel",
+                Count = 2
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:penny_from_nickel",
+            Category = "misc",
+            ConditionTable = {"tcainrework:nickel", },
+            Results = {
+                Type = "tcainrework:penny",
+                Count = 5
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:robo_baby_2",
             Category = "collectible",
-            RecipeSize = Vector(3, 2),
-            ConditionTable = {"The Mind", "tcainrework:eternal_heart", "The Soul", nil, "The Body", nil, },
+            ConditionTable = {"Robo-Baby", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Godhead")
+                Collectible = Isaac.GetItemIdByName("Robo-Baby 2.0")
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:robo_baby_alt",
+            Category = "collectible",
+            ConditionTable = {"Robo-Baby 2.0", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = Isaac.GetItemIdByName("Robo-Baby")
             },
             DisplayRecipe = true
         },
     },
     ["9830dfd9dbb24029b85cbe478591e547f65d1524"] = {
+        {
+            RecipeName = "tcainrework:brimstone",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "Pentagram", nil, "tcainrework:black_heart", "Sulfur", "tcainrework:black_heart", nil, "The Pact", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = Isaac.GetItemIdByName("Brimstone")
+            },
+            DisplayRecipe = true
+        },
         {
             RecipeName = "tcainrework:holy_mantle",
             Category = "collectible",
@@ -162,6 +247,68 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = Isaac.GetItemIdByName("Sulfur")
+            },
+            DisplayRecipe = true
+        },
+    },
+    ["47b9f7adfdb636f43c05c63bbbd32a933e962f4a"] = {
+        {
+            RecipeName = "tcainrework:giga_bomb",
+            Category = "building",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:bomb", "tcainrework:bomb", "tcainrework:bomb", "tcainrework:bomb", "tcainrework:bomb", "tcainrework:bomb", "tcainrework:bomb", "tcainrework:bomb", "tcainrework:bomb", },
+            Results = {
+                Type = "tcainrework:giga_bomb",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:poop_block",
+            Category = "building",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", },
+            Results = {
+                Type = "tcainrework:poop_block",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:stigmata",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:heart", "minecraft:oak_planks", "tcainrework:heart", "minecraft:oak_planks", "tcainrework:eternal_heart", "minecraft:oak_planks", "tcainrework:heart", "minecraft:oak_planks", "tcainrework:heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = Isaac.GetItemIdByName("Stigmata")
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:the_poop",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop_block", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = Isaac.GetItemIdByName("The Poop")
+            },
+            DisplayRecipe = true
+        },
+    },
+    ["1750d7f41f6d582bb32ad15a3c76c121fd1eee86"] = {
+        {
+            RecipeName = "tcainrework:godhead",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {"The Mind", "tcainrework:eternal_heart", "The Soul", nil, "The Body", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = Isaac.GetItemIdByName("Godhead")
             },
             DisplayRecipe = true
         },
@@ -207,62 +354,30 @@ return {
             DisplayRecipe = true
         },
     },
-    ["93ac8946882128457cd9e283b30ca851945e6690"] = {
+    ["774e6a979489881d43d415aff7bf7f7946e9e84a"] = {
         {
-            RecipeName = "tcainrework:midas_touch",
+            RecipeName = "tcainrework:milk",
             Category = "collectible",
-            RecipeSize = Vector(2, 1),
-            ConditionTable = {"#tcainrework:golden", "#tcainrework:golden", },
+            RecipeSize = Vector(1, 2),
+            ConditionTable = {"Breakfast", "minecraft:bucket", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Midas' Touch")
-            },
-            DisplayRecipe = true
-        },
-    },
-    ["shapeless_cc630251aba90c8217236a47f7db67cf5dae30d4"] = {
-        {
-            RecipeName = "tcainrework:nickel_from_dime",
-            Category = "misc",
-            ConditionTable = {"tcainrework:dime", },
-            Results = {
-                Type = "tcainrework:nickel",
-                Count = 2
+                Collectible = Isaac.GetItemIdByName("Milk!")
             },
             DisplayRecipe = true
         },
         {
-            RecipeName = "tcainrework:penny_from_nickel",
-            Category = "misc",
-            ConditionTable = {"tcainrework:nickel", },
-            Results = {
-                Type = "tcainrework:penny",
-                Count = 5
-            },
-            DisplayRecipe = true
-        },
-        {
-            RecipeName = "tcainrework:robo_baby_2",
+            RecipeName = "tcainrework:sacred_heart_alt",
             Category = "collectible",
-            ConditionTable = {"Robo-Baby", },
+            RecipeSize = Vector(1, 2),
+            ConditionTable = {"minecraft:fire", "tcainrework:heart", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Robo-Baby 2.0")
+                Collectible = Isaac.GetItemIdByName("Sacred Heart")
             },
-            DisplayRecipe = true
-        },
-        {
-            RecipeName = "tcainrework:robo_baby_alt",
-            Category = "collectible",
-            ConditionTable = {"Robo-Baby 2.0", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = Isaac.GetItemIdByName("Robo-Baby")
-            },
-            DisplayRecipe = true
+            DisplayRecipe = false
         },
     },
     ["bf0ce597399da0189aa7cbfbd8e1dd99f4a7e7d3"] = {
@@ -275,31 +390,6 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = Isaac.GetItemIdByName("Notched Axe")
-            },
-            DisplayRecipe = true
-        },
-    },
-    ["47b9f7adfdb636f43c05c63bbbd32a933e962f4a"] = {
-        {
-            RecipeName = "tcainrework:poop_block",
-            Category = "building",
-            RecipeSize = Vector(3, 3),
-            ConditionTable = {"tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", },
-            Results = {
-                Type = "tcainrework:poop_block",
-                Count = 1
-            },
-            DisplayRecipe = true
-        },
-        {
-            RecipeName = "tcainrework:the_poop",
-            Category = "collectible",
-            RecipeSize = Vector(3, 3),
-            ConditionTable = {"tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop_block", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", "tcainrework:poop", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Poop")
             },
             DisplayRecipe = true
         },
@@ -341,20 +431,6 @@ return {
                 Collectible = Isaac.GetItemIdByName("Sacred Heart")
             },
             DisplayRecipe = true
-        },
-    },
-    ["774e6a979489881d43d415aff7bf7f7946e9e84a"] = {
-        {
-            RecipeName = "tcainrework:sacred_heart_alt",
-            Category = "collectible",
-            RecipeSize = Vector(1, 2),
-            ConditionTable = {"minecraft:fire", "tcainrework:heart", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = Isaac.GetItemIdByName("Sacred Heart")
-            },
-            DisplayRecipe = false
         },
     },
     ["e69e14100b282cb294eb74086b6a511a787ace6c"] = {

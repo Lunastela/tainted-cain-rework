@@ -11,6 +11,7 @@ return {
         fire
         iron_shovel
         iron_axe
+        bucket
         cobblestone
         crafting_table
         furnace

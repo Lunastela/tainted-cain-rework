@@ -82,14 +82,33 @@ function inventoryHelper.getItemRenderType(pickupType)
     return renderTypes.Default
 end
 
-function inventoryHelper.getItemGraphic(pickup)
-    if pickup.ComponentData
-    and pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX] then
-        return pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX]
+local levelObject = (Game() and Game():GetLevel()) or nil
+TCainRework:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, function(_)
+    levelObject = Game():GetLevel()
+end)
+local function getCurseOfBlind()
+    if levelObject 
+    and (not PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BLACK_CANDLE)) then
+        return (levelObject:GetCurses() & LevelCurse.CURSE_OF_BLIND ~= 0)
     end
-    if pickup.ComponentData
-    and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
-        return getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).GfxFileName
+    return false
+end
+
+function inventoryHelper.getItemGraphic(pickup)
+    if pickup.ComponentData then
+        -- test for curse of blind prior
+        if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] and getCurseOfBlind() then
+            local customGfx = (pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX] ~= nil)
+            return ((customGfx and "gfx/isaac/items/questionmark.png") 
+                or "gfx/items/collectibles/questionmark.png")
+        end
+        -- test custom gfx
+        if pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX] then
+            return pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX]
+        end
+        if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
+            return getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).GfxFileName
+        end
     end
     if itemRegistry[pickup.Type] 
     and itemRegistry[pickup.Type].GFX then
@@ -312,8 +331,10 @@ local function canStackComponentData(item1, item2)
                 return false
             elseif inventoryAttribute == InventoryItemComponentData.COLLECTIBLE_ITEM then
                 -- Force Active Items to not stack
-                if (isActiveFromComponent(item1.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
-                or isActiveFromComponent(item2.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])) then
+                if ((item1.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] 
+                and isActiveFromComponent(item1.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]))
+                or (item2.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
+                and isActiveFromComponent(item2.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]))) then
                     return false        
                 end
             end
@@ -362,7 +383,7 @@ local function getComponentCount(pickup)
     return totalComponentCount
 end
 
-local debugStats = false
+local debugStats = true
 local pillColorNames = require("scripts.tcainrework.inventory.color_to_name")
 local itemTypeTable = {
     [ItemType.ITEM_PASSIVE] = "Passive Item",
@@ -370,12 +391,10 @@ local itemTypeTable = {
     [ItemType.ITEM_FAMILIAR] = "Familiar",
 }
 function inventoryHelper.itemGetFullName(pickup)
-    local blindTextAppend = ""
-    if pickup.ComponentData and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
-        local level = Game():GetLevel() -- todo cache and store this bla bla blah, ensure this is how to properly check flag
-        blindTextAppend = ((level:GetCurses() & LevelCurse.CURSE_OF_BLIND ~= 0) and "§k") or ""
-    end
     local nameTable = {}
+    local blindTextAppend = (((pickup.ComponentData 
+        and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] 
+        and getCurseOfBlind()) and "§k") or "")
     table.insert(nameTable, {
         String = blindTextAppend .. inventoryHelper.getNameFor(pickup), 
         Rarity = inventoryHelper.getItemRarity(pickup)

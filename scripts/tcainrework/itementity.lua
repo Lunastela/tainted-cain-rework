@@ -40,7 +40,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
                 end
 
                 if pickupData.pickupEntity
-                and not pickupData.collected then
+                and not (entity.Wait > 0) then
                     if not pickupData.overridePosition then
                         pickupData.overridePosition = Vector.Zero
                         entity:SetShadowSize(0)

@@ -240,7 +240,8 @@ local function renderBagOfCrafting(player, offset)
                         if not utility.tableContains(bagCollisions[player.Index], entityPointer) then
                             local knockbackDirection = (entity.Position - swipeCapsule:GetPosition()):Normalized()
                             local pickup = entity:ToPickup()
-                            if ((pickup and ((not pickup:IsShopItem()) and pickup.Wait <= 0))
+                            if ((pickup and ((not pickup:IsShopItem()) 
+                            and pickup.Wait <= 0 and (not pickup.Touched)))
                             or (not pickup)) and not bagExclusions[entity.Type] then
                                 local tcainPickup = (pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
                                     and (player:GetPlayerType() == PlayerType.PLAYER_CAIN_B)
@@ -252,7 +253,7 @@ local function renderBagOfCrafting(player, offset)
                                     local forcedInclude = bagInclusions[entity.Type]
                                     if (not pickup and entity:IsVulnerableEnemy()) 
                                     or forcedInclude then
-                                        if entity:TakeDamage(5, 0, EntityRef(player), 5)
+                                        if entity:TakeDamage(6, 0, EntityRef(player), 5)
                                         and (not forcedInclude) then
                                             SFXManager():Play(SoundEffect.SOUND_MEATY_DEATHS, 1, 10, false, 1.5)
                                         end
@@ -278,17 +279,18 @@ local function renderBagOfCrafting(player, offset)
                                     if not (pickup and pickup.Variant == mod.minecraftItemID) then
                                         local knockbackVelocity = ((math.max(1, player.Velocity:Length() / 3) * knockbackDirection) * math.max(20, 40 / entity.Mass))
                                         entity.Velocity = entity.Velocity + knockbackVelocity
-                                        if entity:ToProjectile() then
-                                            entity:ToProjectile():AddProjectileFlags(ProjectileFlags.HIT_ENEMIES)
-                                        end
                                     end
                                 else -- DESTROY item
                                     generateGenericEffect(entity)
                                     table.insert(bagCollisions[player.Index], entityPointer)
                                 end
                             elseif entity.Type == EntityType.ENTITY_PROJECTILE then
-                                local knockbackDirection = (entity.Position - swipeCapsule:GetPosition()):Normalized()
-                                entity.Velocity = (entity.Velocity:Length() * knockbackDirection)
+                                local projectileEntity = entity:ToProjectile()
+                                if projectileEntity then
+                                    local knockbackDirection = (projectileEntity.Position - swipeCapsule:GetPosition()):Normalized()
+                                    projectileEntity.Velocity = (projectileEntity.Velocity:Length() * knockbackDirection)
+                                    projectileEntity:AddProjectileFlags(ProjectileFlags.HIT_ENEMIES)
+                                end
                             end
                             if entity.Type ~= EntityType.ENTITY_FIREPLACE
                             and entity.Type ~= EntityType.ENTITY_POOP

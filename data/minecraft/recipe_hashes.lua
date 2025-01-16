@@ -11,6 +11,17 @@ return {
             },
             DisplayRecipe = false
         },
+        {
+            RecipeName = "minecraft:bucket",
+            Category = "misc",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {"Iron Bar", nil, "Iron Bar", nil, "Iron Bar", nil, },
+            Results = {
+                Type = "minecraft:bucket",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
     },
     ["17b43ca59cc2279bbd8fb58974a49350d8c35ad3"] = {
         {

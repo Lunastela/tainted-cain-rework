@@ -1,12 +1,13 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
-  "ingredients":[
-    "#tcainrework:golden",
-    "#tcainrework:golden"
+  "ingredients": [
+    "Milk!",
+    "tcainrework:mega_battery",
+    "tcainrework:poop_block"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Midas' Touch"
+    "collectible": "Chocolate Milk"
   }
 }

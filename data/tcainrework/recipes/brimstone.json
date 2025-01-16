@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "P": "Pentagram",
+    "V": "Sulfur",
+    "p": "The Pact",
+    "#": "tcainrework:black_heart"
+  },
+  "pattern": [
+    " P ",
+    "#V#",
+    " p "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Brimstone"
+  }
+}

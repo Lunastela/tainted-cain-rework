@@ -1,12 +1,13 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
-  "ingredients":[
-    "#tcainrework:golden",
-    "#tcainrework:golden"
+  "ingredients": [
+    "Guppy's Head",
+    "Guppy's Paw",
+    "Guppy's Tail"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Midas' Touch"
+    "collectible": "Dead Cat"
   }
 }

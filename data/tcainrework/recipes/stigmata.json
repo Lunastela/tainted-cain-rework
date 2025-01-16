@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "R": "tcainrework:heart",
+    "E": "tcainrework:eternal_heart",
+    "W": "minecraft:oak_planks"
+  },
+  "pattern": [
+    "RWR",
+    "WEW",
+    "RWR"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Stigmata"
+  }
+}
