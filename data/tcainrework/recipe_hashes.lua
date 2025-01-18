@@ -44,6 +44,66 @@ return {
             DisplayRecipe = true
         },
         {
+            RecipeName = "tcainrework:golden_battery",
+            Category = "misc",
+            ConditionTable = {"Midas' Touch", "tcainrework:battery", },
+            Results = {
+                Type = "tcainrework:golden_battery",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:golden_bomb",
+            Category = "misc",
+            ConditionTable = {"Midas' Touch", "tcainrework:bomb", },
+            Results = {
+                Type = "tcainrework:golden_bomb",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:golden_heart",
+            Category = "misc",
+            ConditionTable = {"Midas' Touch", "tcainrework:heart", },
+            Results = {
+                Type = "tcainrework:golden_heart",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:golden_key",
+            Category = "misc",
+            ConditionTable = {"Midas' Touch", "tcainrework:key", },
+            Results = {
+                Type = "tcainrework:golden_key",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:golden_penny",
+            Category = "misc",
+            ConditionTable = {"Midas' Touch", "tcainrework:penny", },
+            Results = {
+                Type = "tcainrework:golden_penny",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:golden_pill",
+            Category = "misc",
+            ConditionTable = {"Midas' Touch", "tcainrework:pill", },
+            Results = {
+                Type = "tcainrework:golden_pill",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+        {
             RecipeName = "tcainrework:heart",
             Category = "misc",
             ConditionTable = {"tcainrework:half_heart", "tcainrework:half_heart", },
@@ -394,7 +454,7 @@ return {
             RecipeName = "tcainrework:soul_locket",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {nil, "Iron Bar", nil, "Iron Bar", "tcainrework:soul_heart", "Iron Bar", nil, "Iron Bar", nil, },
+            ConditionTable = {nil, "tcainrework:soul_heart", nil, "tcainrework:soul_heart", "Iron Bar", "tcainrework:soul_heart", nil, "tcainrework:soul_heart", nil, },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
@@ -613,6 +673,17 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = Isaac.GetItemIdByName("Treasure Map")
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:wooden_doll",
+            Category = "misc",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:stick", "minecraft:oak_planks", "minecraft:stick", "minecraft:oak_planks", "#tcainrework:heart", "minecraft:oak_planks", "minecraft:stick", "minecraft:oak_planks", "minecraft:stick", },
+            Results = {
+                Type = "tcainrework:wooden_doll",
+                Count = 1
             },
             DisplayRecipe = true
         },

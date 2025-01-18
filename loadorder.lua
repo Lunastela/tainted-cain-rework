@@ -39,6 +39,7 @@ return {
     cracked_key
     poop
     poop_block
+    wooden_doll
     repentogon
     ]]
 }

@@ -1103,7 +1103,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                 Game():GetHUD():ShowItemText(player, configItem)
                             end, 1, 1, true)
                             inventoryHelper.removePossibleAmount(hotbarInventory, hotbarSlotSelected, 1)
-                            if lastActiveItem ~= 0 then
+                            if lastActiveItem ~= 0 and (configItem.Type == ItemType.ITEM_ACTIVE) then
                                 hotbarInventory[hotbarSlotSelected] = {
                                     Type = "tcainrework:collectible",
                                     Count = 1,
@@ -1117,7 +1117,6 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                         end
                     end
                 end
-
             end
             inputHelper.Update()
         end

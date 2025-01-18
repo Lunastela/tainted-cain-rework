@@ -863,7 +863,7 @@ function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, 
     renderSprite:Play("Idle", true)
     renderSprite:Render(renderPosition)
     local currentCharges = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES]
-    if currentCharges then
+    if currentCharges and utility.getCollectibleConfig(collectibleItem).MaxCharges > 0 then
         local chargeRatio = itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / utility.getCollectibleConfig(collectibleItem).MaxCharges
         if chargeRatio ~= 1 then
             local firstBarCharge = math.min(chargeRatio, 1)

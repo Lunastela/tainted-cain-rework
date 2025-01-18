@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "X": "minecraft:oak_planks",
+    "S": "minecraft:stick",
+    "P": "#tcainrework:heart"
+  },
+  "pattern": [
+    "SXS",
+    "XPX",
+    "SXS"
+  ],
+  "result": {
+    "id": "tcainrework:wooden_doll"
+  }
+}

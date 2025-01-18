@@ -92,11 +92,17 @@ local function numericID(string)
     return itemDescriptions[string].NumericID
 end
 
-local dropOutcomes = WeightedOutcomePicker()
-dropOutcomes:AddOutcomeWeight(numericID("minecraft:stick"), 25)
-dropOutcomes:AddOutcomeWeight(numericID("minecraft:paper"), 25)
-dropOutcomes:AddOutcomeWeight(numericID("minecraft:oak_planks"), 100)
-dropOutcomes:AddOutcomeWeight(numericID("minecraft:leather"), 25)
+local defaultDrop = WeightedOutcomePicker()
+defaultDrop:AddOutcomeWeight(numericID("minecraft:oak_planks"), 75)
+defaultDrop:AddOutcomeWeight(numericID("minecraft:stick"), 25)
+
+local redChestDrop = WeightedOutcomePicker()
+redChestDrop:AddOutcomeWeight(numericID("minecraft:paper"), 3)
+redChestDrop:AddOutcomeWeight(numericID("minecraft:leather"), 1)
+
+local chestDropRates = {
+    [PickupVariant.PICKUP_REDCHEST] = redChestDrop,
+}
 
 function mod:testChestOpening(chest)
     if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
@@ -105,10 +111,11 @@ function mod:testChestOpening(chest)
         if chestSprite:GetAnimation() == "Open" and chestSprite:GetFrame() <= 1 then
             local lootList = chest:GetLootList()
             if lootList and (#lootList:GetEntries() > 0) then
-                for i = 1, math.random(2, 5) do
+                for i = 1, math.random(2, 3 + ((chest.Variant == PickupVariant.PICKUP_CHEST and 0) or 3)) do
                     local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, chest.Position, chest.GetRandomPickupVelocity(chest.Position), chest)
                     local pickupData = saveManager.GetRoomFloorSave(itemPickup) 
                         and saveManager.GetRoomFloorSave(itemPickup).RerollSave
+                    local dropOutcomes = chestDropRates[chest.Variant] or defaultDrop
                     pickupData.Type = numberToItems[dropOutcomes:PickOutcome(chest:GetDropRNG())]
                     pickupData.Count = 1
                 end
