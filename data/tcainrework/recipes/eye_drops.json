@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "H": "#tcainrework:heart",
+    "P": "#tcainrework:pill"
+  },
+  "pattern": [
+    " H ",
+    "HPH",
+    " H "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Eye Drops"
+  }
+}

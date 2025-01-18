@@ -12,25 +12,13 @@ local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items")
     key details about the inventory. In the future this shouldn't be the case.
 --]]
 
-local isaacItemConfig
-local collectibleCache = {}
-local function getCollectibleConfig(collectibleID)
-    if not collectibleCache[collectibleID] then
-        if not isaacItemConfig then
-            isaacItemConfig = Isaac.GetItemConfig()
-        end
-        collectibleCache[collectibleID] = isaacItemConfig:GetCollectible(collectibleID)
-    end
-    return collectibleCache[collectibleID]
-end
-
 function inventoryHelper.getNameFor(pickup)
     if pickup.ComponentData then
         if pickup.ComponentData[InventoryItemComponentData.CUSTOM_NAME] then
             return pickup.ComponentData[InventoryItemComponentData.CUSTOM_NAME]
         end
         if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
-            return utility.getLocalizedString("Items", getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).Name)
+            return utility.getLocalizedString("Items", utility.getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).Name)
         end
     end
     if itemRegistry[pickup.Type]
@@ -52,7 +40,7 @@ local itemRarities = InventoryItemRarity
 function inventoryHelper.getItemRarity(pickup)
     if pickup.ComponentData 
     and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
-        return getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).Quality
+        return utility.getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).Quality
     end
     if itemRegistry[pickup.Type]
     and itemRegistry[pickup.Type].Rarity then
@@ -107,7 +95,7 @@ function inventoryHelper.getItemGraphic(pickup)
             return pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX]
         end
         if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
-            return getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).GfxFileName
+            return utility.getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).GfxFileName
         end
     end
     if itemRegistry[pickup.Type] 
@@ -236,6 +224,11 @@ function inventoryHelper.checkRecipeCraftable(recipe, storedItemCounts)
     end
     for type in pairs(matchedTypes) do
         matchedTypes[type] = matchedTypes[type] - (storedItemCounts[type] or 0)
+        if itemTagLookup[type] then
+            for i, itemType in ipairs(itemTagLookup[type]) do
+                matchedTypes[type] = matchedTypes[type] - (storedItemCounts[itemType] or 0)
+            end
+        end
         if matchedTypes[type] <= 0 then
             matchedTypes[type] = nil
         end
@@ -315,9 +308,9 @@ end
 
 -- this function doesn't need to exist anymore i have streamlined its functionality
 local function isActiveFromComponent(itemID)
-    return (getCollectibleConfig(itemID).Type == ItemType.ITEM_ACTIVE)
+    return (utility.getCollectibleConfig(itemID).Type == ItemType.ITEM_ACTIVE)
 end
-local function canStackComponentData(item1, item2)
+local function canStackComponentData(item1, item2, attributeList)
     -- if neither item has component data, they can stack
     if (not (item1.ComponentData or item2.ComponentData)) then
         return true
@@ -325,7 +318,7 @@ local function canStackComponentData(item1, item2)
     elseif (item1.ComponentData and item2.ComponentData) then 
         -- sift through component data and figure out if it is equal
         local equalData = true
-        for i, inventoryAttribute in pairs(InventoryItemComponentData) do
+        for i, inventoryAttribute in pairs(((attributeList ~= nil) and attributeList) or InventoryItemComponentData) do
             equalData = equalData and (item1.ComponentData[inventoryAttribute] == item2.ComponentData[inventoryAttribute])
             if not equalData then
                 return false
@@ -345,8 +338,20 @@ local function canStackComponentData(item1, item2)
 end
 
 function inventoryHelper.itemCanStackWith(item1, item2)
-    return (item1.Type == item2.Type) 
-        and canStackComponentData(item1, item2)
+    return (((item1.Type == item2.Type) 
+        and canStackComponentData(item1, item2))
+        or (item1 == item2))
+end
+
+-- Generic "of item type" esque function
+function inventoryHelper.itemCanStackWithTag(item1, itemOrList)
+    if itemTagLookup[itemOrList.Type] then
+        return utility.tableContains(itemTagLookup[itemOrList.Type], item1.Type)
+    elseif itemOrList.Type and item1.Type == itemOrList.Type
+        and canStackComponentData(item1, itemOrList, {InventoryItemComponentData.COLLECTIBLE_ITEM}) then
+        return true
+    end 
+    return false
 end
 
 -- Item Names
@@ -431,7 +436,7 @@ function inventoryHelper.itemGetFullName(pickup)
             end
         end
         if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
-            local itemConfig = getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
+            local itemConfig = utility.getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
             if itemTypeTable[itemConfig.Type] then
                 table.insert(nameTable, {
                     String = itemTypeTable[itemConfig.Type],
@@ -684,7 +689,7 @@ local spriteLookupTable = {}
 local interval = 4
 function inventoryHelper.generateCollectibleData(collectibleType)
     -- try to obtain sprite if it exists
-    local itemConfig = getCollectibleConfig(collectibleType)
+    local itemConfig = utility.getCollectibleConfig(collectibleType)
     if itemConfig then
         local lastIndex = string.find(itemConfig.GfxFileName, "/[^/]*$")
         local spritesheetPath = string.lower(itemConfig.GfxFileName:sub(lastIndex + 1))
@@ -721,22 +726,40 @@ function inventoryHelper.generateCollectibleData(collectibleType)
     return nil
 end
 
+local toastStorage = require("scripts.tcainrework.stored.toast_storage")
 local recipeLookupIndex = require('scripts.tcainrework.stored.name_to_recipe')
 local recipeReverseLookup = require('scripts.tcainrework.stored.recipe_from_ingredient')
+function TCainRework:UnlockItemRecipe(recipeName)
+    if recipeName then
+        local runSave = saveManager.GetRunSave()
+        if not runSave.unlockedRecipes then
+            runSave.unlockedRecipes = {}
+        end
+        local recipe = recipeLookupIndex[recipeName]
+        if not utility.tableContains(runSave.unlockedRecipes, recipeName) then
+            local resultingType = (recipe.Results and recipe.Results.Type)
+            if resultingType then
+                local itemTable = {Type = resultingType, Count = 1}
+                if recipe.Results.Collectible then
+                    itemTable.ComponentData = inventoryHelper.generateCollectibleData(recipe.Results.Collectible)
+                end
+                table.insert(toastStorage, itemTable)
+            end
+            table.insert(runSave.unlockedRecipes, recipeName)
+        end
+    end
+end
+
 function inventoryHelper.runUnlockItemType(itemType, collectibleType)
     local runSave = saveManager.GetRunSave()
     if not runSave.obtainedItems then
         runSave.obtainedItems = {}
-    end
-    if not runSave.unlockedRecipes then
-        runSave.unlockedRecipes = {}
     end
     local combinedNameType = itemType .. ((collectibleType and tostring(collectibleType)) or "")
     if not runSave.obtainedItems[combinedNameType] then
         runSave.obtainedItems[combinedNameType] = true
         if recipeReverseLookup[combinedNameType] then
             -- obtain recipe associations
-            local resultItems = {}
             for i, recipeName in ipairs(recipeReverseLookup[combinedNameType]) do
                 -- obtain recipe from lookup table
                 local recipe = recipeLookupIndex[recipeName]
@@ -749,27 +772,9 @@ function inventoryHelper.runUnlockItemType(itemType, collectibleType)
                             goto skipUnlocking
                         end
                     end
-                    if not utility.tableContains(runSave.unlockedRecipes, recipeName) then
-                        local resultingType = (recipe.Results and recipe.Results.Type)
-                        if resultingType then
-                            local itemTable = {Type = resultingType, Count = 1}
-                            if recipe.Results.Collectible then
-                                itemTable.ComponentData = inventoryHelper.generateCollectibleData(recipe.Results.Collectible)
-                            end
-                            table.insert(resultItems, itemTable)
-                        end
-                        table.insert(runSave.unlockedRecipes, recipeName)
-                    end
+                    TCainRework:UnlockItemRecipe(recipeName)
                 end
                 ::skipUnlocking::
-            end
-            if #resultItems >= 1 then
-                TCainRework:CreateToast(
-                    InventoryToastTypes.STANDARD, 
-                    resultItems, nil,
-                    nil, nil,
-                    math.max(180, (60 * #resultItems))
-                )
             end
         end
     end
@@ -823,6 +828,10 @@ durabilityBar:LoadGraphics()
 durabilityBar:Play("Idle", true)
 
 local blackColor = Color(1, 1, 1, 1)
+local yellowBarColor = Color(
+    0, 0, 0, 1, 
+    255 / 255, 219 / 255, 16 / 255
+)
 function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, elapsedTime)
     local collectibleItem = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
     local originalRenderPosition = Vector(renderPosition.X, renderPosition.Y)
@@ -855,20 +864,21 @@ function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, 
     renderSprite:Render(renderPosition)
     local currentCharges = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES]
     if currentCharges then
-        local chargeRatio = itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / getCollectibleConfig(collectibleItem).MaxCharges
-        if chargeRatio < 1 then
+        local chargeRatio = itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / utility.getCollectibleConfig(collectibleItem).MaxCharges
+        if chargeRatio ~= 1 then
+            local firstBarCharge = math.min(chargeRatio, 1)
             durabilityBar.Color = blackColor
             durabilityBar.Scale = renderScale or Vector.One
             durabilityBar:Render(originalRenderPosition + Vector(2, 13))
             durabilityBar.Scale.Y = (durabilityBar.Scale.Y / 2)
-            durabilityBar.Scale.X = chargeRatio
+            durabilityBar.Scale.X = firstBarCharge
 
             local red, green = 1, 1
-            if chargeRatio >= 0.5 then
+            if firstBarCharge >= 0.5 then
                 green = 1
-                red = (1 - chargeRatio) * 2
+                red = (1 - firstBarCharge) * 2
             else
-                green = chargeRatio * 2
+                green = firstBarCharge * 2
                 red = 1
             end
             durabilityBar.Color = Color(
@@ -876,6 +886,14 @@ function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, 
                 red, green, 0
             )
             durabilityBar:Render(originalRenderPosition + Vector(2, 13))
+            
+            local secondBarCharge = math.max(chargeRatio, 1)
+            if secondBarCharge > 1 then
+                -- Second Charge Bar
+                durabilityBar.Color = yellowBarColor
+                durabilityBar.Scale.X = (secondBarCharge - 1)
+                durabilityBar:Render(originalRenderPosition + Vector(2, 13))
+            end
         end
     end
 end

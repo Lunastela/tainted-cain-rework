@@ -3,6 +3,7 @@ return {
         DisplayName = "Nickel",
         GFX = "gfx/items/nickel.png",
         RenderModel = InventoryItemRenderType.Default,
+        ItemTags = {"#tcainrework:coin", "#tcainrework:pickup"},
         StackSize = 16,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false

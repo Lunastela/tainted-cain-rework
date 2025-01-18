@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:key",
+    "B": "#tcainrework:bomb"
+  },
+  "pattern": [
+    "# #",
+    " # ",
+    "B B"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Scissors"
+  }
+}

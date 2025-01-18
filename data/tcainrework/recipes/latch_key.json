@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "Iron Bar",
+    "I": "tcainrework:soul_heart",
+    "#": "#tcainrework:key"
+  },
+  "pattern": [
+    " S ",
+    "# #",
+    " I "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Latch Key"
+  }
+}

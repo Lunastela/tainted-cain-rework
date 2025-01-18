@@ -844,7 +844,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                 for i = 0, inventoryWidth do
                                                     local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
                                                     if (craftingInventory[currentItemIndex] and ((not itemsNeeded[currentItemIndex])
-                                                    or (not inventoryHelper.itemCanStackWith(craftingInventory[currentItemIndex], itemsNeeded[currentItemIndex])))) then
+                                                    or (not inventoryHelper.itemCanStackWithTag(craftingInventory[currentItemIndex], itemsNeeded[currentItemIndex])))) then
                                                         inventoryShiftClick(inventorySet, craftingInventory, currentItemIndex)
                                                     end
                                                 end
@@ -871,15 +871,16 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                                 lowestNumber = math.min(currentAmount, ((lowestNumber ~= nil) and lowestNumber) or currentAmount)
                                                                 highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
                                                             end
-                                                            lowestNumber = (lowestNumber or 0) + 1
+                                                            lowestNumber = (lowestNumber or 1)
                                                             for j, item in pairs(inventory) do
                                                                 local recipeFinished = true
                                                                 for k, item2 in pairs(itemsNeeded) do
                                                                     recipeFinished = false
-                                                                    if inventoryHelper.itemCanStackWith(item, item2) and ((not craftingInventory[k]) 
+                                                                    -- print("item item item atemt", item.Type, craftingInventory[k] and craftingInventory[k].Type)
+                                                                    if inventoryHelper.itemCanStackWithTag(item, item2) and ((not craftingInventory[k]) 
                                                                     or (inventoryHelper.itemCanStackWith(item, craftingInventory[k]) 
                                                                     and craftingInventory[k].Count <= lowestNumber))
-                                                                    and (lowestNumber <= highestAllowedNumber) then
+                                                                    and (lowestNumber < highestAllowedNumber) then
                                                                         local lastItemData = item.ComponentData
                                                                         local removeAmount = inventoryHelper.removePossibleAmount(inventory, j, 1)
                                                                         if removeAmount > 0 then
@@ -907,6 +908,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                             end
                                             ::endRecipes::
                                             curDisplayingRecipe = nil
+                                            lastCombinedString = ""
                                         else
                                             -- otherwise just display recipe
                                             curDisplayingRecipe = recipeFromName
@@ -1047,6 +1049,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                             for snakedInventory, snakedIndices in pairs(cursorSnaking) do
                                 resetSnaking(snakedInventory)
                             end
+                            cancelRecipeOverlay = true
                         end
                     end
                 end
@@ -1089,15 +1092,28 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                         local collectibleType = hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
                         -- Well aware this doesn't work with multiplayer. won't fix yet
                         local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
-                        if rmbTrigger and player then
+                        if rmbTrigger and player and player:IsItemQueueEmpty() then
                             player:AnimateCollectible(collectibleType)
+                            local lastActiveItem, lastActiveCharges = player:GetActiveItem(ActiveSlot.SLOT_PRIMARY), 
+                                (player:GetActiveCharge(ActiveSlot.SLOT_PRIMARY) + player:GetBatteryCharge(ActiveSlot.SLOT_PRIMARY))
                             local configItem = Isaac.GetItemConfig():GetCollectible(collectibleType)
-                            player:QueueItem(configItem)
+                            player:QueueItem(configItem, hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES])
                             SFXManager():Play(SoundEffect.SOUND_POWERUP_SPEWER)
                             Isaac.CreateTimer(function(_) 
                                 Game():GetHUD():ShowItemText(player, configItem)
                             end, 1, 1, true)
                             inventoryHelper.removePossibleAmount(hotbarInventory, hotbarSlotSelected, 1)
+                            if lastActiveItem ~= 0 then
+                                hotbarInventory[hotbarSlotSelected] = {
+                                    Type = "tcainrework:collectible",
+                                    Count = 1,
+                                    ComponentData = {
+                                        [InventoryItemComponentData.COLLECTIBLE_ITEM] = lastActiveItem,
+                                        [InventoryItemComponentData.COLLECTIBLE_CHARGES] = lastActiveCharges,
+                                        [InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] = true
+                                    }
+                                }
+                            end
                         end
                     end
                 end

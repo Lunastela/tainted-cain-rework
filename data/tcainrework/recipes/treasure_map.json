@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "minecraft:paper",
+    "C": "The Compass"
+  },
+  "pattern": [
+    "###",
+    "#C#",
+    "###"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Treasure Map"
+  }
+}

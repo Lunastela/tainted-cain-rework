@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "Eye Drops",
+    "B": "minecraft:bucket"
+  },
+  "pattern": [
+    "#",
+    "B"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Isaac's Tears"
+  }
+}

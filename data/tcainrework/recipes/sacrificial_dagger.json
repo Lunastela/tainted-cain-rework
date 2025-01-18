@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "I": "minecraft:stick",
+    "O": "Blood Oath",
+    "#": "Iron Bar",
+    "B": "tcainrework:black_heart"
+  },
+  "pattern": [
+    " I ",
+    "B#B",
+    "BOB"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Sacrificial Dagger"
+  }
+}

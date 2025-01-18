@@ -18,6 +18,18 @@ function Utility.tableContains(table, value)
     return false
 end
 
+local isaacItemConfig
+local collectibleCache = {}
+function Utility.getCollectibleConfig(collectibleID)
+    if not collectibleCache[collectibleID] then
+        if not isaacItemConfig then
+            isaacItemConfig = Isaac.GetItemConfig()
+        end
+        collectibleCache[collectibleID] = isaacItemConfig:GetCollectible(collectibleID)
+    end
+    return collectibleCache[collectibleID]
+end
+
 Utility.chestVariants = {
     [PickupVariant.PICKUP_CHEST] = true,
     [PickupVariant.PICKUP_SPIKEDCHEST] = true,
@@ -30,18 +42,6 @@ Utility.chestVariants = {
     [PickupVariant.PICKUP_REDCHEST] = true,
     [PickupVariant.PICKUP_MOMSCHEST] = true,
 }
-
-function Utility.canOpenChest(pickup, player)
-    local variant = pickup.Variant
-    if Utility.chestVariants[variant] then
-        if variant == PickupVariant.PICKUP_LOCKEDCHEST 
-        or variant == PickupVariant.PICKUP_ETERNALCHEST then
-            return player:TryUseKey() and pickup:TryOpenChest(player) -- probably works they all share keys?
-        end
-        return pickup:TryOpenChest(player)
-    end
-    return false
-end
 
 function Utility.getPillColor(rawPillColor)
     if rawPillColor >= PillColor.PILL_GIANT_FLAG then

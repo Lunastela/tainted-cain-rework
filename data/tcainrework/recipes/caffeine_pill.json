@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:pill"
+  },
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Caffeine Pill"
+  }
+}

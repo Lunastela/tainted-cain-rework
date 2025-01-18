@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:golden_key",
+    "tcainrework:golden_key",
+    "tcainrework:golden_key"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Skeleton Key"
+  }
+}

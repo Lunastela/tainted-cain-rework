@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:key",
+    "P": "#tcainrework:pickup"
+  },
+  "pattern": [
+    "PPP",
+    " # ",
+    " # "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Screw"
+  }
+}

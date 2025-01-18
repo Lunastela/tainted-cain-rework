@@ -1,7 +1,7 @@
 return {
     Properties = {
         DisplayName = "Collectible",
-        GFX = "gfx/item/.png",
+        GFX = "gfx/isaac/items/questionmark.png",
         RenderModel = InventoryItemRenderType.Default,
         StackSize = 16,
         Rarity = InventoryItemRarity.COMMON,

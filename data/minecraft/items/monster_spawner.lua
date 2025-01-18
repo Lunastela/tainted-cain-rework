@@ -6,8 +6,5 @@ return {
         StackSize = 1,
         Rarity = InventoryItemRarity.EPIC,
         Enchanted = false
-    },
-    ObtainedFrom = {
-        "10.1.0"
     }
 }

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "#tcainrework:familiar",
+    "Iron Bar",
+    "tcainrework:battery"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Robo-Baby"
+  }
+}

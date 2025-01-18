@@ -3,6 +3,7 @@ return {
         DisplayName = "A Card Against Humanity",
         GFX = "gfx/items/cards/card_against_humanity.png",
         RenderModel = InventoryItemRenderType.Default,
+        ItemTags = {"#tcainrework:card", "#tcainrework:pickup"},
         StackSize = 1,
         Rarity = InventoryItemRarity.RARE,
         Enchanted = false

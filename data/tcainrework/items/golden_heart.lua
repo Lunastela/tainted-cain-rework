@@ -3,7 +3,7 @@ return {
         DisplayName = "Golden Heart",
         GFX = "gfx/items/golden_heart.png",
         RenderModel = InventoryItemRenderType.Default,
-        ItemTags = {"#tcainrework:golden"},
+        ItemTags = {"#tcainrework:golden", "#tcainrework:heart", "#tcainrework:pickup"},
         StackSize = 1,
         Rarity = InventoryItemRarity.RARE,
         Enchanted = true

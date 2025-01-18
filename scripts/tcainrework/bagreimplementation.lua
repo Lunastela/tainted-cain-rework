@@ -32,21 +32,19 @@ local bagActions = {
     ButtonAction.ACTION_SHOOTLEFT, ButtonAction.ACTION_SHOOTRIGHT, 
     ButtonAction.ACTION_SHOOTUP, ButtonAction.ACTION_SHOOTDOWN
 }
-local bagRotations = {90, -90, 180, 0}
+
 mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, function(_, player)
     if (player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     and (player:GetSprite():GetAnimation():find("Pickup"))) then
         local bagSprite = bagSprites[player.Index]
         if bagSprite and bagSprite:GetAnimation():find("Idle") then
-            for i = 1, #bagActions do
-                if Input.IsActionPressed(bagActions[i], player.ControllerIndex) then
-                    bagSprite:Play("Swing", true)
-                    bagSpritesFrame[player.Index] = bagSprite:GetFrame()
-                    bagSprite.Scale = player.SpriteScale
-                    bagSprite.Rotation = bagRotations[i]
-                    player:AnimateCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING, "HideItem")
-                    SFXManager():Play(SoundEffect.SOUND_BIRD_FLAP, 1, 2, false, 1 + (math.random(-50, 50) / 1000))
-                end
+            if player:GetShootingJoystick():LengthSquared() > 0 then
+                bagSprite:Play("Swing", true)
+                bagSpritesFrame[player.Index] = bagSprite:GetFrame()
+                bagSprite.Scale = player.SpriteScale
+                bagSprite.Rotation = ((player:GetShootingJoystick():GetAngleDegrees() - 90) + 360) % 360
+                player:AnimateCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING, "HideItem")
+                SFXManager():Play(SoundEffect.SOUND_BIRD_FLAP, 1, 2, false, 1 + (math.random(-50, 50) / 1000))
             end
         end
     end
@@ -215,19 +213,114 @@ local function generateGenericEffect(entity, gridEntity)
     Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, (gridEntity and 2) or 1, entity.Position, Vector.Zero, entitySpawner)
 end
 
+-- Item Salvaging
+
+local function canSalvageItem(collectibleType)
+    local itemConfig = utility.getCollectibleConfig(collectibleType)
+    return not (collectibleType > 0 and (itemConfig.Tags & ItemConfig.TAG_QUEST ~= 0))
+end
+
+local salvageOutcomes = WeightedOutcomePicker()
+salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_HEART, 100)
+salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_COIN, 100)
+salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_KEY, 100)
+salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_BOMB, 100)
+salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_PILL, 15)
+salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_LIL_BATTERY, 15)
+salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_TAROTCARD, 15)
+
+local salvagingList = {}
+local heartSelectionList = {
+    [ItemPoolType.POOL_SECRET] = HeartSubType.HEART_BONE,
+    [ItemPoolType.POOL_ANGEL] = HeartSubType.HEART_ETERNAL,
+    [ItemPoolType.POOL_DEVIL] = HeartSubType.HEART_BLACK,
+    [ItemPoolType.POOL_CURSE] = HeartSubType.HEART_ROTTEN
+}
+local function spawnSalvagePickup(pickup, salvageVariant)
+    local salvageSubtype = 0
+    if salvageVariant == PickupVariant.PICKUP_HEART then
+        local game = Game()
+        local itemPool = game:GetItemPool()
+        local poolType = math.max(0, itemPool:GetPoolForRoom(game:GetRoom():GetType(), pickup:GetDropRNG():GetSeed()))
+        salvageSubtype = (heartSelectionList[poolType] or 1)
+    end
+    local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, salvageVariant, salvageSubtype, 
+        pickup.Position, pickup.GetRandomPickupVelocity(pickup.Position), pickup)
+    return itemPickup
+end
+
+local collectibleToRecipe = require("scripts.tcainrework.stored.collectible_to_recipe")
+local function salvageCollectible(player, pickup)
+    if canSalvageItem(pickup.SubType) then
+        local ptrHash = GetPtrHash(pickup)
+        SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
+        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 2, pickup.Position, Vector.Zero, pickup)
+        -- Salvage Collectible
+        TCainRework:UnlockItemRecipe(collectibleToRecipe[pickup.SubType])
+        local itemQuality = Isaac.GetItemConfig():GetCollectible(pickup.SubType).Quality
+        spawnSalvagePickup(pickup, PickupVariant.PICKUP_HEART)
+        for i = 1, ((2 + math.random(1, 2)) + itemQuality) do
+            local salvageVariant = salvageOutcomes:PickOutcome(pickup:GetDropRNG())
+            spawnSalvagePickup(pickup, salvageVariant)
+        end
+        pickup:Remove()
+        -- There's Options
+        Isaac.CreateTimer(function(_) 
+            pickup:TriggerTheresOptionsPickup()
+            salvagingList[ptrHash] = nil
+        end, 8, 1, true)
+    end
+end
+
+local function notShopItemOrBought(player, pickup)
+    if pickup:IsShopItem() 
+    and getEntityFromTable(pickup) then
+        if player:GetNumCoins() - pickup.Price >= 0 then
+            player:AddCoins(-pickup.Price)
+            pickup.EntityCollisionClass = EntityCollisionClass.ENTCOLL_NONE
+            return true
+        end
+        return false
+    end
+    return true
+end
+
+mod:AddPriorityCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, CallbackPriority.LATE, 
+function(_, entity, collider, low)
+    if canSalvageItem(entity.SubType) then
+        local pickup = entity:ToPickup()
+        if ((collider.Type == EntityType.ENTITY_PLAYER 
+        and ((collider:ToPlayer():GetPlayerType() == PlayerType.PLAYER_CAIN_B) 
+        and (not collider:ToPlayer():IsHoldingItem())))
+        and notShopItemOrBought(collider:ToPlayer(), pickup)) then
+            if not salvagingList[GetPtrHash(entity)] then
+                Isaac.CreateTimer(function(_) 
+                    salvageCollectible(collider:ToPlayer(), pickup)
+                end, 2, 1, true)
+                salvagingList[GetPtrHash(entity)] = true
+            end
+            return pickup:IsShopItem()
+        end
+    end
+end, PickupVariant.PICKUP_COLLECTIBLE)
+
 local function renderBagOfCrafting(player, offset)
-    if not damageCancelRender(player) and (bagSprites[player.Index]
-    and player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)) then
+    if (bagSprites[player.Index] and player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)) then
         local bagSprite = bagSprites[player.Index]
         if canRenderBagSprite(bagSprite) then
             local bagPosition = Isaac.WorldToRenderPosition(player.Position) - (Vector(0, 3) * bagSprite.Scale)
-            bagSprite:Render(bagPosition + offset)
+            if not damageCancelRender(player) then
+                bagSprite:Render(bagPosition + offset)
+            end
             if not hasRenderedThisFrame[player.Index] 
             and (not Game():IsPaused())
             and Game():GetRoom():GetRenderMode() ~= RenderMode.RENDER_WATER_REFLECT then
                 hasRenderedThisFrame[player.Index] = true
                 -- Null Frame Collisions
                 local currentFrame = bagSpritesFrame[player.Index]
+                if currentFrame < 2 and player:GetShootingJoystick():LengthSquared() > 0 then
+                    bagSprite.Rotation = ((player:GetShootingJoystick():GetAngleDegrees() - 90) + 360) % 360
+                end
                 if currentFrame <= 5 then
                     local swipePosition = getBagSwipePosition(bagSprite, player)
                     local swipeCapsule = Capsule(player.Position + swipePosition * 0.75, 
@@ -240,7 +333,7 @@ local function renderBagOfCrafting(player, offset)
                         if not utility.tableContains(bagCollisions[player.Index], entityPointer) then
                             local knockbackDirection = (entity.Position - swipeCapsule:GetPosition()):Normalized()
                             local pickup = entity:ToPickup()
-                            if ((pickup and ((not pickup:IsShopItem()) 
+                            if ((pickup and (notShopItemOrBought(player, pickup)
                             and pickup.Wait <= 0 and (not pickup.Touched)))
                             or (not pickup)) and not bagExclusions[entity.Type] then
                                 local tcainPickup = (pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
@@ -259,7 +352,7 @@ local function renderBagOfCrafting(player, offset)
                                         end
                                     elseif pickup then 
                                         -- Attempt to Open Chest
-                                        utility.canOpenChest(pickup, player)
+                                        player:ForceCollide(pickup)
                                         if pickup.Variant == mod.minecraftItemID then
                                             local pickupData = saveManager.GetRoomFloorSave(entity) 
                                                 and saveManager.GetRoomFloorSave(entity).RerollSave
@@ -267,16 +360,13 @@ local function renderBagOfCrafting(player, offset)
                                         elseif pickup.Variant == PickupVariant.PICKUP_COIN
                                         and pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
                                             pickup:GetSprite():Play("Touched")
-                                        elseif tcainPickup then
-                                            SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
-                                            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 2, entity.Position, Vector.Zero, pickup)
-                                            player:SalvageCollectible(pickup)
-                                            Isaac.CreateTimer(function(_) 
-                                                pickup:TriggerTheresOptionsPickup()
-                                            end, 8, 1, true)
+                                        elseif tcainPickup and not salvagingList[GetPtrHash(entity)] then
+                                            salvageCollectible(player, pickup)
+                                            salvagingList[GetPtrHash(entity)] = true
                                         end
                                     end
-                                    if not (pickup and pickup.Variant == mod.minecraftItemID) then
+                                    if not (pickup and (pickup.Variant == mod.minecraftItemID 
+                                        or pickup.Variant == PickupVariant.PICKUP_GRAB_BAG)) then
                                         local knockbackVelocity = ((math.max(1, player.Velocity:Length() / 3) * knockbackDirection) * math.max(20, 40 / entity.Mass))
                                         entity.Velocity = entity.Velocity + knockbackVelocity
                                     end
@@ -365,20 +455,26 @@ mod:AddCallback(ModCallbacks.MC_POST_EFFECT_RENDER, function(_, effect, offset)
     end
 end, EffectVariant.LADDER)
 
+local function renderBagOver(player)
+    local rotation = ((bagSprites[player.Index] and bagSprites[player.Index].Rotation) 
+        + ((math.min(bagSpritesFrame[player.Index] or 0, 4) * 180) / 4) % 360)
+    if rotation > 90 and rotation < 270 then
+        return true
+    end
+    return false
+end
+
 mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_RENDER, function(_, player, offset)
     hasRenderedThisFrame = {}
     if bagSprites[player.Index]
-    and (bagSprites[player.Index].Rotation == bagRotations[3]
-    or (bagSprites[player.Index].Rotation == bagRotations[1] and bagSpritesFrame[player.Index] <= 3)
-    or (bagSprites[player.Index].Rotation == bagRotations[2] and bagSpritesFrame[player.Index] > 3)) then
+    and (not renderBagOver(player)) then
         renderBagOfCrafting(player, offset)
     end
 end)
 mod:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, function(_, player, offset)
     if bagSprites[player.Index]
-    and (bagSprites[player.Index].Rotation == bagRotations[4]
-    or (bagSprites[player.Index].Rotation == bagRotations[1] and bagSpritesFrame[player.Index] > 3)
-    or (bagSprites[player.Index].Rotation == bagRotations[2] and bagSpritesFrame[player.Index] <= 3)) then
+    and (renderBagOver(player)
+    or damageCancelRender(player)) then
         renderBagOfCrafting(player, offset)
     end
 end)

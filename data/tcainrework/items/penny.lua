@@ -3,6 +3,7 @@ return {
         DisplayName = "Penny",
         GFX = "gfx/items/penny.png",
         RenderModel = InventoryItemRenderType.Default,
+        ItemTags = {"#tcainrework:coin", "#tcainrework:small_pickup"},
         StackSize = 16,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false

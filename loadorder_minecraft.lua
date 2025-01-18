@@ -9,8 +9,11 @@ return {
         bowl
         stick
         fire
+        leather
         iron_shovel
         iron_axe
+        paper
+        book
         bucket
         cobblestone
         crafting_table

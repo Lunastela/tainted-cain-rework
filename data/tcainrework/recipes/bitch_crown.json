@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "D infinity",
+    "Sacred Orb",
+    "Chaos",
+    "Glowing Hourglass",
+    "Eden's Soul",
+    "Bag of Crafting"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Glitched Crown"
+  }
+}

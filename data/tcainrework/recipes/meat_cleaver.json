@@ -1,9 +1,15 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    "minecraft:iron_axe",
-    "tcainrework:heart"
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "Iron Bar",
+    "I": "minecraft:oak_planks",
+    "#": "tcainrework:half_heart"
+  },
+  "pattern": [
+    " S ",
+    "#S#",
+    " I "
   ],
   "result": {
     "id": "tcainrework:collectible",

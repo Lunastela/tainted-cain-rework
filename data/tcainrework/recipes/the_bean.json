@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Compost",
+    "#tcainrework:bomb",
+    "#tcainrework:bomb"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Bean"
+  }
+}

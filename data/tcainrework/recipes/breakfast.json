@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "Yum Heart",
+    "-": "minecraft:paper"
+  },
+  "pattern": [
+    "-",
+    "#",
+    "-"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Breakfast"
+  }
+}

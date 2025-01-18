@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:key",
+    "P": "#tcainrework:pickup"
+  },
+  "pattern": [
+    " # ",
+    "# #",
+    "P#P"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Wire Coat Hanger"
+  }
+}

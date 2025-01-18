@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "minecraft:cobblestone",
+    "#": "#tcainrework:card"
+  },
+  "pattern": [
+    "CCC",
+    "C#C",
+    "CCC"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Tiny Planet"
+  }
+}

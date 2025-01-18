@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "O": "minecraft:oak_planks",
+    "H": "tcainrework:heart"
+  },
+  "pattern": [
+    " O ",
+    "HHH",
+    "HHH"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Jar"
+  }
+}

@@ -1,4 +1,16 @@
 return {
+    ["shapeless_085fbabd884e6a20267d051dfd7bf5c6c12ac53a"] = {
+        {
+            RecipeName = "minecraft:book",
+            Category = "misc",
+            ConditionTable = {"minecraft:paper", "minecraft:paper", "minecraft:paper", "minecraft:leather", },
+            Results = {
+                Type = "minecraft:book",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+    },
     ["e3c5526e6452984587d4aeeb798ae3f2d93a4ab6"] = {
         {
             RecipeName = "minecraft:bowl",
@@ -59,7 +71,7 @@ return {
                 Type = "minecraft:iron_axe",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = false
         },
     },
     ["85f1ae3dcaf3a6c5984fbf8db91065c0489ade1a"] = {
@@ -72,7 +84,7 @@ return {
                 Type = "minecraft:iron_shovel",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = false
         },
     },
     ["93572b414e21721b85aa52ce823174d3bf4603ae"] = {

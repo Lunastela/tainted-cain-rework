@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "X": "minecraft:leather"
+  },
+  "pattern": [
+    "XXX"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Belt"
+  }
+}

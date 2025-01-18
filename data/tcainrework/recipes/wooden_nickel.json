@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "W": "minecraft:oak_planks",
+    "N": "tcainrework:nickel",
+    "L": "tcainrework:lucky_penny"
+  },
+  "pattern": [
+    "WLW",
+    "WNW",
+    "WWW"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Wooden Nickel"
+  }
+}

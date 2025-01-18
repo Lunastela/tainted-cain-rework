@@ -10,6 +10,7 @@ local minecraftItemID = mod.minecraftItemID
 
 local constantScale = Vector.One * 1.15
 local numberToItems = require("scripts.tcainrework.stored.num_to_id")
+local itemDescriptions = require("scripts.tcainrework.stored.id_to_iteminfo")
 mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
     local entityHash = GetPtrHash(entity)
     if not collectedItems[entityHash] then
@@ -87,6 +88,16 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collid
     end
 end, minecraftItemID)
 
+local function numericID(string)
+    return itemDescriptions[string].NumericID
+end
+
+local dropOutcomes = WeightedOutcomePicker()
+dropOutcomes:AddOutcomeWeight(numericID("minecraft:stick"), 25)
+dropOutcomes:AddOutcomeWeight(numericID("minecraft:paper"), 25)
+dropOutcomes:AddOutcomeWeight(numericID("minecraft:oak_planks"), 100)
+dropOutcomes:AddOutcomeWeight(numericID("minecraft:leather"), 25)
+
 function mod:testChestOpening(chest)
     if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     and mod.inventoryHelper.getUnlockedInventory() then
@@ -98,8 +109,7 @@ function mod:testChestOpening(chest)
                     local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, chest.Position, chest.GetRandomPickupVelocity(chest.Position), chest)
                     local pickupData = saveManager.GetRoomFloorSave(itemPickup) 
                         and saveManager.GetRoomFloorSave(itemPickup).RerollSave
-                    local unlucky = math.random(1, 5) == 1
-                    pickupData.Type = unlucky and "minecraft:stick" or "minecraft:oak_planks"
+                    pickupData.Type = numberToItems[dropOutcomes:PickOutcome(chest:GetDropRNG())]
                     pickupData.Count = 1
                 end
             end

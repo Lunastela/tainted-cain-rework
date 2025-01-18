@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "minecraft:bucket",
+    "Yum Heart",
+    "tcainrework:eternal_heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Bucket of Lard"
+  }
+}

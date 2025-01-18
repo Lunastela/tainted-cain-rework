@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "tcainrework:half_heart",
+    "tcainrework:half_heart"
+  ],
+  "result": {
+    "id": "tcainrework:heart"
+  }
+}

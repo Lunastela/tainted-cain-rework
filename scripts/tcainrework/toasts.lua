@@ -12,7 +12,7 @@ function mod:CreateToast(toastType, renderItems, renderIcon, toastText, toastSub
     toastSprite:Play("Idle", true)
     toastSprite:ReplaceSpritesheet(0, "gfx/ui/" .. toastType .. ".png")
     toastSprite:LoadGraphics()
-    table.insert(toastList, {
+    local myToast = {
         Sprite = toastSprite, 
         Time = 0, HoldTime = 0, 
         Type = toastType,
@@ -24,15 +24,27 @@ function mod:CreateToast(toastType, renderItems, renderIcon, toastText, toastSub
         SubText = toastSubtext
         or ((toastType == InventoryToastTypes.STANDARD) and "Check your recipe book") or "",
         ToastTime = toastTime or 180
-    })
+    }
+    table.insert(toastList, myToast)
     SFXManager():Play(Isaac.GetSoundIdByName("Toast_InventoryIn"), 1, 2, false, 1, 0)
+    return myToast
 end
 
 local customSprite = Sprite()
 customSprite:Load("gfx/items/inventoryitem.anm2", true)
 
 local additionConstant = 0.025
+local toastStorage = require("scripts.tcainrework.stored.toast_storage")
+local activeRecipeToast = nil
 mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY, function(_)
+    if #toastStorage > 0 and (not activeRecipeToast) then
+        activeRecipeToast = TCainRework:CreateToast(
+            InventoryToastTypes.STANDARD, 
+            toastStorage, nil,
+            nil, nil,
+            180
+        )
+    end
     local flaggedForDeletion = {}
     for i, toast in pairs(toastList) do
         local toastSprite = toast.Sprite
@@ -90,6 +102,12 @@ mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY,
     end
     if #flaggedForDeletion > 0 then
         for i, j in ipairs(flaggedForDeletion) do
+            if activeRecipeToast == toastList[j] then
+                for k in ipairs(toastStorage) do
+                    toastStorage[k] = nil
+                end
+                activeRecipeToast = nil
+            end
             toastList[j] = nil
         end
     end

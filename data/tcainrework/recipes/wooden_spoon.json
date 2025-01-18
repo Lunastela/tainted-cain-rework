@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "X": "minecraft:oak_planks",
+    "#": "minecraft:stick",
+    "P": "#tcainrework:pickup"
+  },
+  "pattern": [
+    " XX",
+    "P#X",
+    "#P "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Wooden Spoon"
+  }
+}

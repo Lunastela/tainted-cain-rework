@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "Iron Bar",
+    "B": "tcainrework:battery"
+  },
+  "pattern": [
+    " # ",
+    "#B#",
+    " # "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Compass"
+  }
+}

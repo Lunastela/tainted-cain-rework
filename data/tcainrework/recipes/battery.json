@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "tcainrework:mini_battery",
+    "tcainrework:mini_battery",
+    "tcainrework:mini_battery"
+  ],
+  "result": {
+    "id": "tcainrework:battery"
+  }
+}

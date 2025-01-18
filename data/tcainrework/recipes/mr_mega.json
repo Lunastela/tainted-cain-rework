@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "X": "tcainrework:bomb",
+    "B": "tcainrework:giga_bomb"
+  },
+  "pattern": [
+    " X ",
+    "XBX",
+    " X "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Mr. Mega"
+  }
+}

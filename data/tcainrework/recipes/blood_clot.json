@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:heart"
+  },
+  "pattern": [
+    " # ",
+    "###",
+    " # "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Blood Clot"
+  }
+}

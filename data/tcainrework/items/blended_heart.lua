@@ -3,6 +3,7 @@ return {
         DisplayName = "Blended Heart",
         GFX = "gfx/items/blended_heart.png",
         RenderModel = InventoryItemRenderType.Default,
+        ItemTags = {"#tcainrework:heart", "#tcainrework:pickup"},
         StackSize = 16,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false

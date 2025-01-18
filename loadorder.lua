@@ -4,7 +4,9 @@ return {
     Items = [[
     collectible
     heart
+    half_heart
     soul_heart
+    half_soul_heart
     black_heart
     eternal_heart
     blended_heart

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "X": "#tcainrework:card",
+    "P": "minecraft:paper"
+  },
+  "pattern": [
+    "XXX",
+    "XPX",
+    "XXX"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Deck of Cards"
+  }
+}

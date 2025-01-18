@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "minecraft:leather",
+    "C": "minecraft:crafting_table"
+  },
+  "pattern": [
+    " # ",
+    "#C#",
+    "###"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Bag of Crafting"
+  }
+}

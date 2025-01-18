@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "#tcainrework:pickup",
+    "#tcainrework:pickup",
+    "#tcainrework:pickup",
+    "#tcainrework:pickup",
+    "#tcainrework:pickup",
+    "minecraft:oak_planks",
+    "minecraft:oak_planks"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Consolation Prize"
+  }
+}

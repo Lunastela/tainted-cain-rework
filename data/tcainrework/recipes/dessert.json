@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "#tcainrework:heart",
+    "#tcainrework:heart",
+    "#tcainrework:heart",
+    "#tcainrework:heart",
+    "#tcainrework:heart",
+    "#tcainrework:heart",
+    "#tcainrework:heart",
+    "#tcainrework:heart",
+    "#tcainrework:card"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Dessert"
+  }
+}

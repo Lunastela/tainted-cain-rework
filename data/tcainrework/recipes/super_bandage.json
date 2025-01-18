@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "X": "Old Bandage"
+  },
+  "pattern": [
+    "XX"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Super Bandage"
+  }
+}

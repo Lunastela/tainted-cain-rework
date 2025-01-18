@@ -38,6 +38,7 @@ local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items")
 local recipeStorage = require("scripts.tcainrework.stored.recipe_hashmap")
 local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
 local recipeReverseLookup = require("scripts.tcainrework.stored.recipe_from_ingredient")
+local collectibleToRecipe = require("scripts.tcainrework.stored.collectible_to_recipe")
 
 local index = 0
 function mod:loadRegistry(curLoad)
@@ -98,6 +99,11 @@ function mod:loadRegistry(curLoad)
                                 table.insert(recipeReverseLookup[nameType], recipeName)
                             end
                         end
+                    end
+                    if recipeData.Results 
+                    and recipeData.Results.Collectible 
+                    and recipeData.DisplayRecipe then
+                        collectibleToRecipe[recipeData.Results.Collectible] = recipeName
                     end
                 end
             end

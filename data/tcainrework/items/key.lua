@@ -3,6 +3,7 @@ return {
         DisplayName = "Key",
         GFX = "gfx/items/key.png",
         RenderModel = InventoryItemRenderType.Default,
+        ItemTags = {"#tcainrework:key", "#tcainrework:pickup", "#tcainrework:metal"},
         StackSize = 16,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false

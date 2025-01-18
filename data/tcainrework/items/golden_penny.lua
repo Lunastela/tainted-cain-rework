@@ -3,7 +3,7 @@ return {
         DisplayName = "Golden Penny",
         GFX = "gfx/items/golden_penny.png",
         RenderModel = InventoryItemRenderType.Default,
-        ItemTags = {"#tcainrework:golden"},
+        ItemTags = {"#tcainrework:golden", "#tcainrework:coin", "#tcainrework:pickup"},
         StackSize = 1,
         Rarity = InventoryItemRarity.RARE,
         Enchanted = true

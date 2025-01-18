@@ -3,7 +3,7 @@ return {
         DisplayName = "Golden Bomb",
         GFX = "gfx/items/golden_bomb.png",
         RenderModel = InventoryItemRenderType.Default,
-        ItemTags = {"#tcainrework:golden"},
+        ItemTags = {"#tcainrework:golden", "#tcainrework:bomb", "#tcainrework:pickup"},
         StackSize = 1,
         Rarity = InventoryItemRarity.RARE,
         Enchanted = true
