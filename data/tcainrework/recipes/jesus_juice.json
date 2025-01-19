@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:heart",
+    "S": "tcainrework:soul_heart",
+    "C": "#tcainrework:card"
+  },
+  "pattern": [
+    "#C#",
+    "#S#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Jesus Juice"
+  }
+}

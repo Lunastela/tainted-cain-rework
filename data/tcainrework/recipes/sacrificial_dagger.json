@@ -10,7 +10,7 @@
   "pattern": [
     " I ",
     "B#B",
-    "BOB"
+    " O "
   ],
   "result": {
     "id": "tcainrework:collectible",

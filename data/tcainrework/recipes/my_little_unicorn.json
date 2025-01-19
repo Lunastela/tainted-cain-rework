@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "tcainrework:soul_heart",
+    "C": "minecraft:cobblestone",
+    "#": "Unicorn Stump"
+  },
+  "pattern": [
+    "S",
+    "C",
+    "#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "My Little Unicorn"
+  }
+}

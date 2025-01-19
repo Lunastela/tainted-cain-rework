@@ -223,6 +223,7 @@ function inventoryHelper.checkRecipeCraftable(recipe, storedItemCounts)
         matchedTypes[myItemID] = (matchedTypes[myItemID] or 0) + 1
     end
     for type in pairs(matchedTypes) do
+        -- TODO: SORT ITEMS, SEARCH TYPES AND THEN SEARCH TAGS
         matchedTypes[type] = matchedTypes[type] - (storedItemCounts[type] or 0)
         if itemTagLookup[type] then
             for i, itemType in ipairs(itemTagLookup[type]) do

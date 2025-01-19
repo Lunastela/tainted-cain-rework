@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "#tcainrework:coin",
+    "B": "#tcainrework:bomb",
+    "K": "#tcainrework:key",
+    "H": "#tcainrework:soul_heart",
+    "#": "#book"
+  },
+  "pattern": [
+    "C B",
+    " # ",
+    "K H"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Book of Sin"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "#tcainrework:pill",
+    "B": "The Jar"
+  },
+  "pattern": [
+    "SSS",
+    "SBS",
+    "SSS"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Mom's Bottle of Pills"
+  }
+}

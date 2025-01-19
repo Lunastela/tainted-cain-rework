@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:bomb",
+    "T": "minecraft:torch",
+    "G": "tcainrework:golden_bomb"
+  },
+  "pattern": [
+    "#T#",
+    "TGT",
+    "#T#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Hot Bombs"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "MEAT!",
+    "tcainrework:rotten_heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Rotten Meat"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "T": "minecraft:torch",
+    "B": "Bob's Brain"
+  },
+  "pattern": [
+    " T ",
+    "TBT",
+    " T "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Fire Mind"
+  }
+}

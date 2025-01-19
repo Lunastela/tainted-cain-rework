@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "tcainrework:soul_heart",
+    "B": "The Bible"
+  },
+  "pattern": [
+    " S ",
+    "SBS",
+    " S "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Book of Revelations"
+  }
+}

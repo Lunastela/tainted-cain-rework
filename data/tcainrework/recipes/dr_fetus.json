@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Pyro",
+    "The Jar",
+    "#familiar"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Dr. Fetus"
+  }
+}

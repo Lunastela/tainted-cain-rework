@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#book",
+    "B": "tcainrework:giga_bomb",
+    "b": "#tcainrework:bomb"
+  },
+  "pattern": [
+    "bBb",
+    "b#b",
+    "bbb"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Anarchist Cookbook"
+  }
+}

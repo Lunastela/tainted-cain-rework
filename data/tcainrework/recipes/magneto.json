@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "O": "tcainrework:battery",
+    "H": "Iron Bar"
+  },
+  "pattern": [
+    "O",
+    "H",
+    "H"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Magneto"
+  }
+}

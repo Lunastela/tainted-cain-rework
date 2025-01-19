@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:bomb",
+    "V": "<3",
+    "H": "Hot Bombs",
+    "G": "tcainrework:golden_bomb"
+  },
+  "pattern": [
+    "#V#",
+    "#H#",
+    " G "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Pyromaniac"
+  }
+}
