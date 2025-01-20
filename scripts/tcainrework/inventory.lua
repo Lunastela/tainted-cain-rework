@@ -896,12 +896,14 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                                         and utility.tableContains(itemTagLookup[itemOrTag.Type], inventory[j].Type)) 
                                                                         or (inventory[j].Type == itemOrTag.Type)) then
                                                                             table.insert(inventoryLookupTable, j)
-                                                                            print('adding to candidates', inventory[j] and inventory[j].Type)
                                                                         end
                                                                     end
-                                                                    table.sort(inventoryLookupTable, function(a, b)
-                                                                        return inventoryHelper.sortTableByTags(inventory[a].Type, inventory[b].Type)
-                                                                    end)
+                                                                    if itemTagLookup[itemOrTag.Type] then
+                                                                        table.sort(inventoryLookupTable, function(a, b)
+                                                                            return (utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventory[a].Type) 
+                                                                                < utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventory[b].Type))
+                                                                        end)
+                                                                    end
                                                                     for i in ipairs(inventoryLookupTable) do
                                                                         print(inventory[inventoryLookupTable[i]].Type)
                                                                     end
@@ -923,14 +925,17 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                                                     }
                                                                                     itemsNeeded[itemIndex] = nil
                                                                                 end
+
                                                                             end
+
                                                                         end
+
                                                                     end
+
                                                                 end
                                                             end
                                                         end
                                                     end
-                                                    ::recipeFinished::
                                                 else
                                                     times = 0
                                                     goto endRecipes

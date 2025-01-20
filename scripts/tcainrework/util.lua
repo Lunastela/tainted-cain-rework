@@ -18,6 +18,17 @@ function Utility.tableContains(table, value)
     return false
 end
 
+function Utility.getIndexInTable(table, value)
+    if table ~= nil then
+        for i = 1,#table do
+            if (table[i] == value) then
+                return i
+            end
+        end
+    end
+    return nil
+end
+
 local isaacItemConfig
 local collectibleCache = {}
 function Utility.getCollectibleConfig(collectibleID)

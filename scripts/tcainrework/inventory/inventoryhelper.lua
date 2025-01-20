@@ -511,18 +511,25 @@ end
 function inventoryHelper.reconveneFromInventory(currentStack, inventoryList)
     if currentStack and currentStack.Count < inventoryHelper.getMaxStackFor(currentStack.Type) then
         local fakeInventory = {}
+        local inventoryDisplacement = 0
         for i, subInventory in ipairs(inventoryList) do
             if inventoryHelper.isValidInventory(subInventory) then
                 for j, inventoryItem in pairs(subInventory) do
                     if inventoryItem ~= nil and inventoryItem.Count > 0 
                     and inventoryHelper.itemCanStackWith(inventoryItem, currentStack) then
-                        table.insert(fakeInventory, {Slot = j, Inventory = subInventory})
+                        table.insert(fakeInventory, {
+                            Slot = j, 
+                            Inventory = subInventory, 
+                            AbsoluteSlot = j + inventoryDisplacement
+                        })
                     end
                 end
+                inventoryDisplacement = inventoryDisplacement + (inventoryHelper.getInventoryWidth(subInventory) * inventoryHelper.getInventoryHeight(subInventory))
             end
         end
         table.sort(fakeInventory, function(a, b) 
-            return a.Inventory[a.Slot].Count < b.Inventory[b.Slot].Count
+            -- print(a.Inventory[a.Slot].Count, b.Inventory[b.Slot].Count, "-", a.AbsoluteSlot, b.AbsoluteSlot)
+            return (a.AbsoluteSlot < b.AbsoluteSlot)
         end)
         for i, inventoryPointer in pairs(fakeInventory) do
             local inventoryItem = inventoryPointer.Inventory[inventoryPointer.Slot]

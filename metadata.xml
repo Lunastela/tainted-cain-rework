@@ -29,7 +29,7 @@ Look no further than [b]Tainted Cain Rework![/b] Tainted Cain Rework makes sever
     [*] Incompatible with modded items and pickups unless they provide support. There is, however, an extensive API for adding support with other mods, such as custom recipes and pickup types, that anyone is free to use.
     [*] [b]Currently unavailable in multiplayer.[/b] This may change in the future, sorry!
 [/list]</description>
-    <version>1.3</version>
+    <version>1.4</version>
     <visibility>Private</visibility>
     <tag id="Lua"/>
     <tag id="Items"/>
