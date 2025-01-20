@@ -5,7 +5,7 @@ return {
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:heart", "#tcainrework:soul_heart", "#tcainrework:pickup"},
         StackSize = 16,
-        Rarity = InventoryItemRarity.COMMON,
+        Rarity = InventoryItemRarity.UNCOMMON,
         Enchanted = false
     },
     ObtainedFrom = {

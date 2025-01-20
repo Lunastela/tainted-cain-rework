@@ -217,7 +217,7 @@ end
 
 local function canSalvageItem(collectibleType)
     local itemConfig = utility.getCollectibleConfig(collectibleType)
-    return not (collectibleType > 0 and (itemConfig.Tags & ItemConfig.TAG_QUEST ~= 0))
+    return ((collectibleType > 0) and not (itemConfig.Tags & ItemConfig.TAG_QUEST ~= 0))
 end
 
 local salvageOutcomes = WeightedOutcomePicker()
@@ -234,7 +234,8 @@ local heartSelectionList = {
     [ItemPoolType.POOL_SECRET] = HeartSubType.HEART_BONE,
     [ItemPoolType.POOL_ANGEL] = HeartSubType.HEART_ETERNAL,
     [ItemPoolType.POOL_DEVIL] = HeartSubType.HEART_BLACK,
-    [ItemPoolType.POOL_CURSE] = HeartSubType.HEART_ROTTEN
+    [ItemPoolType.POOL_CURSE] = HeartSubType.HEART_ROTTEN,
+    [ItemPoolType.POOL_ULTRA_SECRET] = HeartSubType.HEART_BONE,
 }
 local function spawnSalvagePickup(pickup, salvageVariant)
     local salvageSubtype = 0
@@ -255,11 +256,31 @@ local function salvageCollectible(player, pickup)
         local ptrHash = GetPtrHash(pickup)
         SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 2, pickup.Position, Vector.Zero, pickup)
-        -- Salvage Collectible
+        -- Unlock Item Recipe
         TCainRework:UnlockItemRecipe(collectibleToRecipe[pickup.SubType])
+        -- Boss Rush / Challenge Room
+        local roomType = Game():GetRoom():GetType()
+        if roomType == RoomType.ROOM_BOSSRUSH or roomType == RoomType.ROOM_CHALLENGE then
+            Ambush.StartChallenge()
+            -- Add additional boss rush salvage (because it's depths 2, actually I don't need to justify myself to you?)
+            if roomType == RoomType.ROOM_BOSSRUSH then
+                local timeStep, times = 3, 6
+                Isaac.CreateTimer(function(_)
+                    for i = 1, 2 do
+                        local salvageVariant = salvageOutcomes:PickOutcome(pickup:GetDropRNG())
+                        spawnSalvagePickup(pickup, salvageVariant)
+                    end
+                end, timeStep, times, false)
+                Isaac.CreateTimer(function(_)
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, BombSubType.BOMB_SUPERTROLL, 
+                        pickup.Position, pickup.GetRandomPickupVelocity(pickup.Position), pickup)
+                end, ((times + 1) * timeStep), 1, false)
+            end
+        end
+        -- Spawn Salvage
         local itemQuality = Isaac.GetItemConfig():GetCollectible(pickup.SubType).Quality
         spawnSalvagePickup(pickup, PickupVariant.PICKUP_HEART)
-        for i = 1, ((2 + math.random(1, 2)) + itemQuality) do
+        for i = 1, ((3 + math.random(1, 3)) + itemQuality) do
             local salvageVariant = salvageOutcomes:PickOutcome(pickup:GetDropRNG())
             spawnSalvagePickup(pickup, salvageVariant)
         end

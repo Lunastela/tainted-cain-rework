@@ -149,6 +149,7 @@ function inventoryHelper.getUnlockedInventory(setUnlocked)
             240
         )
         runSave.inventoryUnlocked = setUnlocked
+        Isaac.SetWindowTitle(" (A.K.A. Minecraft 1.21.4)")
     end
     return runSave.inventoryUnlocked
 end
@@ -216,23 +217,40 @@ function inventoryHelper.getInventoryItemList(inventorySet, inventoryBlacklist)
     return storedItemCounts
 end
 
+function inventoryHelper.sortTableByTags(a, b)
+    return ((not itemTagLookup[a] and itemTagLookup[b]) 
+    or ((itemTagLookup[a] and itemTagLookup[b]) and #itemTagLookup[a] < #itemTagLookup[b])
+    or false)
+end
+
 function inventoryHelper.checkRecipeCraftable(recipe, storedItemCounts)
-    local matchedTypes = {}
+    local typedIndex, matchedTypes = {}, {}
     for i, itemID in pairs(recipe.ConditionTable) do
         local myItemID = conditionalItemLookupType(itemID)
         matchedTypes[myItemID] = (matchedTypes[myItemID] or 0) + 1
+        table.insert(typedIndex, myItemID)
     end
-    for type in pairs(matchedTypes) do
-        -- TODO: SORT ITEMS, SEARCH TYPES AND THEN SEARCH TAGS
-        matchedTypes[type] = matchedTypes[type] - (storedItemCounts[type] or 0)
+    table.sort(typedIndex, inventoryHelper.sortTableByTags)
+
+    for index, type in ipairs(typedIndex) do
+        local itemTags = {type}
         if itemTagLookup[type] then
-            for i, itemType in ipairs(itemTagLookup[type]) do
-                matchedTypes[type] = matchedTypes[type] - (storedItemCounts[itemType] or 0)
+            itemTags = itemTagLookup[type]
+        end
+        for i, itemInTag in ipairs(itemTags) do
+            local itemAmount = matchedTypes[typedIndex[index]]
+            if storedItemCounts[itemInTag] and itemAmount then
+                -- print(typedIndex[index], matchedTypes[typedIndex[index]], itemInTag)
+                local subtractableAmount = math.min(storedItemCounts[itemInTag], itemAmount)
+                storedItemCounts[itemInTag] = storedItemCounts[itemInTag] - subtractableAmount
+                matchedTypes[typedIndex[index]] = itemAmount - subtractableAmount
+                if matchedTypes[typedIndex[index]] <= 0 then
+                    matchedTypes[typedIndex[index]] = nil
+                    goto nextItem
+                end
             end
         end
-        if matchedTypes[type] <= 0 then
-            matchedTypes[type] = nil
-        end
+        ::nextItem::
     end
     for type in pairs(matchedTypes) do
         return false
@@ -241,14 +259,16 @@ function inventoryHelper.checkRecipeCraftable(recipe, storedItemCounts)
 end
 
 function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inventorySet)
-    local recipeList, craftableRecipeList, storedItemCounts, availableTabs = {}, {}, inventoryHelper.getInventoryItemList(inventorySet), {}
+    local recipeList, craftableRecipeList, availableTabs = {}, {}, {}
     local runSave = saveManager.TryGetRunSave()
-    if runSave and #runSave.unlockedRecipes > 0 then
+    if runSave and (runSave.unlockedRecipes and #runSave.unlockedRecipes > 0 )then
         for i, recipe in ipairs(runSave.unlockedRecipes) do
             local recipeFromName = recipeLookupIndex[runSave.unlockedRecipes[i]]
             availableTabs[recipeFromName.Category] = true
             if (not recipeBookTab) or (recipeBookTab and recipeFromName.Category == recipeBookTab) then
-                local recipeCraftable = inventoryHelper.checkRecipeCraftable(recipeFromName, storedItemCounts)
+                local recipeCraftable = inventoryHelper.checkRecipeCraftable(
+                    recipeFromName, inventoryHelper.getInventoryItemList(inventorySet)
+                )
                 local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
                 if fakeItem then
                     local itemName = string.lower(inventoryHelper.getNameFor(fakeItem))
@@ -346,6 +366,7 @@ end
 
 -- Generic "of item type" esque function
 function inventoryHelper.itemCanStackWithTag(item1, itemOrList)
+    print(itemOrList, itemOrList.Type)
     if itemTagLookup[itemOrList.Type] then
         return utility.tableContains(itemTagLookup[itemOrList.Type], item1.Type)
     elseif itemOrList.Type and item1.Type == itemOrList.Type

@@ -10,9 +10,9 @@ return {
     black_heart
     eternal_heart
     blended_heart
-    golden_heart
     bone_heart
     rotten_heart
+    golden_heart
     penny
     nickel
     dime

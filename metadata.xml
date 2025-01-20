@@ -3,8 +3,33 @@
     <name>[RGON] Tainted Cain Rework</name>
     <directory>cain-crafting</directory>
     <id>3408837286</id>
-    <description></description>
-    <version>1.2</version>
+    <description>[h1]This mod requires [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]REPENTOGON[/url]. 
+If you do not yet have it, get it [url=https://repentogon.com]here[/url].[/h1]
+
+Ever miss the days where Tainted Cain's recipes were stagnant and predictable? Do you feel recipes should be more involved and require a little more subtlety and nuance?
+
+Look no further than [b]Tainted Cain Rework![/b] Tainted Cain Rework makes several changes to the Bag of Crafting, as well as Tainted Cain himself, enhancing the immersion and experience of playing the character.
+
+[b]
+[h2]Features:[/h2]
+[list]
+    [*] 700+ New Recipes!
+    [*] New (and Consistent) Bag of Crafting Mechanics!
+    [*] Reworked Salvaging and gave the Bag of Crafting the ability to Salvage items.
+    [*] More Unique Pickup Types in the Bag of Crafting!
+    [*] Nuanced Recipes and Recipe Variety! (Recipes tied to aspects of the run).
+    [*] Harder Late Game Recipes!
+    [*] And so much more!
+[/list]
+[/b]
+
+[h2]Notes:[/h2]
+[list]
+    [*] As stated above, requires [b]REPENTOGON[/b].
+    [*] Incompatible with modded items and pickups unless they provide support. There is, however, an extensive API for adding support with other mods, such as custom recipes and pickup types, that anyone is free to use.
+    [*] [b]Currently unavailable in multiplayer.[/b] This may change in the future, sorry!
+[/list]</description>
+    <version>1.3</version>
     <visibility>Private</visibility>
     <tag id="Lua"/>
     <tag id="Items"/>

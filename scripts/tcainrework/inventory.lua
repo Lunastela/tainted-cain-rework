@@ -861,40 +861,71 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                             while times > 0 do
                                                 if inventoryHelper.checkRecipeCraftable(recipeFromName, inventoryHelper.getInventoryItemList(inventorySet, {craftingInventory})) then
                                                     itemsNeeded = getRecipeItemList(recipeFromName)
+                                                    -- create an assorted stack of items the recipe needs for later use
+                                                    local sortedItemStack = {}
+                                                    for i, item in pairs(itemsNeeded) do
+                                                        table.insert(sortedItemStack, i)
+                                                    end
+                                                    -- sort the stacks by order of least accessible to most accessible
+                                                    table.sort(sortedItemStack, function(a, b)
+                                                        return inventoryHelper.sortTableByTags(itemsNeeded[a].Type, itemsNeeded[b].Type)
+                                                    end)
+                                                    -- for i, assignedIndex in ipairs(sortedItemStack) do
+                                                    --     print(i, assignedIndex, itemsNeeded[assignedIndex].Type)
+                                                    -- end
                                                     for i, inventory in ipairs(inventorySet) do
                                                         if (inventory ~= craftingInventory
                                                         and inventoryHelper.isValidInventory(inventory)) then
+                                                            -- Obtain the highest amount of items per slot able to be placed (based on previous configurations)
                                                             local lowestNumber, highestAllowedNumber = nil, nil
-                                                            for k, item2 in pairs(itemsNeeded) do
-                                                                local currentAmount = (craftingInventory[k] and craftingInventory[k].Count) or 0
-                                                                local currentMaxStack = (craftingInventory[k] and inventoryHelper.getMaxStackFor(craftingInventory[k].Type)) or 9999
+                                                            for index, itemIndex in ipairs(sortedItemStack) do
+                                                                local currentAmount = (craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or 0
+                                                                local currentMaxStack = (craftingInventory[itemIndex] and inventoryHelper.getMaxStackFor(craftingInventory[itemIndex].Type)) or 9999
                                                                 lowestNumber = math.min(currentAmount, ((lowestNumber ~= nil) and lowestNumber) or currentAmount)
                                                                 highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
                                                             end
                                                             lowestNumber = (lowestNumber or 1)
-                                                            for j, item in pairs(inventory) do
-                                                                local recipeFinished = true
-                                                                for k, item2 in pairs(itemsNeeded) do
-                                                                    recipeFinished = false
-                                                                    -- print("item item item atemt", item.Type, craftingInventory[k] and craftingInventory[k].Type)
-                                                                    if inventoryHelper.itemCanStackWithTag(item, item2) and ((not craftingInventory[k]) 
-                                                                    or (inventoryHelper.itemCanStackWith(item, craftingInventory[k]) 
-                                                                    and craftingInventory[k].Count <= lowestNumber))
-                                                                    and (lowestNumber < highestAllowedNumber) then
-                                                                        local lastItemData = item.ComponentData
-                                                                        local removeAmount = inventoryHelper.removePossibleAmount(inventory, j, 1)
-                                                                        if removeAmount > 0 then
-                                                                            craftingInventory[k] = {
-                                                                                Type = item.Type,
-                                                                                Count = ((craftingInventory[k] and craftingInventory[k].Count) or 0) + removeAmount,
-                                                                                ComponentData = lastItemData
-                                                                            }
-                                                                            itemsNeeded[k] = nil
+                                                            -- Loop through necessary ingredients
+                                                            for index, itemIndex in ipairs(sortedItemStack) do
+                                                                local itemOrTag = itemsNeeded[itemIndex]
+                                                                if itemOrTag then
+                                                                    -- Get best items for the list in order
+                                                                    local inventoryLookupTable = {}
+                                                                    for j in pairs(inventory) do
+                                                                        if (inventory[j] and inventory[j].Type) and ((itemTagLookup[itemOrTag.Type] 
+                                                                        and utility.tableContains(itemTagLookup[itemOrTag.Type], inventory[j].Type)) 
+                                                                        or (inventory[j].Type == itemOrTag.Type)) then
+                                                                            table.insert(inventoryLookupTable, j)
+                                                                            print('adding to candidates', inventory[j] and inventory[j].Type)
                                                                         end
                                                                     end
-                                                                end
-                                                                if recipeFinished then
-                                                                    goto recipeFinished
+                                                                    table.sort(inventoryLookupTable, function(a, b)
+                                                                        return inventoryHelper.sortTableByTags(inventory[a].Type, inventory[b].Type)
+                                                                    end)
+                                                                    for i in ipairs(inventoryLookupTable) do
+                                                                        print(inventory[inventoryLookupTable[i]].Type)
+                                                                    end
+                                                                    for j, inventoryItemIndex in ipairs(inventoryLookupTable) do
+                                                                        local inventoryItem = inventory[inventoryItemIndex]
+                                                                        if inventoryItem then
+                                                                            -- print("item item item atemt", item.Type, craftingInventory[itemIndex] and craftingInventory[itemIndex].Type)
+                                                                            if inventoryHelper.itemCanStackWithTag(inventoryItem, itemOrTag) and ((not craftingInventory[itemIndex]) 
+                                                                            or (inventoryHelper.itemCanStackWith(inventoryItem, craftingInventory[itemIndex]) 
+                                                                            and craftingInventory[itemIndex].Count <= lowestNumber))
+                                                                            and (lowestNumber < highestAllowedNumber) then
+                                                                                local lastItemData = inventoryItem.ComponentData
+                                                                                local removeAmount = inventoryHelper.removePossibleAmount(inventory, inventoryItemIndex, 1)
+                                                                                if removeAmount > 0 then
+                                                                                    craftingInventory[itemIndex] = {
+                                                                                        Type = inventoryItem.Type,
+                                                                                        Count = ((craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or 0) + removeAmount,
+                                                                                        ComponentData = lastItemData
+                                                                                    }
+                                                                                    itemsNeeded[itemIndex] = nil
+                                                                                end
+                                                                            end
+                                                                        end
+                                                                    end
                                                                 end
                                                             end
                                                         end
@@ -1104,6 +1135,17 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                             end, 1, 1, true)
                             inventoryHelper.removePossibleAmount(hotbarInventory, hotbarSlotSelected, 1)
                             if lastActiveItem ~= 0 and (configItem.Type == ItemType.ITEM_ACTIVE) then
+                                -- TODO fix active items
+                                -- local history = player:GetHistory()
+                                -- for i, item in ipairs(history:GetCollectiblesHistory()) do
+                                --     if item:GetItemID() == lastActiveItem then
+                                --         history:RemoveHistoryItemByIndex(i)
+                                --     end
+                                -- end
+                                -- while player:GetCollectibleNum(lastActiveItem, true) > 1 do
+                                --     player:RemoveCollectible(lastActiveItem, true, ActiveSlot.SLOT_PRIMARY, true)
+                                -- end
+                                -- print(player:GetCollectibleNum(lastActiveItem, true))
                                 hotbarInventory[hotbarSlotSelected] = {
                                     Type = "tcainrework:collectible",
                                     Count = 1,

@@ -109,6 +109,14 @@ function mod:loadRegistry(curLoad)
             end
         end
     end
+    -- sort item tags
+    for tagName in pairs(itemTagLookup) do
+        table.sort(itemTagLookup[tagName], function(a, b)
+            return ((itemDescriptions[a].Rarity == itemDescriptions[b].Rarity) 
+            and (itemDescriptions[a].NumericID < itemDescriptions[b].NumericID))
+                or (itemDescriptions[a].Rarity) < (itemDescriptions[b].Rarity)
+        end)
+    end
     return curLoad
 end
 

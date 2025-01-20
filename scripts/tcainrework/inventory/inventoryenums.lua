@@ -16,12 +16,13 @@ InventoryItemRarity = {
     UNCOMMON = 1,
     RARE = 2,
     EPIC = 3,
-    SUBTEXT = 4,
-    EFFECT_POSITIVE = 5,
-    EFFECT_NEGATIVE = 6,
-    DEBUG_TEXT = 7,
-    TUTORIAL_PURPLE = 8,
-    INVERT_TEXT = 9
+    LEGENDARY = 4,
+    SUBTEXT = 5,
+    EFFECT_POSITIVE = 6,
+    EFFECT_NEGATIVE = 7,
+    DEBUG_TEXT = 8,
+    TUTORIAL_PURPLE = 9,
+    INVERT_TEXT = 10
 }
 
 InventoryItemRenderType = {
@@ -47,6 +48,11 @@ InventoryItemRarityColors = {
     [InventoryItemRarity.EPIC] = {
         Color = KColor(255 / 255, 85 / 255, 255 / 255, 1),
         Shadow = KColor(63 / 255, 21 / 255, 63 / 255, 1)
+    },
+    -- TODO change legendary colors
+    [InventoryItemRarity.LEGENDARY] = {
+        Color = KColor(224 / 255, 165 / 255, 31 / 255, 1),
+        Shadow = KColor(114 / 255, 63 / 255, 0 / 255, 1)
     },
     -- Subtext / Effect Colors
     [InventoryItemRarity.SUBTEXT] = {
