@@ -1,3 +1,4 @@
+local utility = require("scripts.tcainrework.util")
 return {
     Properties = {
         DisplayName = "Collectible",
@@ -8,6 +9,12 @@ return {
         Enchanted = false
     },
     ObtainedFrom = {
-        "5.100"
+        {
+            EntityID = "5.100",
+            Amount = 1,
+            Condition = function(entity, player)
+                return utility.generateCollectibleData(entity.SubType)
+            end
+        }
     }
 }

@@ -1,5 +1,5 @@
 return {
-    Namespace = "tcainrework", 
+    Namespace = "tcainrework",
     Name = "Tainted Cain Rework",
     Items = [[
     collectible
@@ -28,10 +28,13 @@ return {
     battery
     mega_battery
     golden_battery
-    card
+    tarot_card
+    reverse_tarot_card
+    mtg_card
     holy_card
     credit_card
     card_against_humanity
+    wild_card
     pill
     golden_pill
     rune
@@ -41,5 +44,6 @@ return {
     poop_block
     wooden_doll
     repentogon
+    card
     ]]
 }

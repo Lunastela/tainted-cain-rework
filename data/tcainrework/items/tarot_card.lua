@@ -1,8 +1,8 @@
 local utility = require("scripts.tcainrework.util")
 return {
     Properties = {
-        DisplayName = "Card",
-        GFX = "gfx/items/cards/playing_card.png",
+        DisplayName = "Tarot Card",
+        GFX = "gfx/items/cards/tarot.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:card", "#tcainrework:pickup"},
         StackSize = 16,
@@ -14,11 +14,12 @@ return {
             EntityID = "5.300", 
             Amount = 1,
             Condition = function(entity, player)
-                -- only accounts for vanilla cards. last card added, so will always be fallback
-                local cardConfig = Isaac.GetItemConfig():GetCard(entity.SubType)
-                if cardConfig:IsCard() and entity.SubType < Card.NUM_CARDS then
-                    return {[InventoryItemComponentData.CUSTOM_DESC] = utility.getLocalizedString("PocketItems", cardConfig.Name)}
-                end 
+                if (entity.SubType <= 22) then
+                    return {
+                        [InventoryItemComponentData.CUSTOM_DESC] = "Major Arcana\n" 
+                        .. utility.getLocalizedString("PocketItems", Isaac.GetItemConfig():GetCard(entity.SubType).Name)
+                    }
+                end
                 return false
             end
         }

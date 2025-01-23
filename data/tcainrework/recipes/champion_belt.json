@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "S": "#tcainrework:pill",
-    "B": "The Jar"
+    "X": "minecraft:leather",
+    "H": "tcainrework:heart"
   },
   "pattern": [
-    " S ",
-    "SBS",
-    " S "
+    "HHH",
+    "XXX",
+    "HHH"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mom's Bottle of Pills"
+    "collectible": "Champion Belt"
   }
 }

@@ -2,16 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "S": "#tcainrework:pill",
-    "B": "The Jar"
+    "#": "The Scooper",
+    "S": "tcainrework:soul_heart",
+    "H": "tcainrework:heart"
   },
   "pattern": [
-    " S ",
-    "SBS",
-    " S "
+    "HSH",
+    "H#H",
+    " H "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mom's Bottle of Pills"
+    "collectible": "The Peeper"
   }
 }

@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "S": "#tcainrework:pill",
-    "B": "The Jar"
+    "X": "tcainrework:heart",
+    "R": "tcainrework:rotten_heart"
   },
   "pattern": [
-    " S ",
-    "SBS",
-    " S "
+    "XXR",
+    "XXR",
+    "XXR"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mom's Bottle of Pills"
+    "collectible": "Yuck Heart"
   }
 }

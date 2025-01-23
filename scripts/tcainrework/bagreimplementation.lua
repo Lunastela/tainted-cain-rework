@@ -28,11 +28,6 @@ function(_, id, rng, player, flags, slot)
     return true
 end, CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
 
-local bagActions = {
-    ButtonAction.ACTION_SHOOTLEFT, ButtonAction.ACTION_SHOOTRIGHT, 
-    ButtonAction.ACTION_SHOOTUP, ButtonAction.ACTION_SHOOTDOWN
-}
-
 mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, function(_, player)
     if (player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     and (player:GetSprite():GetAnimation():find("Pickup"))) then
@@ -62,7 +57,15 @@ local function getBagSwipePosition(bagSprite, player)
 end
 
 local entityToItemLookupTable = require("scripts.tcainrework.stored.entityid_to_id")
-local function getEntityFromTable(entity, gridEntity)
+local function checkEntityConditional(entity, entityLookup, player)
+    local checkedCondition = entityLookup.Condition and entityLookup.Condition(entity, player)
+    if not entityLookup.Condition or (checkedCondition ~= false) then
+        return entityLookup, checkedCondition
+    end
+    return nil, nil
+end
+
+local function getEntityFromTable(entity, gridEntity, player)
     local allVariants = (gridEntity and {entity:GetType(), entity:GetVariant()})
         or {tostring(entity.Type), tostring(entity.Variant), tostring(entity.SubType)}
     for i = #allVariants, 1, -1 do
@@ -71,103 +74,21 @@ local function getEntityFromTable(entity, gridEntity)
             totalString = totalString .. "." .. allVariants[j + 1]
         end
         if entityToItemLookupTable and entityToItemLookupTable[totalString] then
-            if totalString == "5.300" then
-                local cardConfig = Isaac.GetItemConfig():GetCard(entity.SubType)
-                entityToItemLookupTable[totalString].Type = (cardConfig:IsRune() and "tcainrework:rune" or "tcainrework:card")
+            if entityToItemLookupTable[totalString].Type then
+                local entityLookup, entityConditionTable = checkEntityConditional(entity, entityToItemLookupTable[totalString], player)
+                return entityLookup, entityConditionTable
+            else
+                for i, lookupTable in ipairs(entityToItemLookupTable[totalString]) do
+                    local entityLookup, entityConditionTable = checkEntityConditional(entity, lookupTable, player)
+                    if entityLookup then
+                        return entityLookup, entityConditionTable
+                    end
+                end
             end
-            return entityToItemLookupTable[totalString]
         end
     end
     return nil
 end 
-
-local unoCard = {
-    [Card.CARD_WILD] = true
-}
-
-local runeList = {
-    [Card.RUNE_HAGALAZ] = "left",
-    [Card.RUNE_JERA] = "left",
-    [Card.RUNE_EHWAZ] = "left",
-    [Card.RUNE_DAGAZ] = "left",
-    [Card.RUNE_ANSUZ] = "right",
-    [Card.RUNE_PERTHRO] = "right",
-    [Card.RUNE_BERKANO] = "right",
-    [Card.RUNE_ALGIZ] = "right",
-    [Card.RUNE_BLANK] = "right",
-    [Card.RUNE_BLACK] = "black"
-}
-
-local mtgCard = {
-    [Card.CARD_CHAOS] = true,
-    [Card.CARD_HUGE_GROWTH] = true,
-    [Card.CARD_ANCIENT_RECALL] = true,
-    [Card.CARD_ERA_WALK] = true
-}
-local function getComponentDataFromEntity(entity)
-    -- Pills
-    if entity.Type == EntityType.ENTITY_PICKUP then 
-        if entity.Variant == PickupVariant.PICKUP_PILL then
-            local pillEffect = Game():GetItemPool():GetPillEffect(entity.SubType)
-            local gfxPath = "pill_base_"
-            local localizedColor, isHorsePill = utility.getPillColor(entity.SubType)
-            gfxPath = (isHorsePill and "horse" or "") .. gfxPath .. tostring(localizedColor) .. ".png"
-            return {
-                [InventoryItemComponentData.PILL_EFFECT] = pillEffect,
-                [InventoryItemComponentData.PILL_COLOR] = entity.SubType,
-                [InventoryItemComponentData.CUSTOM_GFX] = "gfx/items/pills/" .. gfxPath
-            }
-        elseif entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
-            return mod.inventoryHelper.generateCollectibleData(entity.SubType)
-        elseif entity.Variant == PickupVariant.PICKUP_TAROTCARD then
-            -- check if any entity slot specifically exists for this card
-            local absoluteIDName = tostring(entity.Type) .. "." .. tostring(entity.Variant) .. "." .. tostring(entity.SubType)
-            if entityToItemLookupTable[absoluteIDName] then
-                return nil
-            else -- generic cards
-                local gfxPath = "tarot"
-                local customName, localizedName, customDescription
-                local cardConfig = Isaac.GetItemConfig():GetCard(entity.SubType)
-                localizedName = utility.getLocalizedString("PocketItems", cardConfig.Name)
-                local returnTable = {}
-                if cardConfig:IsCard() then
-                    if entity.SubType <= 22 
-                    or (entity.SubType >= 56 and entity.SubType <= 77) then
-                        customDescription = "Major Arcana"
-                        customName = "Tarot Card"
-                        if (entity.SubType >= 56 and entity.SubType <= 77) then
-                            gfxPath = gfxPath .. "_reverse"
-                            customDescription = "Reverse " .. customDescription
-                            returnTable[InventoryItemComponentData.ENCHANTMENT_OVERRIDE] = true
-                        end
-                    elseif unoCard[entity.SubType] then
-                        gfxPath = "uno_card"
-                        customName = "Uno Card"
-                    elseif mtgCard[entity.SubType] then
-                        gfxPath = "mtg_card"
-                        customName = "Magic: The Gathering Card"
-                    else
-                        gfxPath = "playing_card"
-                    end
-                elseif cardConfig:IsRune() then
-                    customName = "Rune"
-                    gfxPath = "rune_shard"
-                    if runeList[entity.SubType] then
-                        gfxPath = runeList[entity.SubType] .. "_rune"
-                    end
-                    if string.find(string.lower(localizedName), "soul") then
-                        customName = "Soul Stone"
-                    end
-                end
-                returnTable[InventoryItemComponentData.CUSTOM_GFX] = "gfx/items/cards/" .. gfxPath .. ".png"
-                returnTable[InventoryItemComponentData.CUSTOM_DESC] = (((customDescription and (customDescription .. "\n")) or "") .. localizedName)
-                returnTable[InventoryItemComponentData.CUSTOM_NAME] = customName
-                return returnTable
-            end
-        end
-    end
-    return nil
-end
 
 local bagExclusions = {
     [EntityType.ENTITY_SHOPKEEPER] = true,
@@ -295,7 +216,7 @@ end
 
 local function notShopItemOrBought(player, pickup)
     if pickup:IsShopItem() 
-    and getEntityFromTable(pickup) then
+    and getEntityFromTable(pickup, false, player) then
         if player:GetNumCoins() - pickup.Price >= 0 then
             player:AddCoins(-pickup.Price)
             pickup.EntityCollisionClass = EntityCollisionClass.ENTCOLL_NONE
@@ -345,7 +266,7 @@ local function renderBagOfCrafting(player, offset)
                 if currentFrame <= 5 then
                     local swipePosition = getBagSwipePosition(bagSprite, player)
                     local swipeCapsule = Capsule(player.Position + swipePosition * 0.75, 
-                        player.Position + swipePosition, 25 * player.SpriteScale:Length())
+                        player.Position + swipePosition, 30 * player.SpriteScale:Length())
                     local foundEntities = Isaac.FindInCapsule(swipeCapsule, 
                         EntityPartition.ENEMY | EntityPartition.PICKUP | EntityPartition.BULLET
                     )
@@ -359,9 +280,12 @@ local function renderBagOfCrafting(player, offset)
                             or (not pickup)) and not bagExclusions[entity.Type] then
                                 local tcainPickup = (pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
                                     and (player:GetPlayerType() == PlayerType.PLAYER_CAIN_B)
-                                local itemTable = (not tcainPickup) and getEntityFromTable(entity)
+                                local itemTable, itemCondition = getEntityFromTable(entity, false, player)
+                                if tcainPickup then
+                                    itemTable, itemCondition = nil, nil
+                                end
                                 local ableToAddItem = itemTable and mod:AddItemToInventory(
-                                    itemTable.Type, itemTable.Amount, getComponentDataFromEntity(entity, player)
+                                    itemTable.Type, itemTable.Amount, itemCondition
                                 )
                                 if not ableToAddItem then
                                     local forcedInclude = bagInclusions[entity.Type]
@@ -419,7 +343,7 @@ local function renderBagOfCrafting(player, offset)
                                 if gridEntity then
                                     local positionHash = utility.sha1(tostring(gridEntity.Position.X) .. "." .. tostring(gridEntity.Position.Y))
                                     if (not utility.tableContains(bagCollisions[player.Index], positionHash)) then
-                                        local itemTable = getEntityFromTable(gridEntity, true)
+                                        local itemTable = getEntityFromTable(gridEntity, true, player)
                                         local ableToAddItem = itemTable and mod:AddItemToInventory(itemTable.Type, itemTable.Amount)
                                         if not ableToAddItem then
                                             gridEntity:Hurt(3)
@@ -439,6 +363,7 @@ local function renderBagOfCrafting(player, offset)
                             end
                         end
                     end
+                    -- DebugRenderer.Get(1, true):Capsule(swipeCapsule)
                 end
                 bagSprite:SetFrame(math.floor(currentFrame))
                 bagSprite:Update()

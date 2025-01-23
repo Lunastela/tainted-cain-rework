@@ -41,6 +41,7 @@ local fontSwitchCodes = {
 function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, RenderColor, BoxWidth, Center, Format)
     local textType = fontType.DEFAULT
     PositionX = PositionX - (1 / fontScale)
+    PositionX, PositionY = PositionX + Game().ScreenShakeOffset.X, PositionY + Game().ScreenShakeOffset.Y
     if Format then
         local stringsToFormat = {}
         local lastIndex = 1

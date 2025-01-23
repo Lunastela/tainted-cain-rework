@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "S": "#tcainrework:pill",
-    "B": "The Jar"
+    "#": "#tcainrework:key",
+    "S": "minecraft:stick"
   },
   "pattern": [
-    " S ",
-    "SBS",
-    " S "
+    " # ",
+    " ##",
+    "S  "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mom's Bottle of Pills"
+    "collectible": "The Scooper"
   }
 }

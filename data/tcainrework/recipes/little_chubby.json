@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "minecraft:cobblestone",
+    "S": "tcainrework:soul_heart",
+    "-": "minecraft:leather"
+  },
+  "pattern": [
+    "#-#",
+    "#S#",
+    "#-#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Little Chubby"
+  }
+}

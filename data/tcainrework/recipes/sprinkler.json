@@ -2,16 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "S": "#tcainrework:pill",
-    "B": "The Jar"
+    "E": "Eye Drops",
+    "I": "Iron Bar",
+    "B": "#tcainrework:battery"
   },
   "pattern": [
-    " S ",
-    "SBS",
-    " S "
+    "E",
+    "I",
+    "B"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mom's Bottle of Pills"
+    "collectible": "Sprinkler"
   }
 }

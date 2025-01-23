@@ -165,7 +165,7 @@ local function checkRecipes()
                 Count = recipeOutput.Count
             }
             if recipeOutput.Collectible then
-                lastOutputItem.ComponentData = inventoryHelper.generateCollectibleData(recipeOutput.Collectible)
+                lastOutputItem.ComponentData = utility.generateCollectibleData(recipeOutput.Collectible)
             end
             outputInventory[1] = lastOutputItem
             outputSlotOccupied = true
@@ -272,6 +272,7 @@ local function getRecipeItemList(recipe)
     return itemsNeeded
 end
 
+local lastStartTime = 0
 local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items") 
 local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLMBPress, isRMBPress, isLMBReleased, isRMBReleased, held)
     local myItem = held or inventory[itemIndex]
@@ -314,7 +315,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                         recipeIngredientDisplay = getConditionalFromAnyRecipe(curDisplayingRecipe, inventory, itemIndex)
                         if recipeIngredientDisplay and itemTagLookup[recipeIngredientDisplay.Type] then
                             local itemTagTable = itemTagLookup[recipeIngredientDisplay.Type]
-                            recipeIngredientDisplay.Type = itemTagTable[math.floor((Isaac.GetTime() / 1000) % (#itemTagTable)) + 1]
+                            recipeIngredientDisplay.Type = itemTagTable[math.floor(((Isaac.GetTime() - lastStartTime) / 1000) % (#itemTagTable)) + 1]
                         end
                         fakeDisplayRecipe = (recipeIngredientDisplay ~= nil)
                     end
@@ -599,7 +600,7 @@ local craftingGray = 55 / 255
 local craftingFontColor = KColor(craftingGray, craftingGray, craftingGray, 1)
 
 local hotbarCellSize = 20
-local inventoryHorizontalSize = 178
+local inventorySize = Vector(178, 166)
 
 local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
 local recipeBookTabs = {"collectible"}
@@ -607,6 +608,7 @@ local selectedTab = 1
 local selectedPage = 0
 local function resetRecipeBook()
     curDisplayingRecipe = nil
+    lastStartTime = 0
     searchBarSelected = false
     if searchBarText ~= "" then
         searchBarText = ""
@@ -664,7 +666,8 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
         end
 
         -- local currentTime = Isaac.GetTime()
-        if (not Game():IsPaused()) then
+        local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+        if (not Game():IsPaused()) and player then
             if (not searchBarSelected) and Input.IsButtonTriggered(Keyboard.KEY_I, 0) then
                 inventoryState = ((inventoryState == InventoryStates.CRAFTING) and InventoryStates.CLOSED) or InventoryStates.CRAFTING
             end
@@ -693,7 +696,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                 craftingInterface:SetFrame("Idle", 0)
                 local buttonLayer = craftingInterface:GetLayerFrameData(2)
                 if buttonLayer then
-                    local buttonPosition = screenCenter + (Vector((recipeBookOpen and (inventoryHorizontalSize / 2)) or 0, 0) + (buttonLayer:GetPos()))
+                    local buttonPosition = screenCenter + (Vector((recipeBookOpen and (inventorySize.X / 2)) or 0, 0) + (buttonLayer:GetPos()))
                     if inventoryHelper.hoveringOver(mousePosition, buttonPosition, 20, 20) then
                         craftingInterface:SetFrame("Idle", 1)
                         if lmbTrigger then
@@ -702,7 +705,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                         end
                     end
                 end
-                screenCenter.X = screenCenter.X + ((recipeBookOpen and (inventoryHorizontalSize / 2)) or 0)
+                screenCenter.X = screenCenter.X + ((recipeBookOpen and (inventorySize.X / 2)) or 0)
 
                 craftingInterface:Render(screenCenter)
 
@@ -735,7 +738,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
 
                 if recipeBookOpen then
                     -- filter button
-                    local recipeBookPosition = screenCenter - Vector(inventoryHorizontalSize, 0)
+                    local recipeBookPosition = screenCenter - Vector(inventorySize.X, 0)
                     local hoveringOver = false
                     local recipeBookFilter = inventoryHelper.getRecipeBookFilter()
                     craftingInterface:SetFrame("Recipe", 0)
@@ -895,6 +898,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                                         if (inventory[j] and inventory[j].Type) and ((itemTagLookup[itemOrTag.Type] 
                                                                         and utility.tableContains(itemTagLookup[itemOrTag.Type], inventory[j].Type)) 
                                                                         or (inventory[j].Type == itemOrTag.Type)) then
+                                                                            -- print(inventory[j].Type, itemOrTag.Type)
                                                                             table.insert(inventoryLookupTable, j)
                                                                         end
                                                                     end
@@ -904,9 +908,9 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                                                 < utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventory[b].Type))
                                                                         end)
                                                                     end
-                                                                    for i in ipairs(inventoryLookupTable) do
-                                                                        print(inventory[inventoryLookupTable[i]].Type)
-                                                                    end
+                                                                    -- for i in ipairs(inventoryLookupTable) do
+                                                                    --     print(inventory[inventoryLookupTable[i]].Type)
+                                                                    -- end
                                                                     for j, inventoryItemIndex in ipairs(inventoryLookupTable) do
                                                                         local inventoryItem = inventory[inventoryItemIndex]
                                                                         if inventoryItem then
@@ -925,13 +929,9 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                                                     }
                                                                                     itemsNeeded[itemIndex] = nil
                                                                                 end
-
                                                                             end
-
                                                                         end
-
                                                                     end
-
                                                                 end
                                                             end
                                                         end
@@ -948,6 +948,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                         else
                                             -- otherwise just display recipe
                                             curDisplayingRecipe = recipeFromName
+                                            lastStartTime = Isaac.GetTime()
                                             cancelRecipeOverlay = false
                                         end
                                     end
@@ -1037,7 +1038,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                     RenderInventorySlot(mousePosition - Vector.One * 8, nil, 1, lmbTrigger, rmbTrigger, lmbRelease, rmbRelease, cursorHeldItem)
                     -- Handle Snaking for next frame
                     local maxSnake = calculateMaxSnake()
-                    if snakeType ~= nil and maxSnake > 1 then
+                    if (snakeType ~= nil and maxSnake > 1) then
                         local maxSnakeAmount = math.min(maxSnake, cursorHeldItem.Count)
                         local itemDistribution = (snakeType == Mouse.MOUSE_BUTTON_1 and math.floor(cursorHeldItem.Count / maxSnakeAmount)) or 1
                         snakeCursorRemainder = cursorHeldItem.Count - (itemDistribution * maxSnakeAmount)
@@ -1087,6 +1088,24 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                             end
                             cancelRecipeOverlay = true
                         end
+                    else -- attempt dropping item
+                        if not (inventoryHelper.hoveringOver(mousePosition, screenCenter - (inventorySize / 2), inventorySize.X, inventorySize.Y)
+                        or (recipeBookOpen and inventoryHelper.hoveringOver(mousePosition, screenCenter - (Vector(inventorySize.X - 30, 0) + (inventorySize / 2)),  inventorySize.X, inventorySize.Y))) then
+                            local dropPressed = Input.IsButtonPressed(Keyboard.KEY_Q, 0)
+                            local amount = (rmbRelease and 1) or (cursorHeldItem.Count or dropPressed)
+                            if lmbRelease or rmbRelease then
+                                cursorHeldItem.Count = cursorHeldItem.Count - amount
+                                local minecraftItem = Isaac.Spawn(EntityType.ENTITY_PICKUP, mod.minecraftItemID, 0, player.Position, (player.Velocity:Normalize() or Vector(0, 1)) * 2, player)
+                                local pickupData = saveManager.GetRoomFloorSave(minecraftItem) 
+                                    and saveManager.GetRoomFloorSave(minecraftItem).RerollSave
+                                pickupData.Type = cursorHeldItem.Type
+                                pickupData.Count = amount
+                                pickupData.ComponentData = cursorHeldItem.ComponentData
+                                if cursorHeldItem.Count <= 0 then
+                                    cursorHeldItem = nil
+                                end
+                            end
+                        end
                     end
                 end
                 if currentTooltipInformation then -- Render Tooltips
@@ -1127,30 +1146,25 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                     and hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
                         local collectibleType = hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
                         -- Well aware this doesn't work with multiplayer. won't fix yet
-                        local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
                         if rmbTrigger and player and player:IsItemQueueEmpty() then
                             player:AnimateCollectible(collectibleType)
                             local lastActiveItem, lastActiveCharges = player:GetActiveItem(ActiveSlot.SLOT_PRIMARY), 
                                 (player:GetActiveCharge(ActiveSlot.SLOT_PRIMARY) + player:GetBatteryCharge(ActiveSlot.SLOT_PRIMARY))
                             local configItem = Isaac.GetItemConfig():GetCollectible(collectibleType)
-                            player:QueueItem(configItem, hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES])
+                            player:AddCollectible(
+                                collectibleType, 
+                                hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES], 
+                                not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] ~= nil),
+                                ActiveSlot.SLOT_PRIMARY
+                            )
+                            print('first time taking active?:', not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] ~= nil))
                             SFXManager():Play(SoundEffect.SOUND_POWERUP_SPEWER)
                             Isaac.CreateTimer(function(_) 
                                 Game():GetHUD():ShowItemText(player, configItem)
                             end, 1, 1, true)
                             inventoryHelper.removePossibleAmount(hotbarInventory, hotbarSlotSelected, 1)
                             if lastActiveItem ~= 0 and (configItem.Type == ItemType.ITEM_ACTIVE) then
-                                -- TODO fix active items
-                                -- local history = player:GetHistory()
-                                -- for i, item in ipairs(history:GetCollectiblesHistory()) do
-                                --     if item:GetItemID() == lastActiveItem then
-                                --         history:RemoveHistoryItemByIndex(i)
-                                --     end
-                                -- end
-                                -- while player:GetCollectibleNum(lastActiveItem, true) > 1 do
-                                --     player:RemoveCollectible(lastActiveItem, true, ActiveSlot.SLOT_PRIMARY, true)
-                                -- end
-                                -- print(player:GetCollectibleNum(lastActiveItem, true))
+                                player:RemoveCollectible(lastActiveItem, true, ActiveSlot.SLOT_PRIMARY, true)
                                 hotbarInventory[hotbarSlotSelected] = {
                                     Type = "tcainrework:collectible",
                                     Count = 1,

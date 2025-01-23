@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Boom!",
+    "tcainrework:mega_battery"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Mr. Boom"
+  }
+}

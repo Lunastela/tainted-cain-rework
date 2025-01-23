@@ -2,16 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "S": "#tcainrework:pill",
-    "B": "The Jar"
+    "S": "tcainrework:soul_heart",
+    "C": "#tcainrework:card",
+    "#": "tcainrework:lucky_penny"
   },
   "pattern": [
     " S ",
-    "SBS",
+    "C#C",
     " S "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mom's Bottle of Pills"
+    "collectible": "Fortune Cookie"
   }
 }

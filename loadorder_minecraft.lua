@@ -10,6 +10,8 @@ return {
         stick
         fire
         leather
+        torch
+        lever
         iron_shovel
         iron_axe
         paper

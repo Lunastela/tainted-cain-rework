@@ -1,15 +1,13 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
-  "ingredients": [
-    "#tcainrework:coin",
-    "#tcainrework:bomb",
+  "ingredients":[
     "#tcainrework:soul_heart",
-    "#tcainrework:key",
-    "minecraft:book"
+    "tcainrework:giga_bomb",
+    "minecraft:paper"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "The Book of Sin"
+    "collectible": "Match Book"
   }
 }

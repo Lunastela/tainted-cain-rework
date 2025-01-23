@@ -11,6 +11,11 @@ local minecraftItemID = mod.minecraftItemID
 local constantScale = Vector.One * 1.15
 local numberToItems = require("scripts.tcainrework.stored.num_to_id")
 local itemDescriptions = require("scripts.tcainrework.stored.id_to_iteminfo")
+
+local simpleItemDisplacement = {
+    0, 1, 3, -2, 1
+}
+
 mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
     local entityHash = GetPtrHash(entity)
     if not collectedItems[entityHash] then
@@ -23,7 +28,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
         end
         local renderType = mod.inventoryHelper.getItemRenderType(pickupData.Type)
         if not reflection then
-            elapsedTimeTable[entityHash] = (elapsedTimeTable[entityHash] or math.random(0, 10)) + 0.025
+            elapsedTimeTable[entityHash] = (elapsedTimeTable[entityHash] or 0) + 0.0375
         end
         -- Animation Rendering
         local entitySprite = entity:GetSprite()
@@ -63,11 +68,20 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
                 end
                 if entitySprite:GetAnimation() ~= "Appear"
                 or (entitySprite:GetFrame() > 4) then
-                    mod.inventoryHelper.renderItem(
-                        {Type = pickupData.Type, Count = pickupData.Count}, 
-                        renderPosition, 
-                        itemScale, (elapsedTimeTable[entityHash] or 0)
-                    )
+                    local totalStackAmount = (((pickupData.Count or 1) > 1) and (math.ceil((pickupData.Count or 1) / 16) + 1)) or 1
+                    local eightSpin = .785
+                    local elapsedTime = ((eightSpin * (elapsedTimeTable[entityHash] * 0.75)) + (eightSpin * 3)) % (eightSpin * 8)
+                    local flip = not (elapsedTime > (eightSpin * 5) or elapsedTime < eightSpin)
+                    for i = 1, totalStackAmount do
+                        local vectorDisplacement = ((flip and i) or ((totalStackAmount - i) + 1)) 
+                        mod.inventoryHelper.renderItem(
+                            {Type = pickupData.Type, Count = pickupData.Count, ComponentData = pickupData.ComponentData}, 
+                            renderPosition + ((Vector(-vectorDisplacement + math.floor(totalStackAmount / 2), vectorDisplacement) 
+                                + Vector(1, -1)):Rotated((elapsedTime / (eightSpin * 8)) * 360) 
+                                + Vector(0, simpleItemDisplacement[vectorDisplacement])) * Vector(1.25, 1 / 4), 
+                            itemScale, elapsedTime
+                        )
+                    end
                 end
             end
         end
@@ -76,13 +90,16 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
 end, minecraftItemID)
 
 mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collider, low)
+    local pickupData = saveManager.GetRoomFloorSave(entity) 
+        and saveManager.GetRoomFloorSave(entity).RerollSave
     if (collider.Type == EntityType.ENTITY_PLAYER) then
-        local pickupData = saveManager.GetRoomFloorSave(entity) 
-            and saveManager.GetRoomFloorSave(entity).RerollSave
         pickupData.pickupEntity = collider
         return true
     end
     if (collider.Type == EntityType.ENTITY_PICKUP and collider.Variant == minecraftItemID) then
+        -- local colliderData = saveManager.GetRoomFloorSave(collider) 
+        --     and saveManager.GetRoomFloorSave(collider).RerollSave
+        -- if mod.inventoryHelper.canStack
         -- collider:Remove()
         return true
     end

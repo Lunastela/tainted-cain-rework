@@ -9,7 +9,7 @@ end
 
 function Utility.tableContains(table, value)
     if table ~= nil then
-        for i = 1,#table do
+        for i = 1, #table do
             if (table[i] == value) then
                 return true
             end
@@ -20,7 +20,7 @@ end
 
 function Utility.getIndexInTable(table, value)
     if table ~= nil then
-        for i = 1,#table do
+        for i = 1, #table do
             if (table[i] == value) then
                 return i
             end
@@ -39,6 +39,49 @@ function Utility.getCollectibleConfig(collectibleID)
         collectibleCache[collectibleID] = isaacItemConfig:GetCollectible(collectibleID)
     end
     return collectibleCache[collectibleID]
+end
+
+local dummySprite = Sprite()
+dummySprite:Load("gfx/items/inventoryitem.anm2", false)
+local spriteLookupTable = {}
+local interval = 4
+function Utility.generateCollectibleData(collectibleType)
+    -- try to obtain sprite if it exists
+    local itemConfig = Utility.getCollectibleConfig(collectibleType)
+    if itemConfig then
+        local lastIndex = string.find(itemConfig.GfxFileName, "/[^/]*$")
+        local spritesheetPath = string.lower(itemConfig.GfxFileName:sub(lastIndex + 1))
+        local spriteFullPath = "gfx/isaac/items/" .. spritesheetPath
+        local initialCharges = ((itemConfig.Type == ItemType.ITEM_ACTIVE) and itemConfig.InitCharge) or nil
+        if initialCharges == -1 then
+            initialCharges = itemConfig.MaxCharges
+        end
+        if not spriteLookupTable[spritesheetPath] then
+            dummySprite:ReplaceSpritesheet(0, spriteFullPath)
+            dummySprite:LoadGraphics()
+            dummySprite:SetFrame("Idle", 0)
+            for i = -16, 16, interval do
+                for j = -16, 16, interval do
+                    local positionVector = Vector(i, j)
+                    local result = dummySprite:GetTexel(positionVector, Vector.Zero, 1, 0)
+                    if (result.Red ~= 0 or result.Green ~= 0
+                            or result.Blue ~= 0 or result.Alpha ~= 0) then
+                        spriteLookupTable[spritesheetPath] = spriteFullPath
+                        goto spriteFound
+                    end
+                end
+            end
+            spriteLookupTable[spritesheetPath] = -1
+            ::spriteFound::
+        end
+        return {
+            [InventoryItemComponentData.CUSTOM_GFX] = ((spriteLookupTable[spritesheetPath] ~= -1) and spriteLookupTable[spritesheetPath]) or
+                nil,
+            [InventoryItemComponentData.COLLECTIBLE_ITEM] = collectibleType,
+            [InventoryItemComponentData.COLLECTIBLE_CHARGES] = initialCharges or nil
+        }
+    end
+    return nil
 end
 
 Utility.chestVariants = {
@@ -69,72 +112,71 @@ function Utility.sha1(message)
     local h2 = 0x98BADCFE;
     local h3 = 0x10325476;
     local h4 = 0xC3D2E1F0;
-    
+
     -- padding, etc
     local bits = #message * 8;
-    message = message  .. '\x80';
+    message = message .. '\x80';
     local paddingAmount = (120 - (#message % 64)) % 64;
     message = message .. string.rep('\0', paddingAmount);
     message = message .. string.pack('>I8', bits);
-    
+
     -- rotate function
     local function rol(value, bits)
-    return (((value) << (bits)) | ((value) >> (32 - (bits))));
+        return (((value) << (bits)) | ((value) >> (32 - (bits))));
     end;
-    
-    -- process each chunk
-    for i=1,#message,64 do
-    local chunk = string.sub(message, i, i+63);
-    local parts = {};
-    
-    -- split chunk into 16 parts
-    for i=0,15 do
-        parts[i] = string.unpack('>I4',string.sub(chunk, 1+i*4, 4+i*4));
-        --print(parts[i]);
-    end;
-    
-    -- extend into 80 parts
-    for i=16,79 do
-        parts[i] = rol(parts[i-3] ~ parts[i-8] ~ parts[i-14] ~ parts[i-16], 1) & 0xFFFFFFFF;
-    end;
-    
-    -- initialise hash values
-    local a,b,c,d,e = h0,h1,h2,h3,h4;
-    local f,k;
-    
-    -- main loop
-    for i=0,79 do
-        if 0 <= i and i <= 19 then
-        f = (b & c) | ((~b) & d)
-        k = 0x5A827999
-        elseif 20 <= i and i <= 39 then
-        f = b ~ c ~ d
-        k = 0x6ED9EBA1
-        elseif 40 <= i and i <= 59 then
-        f = (b & c) | (b & d) | (c & d) 
-        k = 0x8F1BBCDC
-        elseif 60 <= i and i <= 79 then
-        f = b ~ c ~ d
-        k = 0xCA62C1D6
-        end
 
-        local temp = (rol(a, 5) + f + e + k + parts[i]) & 0xFFFFFFFF
-        e = d;
-        d = c;
-        c = rol(b, 30);
-        b = a;
-        a = temp;
+    -- process each chunk
+    for i = 1, #message, 64 do
+        local chunk = string.sub(message, i, i + 63);
+        local parts = {};
+
+        -- split chunk into 16 parts
+        for i = 0, 15 do
+            parts[i] = string.unpack('>I4', string.sub(chunk, 1 + i * 4, 4 + i * 4));
+            --print(parts[i]);
+        end;
+
+        -- extend into 80 parts
+        for i = 16, 79 do
+            parts[i] = rol(parts[i - 3] ~ parts[i - 8] ~ parts[i - 14] ~ parts[i - 16], 1) & 0xFFFFFFFF;
+        end;
+
+        -- initialise hash values
+        local a, b, c, d, e = h0, h1, h2, h3, h4;
+        local f, k;
+
+        -- main loop
+        for i = 0, 79 do
+            if 0 <= i and i <= 19 then
+                f = (b & c) | ((~b) & d)
+                k = 0x5A827999
+            elseif 20 <= i and i <= 39 then
+                f = b ~ c ~ d
+                k = 0x6ED9EBA1
+            elseif 40 <= i and i <= 59 then
+                f = (b & c) | (b & d) | (c & d)
+                k = 0x8F1BBCDC
+            elseif 60 <= i and i <= 79 then
+                f = b ~ c ~ d
+                k = 0xCA62C1D6
+            end
+
+            local temp = (rol(a, 5) + f + e + k + parts[i]) & 0xFFFFFFFF
+            e = d;
+            d = c;
+            c = rol(b, 30);
+            b = a;
+            a = temp;
+        end;
+
+        h0 = (h0 + a) & 0xFFFFFFFF;
+        h1 = (h1 + b) & 0xFFFFFFFF;
+        h2 = (h2 + c) & 0xFFFFFFFF;
+        h3 = (h3 + d) & 0xFFFFFFFF;
+        h4 = (h4 + e) & 0xFFFFFFFF;
     end;
-    
-    h0 = (h0 + a) & 0xFFFFFFFF;
-    h1 = (h1 + b) & 0xFFFFFFFF;
-    h2 = (h2 + c) & 0xFFFFFFFF;
-    h3 = (h3 + d) & 0xFFFFFFFF;
-    h4 = (h4 + e) & 0xFFFFFFFF;
-    
-    end;
-    
-    return string.format('%08x%08x%08x%08x%08x', h0, h1, h2, h3, h4);    
+
+    return string.format('%08x%08x%08x%08x%08x', h0, h1, h2, h3, h4);
 end
 
 function Utility.getLocalizedString(category, key)
@@ -149,7 +191,7 @@ end
     Avert your gaze
 ]]
 
-function Utility.renderNineSlice(sprite, position, boxScale) 
+function Utility.renderNineSlice(sprite, position, boxScale)
     position.X = position.X + boxScale.X / 2
     -- top left
     sprite.Scale = Vector.One

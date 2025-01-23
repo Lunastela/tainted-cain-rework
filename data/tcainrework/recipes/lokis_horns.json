@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "S": "#tcainrework:pill",
-    "B": "The Jar"
+    "#": "tcainrework:black_heart",
+    "B": "tcainrework:bomb"
   },
   "pattern": [
-    " S ",
-    "SBS",
-    " S "
+    " B ",
+    "# #",
+    " B "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mom's Bottle of Pills"
+    "collectible": "Loki's Horns"
   }
 }

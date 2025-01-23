@@ -44,35 +44,54 @@ local index = 0
 function mod:loadRegistry(curLoad)
     -- Items
     registerFromLoadOrder(curLoad.Namespace, curLoad.Items, "items",
-    function (registryName, foundData)
-        if foundData and foundData.Properties then
-            index = index + 1
-            numberToItems[index] = registryName
-            foundData.Properties.NumericID = index 
-            itemDescriptions[registryName] = foundData.Properties
-            if foundData.ObtainedFrom then -- Register Entities that turn into this item
-                for _, entity in ipairs(foundData.ObtainedFrom) do
-                    entityToItemConversions[entity.EntityID or entity] = {
-                        Type = registryName, 
-                        Amount = entity.Amount or 1
-                    }
-                end
-            end
-            local currentItemTags = foundData.Properties.ItemTags
-            if currentItemTags then
-                for i, itemTag in ipairs(currentItemTags) do
-                    if not itemTagLookup[itemTag] then
-                        itemTagLookup[itemTag] = {}
+        function(registryName, foundData)
+            if foundData and foundData.Properties then
+                index = index + 1
+                numberToItems[index] = registryName
+                foundData.Properties.NumericID = index
+                itemDescriptions[registryName] = foundData.Properties
+                if foundData.ObtainedFrom then -- Register Entities that turn into this item
+                    for _, entity in ipairs(foundData.ObtainedFrom) do
+                        -- if entity has conditional or entity table already exists
+                        local entityID = entity.EntityID or entity
+                        local entityTable = {
+                            Type = registryName,
+                            Amount = entity.Amount or 1,
+                            Condition = entity.Condition or nil
+                        }
+                        if entityToItemConversions[entityID] then
+                            -- convert into larger table for multiple entities
+                            if entityToItemConversions[entityID].Type then
+                                local storedEntity = {
+                                    Type = entityToItemConversions[entityID].Type,
+                                    Amount = entityToItemConversions[entityID].Amount or 1,
+                                    Condition = entityToItemConversions[entityID].Condition or nil
+                                }
+                                entityToItemConversions[entityID] = {}
+                                table.insert(entityToItemConversions[entityID], storedEntity)
+                            end
+                            -- insert entity table
+                            table.insert(entityToItemConversions[entityID], entityTable)
+                        else
+                            entityToItemConversions[entityID] = entityTable
+                        end
                     end
-                    if not utility.tableContains(itemTagLookup[itemTag], registryName) then
-                        table.insert(itemTagLookup[itemTag], registryName)
+                end
+                local currentItemTags = foundData.Properties.ItemTags
+                if currentItemTags then
+                    for i, itemTag in ipairs(currentItemTags) do
+                        if not itemTagLookup[itemTag] then
+                            itemTagLookup[itemTag] = {}
+                        end
+                        if not utility.tableContains(itemTagLookup[itemTag], registryName) then
+                            table.insert(itemTagLookup[itemTag], registryName)
+                        end
                     end
                 end
+            else
+                print('registry unavailable:', registryName)
             end
-        else
-            print('registry unavailable:', registryName)
-        end
-    end)
+        end)
     -- Recipes
     local recipePath = "data." .. curLoad.Namespace .. ".recipe_hashes"
     local pathExists, foundData = pcall(include, recipePath)
@@ -100,9 +119,9 @@ function mod:loadRegistry(curLoad)
                             end
                         end
                     end
-                    if recipeData.Results 
-                    and recipeData.Results.Collectible 
-                    and recipeData.DisplayRecipe then
+                    if recipeData.Results
+                        and recipeData.Results.Collectible
+                        and recipeData.DisplayRecipe then
                         collectibleToRecipe[recipeData.Results.Collectible] = recipeName
                     end
                 end
@@ -112,8 +131,8 @@ function mod:loadRegistry(curLoad)
     -- sort item tags
     for tagName in pairs(itemTagLookup) do
         table.sort(itemTagLookup[tagName], function(a, b)
-            return ((itemDescriptions[a].Rarity == itemDescriptions[b].Rarity) 
-            and (itemDescriptions[a].NumericID < itemDescriptions[b].NumericID))
+            return ((itemDescriptions[a].Rarity == itemDescriptions[b].Rarity)
+                    and (itemDescriptions[a].NumericID < itemDescriptions[b].NumericID))
                 or (itemDescriptions[a].Rarity) < (itemDescriptions[b].Rarity)
         end)
     end

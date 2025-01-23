@@ -87,6 +87,41 @@ return {
             DisplayRecipe = false
         },
     },
+    ["774e6a979489881d43d415aff7bf7f7946e9e84a"] = {
+        {
+            RecipeName = "minecraft:lever",
+            Category = "misc",
+            RecipeSize = Vector(1, 2),
+            ConditionTable = {"minecraft:stick", "minecraft:cobblestone", },
+            Results = {
+                Type = "minecraft:lever",
+                Count = 1
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "minecraft:stick",
+            Category = "misc",
+            RecipeSize = Vector(1, 2),
+            ConditionTable = {"minecraft:oak_planks", "minecraft:oak_planks", },
+            Results = {
+                Type = "minecraft:stick",
+                Count = 4
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "minecraft:torch",
+            Category = "misc",
+            RecipeSize = Vector(1, 2),
+            ConditionTable = {"A Lump of Coal", "minecraft:stick", },
+            Results = {
+                Type = "minecraft:torch",
+                Count = 4
+            },
+            DisplayRecipe = true
+        },
+    },
     ["93572b414e21721b85aa52ce823174d3bf4603ae"] = {
         {
             RecipeName = "minecraft:oak_boat",
@@ -124,19 +159,6 @@ return {
                 Count = 3
             },
             DisplayRecipe = false
-        },
-    },
-    ["774e6a979489881d43d415aff7bf7f7946e9e84a"] = {
-        {
-            RecipeName = "minecraft:stick",
-            Category = "misc",
-            RecipeSize = Vector(1, 2),
-            ConditionTable = {"minecraft:oak_planks", "minecraft:oak_planks", },
-            Results = {
-                Type = "minecraft:stick",
-                Count = 4
-            },
-            DisplayRecipe = true
         },
     },
 }
