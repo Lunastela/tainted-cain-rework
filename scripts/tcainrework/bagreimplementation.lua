@@ -276,7 +276,8 @@ local function renderBagOfCrafting(player, offset)
                             local knockbackDirection = (entity.Position - swipeCapsule:GetPosition()):Normalized()
                             local pickup = entity:ToPickup()
                             if ((pickup and (notShopItemOrBought(player, pickup)
-                            and pickup.Wait <= 0 and (not pickup.Touched)))
+                            and pickup.Wait <= 0 and (not (pickup.Touched 
+                            or pickup:GetSprite():GetAnimation() == "Collect"))))
                             or (not pickup)) and not bagExclusions[entity.Type] then
                                 local tcainPickup = (pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
                                     and (player:GetPlayerType() == PlayerType.PLAYER_CAIN_B)
