@@ -1,10 +1,15 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "collectible",
-  "ingredients": [
-    "The Poop",
-    "tcainrework:bone_heart",
-    "tcainrework:soul_heart"
+  "key": {
+    "#": "tcainrework:rotten_heart",
+    "S": "tcainrework:soul_heart",
+    "G": "The Poop"
+  },
+  "pattern": [
+    " # ",
+    "SGS",
+    " # "
   ],
   "result": {
     "id": "tcainrework:collectible",

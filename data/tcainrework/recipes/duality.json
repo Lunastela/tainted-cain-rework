@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:eternal_heart",
+    "tcainrework:eternal_heart",
+    "tcainrework:eternal_heart",
+    "tcainrework:eternal_heart",
+    "tcainrework:black_heart",
+    "tcainrework:black_heart",
+    "tcainrework:black_heart",
+    "tcainrework:black_heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Duality"
+  }
+}

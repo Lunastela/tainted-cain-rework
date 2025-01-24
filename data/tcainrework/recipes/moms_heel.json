@@ -2,15 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "tcainrework:black_heart",
-    "B": "tcainrework:bomb"
+    "#": "#tcainrework:heart"
   },
   "pattern": [
-    "B B",
-    " # "
+    " ##",
+    " ##",
+    "# #"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Loki's Horns"
+    "collectible": "Mom's Heels"
   }
 }

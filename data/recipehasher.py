@@ -9,8 +9,10 @@ import pathlib
 
 # Prerequisites: "recipes/" folder
 
+recipeCount = 0
 localPath = str(pathlib.Path(__file__).parent.resolve()) 
 for entry in os.listdir(localPath):
+    namespaceRecipes = 0
     subFolderName = "\\{}".format(entry)
     if os.path.isdir(localPath + subFolderName):
         recipePath = localPath + subFolderName + "\\recipes"
@@ -96,6 +98,7 @@ for entry in os.listdir(localPath):
                         'width' : Width,
                         'height' : Height
                     })
+                    namespaceRecipes += 1
 
         # Create Lua File
         recipeExport = open(localPath + subFolderName + "\\recipe_hashes.lua", "w")
@@ -136,3 +139,6 @@ for entry in os.listdir(localPath):
 
         recipeExport.write("}")
         recipeExport.close()
+        print("Namespace {} exported {} recipes.".format(entry, namespaceRecipes))
+        recipeCount += namespaceRecipes
+print("Successfully exported {} recipes.".format(recipeCount))

@@ -2,12 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "tcainrework:cracked_key",
-    "tcainrework:cracked_key",
-    "tcainrework:cracked_key"
+    "tcainrework:bone_heart",
+    "The Necronomicon"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Red Key"
+    "collectible": "Book of the Dead"
   }
 }

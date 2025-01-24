@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "tcainrework:black_heart",
-    "B": "tcainrework:bomb"
+    "L": "tcainrework:lucky_penny",
+    "#": "#tcainrework:heart"
   },
   "pattern": [
-    "B B",
-    " # "
+    " LL",
+    " ##",
+    "###"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Loki's Horns"
+    "collectible": "Lucky Foot"
   }
 }

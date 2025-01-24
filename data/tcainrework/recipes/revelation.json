@@ -2,15 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "tcainrework:black_heart",
-    "B": "tcainrework:bomb"
+    "R": "Redemption",
+    "V": "Sulfur",
+    "A": "Act of Contrition"
   },
   "pattern": [
-    "B B",
-    " # "
+    "R",
+    "A",
+    "V"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Loki's Horns"
+    "collectible": "Redemption"
   }
 }

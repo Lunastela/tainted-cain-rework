@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "tcainrework:cracked_key",
-    "tcainrework:cracked_key",
-    "tcainrework:cracked_key"
+    "Ventricle Razor",
+    "Cambion Conception",
+    "False PHD"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Red Key"
+    "collectible": "C Section"
   }
 }

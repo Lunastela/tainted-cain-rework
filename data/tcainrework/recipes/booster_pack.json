@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "#tcainrework:card",
+    "#tcainrework:card",
+    "#tcainrework:card",
+    "#tcainrework:card",
+    "#tcainrework:card",
+    "tcainrework:dice_shard"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Booster Pack"
+  }
+}

@@ -13,16 +13,17 @@ function mod:CreateToast(toastType, renderItems, renderIcon, toastText, toastSub
     toastSprite:ReplaceSpritesheet(0, "gfx/ui/" .. toastType .. ".png")
     toastSprite:LoadGraphics()
     local myToast = {
-        Sprite = toastSprite, 
-        Time = 0, HoldTime = 0, 
+        Sprite = toastSprite,
+        Time = 0,
+        HoldTime = 0,
         Type = toastType,
-        RenderItems = renderItems or {{Type = "minecraft:stick", Count = 1}},
+        RenderItems = renderItems or { { Type = "minecraft:stick", Count = 1 } },
         RenderIcon = renderIcon,
-        Text = toastText 
-        or ((toastType == InventoryToastTypes.STANDARD) and "New Recipes Unlocked!")
-        or ((toastType == InventoryToastTypes.ADVANCEMENT) and "Advancement Made!") or "",
+        Text = toastText
+            or ((toastType == InventoryToastTypes.STANDARD) and "New Recipes Unlocked!")
+            or ((toastType == InventoryToastTypes.ADVANCEMENT) and "Advancement Made!") or "",
         SubText = toastSubtext
-        or ((toastType == InventoryToastTypes.STANDARD) and "Check your recipe book") or "",
+            or ((toastType == InventoryToastTypes.STANDARD) and "Check your recipe book") or "",
         ToastTime = toastTime or 180
     }
     table.insert(toastList, myToast)
@@ -39,7 +40,7 @@ local activeRecipeToast = nil
 mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY, function(_)
     if #toastStorage > 0 and (not activeRecipeToast) then
         activeRecipeToast = TCainRework:CreateToast(
-            InventoryToastTypes.STANDARD, 
+            InventoryToastTypes.STANDARD,
             toastStorage, nil,
             nil, nil,
             180
@@ -50,8 +51,8 @@ mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY,
         local toastSprite = toast.Sprite
         toast.Time = toast.Time + additionConstant
         if toast.HoldTime < toast.ToastTime then
-            if toast.Time > 1 then 
-                toast.Time = 1 
+            if toast.Time > 1 then
+                toast.Time = 1
                 toast.HoldTime = toast.HoldTime + 1
             end
             toast.X = 160 - (easeInCubic(toast.Time) * 160)
@@ -72,15 +73,16 @@ mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY,
         if toast.Type and toast.Text and toast.SubText then
             -- Render Toasts and Icons
             toastPosition = (toastPosition - Vector(160, 0)) + Vector(8, 8)
-            
+
             -- crafting table :sob:
             if (toast.Type == InventoryToastTypes.STANDARD) then
-                inventoryHelper.renderItem({Type = "minecraft:crafting_table", Count = 1}, toastPosition - Vector(6, 6), Vector.One / 1.625)
+                inventoryHelper.renderItem({ Type = "minecraft:crafting_table", Count = 1 }, toastPosition - Vector(6, 6),
+                    Vector.One / 1.625)
             end
 
             -- Item Rendering
             local itemToRender = toast.RenderItems[
-                math.min(math.max(math.ceil((toast.HoldTime * (#toast.RenderItems)) / toast.ToastTime), 1), #toast.RenderItems)
+            math.min(math.max(math.ceil((toast.HoldTime * (#toast.RenderItems)) / toast.ToastTime), 1), #toast.RenderItems)
             ]
             if toast.RenderIcon then
                 if not itemToRender.ComponentData then
@@ -93,11 +95,13 @@ mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY,
             -- Text Rendering
             toastPosition.Y = toastPosition.Y - 2
             toastPosition.X = toastPosition.X + 24
-            inventoryHelper.renderMinecraftText(toast.Text, toastPosition, 
-                ((toast.Type == InventoryToastTypes.ADVANCEMENT) and InventoryItemRarity.UNCOMMON) or InventoryItemRarity.TUTORIAL_PURPLE, false, true)
+            inventoryHelper.renderMinecraftText(toast.Text, toastPosition,
+                ((toast.Type == InventoryToastTypes.ADVANCEMENT) and InventoryItemRarity.UNCOMMON) or
+                InventoryItemRarity.TUTORIAL_PURPLE, false, true)
             toastPosition.Y = toastPosition.Y + 11
-            inventoryHelper.renderMinecraftText(toast.SubText, toastPosition, 
-                    ((toast.Type == InventoryToastTypes.ADVANCEMENT) and InventoryItemRarity.COMMON) or InventoryItemRarity.INVERT_TEXT, false, true)
+            inventoryHelper.renderMinecraftText(toast.SubText, toastPosition,
+                ((toast.Type == InventoryToastTypes.ADVANCEMENT) and InventoryItemRarity.COMMON) or
+                InventoryItemRarity.INVERT_TEXT, false, true)
         end
     end
     if #flaggedForDeletion > 0 then

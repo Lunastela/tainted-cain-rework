@@ -2,7 +2,7 @@ local mouseInputHelper = {}
 
 local mouseHeld = {}
 local mouseReleased = {}
-function mouseInputHelper.isMouseButtonTriggered(mouseButton) 
+function mouseInputHelper.isMouseButtonTriggered(mouseButton)
     local mouseButtonPress = Input.IsMouseBtnPressed(mouseButton)
     if mouseButtonPress then
         local lastMouseHeld = mouseHeld[mouseButton] or false
@@ -14,11 +14,11 @@ end
 
 function mouseInputHelper.isMouseButtonHeld(mouseButton)
     -- I'm so smart
-    local mouseTriggered = mouseInputHelper.isMouseButtonTriggered(mouseButton) 
+    local mouseTriggered = mouseInputHelper.isMouseButtonTriggered(mouseButton)
     return mouseTriggered or mouseHeld[mouseButton]
 end
 
-function mouseInputHelper.isMouseButtonReleased(mouseButton) 
+function mouseInputHelper.isMouseButtonReleased(mouseButton)
     local mouseButtonReleased = mouseReleased[mouseButton]
     if mouseButtonReleased then
         mouseReleased[mouseButton] = nil
@@ -28,7 +28,7 @@ end
 
 -- i KNOW this isnt a mouse thing
 function mouseInputHelper.isShiftHeld()
-    return Input.IsButtonPressed(Keyboard.KEY_LEFT_SHIFT, 0) 
+    return Input.IsButtonPressed(Keyboard.KEY_LEFT_SHIFT, 0)
         or Input.IsButtonPressed(Keyboard.KEY_RIGHT_SHIFT, 0)
 end
 
@@ -44,4 +44,5 @@ function mouseInputHelper.Update()
         end
     end
 end
+
 return mouseInputHelper

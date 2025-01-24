@@ -12,6 +12,7 @@ return {
         leather
         torch
         lever
+        ladder
         iron_shovel
         iron_axe
         paper

@@ -1,12 +1,12 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
-  "ingredients": [
-    "Milk!",
-    "Yum Heart"
+  "ingredients":[
+    "tcainrework:poop_block",
+    "tcainrework:rotten_heart"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Bucket of Lard"
+    "collectible": "Compost"
   }
 }

@@ -7,7 +7,7 @@ local mtgCard = {
 }
 return {
     Properties = {
-        DisplayName = "Card",
+        DisplayName = "Magic: The Gathering Card",
         GFX = "gfx/items/cards/mtg_card.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:card", "#tcainrework:pickup"},

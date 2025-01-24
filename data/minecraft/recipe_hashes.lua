@@ -87,6 +87,19 @@ return {
             DisplayRecipe = false
         },
     },
+    ["0e334c4a17fb8172b566841ae5e0a56ad99a2307"] = {
+        {
+            RecipeName = "minecraft:ladder",
+            Category = "misc",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:stick", nil, "minecraft:stick", "minecraft:stick", "minecraft:stick", "minecraft:stick", "minecraft:stick", nil, "minecraft:stick", },
+            Results = {
+                Type = "minecraft:ladder",
+                Count = 3
+            },
+            DisplayRecipe = true
+        },
+    },
     ["774e6a979489881d43d415aff7bf7f7946e9e84a"] = {
         {
             RecipeName = "minecraft:lever",

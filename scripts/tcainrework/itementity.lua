@@ -70,7 +70,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
                 or (entitySprite:GetFrame() > 4) then
                     local totalStackAmount = (((pickupData.Count or 1) > 1) and (math.ceil((pickupData.Count or 1) / 16) + 1)) or 1
                     local eightSpin = .785
-                    local elapsedTime = ((eightSpin * (elapsedTimeTable[entityHash] * 0.75)) + (eightSpin * 3)) % (eightSpin * 8)
+                    local elapsedTime = ((eightSpin * ((elapsedTimeTable[entityHash] or 0) * 0.75)) + (eightSpin * 3)) % (eightSpin * 8)
                     local flip = not (elapsedTime > (eightSpin * 5) or elapsedTime < eightSpin)
                     for i = 1, totalStackAmount do
                         local vectorDisplacement = ((flip and i) or ((totalStackAmount - i) + 1)) 
