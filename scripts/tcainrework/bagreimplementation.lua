@@ -275,10 +275,10 @@ local function renderBagOfCrafting(player, offset)
                         if not utility.tableContains(bagCollisions[player.Index], entityPointer) then
                             local knockbackDirection = (entity.Position - swipeCapsule:GetPosition()):Normalized()
                             local pickup = entity:ToPickup()
-                            if ((pickup and (notShopItemOrBought(player, pickup)
-                            and pickup.Wait <= 0 and (not (pickup.Touched 
-                            or pickup:GetSprite():GetAnimation() == "Collect"))))
-                            or (not pickup)) and not bagExclusions[entity.Type] then
+                            if (((pickup and (notShopItemOrBought(player, pickup) and pickup.Wait <= 0 
+                            and (not (pickup:GetSprite():GetAnimation() == "Collect"))))
+                            or (not pickup)) and not bagExclusions[entity.Type])
+                            and (entity:ForceCollide(player, false) ~= true) then
                                 local tcainPickup = (pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
                                     and (player:GetPlayerType() == PlayerType.PLAYER_CAIN_B)
                                 local itemTable, itemCondition = getEntityFromTable(entity, false, player)

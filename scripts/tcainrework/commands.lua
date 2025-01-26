@@ -27,6 +27,8 @@ mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, function(_, command, arguments)
                 print("Invalid ItemID: Argument 1")
             end
         end
+    elseif command == "insomnia" then
+        mod.summonPhantoms()
     end
 end)
 

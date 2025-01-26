@@ -11,4 +11,18 @@
         numGridCollisionPoints="6">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
     </entity>
+    <entity anm2path="minecraft/phantom.anm2" 
+        id="452" 
+        name="Phantom" 
+        collisionDamage="1" 
+        collisionMass="3" 
+        collisionRadius="32" 
+        shadowSize="8"
+        friction="1" 
+        tags="noreroll nodelirium"
+        shutdoors="false"
+        gridCollision="none"
+        numGridCollisionPoints="24">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
 </entities>

@@ -15,4 +15,40 @@
 	<sound name="Minecraft_Click">
 		<sample weight="1" path="ui/Click.wav" />
 	</sound>
+	<!-- Phantom Sounds -->
+	<sound name="Phantom_Idle">
+		<sample weight="1" path="phantom/idle1.wav" />
+		<sample weight="1" path="phantom/idle2.wav" />
+		<sample weight="1" path="phantom/idle3.wav" />
+		<sample weight="1" path="phantom/idle4.wav" />
+		<sample weight="1" path="phantom/idle5.wav" />
+	</sound>
+	<sound name="Phantom_Bite">
+		<sample weight="1" path="phantom/bite1.wav" />
+		<sample weight="1" path="phantom/bite2.wav" />
+	</sound>
+	<sound name="Phantom_Death">
+		<sample weight="1" path="phantom/death1.wav" />
+		<sample weight="1" path="phantom/death2.wav" />
+		<sample weight="1" path="phantom/death3.wav" />
+	</sound>
+	<sound name="Phantom_Flap">
+		<sample weight="1" path="phantom/flap1.wav" />
+		<sample weight="1" path="phantom/flap2.wav" />
+		<sample weight="1" path="phantom/flap3.wav" />
+		<sample weight="1" path="phantom/flap4.wav" />
+		<sample weight="1" path="phantom/flap5.wav" />
+		<sample weight="1" path="phantom/flap6.wav" />
+	</sound>
+	<sound name="Phantom_Hurt">
+		<sample weight="1" path="phantom/hurt1.wav" />
+		<sample weight="1" path="phantom/hurt2.wav" />
+		<sample weight="1" path="phantom/hurt3.wav" />
+	</sound>
+	<sound name="Phantom_Swoop">
+		<sample weight="1" path="phantom/swoop1.wav" />
+		<sample weight="1" path="phantom/swoop2.wav" />
+		<sample weight="1" path="phantom/swoop3.wav" />
+		<sample weight="1" path="phantom/swoop4.wav" />
+	</sound>
 </sounds>
