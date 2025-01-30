@@ -61,7 +61,6 @@ end
 
 local phantomRestingPosition = 0.33
 local phantomRestingHeight = 75
-local minecraftFont = require("scripts.tcainrework.font")
 local saveManager = require("scripts.save_manager")
 local function getPhantomHash(phantom)
     return "p" .. tostring(GetPtrHash(phantom))
@@ -179,7 +178,7 @@ local function canCollideWithPhantom(phantom, entity)
         local otherPotentialPosition = (saveData 
             and saveData.phantomTable and saveData.phantomTable[entityHash]
             and saveData.phantomTable[entityHash].hoverPosition)
-        if otherPotentialPosition then
+        if phantomPosition and otherPotentialPosition then
             return math.abs(phantomPosition - otherPotentialPosition) <= phantomHitboxSize
         end
         return (phantomPosition or phantomRestingHeight) <= phantomHitboxSize

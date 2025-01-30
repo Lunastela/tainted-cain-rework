@@ -145,8 +145,12 @@ void main(void) {
     ivec2 textureSize2d = textureSize(Texture0, 0);
     float myTextureSize = float(textureSize2d.y) / pixelSize.y;
 
-  	vec2 s_pos = (vec2(TexCoord0.x, 1. - TexCoord0.y * myTextureSize) - vec2(.5)) * (2. * (41.45 / 46.));
+    vec2 pa = vec2(1.0 + PixelationAmountOut, 1.0 + PixelationAmountOut) / TextureSizeOut;
+   	vec2 uv = (vec2(TexCoord0.x, 1. - TexCoord0.y * myTextureSize) - vec2(.5)) * (2. * (41.45 / 46.));
+
+  	vec2 s_pos = PixelationAmountOut > 0.0 ? uv - mod(uv, pa) + pa * .5 : uv; // uv silly
 	float rotation = -(ColorizeOut.r);
+    rotation = PixelationAmountOut > 0.0 ? (ceil(rotation * 4 * PixelationAmountOut) / (4 * PixelationAmountOut)) : rotation;
 
 	vec3 up = vec3(0.0, 1.0, 0.0);
 	vec3 c_pos = vec3(10., 6., 10.) * rotateY(rotation);
