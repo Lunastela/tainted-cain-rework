@@ -23,8 +23,18 @@ minecraftFont.FontList = {
 local defaultFont = minecraftFont.FontList[fontType.DEFAULT]
 
 local fontScale = 3
-function minecraftFont.GetStringWidth(minecraftFont, string)
-    return defaultFont:GetStringWidth(string) / fontScale
+function minecraftFont.GetStringWidth(minecraftFont, myString)
+    -- REPENTANCE PLUS FUCKING SUCKS IT FUCKING SUCKS AND I FUCKING HATE IT
+    -- TODO REMOVE THIS GARBAGE SHIT WHEN NICALIS FIXES IT
+    if REPENTANCE_PLUS then
+        local curLength = 0
+        for i = 1, string.len(myString) do
+            local character = string.sub(myString, i, i)
+            curLength = curLength + defaultFont:GetCharacterWidth(character) / fontScale
+        end
+        return curLength 
+    end
+    return defaultFont:GetStringWidth(myString) / fontScale
 end
 
 function minecraftFont.GetLineHeight(minecraftFont)
@@ -38,6 +48,18 @@ local fontSwitchCodes = {
     ["o"] = fontType.ITALIC,
     ["r"] = fontType.DEFAULT
 }
+
+local defaultSettings = REPENTANCE_PLUS and FontRenderSettings()
+local function repentancePlusFuckingSucks(font, myString, posX, posY, scaleX, scaleY, color)
+    -- FUCK YOU and your stupid FUCKING fonts
+    -- NICALIS FIX YOUR STUPID SHIT PLEASE
+    local curPosition = 0
+    for i = 1, string.len(myString) do
+        local character = string.sub(myString, i, i)
+        font:DrawString(character, posX + curPosition, posY, scaleX, scaleY, color, defaultSettings)
+        curPosition = curPosition + font:GetCharacterWidth(character) * scaleX
+    end
+end
 function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, RenderColor, BoxWidth, Center, Format)
     local textType = fontType.DEFAULT
     PositionX = PositionX - (1 / fontScale)
@@ -76,19 +98,36 @@ function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, R
                 end
                 substring.String = obfuscatedString
             end
-            minecraftFont.FontList[textType]:DrawStringScaled(
-                substring.String, PositionX + xDisplacement, PositionY, 
-                1 / fontScale, 1 / fontScale, 
-                RenderColor, BoxWidth, Center
-            )
+            if REPENTANCE_PLUS then
+                repentancePlusFuckingSucks(
+                    minecraftFont.FontList[textType],
+                    substring.String, PositionX + xDisplacement, PositionY, 
+                    1 / fontScale, 1 / fontScale, RenderColor
+                )
+            else
+                minecraftFont.FontList[textType]:DrawStringScaled(
+                    substring.String, PositionX + xDisplacement, PositionY, 
+                    1 / fontScale, 1 / fontScale, 
+                    RenderColor, BoxWidth, Center
+                )
+            end
             xDisplacement = xDisplacement + minecraftFont:GetStringWidth(substring.String)
         end
     else
-        minecraftFont.FontList[textType]:DrawStringScaled(
-            String, PositionX, PositionY, 
-            1 / fontScale, 1 / fontScale, 
-            RenderColor, BoxWidth, Center
-        )
+        if REPENTANCE_PLUS then
+            repentancePlusFuckingSucks(
+                minecraftFont.FontList[textType],
+                String, PositionX, PositionY, 
+                1 / fontScale, 1 / fontScale, 
+                RenderColor
+            )
+        else
+            minecraftFont.FontList[textType]:DrawStringScaled(
+                String, PositionX, PositionY, 
+                1 / fontScale, 1 / fontScale, 
+                RenderColor, BoxWidth, Center
+            )
+        end
     end
 end
 return minecraftFont
