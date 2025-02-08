@@ -1,0 +1,62 @@
+# AngelCode Bitmap Font Generator configuration file
+fileVersion=1
+
+# font settings
+fontName=Minecraft Seven v2
+fontFile=
+charSet=0
+fontSize=27
+aa=1
+scaleH=100
+useSmoothing=0
+isBold=0
+isItalic=0
+useUnicode=1
+disableBoxChars=1
+outputInvalidCharGlyph=0
+dontIncludeKerningPairs=1
+useHinting=1
+renderFromOutline=1
+useClearType=0
+autoFitNumPages=0
+autoFitFontSizeMin=0
+autoFitFontSizeMax=0
+
+# character alignment
+paddingDown=0
+paddingUp=0
+paddingRight=0
+paddingLeft=0
+spacingHoriz=1
+spacingVert=1
+useFixedHeight=1
+forceZero=0
+widthPaddingFactor=0.00
+
+# output file
+outWidth=640
+outHeight=640
+outBitDepth=32
+fontDescFormat=2
+fourChnlPacked=0
+textureFormat=png
+textureCompression=0
+alphaChnl=1
+redChnl=0
+greenChnl=0
+blueChnl=0
+invA=0
+invR=0
+invG=0
+invB=0
+
+# outline
+outlineThickness=0
+
+# selected chars
+chars=0-0,13,32-126,160-163,165-177,180,182-184,186-187,191-328,330-382,402,508-511,536-539,567,900-902
+chars=904-906,908,910-929,931-974,1024-1119,1168-1169,7682-7683,7690-7691,7710-7711,7714-7715,7728-7729
+chars=7744-7745,7766-7767,7776-7777,7786-7787,7808-7813,7838,7922-7923,8211-8213,8216-8218,8220-8222,8224
+chars=8225-8226,8230,8240,8249-8250,8260,8364,8710,8719,8721-8722,8734
+
+# imported icon images
