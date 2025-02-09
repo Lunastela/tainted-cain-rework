@@ -173,7 +173,6 @@ end
 
 local collectibleToRecipe = require("scripts.tcainrework.stored.collectible_to_recipe")
 local function salvageCollectible(player, pickup)
-    print('my salvage')
     if canSalvageItem(pickup.SubType) then
         local ptrHash = GetPtrHash(pickup)
         SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)

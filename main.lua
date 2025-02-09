@@ -5,6 +5,8 @@ TCainRework = mod
 local saveManager = require("scripts.save_manager")
 saveManager.Init(mod)
 local utility = require("scripts.tcainrework.util")
+include("scripts.tcainrework.inventory.inventoryenums")
+mod.inventoryHelper = include("scripts.tcainrework.inventory.inventoryhelper")
 
 -- Render Scale Options
 if Options.MaxRenderScale <= 3 then
@@ -13,7 +15,6 @@ end
 mod.elapsedTime = 0
 
 -- Load Mod Data
-include("scripts.tcainrework.inventory.inventoryenums")
 local loadedIDs = {}
 local function registerFromLoadOrder(namespace, orderList, dataFolder, returnFunction)
     if orderList then
@@ -107,10 +108,7 @@ function mod:loadRegistry(curLoad)
                     recipeLookupIndex[recipeName] = recipeData
                     if recipeData.ConditionTable then
                         for i, itemType in pairs(recipeData.ConditionTable) do
-                            local nameType = utility.trimType(itemType)
-                            if utility.fastItemIDByName(itemType) ~= -1 then
-                                nameType = "tcainrework:collectible" .. tostring(utility.fastItemIDByName(itemType))
-                            end
+                            local nameType = mod.inventoryHelper.conditionalItemLookupType(mod.inventoryHelper.createItem(itemType))
                             if not recipeReverseLookup[nameType] then
                                 recipeReverseLookup[nameType] = {}
                             end
@@ -119,10 +117,11 @@ function mod:loadRegistry(curLoad)
                             end
                         end
                     end
+                    -- TODO : fix recipes only giving the last !
                     if recipeData.Results
                         and recipeData.Results.Collectible
                         and recipeData.DisplayRecipe then
-                        collectibleToRecipe[recipeData.Results.Collectible] = recipeName
+                        collectibleToRecipe[utility.fastItemIDByName(recipeData.Results.Collectible)] = recipeName
                     end
                 end
             end
@@ -161,7 +160,6 @@ function mod:reloadRegistries()
 end
 
 -- Load Supplementaries
-mod.inventoryHelper = include("scripts.tcainrework.inventory.inventoryhelper")
 include("scripts.tcainrework.bagreimplementation")
 include("scripts.tcainrework.itementity")
 include("scripts.tcainrework.inventory")

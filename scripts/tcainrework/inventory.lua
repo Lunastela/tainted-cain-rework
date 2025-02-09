@@ -184,10 +184,7 @@ local function finalizeOutputs()
     local outputInventory = inventoryHelper.getInventory(InventoryTypes.OUTPUT)
     if outputSlotOccupied and outputInventory[1] == nil then
         if lastOutputItem then
-            inventoryHelper.unlockItemBatchType(
-                lastOutputItem.Type,
-                (lastOutputItem.ComponentData and lastOutputItem.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
-            )
+            inventoryHelper.unlockItemBatch(lastOutputItem)
             lastOutputItem = nil
         end
         for i in pairs(craftingInventory) do
@@ -593,9 +590,10 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
         end
     end
     if addedAny then
-        inventoryHelper.unlockItemBatchType(
-            pickupType,
-            (optionalComponentData and optionalComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
+        inventoryHelper.unlockItemBatch({
+                Type = pickupType,
+                ComponentData = optionalComponentData
+            }
         )
         inventoryHelper.recipeCraftableDirty = true
     end
@@ -1160,6 +1158,9 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                             local lastActiveItem, lastActiveCharges = player:GetActiveItem(ActiveSlot.SLOT_PRIMARY), 
                                 (player:GetActiveCharge(ActiveSlot.SLOT_PRIMARY) + player:GetBatteryCharge(ActiveSlot.SLOT_PRIMARY))
                             local configItem = Isaac.GetItemConfig():GetCollectible(collectibleType)
+                            if lastActiveItem ~= 0 and (configItem.Type == ItemType.ITEM_ACTIVE) then
+                                player:RemoveCollectible(lastActiveItem, true, ActiveSlot.SLOT_PRIMARY, true)
+                            end
                             player:AddCollectible(
                                 collectibleType, 
                                 hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES], 
@@ -1173,7 +1174,6 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                             end, 1, 1, true)
                             inventoryHelper.removePossibleAmount(hotbarInventory, hotbarSlotSelected, 1)
                             if lastActiveItem ~= 0 and (configItem.Type == ItemType.ITEM_ACTIVE) then
-                                player:RemoveCollectible(lastActiveItem, true, ActiveSlot.SLOT_PRIMARY, true)
                                 hotbarInventory[hotbarSlotSelected] = {
                                     Type = "tcainrework:collectible",
                                     Count = 1,

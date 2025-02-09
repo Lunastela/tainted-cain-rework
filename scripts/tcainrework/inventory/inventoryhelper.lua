@@ -381,7 +381,6 @@ local function canStackComponentData(item1, item2, soft)
     elseif (item1.ComponentData and item2.ComponentData) then 
         -- sift through component data and figure out if it is equal
         for i, inventoryAttribute in pairs(InventoryItemComponentData) do
-            print(item1.ComponentData[inventoryAttribute], item2.ComponentData[inventoryAttribute])
             local equalData = (item1.ComponentData[inventoryAttribute] == item2.ComponentData[inventoryAttribute])
             if soft and (not equalData) then
                 equalData = (not item1.ComponentData[inventoryAttribute]) or (not item2.ComponentData[inventoryAttribute])
@@ -696,13 +695,6 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
                         craftingIndex = index
                     end
                     if myConditionTable[index] then
-                        if recipe.Results.Collectible == "Dr. Fetus" then
-                            print(
-                                inventoryHelper.conditionalItemLookupType(craftingTable[craftingIndex]), 
-                                inventoryHelper.conditionalItemLookupType(myConditionTable[index]), 
-                                inventoryHelper.itemCanStackWithTag(craftingTable[craftingIndex], myConditionTable[index])
-                            )
-                        end
                         if (not inventoryHelper.itemCanStackWithTag(craftingTable[craftingIndex], myConditionTable[index])) then
                             goto recipeContinue
                         end
@@ -789,12 +781,13 @@ function TCainRework:UnlockItemRecipe(recipeName)
     end
 end
 
-function inventoryHelper.runUnlockItemType(itemType, collectibleType)
+function inventoryHelper.runUnlockItem(item)
     local runSave = saveManager.GetRunSave()
     if not runSave.obtainedItems then
         runSave.obtainedItems = {}
     end
-    local combinedNameType = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(itemType))
+    local combinedNameType = inventoryHelper.conditionalItemLookupType(item)
+    print(combinedNameType)
     if not runSave.obtainedItems[combinedNameType] then
         runSave.obtainedItems[combinedNameType] = true
         if recipeReverseLookup[combinedNameType] then
@@ -818,14 +811,14 @@ function inventoryHelper.runUnlockItemType(itemType, collectibleType)
     end
 end
 
-function inventoryHelper.unlockItemBatchType(itemType, collectibleType)
-    if itemRegistry[itemType]
-    and itemRegistry[itemType].ItemTags then
-        for i, itemTag in ipairs(itemRegistry[itemType].ItemTags) do
-            inventoryHelper.runUnlockItemType(itemTag)
+function inventoryHelper.unlockItemBatch(item)
+    if item.Type and itemRegistry[item.Type]
+    and itemRegistry[item.Type].ItemTags then
+        for i, itemTag in ipairs(itemRegistry[item.Type].ItemTags) do
+            inventoryHelper.runUnlockItem(inventoryHelper.createItem(itemTag))
         end
     end
-    inventoryHelper.runUnlockItemType(itemType, collectibleType)
+    inventoryHelper.runUnlockItem(item)
 end
 
 -- Item Renderer

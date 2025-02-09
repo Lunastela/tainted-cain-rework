@@ -203,7 +203,6 @@ mod:AddCallback(ModCallbacks.MC_POST_NPC_INIT, function(_, entity)
     if entity.Type == phantomID and entity.Variant == phantomVariant then
         if not entity:HasEntityFlags(EntityFlag.FLAG_PERSISTENT) then
             entity:AddEntityFlags(EntityFlag.FLAG_PERSISTENT)
-            print('attempting persistence')
         end
     end
 end, phantomID)
