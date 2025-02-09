@@ -74,6 +74,7 @@ local levelObject = (Game() and Game():GetLevel()) or nil
 TCainRework:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, function(_)
     levelObject = Game():GetLevel()
 end)
+
 local function getCurseOfBlind()
     if levelObject 
     and (not PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BLACK_CANDLE)) then
@@ -149,7 +150,6 @@ function inventoryHelper.getUnlockedInventory(setUnlocked)
             240
         )
         runSave.inventoryUnlocked = setUnlocked
-        Isaac.SetWindowTitle(" (A.K.A. Minecraft 1.21.4)")
     end
     return runSave.inventoryUnlocked
 end
@@ -184,18 +184,46 @@ function inventoryHelper.setRecipeBookFilter(isEnabled)
     end
 end
 
-local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
-local recipeItemLookupTable = {}
-local function conditionalItemLookupType(itemID)
-    if not recipeItemLookupTable[itemID] then
-        local myItemID = itemID
-        local itemCollectibleData = Isaac.GetItemIdByName(itemID)
-        if itemCollectibleData ~= -1 then
-            myItemID = "tcainrework:collectible" .. itemCollectibleData
+local json = require("json")
+function inventoryHelper.createItem(itemString, count)
+    local itemType, componentData = itemString, nil
+    local splitPosition = itemString:find("{")
+    if splitPosition then
+        itemType = itemString:sub(1, splitPosition - 1)
+        componentData = json.decode(itemString:sub(splitPosition, -1))
+        -- Sanitize Data
+        if componentData then 
+            -- Card Checking
+            if componentData[InventoryItemComponentData.CARD_TYPE] then
+                local cardID = Isaac.GetCardIdByName(componentData[InventoryItemComponentData.CARD_TYPE])
+                if cardID ~= -1 then
+                    componentData[InventoryItemComponentData.CARD_TYPE] = cardID
+                end
+            end
         end
-        recipeItemLookupTable[itemID] = myItemID
     end
-    return recipeItemLookupTable[itemID]
+    if utility.fastItemIDByName(itemString) ~= -1 then
+        if not componentData then
+            componentData = {}
+        end
+        componentData[InventoryItemComponentData.COLLECTIBLE_ITEM] = utility.fastItemIDByName(itemString)
+        itemType = "tcainrework:collectible"
+    end
+    return {
+        Type = itemType,
+        Count = 1 or count,
+        ComponentData = componentData
+    }
+end
+
+local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
+function inventoryHelper.conditionalItemLookupType(item)
+    local itemName = item.Type
+    if item.ComponentData then
+        itemName = itemName .. (item.ComponentData[InventoryItemComponentData.CARD_TYPE] or "")
+        itemName = itemName .. (item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] or "")
+    end
+    return itemName
 end
 
 function inventoryHelper.getInventoryItemList(inventorySet, inventoryBlacklist)
@@ -204,12 +232,7 @@ function inventoryHelper.getInventoryItemList(inventorySet, inventoryBlacklist)
         if inventoryHelper.isValidInventory(inventory)
         and not (inventoryBlacklist and utility.tableContains(inventoryBlacklist, inventory)) then
             for j, item in pairs(inventory) do
-                local itemName = item.Type
-                local itemCollectibleData = ((item.ComponentData)
-                    and item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
-                if itemCollectibleData then
-                    itemName = itemName .. itemCollectibleData
-                end
+                local itemName = inventoryHelper.conditionalItemLookupType(item)
                 storedItemCounts[itemName] = (storedItemCounts[itemName] or 0) + (item.Count or 0)
             end
         end
@@ -223,24 +246,41 @@ function inventoryHelper.sortTableByTags(a, b)
     or false)
 end
 
-function inventoryHelper.checkRecipeCraftable(recipe, storedItemCounts)
+local cachedRecipeOutputs = {}
+inventoryHelper.recipeCraftableDirty = true
+function inventoryHelper.checkRecipeCraftable(recipeName, recipe, storedItemCounts)
+    if (not inventoryHelper.recipeCraftableDirty) and cachedRecipeOutputs[recipeName] ~= nil then
+        return cachedRecipeOutputs[recipeName]
+    end
     local typedIndex, matchedTypes = {}, {}
     for i, itemID in pairs(recipe.ConditionTable) do
-        local myItemID = conditionalItemLookupType(itemID)
+        local fakeItem = inventoryHelper.createItem(itemID)
+        local myItemID = inventoryHelper.conditionalItemLookupType(fakeItem)
         matchedTypes[myItemID] = (matchedTypes[myItemID] or 0) + 1
         table.insert(typedIndex, myItemID)
     end
     table.sort(typedIndex, inventoryHelper.sortTableByTags)
 
+    -- Sift through matching types
     for index, type in ipairs(typedIndex) do
         local itemTags = {type}
         if itemTagLookup[type] then
-            itemTags = itemTagLookup[type]
+            itemTags = {}
+            -- add different component items to the tags
+            for i, itemInTag in ipairs(itemTagLookup[type]) do
+                table.insert(itemTags, itemInTag)
+                for storedItem, j  in pairs(storedItemCounts) do
+                    if storedItem ~= itemInTag 
+                    and string.find(storedItem, itemInTag) then
+                        table.insert(itemTags, storedItem)
+                        -- print(storedItem)
+                    end
+                end
+            end
         end
         for i, itemInTag in ipairs(itemTags) do
             local itemAmount = matchedTypes[typedIndex[index]]
             if storedItemCounts[itemInTag] and itemAmount then
-                -- print(typedIndex[index], matchedTypes[typedIndex[index]], itemInTag)
                 local subtractableAmount = math.min(storedItemCounts[itemInTag], itemAmount)
                 storedItemCounts[itemInTag] = storedItemCounts[itemInTag] - subtractableAmount
                 matchedTypes[typedIndex[index]] = itemAmount - subtractableAmount
@@ -267,8 +307,9 @@ function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inve
             availableTabs[recipeFromName.Category] = true
             if (not recipeBookTab) or (recipeBookTab and recipeFromName.Category == recipeBookTab) then
                 local recipeCraftable = inventoryHelper.checkRecipeCraftable(
-                    recipeFromName, inventoryHelper.getInventoryItemList(inventorySet)
+                    runSave.unlockedRecipes[i], recipeFromName, inventoryHelper.getInventoryItemList(inventorySet)
                 )
+                cachedRecipeOutputs[runSave.unlockedRecipes[i]] = recipeCraftable
                 local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
                 if fakeItem then
                     local itemName = string.lower(inventoryHelper.getNameFor(fakeItem))
@@ -281,6 +322,7 @@ function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inve
                 end
             end
         end
+        inventoryHelper.recipeCraftableDirty = false
     end
     return recipeList, craftableRecipeList, availableTabs
 end
@@ -339,14 +381,15 @@ local function canStackComponentData(item1, item2, soft)
     elseif (item1.ComponentData and item2.ComponentData) then 
         -- sift through component data and figure out if it is equal
         for i, inventoryAttribute in pairs(InventoryItemComponentData) do
+            print(item1.ComponentData[inventoryAttribute], item2.ComponentData[inventoryAttribute])
             local equalData = (item1.ComponentData[inventoryAttribute] == item2.ComponentData[inventoryAttribute])
             if soft and (not equalData) then
                 equalData = (not item1.ComponentData[inventoryAttribute]) or (not item2.ComponentData[inventoryAttribute])
-                print(equalData, "reseting equal data for soft collectible", item1.Type, item2.Type)
+                print(equalData, "reseting equal data for soft collectible", item1.ComponentData[inventoryAttribute], item2.ComponentData[inventoryAttribute])
             end
             if not equalData then
                 return false
-            elseif inventoryAttribute == InventoryItemComponentData.COLLECTIBLE_ITEM then
+            elseif inventoryAttribute == InventoryItemComponentData.COLLECTIBLE_ITEM and not soft then
                 -- Force Active Items to not stack
                 if ((item1.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] 
                 and isActiveFromComponent(item1.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]))
@@ -458,6 +501,13 @@ function inventoryHelper.itemGetFullName(pickup)
                 })
             end
         end
+        if pickup.ComponentData[InventoryItemComponentData.CARD_TYPE] then
+            local cardConfig = utility.getCardConfig(pickup.ComponentData[InventoryItemComponentData.CARD_TYPE])
+            table.insert(nameTable, {
+                String = utility.getLocalizedString("PocketItems", cardConfig.Name),
+                Rarity = InventoryItemRarity.SUBTEXT
+            })
+        end
         if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
             local itemConfig = utility.getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
             if itemTypeTable[itemConfig.Type] then
@@ -505,6 +555,7 @@ function inventoryHelper.removePossibleAmount(inventory, itemIndex, removeAmount
         end
         return amountRemoved
     end
+    inventoryHelper.recipeCraftableDirty = true
     return 0
 end
 
@@ -607,25 +658,22 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
                 table.insert(craftingTable, item)
             end
             table.sort(craftingTable, function(a, b)
-                return conditionalItemLookupType(a.Type)
-                    < conditionalItemLookupType(b.Type)
+                return inventoryHelper.conditionalItemLookupType(a)
+                    < inventoryHelper.conditionalItemLookupType(b)
             end)
         end
         for i, recipe in ipairs(recipeList) do
             local index = 1
-            local myConditionTable = recipe.ConditionTable
+            local myConditionTable = {}
+            for i, type in pairs(recipe.ConditionTable) do
+                myConditionTable[i] = inventoryHelper.createItem(type)
+            end
             if shapeless then
-                -- replace generic item tags with any matching variants in the recipe
-                myConditionTable = {}
-                -- conditionalItemLookupType
-                for i, type in ipairs(recipe.ConditionTable) do
-                    table.insert(myConditionTable, type)
-                end
                 for i, item in pairs(craftingInventory) do
                     if item and item.Type then
                         for j, type in ipairs(myConditionTable) do
-                            if utility.tableContains(itemTagLookup[type], item.Type) then
-                                myConditionTable[j] = item.Type
+                            if utility.tableContains(itemTagLookup[type.Type], item.Type) then
+                                myConditionTable[j] = item
                                 goto nextItemTag
                             end
                         end
@@ -633,10 +681,13 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
                     end
                 end
                 table.sort(myConditionTable, function(a, b)
-                    return conditionalItemLookupType(a)
-                        < conditionalItemLookupType(b)
+                    return inventoryHelper.conditionalItemLookupType(a)
+                        < inventoryHelper.conditionalItemLookupType(b)
                 end)
             end
+
+
+
             local craftingIndex = 0
             for k = topLeft.Y, bottomRight.Y do
                 for l = topLeft.X, bottomRight.X do
@@ -644,20 +695,17 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
                     if shapeless then
                         craftingIndex = index
                     end
-
                     if myConditionTable[index] then
-                        local collectibleType = Isaac.GetItemIdByName(myConditionTable[index])
-                        local typeName = ((collectibleType ~= -1) and "tcainrework:collectible")
-                            or myConditionTable[index]
-                        if (not inventoryHelper.itemCanStackWithTag(craftingTable[craftingIndex], {
-                            Type = typeName, 
-                            ComponentData = {
-                                [InventoryItemComponentData.COLLECTIBLE_ITEM] = ((collectibleType ~= -1) and collectibleType) or nil
-                            }
-                        })) then
+                        if recipe.Results.Collectible == "Dr. Fetus" then
+                            print(
+                                inventoryHelper.conditionalItemLookupType(craftingTable[craftingIndex]), 
+                                inventoryHelper.conditionalItemLookupType(myConditionTable[index]), 
+                                inventoryHelper.itemCanStackWithTag(craftingTable[craftingIndex], myConditionTable[index])
+                            )
+                        end
+                        if (not inventoryHelper.itemCanStackWithTag(craftingTable[craftingIndex], myConditionTable[index])) then
                             goto recipeContinue
                         end
-                        -- print(craftingTable[craftingIndex].Type, myConditionTable[index])
                     end
                     index = index + 1
                 end
@@ -689,11 +737,11 @@ end
 function inventoryHelper.conditionalItemFromRecipe(recipe, itemIndex)
     if recipe.ConditionTable and recipe.ConditionTable[itemIndex] then
         local presumedItemType = recipe.ConditionTable[itemIndex]
-        local itemCollectibleData = Isaac.GetItemIdByName(presumedItemType)
+        local itemCollectibleData = utility.fastItemIDByName(presumedItemType)
         if itemCollectibleData ~= -1 then
             presumedItemType = "tcainrework:collectible"
         end
-        local fakeResultItem = {Type = presumedItemType}
+        local fakeResultItem = inventoryHelper.createItem(presumedItemType)
         if itemCollectibleData ~= -1 then
             fakeResultItem.ComponentData = utility.generateCollectibleData(itemCollectibleData)
         end
@@ -730,7 +778,7 @@ function TCainRework:UnlockItemRecipe(recipeName)
         if not utility.tableContains(runSave.unlockedRecipes, recipeName) then
             local resultingType = (recipe.Results and recipe.Results.Type)
             if resultingType then
-                local itemTable = {Type = resultingType, Count = 1}
+                local itemTable = inventoryHelper.createItem(resultingType)
                 if recipe.Results.Collectible then
                     itemTable.ComponentData = utility.generateCollectibleData(recipe.Results.Collectible)
                 end
@@ -746,7 +794,7 @@ function inventoryHelper.runUnlockItemType(itemType, collectibleType)
     if not runSave.obtainedItems then
         runSave.obtainedItems = {}
     end
-    local combinedNameType = itemType .. ((collectibleType and tostring(collectibleType)) or "")
+    local combinedNameType = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(itemType))
     if not runSave.obtainedItems[combinedNameType] then
         runSave.obtainedItems[combinedNameType] = true
         if recipeReverseLookup[combinedNameType] then
@@ -756,10 +804,9 @@ function inventoryHelper.runUnlockItemType(itemType, collectibleType)
                 local recipe = recipeLookupIndex[recipeName]
                 if recipe and recipe.ConditionTable and recipe.DisplayRecipe then
                     for i, curType in pairs(recipe.ConditionTable) do
-                        local potentialItemId = ((Isaac.GetItemIdByName(curType) ~= 1) 
-                            and "tcainrework:collectible" .. Isaac.GetItemIdByName(curType)) or nil
+                        local fakeItem = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(curType))
                         if not runSave.obtainedItems[curType]
-                        and not (potentialItemId and runSave.obtainedItems[potentialItemId]) then
+                        and not runSave.obtainedItems[fakeItem] then
                             goto skipUnlocking
                         end
                     end

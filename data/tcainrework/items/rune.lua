@@ -38,7 +38,7 @@ return {
                     return { 
                         [InventoryItemComponentData.CUSTOM_NAME] = (isSoulStone and "Soul Stone") or nil,
                         [InventoryItemComponentData.CUSTOM_GFX] = "gfx/items/cards/" .. gfxName .. ".png",
-                        [InventoryItemComponentData.CUSTOM_DESC] = localizedName
+                        [InventoryItemComponentData.CARD_TYPE] = entity.SubType
                     }
                 end 
                 return false

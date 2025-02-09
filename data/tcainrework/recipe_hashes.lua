@@ -7,7 +7,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Abaddon")
+                Collectible = "Abaddon"
             },
             DisplayRecipe = true
         },
@@ -18,7 +18,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Black Bean")
+                Collectible = "The Black Bean"
             },
             DisplayRecipe = true
         },
@@ -29,7 +29,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Book of the Dead")
+                Collectible = "Book of the Dead"
             },
             DisplayRecipe = true
         },
@@ -40,7 +40,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Boom!")
+                Collectible = "Boom!"
             },
             DisplayRecipe = true
         },
@@ -51,7 +51,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Bucket of Lard")
+                Collectible = "Bucket of Lard"
             },
             DisplayRecipe = true
         },
@@ -62,7 +62,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Compost")
+                Collectible = "Compost"
             },
             DisplayRecipe = true
         },
@@ -83,7 +83,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Doctor's Remote")
+                Collectible = "Doctor's Remote"
             },
             DisplayRecipe = true
         },
@@ -94,7 +94,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Epic Fetus")
+                Collectible = "Epic Fetus"
             },
             DisplayRecipe = true
         },
@@ -175,7 +175,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Kamikaze!")
+                Collectible = "Kamikaze!"
             },
             DisplayRecipe = true
         },
@@ -186,7 +186,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Midas' Touch")
+                Collectible = "Midas' Touch"
             },
             DisplayRecipe = true
         },
@@ -197,7 +197,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Midas' Touch")
+                Collectible = "Midas' Touch"
             },
             DisplayRecipe = true
         },
@@ -208,7 +208,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Midnight Snack")
+                Collectible = "Midnight Snack"
             },
             DisplayRecipe = true
         },
@@ -219,7 +219,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Mr. Boom")
+                Collectible = "Mr. Boom"
             },
             DisplayRecipe = true
         },
@@ -230,7 +230,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Rotten Meat")
+                Collectible = "Rotten Meat"
             },
             DisplayRecipe = true
         },
@@ -254,7 +254,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Anarchist Cookbook")
+                Collectible = "Anarchist Cookbook"
             },
             DisplayRecipe = true
         },
@@ -266,7 +266,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Blood Bombs")
+                Collectible = "Blood Bombs"
             },
             DisplayRecipe = true
         },
@@ -278,7 +278,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Blood of the Martyr")
+                Collectible = "Blood of the Martyr"
             },
             DisplayRecipe = true
         },
@@ -290,7 +290,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Ceremonial Robes")
+                Collectible = "Ceremonial Robes"
             },
             DisplayRecipe = true
         },
@@ -302,7 +302,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Champion Belt")
+                Collectible = "Champion Belt"
             },
             DisplayRecipe = true
         },
@@ -314,7 +314,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Deck of Cards")
+                Collectible = "Deck of Cards"
             },
             DisplayRecipe = true
         },
@@ -337,7 +337,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Hot Bombs")
+                Collectible = "Hot Bombs"
             },
             DisplayRecipe = true
         },
@@ -349,7 +349,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Lil Gurdy")
+                Collectible = "Lil Gurdy"
             },
             DisplayRecipe = true
         },
@@ -361,7 +361,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Little Chubby")
+                Collectible = "Little Chubby"
             },
             DisplayRecipe = true
         },
@@ -373,7 +373,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Mama Mega!")
+                Collectible = "Mama Mega!"
             },
             DisplayRecipe = true
         },
@@ -385,7 +385,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Mystery Gift")
+                Collectible = "Mystery Gift"
             },
             DisplayRecipe = true
         },
@@ -408,7 +408,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Stigmata")
+                Collectible = "Stigmata"
             },
             DisplayRecipe = true
         },
@@ -420,7 +420,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Ladder")
+                Collectible = "The Ladder"
             },
             DisplayRecipe = true
         },
@@ -432,7 +432,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Poop")
+                Collectible = "The Poop"
             },
             DisplayRecipe = true
         },
@@ -444,7 +444,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Tiny Planet")
+                Collectible = "Tiny Planet"
             },
             DisplayRecipe = true
         },
@@ -456,7 +456,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Treasure Map")
+                Collectible = "Treasure Map"
             },
             DisplayRecipe = true
         },
@@ -479,7 +479,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Wooden Nickel")
+                Collectible = "Wooden Nickel"
             },
             DisplayRecipe = true
         },
@@ -491,7 +491,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Yuck Heart")
+                Collectible = "Yuck Heart"
             },
             DisplayRecipe = true
         },
@@ -503,7 +503,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Yum Heart")
+                Collectible = "Yum Heart"
             },
             DisplayRecipe = true
         },
@@ -517,7 +517,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Anemic")
+                Collectible = "Anemic"
             },
             DisplayRecipe = true
         },
@@ -529,7 +529,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Caffeine Pill")
+                Collectible = "Caffeine Pill"
             },
             DisplayRecipe = true
         },
@@ -542,7 +542,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("A Dollar")
+                Collectible = "A Dollar"
             },
             DisplayRecipe = true
         },
@@ -553,7 +553,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Shard of Glass")
+                Collectible = "Shard of Glass"
             },
             DisplayRecipe = true
         },
@@ -566,7 +566,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("A Quarter")
+                Collectible = "A Quarter"
             },
             DisplayRecipe = true
         },
@@ -577,7 +577,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Book of Sin")
+                Collectible = "The Book of Sin"
             },
             DisplayRecipe = true
         },
@@ -598,7 +598,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Sacred Heart")
+                Collectible = "Sacred Heart"
             },
             DisplayRecipe = true
         },
@@ -611,7 +611,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("A Quarter")
+                Collectible = "A Quarter"
             },
             DisplayRecipe = true
         },
@@ -632,7 +632,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Chocolate Milk")
+                Collectible = "Chocolate Milk"
             },
             DisplayRecipe = true
         },
@@ -643,7 +643,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("C Section")
+                Collectible = "C Section"
             },
             DisplayRecipe = true
         },
@@ -654,7 +654,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("C Section")
+                Collectible = "C Section"
             },
             DisplayRecipe = true
         },
@@ -665,7 +665,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Dead Cat")
+                Collectible = "Dead Cat"
             },
             DisplayRecipe = true
         },
@@ -676,7 +676,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Dr. Fetus")
+                Collectible = "Dr. Fetus"
             },
             DisplayRecipe = true
         },
@@ -687,7 +687,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Match Book")
+                Collectible = "Match Book"
             },
             DisplayRecipe = true
         },
@@ -708,7 +708,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Pyro")
+                Collectible = "Pyro"
             },
             DisplayRecipe = true
         },
@@ -719,7 +719,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Red Key")
+                Collectible = "Red Key"
             },
             DisplayRecipe = true
         },
@@ -730,7 +730,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Robo-Baby")
+                Collectible = "Robo-Baby"
             },
             DisplayRecipe = true
         },
@@ -741,7 +741,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Skeleton Key")
+                Collectible = "Skeleton Key"
             },
             DisplayRecipe = true
         },
@@ -752,7 +752,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Bean")
+                Collectible = "The Bean"
             },
             DisplayRecipe = true
         },
@@ -766,7 +766,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Bag of Crafting")
+                Collectible = "Bag of Crafting"
             },
             DisplayRecipe = true
         },
@@ -778,7 +778,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Jar")
+                Collectible = "The Jar"
             },
             DisplayRecipe = true
         },
@@ -791,7 +791,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Glitched Crown")
+                Collectible = "Glitched Crown"
             },
             DisplayRecipe = true
         },
@@ -802,7 +802,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Booster Pack")
+                Collectible = "Booster Pack"
             },
             DisplayRecipe = true
         },
@@ -813,7 +813,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Consolation Prize")
+                Collectible = "Consolation Prize"
             },
             DisplayRecipe = true
         },
@@ -827,7 +827,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Blood Clot")
+                Collectible = "Blood Clot"
             },
             DisplayRecipe = true
         },
@@ -839,7 +839,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Book of Revelations")
+                Collectible = "Book of Revelations"
             },
             DisplayRecipe = true
         },
@@ -851,7 +851,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Brimstone")
+                Collectible = "Brimstone"
             },
             DisplayRecipe = true
         },
@@ -863,7 +863,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Celtic Cross")
+                Collectible = "Celtic Cross"
             },
             DisplayRecipe = true
         },
@@ -875,7 +875,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Compass")
+                Collectible = "The Compass"
             },
             DisplayRecipe = true
         },
@@ -887,7 +887,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Distant Admiration")
+                Collectible = "Distant Admiration"
             },
             DisplayRecipe = true
         },
@@ -899,7 +899,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Eden's Soul")
+                Collectible = "Eden's Soul"
             },
             DisplayRecipe = true
         },
@@ -911,7 +911,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Eye Drops")
+                Collectible = "Eye Drops"
             },
             DisplayRecipe = true
         },
@@ -923,7 +923,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Fire Mind")
+                Collectible = "Fire Mind"
             },
             DisplayRecipe = true
         },
@@ -935,7 +935,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Forever alone")
+                Collectible = "Forever alone"
             },
             DisplayRecipe = true
         },
@@ -947,7 +947,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Fortune Cookie")
+                Collectible = "Fortune Cookie"
             },
             DisplayRecipe = true
         },
@@ -959,7 +959,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Holy Mantle")
+                Collectible = "Holy Mantle"
             },
             DisplayRecipe = true
         },
@@ -971,7 +971,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Mama Mega!")
+                Collectible = "Mama Mega!"
             },
             DisplayRecipe = true
         },
@@ -983,7 +983,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Meat Cleaver")
+                Collectible = "Meat Cleaver"
             },
             DisplayRecipe = true
         },
@@ -995,7 +995,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Mom's Bottle of Pills")
+                Collectible = "Mom's Bottle of Pills"
             },
             DisplayRecipe = true
         },
@@ -1007,7 +1007,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Mr. Mega")
+                Collectible = "Mr. Mega"
             },
             DisplayRecipe = true
         },
@@ -1019,7 +1019,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Sacrificial Dagger")
+                Collectible = "Sacrificial Dagger"
             },
             DisplayRecipe = true
         },
@@ -1031,7 +1031,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Soul Locket")
+                Collectible = "Soul Locket"
             },
             DisplayRecipe = true
         },
@@ -1043,7 +1043,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Sulfur")
+                Collectible = "Sulfur"
             },
             DisplayRecipe = true
         },
@@ -1057,7 +1057,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Bob's Rotten Head")
+                Collectible = "Bob's Rotten Head"
             },
             DisplayRecipe = true
         },
@@ -1110,7 +1110,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Robo-Baby 2.0")
+                Collectible = "Robo-Baby 2.0"
             },
             DisplayRecipe = true
         },
@@ -1121,7 +1121,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Robo-Baby")
+                Collectible = "Robo-Baby"
             },
             DisplayRecipe = true
         },
@@ -1135,7 +1135,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Breakfast")
+                Collectible = "Breakfast"
             },
             DisplayRecipe = true
         },
@@ -1147,7 +1147,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Magneto")
+                Collectible = "Magneto"
             },
             DisplayRecipe = true
         },
@@ -1159,7 +1159,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Mega Blast")
+                Collectible = "Mega Blast"
             },
             DisplayRecipe = true
         },
@@ -1171,7 +1171,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Monster Manual")
+                Collectible = "Monster Manual"
             },
             DisplayRecipe = true
         },
@@ -1183,7 +1183,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("My Little Unicorn")
+                Collectible = "My Little Unicorn"
             },
             DisplayRecipe = true
         },
@@ -1195,7 +1195,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("My Reflection")
+                Collectible = "My Reflection"
             },
             DisplayRecipe = true
         },
@@ -1207,7 +1207,19 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Redemption")
+                Collectible = "Redemption"
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:spoon_bender",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"Iron Bar", "Wooden Spoon", "tcainrework:tarot_card{\"card_type\":2}", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Spoon Bender"
             },
             DisplayRecipe = true
         },
@@ -1219,7 +1231,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Sprinkler")
+                Collectible = "Sprinkler"
             },
             DisplayRecipe = true
         },
@@ -1227,11 +1239,11 @@ return {
             RecipeName = "tcainrework:we_need_to_go_deeper",
             Category = "collectible",
             RecipeSize = Vector(1, 3),
-            ConditionTable = {"#tcainrework:ehwaz", "minecraft:stick", "minecraft:stick", },
+            ConditionTable = {"tcainrework:rune{\"card_type\":34,\"custom_gfx\":\"gfx/items/cards/left_rune.png\"}", "minecraft:stick", "minecraft:stick", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("We Need To Go Deeper!")
+                Collectible = "We Need To Go Deeper!"
             },
             DisplayRecipe = true
         },
@@ -1244,7 +1256,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Dessert")
+                Collectible = "Dessert"
             },
             DisplayRecipe = true
         },
@@ -1255,7 +1267,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("<3")
+                Collectible = "<3"
             },
             DisplayRecipe = true
         },
@@ -1268,7 +1280,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Duality")
+                Collectible = "Duality"
             },
             DisplayRecipe = true
         },
@@ -1282,7 +1294,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Godhead")
+                Collectible = "Godhead"
             },
             DisplayRecipe = true
         },
@@ -1296,7 +1308,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Hallowed Ground")
+                Collectible = "Hallowed Ground"
             },
             DisplayRecipe = true
         },
@@ -1310,7 +1322,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Iron Bar")
+                Collectible = "Iron Bar"
             },
             DisplayRecipe = true
         },
@@ -1322,7 +1334,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Jesus Juice")
+                Collectible = "Jesus Juice"
             },
             DisplayRecipe = true
         },
@@ -1336,7 +1348,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Isaac's Tears")
+                Collectible = "Isaac's Tears"
             },
             DisplayRecipe = true
         },
@@ -1348,7 +1360,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Milk!")
+                Collectible = "Milk!"
             },
             DisplayRecipe = true
         },
@@ -1360,7 +1372,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Sacred Heart")
+                Collectible = "Sacred Heart"
             },
             DisplayRecipe = false
         },
@@ -1374,7 +1386,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Latch Key")
+                Collectible = "Latch Key"
             },
             DisplayRecipe = true
         },
@@ -1388,7 +1400,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Loki's Horns")
+                Collectible = "Loki's Horns"
             },
             DisplayRecipe = true
         },
@@ -1402,7 +1414,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Lucky Foot")
+                Collectible = "Lucky Foot"
             },
             DisplayRecipe = true
         },
@@ -1416,7 +1428,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Mom's Heels")
+                Collectible = "Mom's Heels"
             },
             DisplayRecipe = true
         },
@@ -1430,7 +1442,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Notched Axe")
+                Collectible = "Notched Axe"
             },
             DisplayRecipe = true
         },
@@ -1442,7 +1454,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Screw")
+                Collectible = "Screw"
             },
             DisplayRecipe = true
         },
@@ -1456,7 +1468,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Pyromaniac")
+                Collectible = "Pyromaniac"
             },
             DisplayRecipe = true
         },
@@ -1468,7 +1480,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Peeper")
+                Collectible = "The Peeper"
             },
             DisplayRecipe = true
         },
@@ -1495,7 +1507,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Scissors")
+                Collectible = "Scissors"
             },
             DisplayRecipe = true
         },
@@ -1509,7 +1521,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Super Bandage")
+                Collectible = "Super Bandage"
             },
             DisplayRecipe = true
         },
@@ -1523,7 +1535,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Belt")
+                Collectible = "The Belt"
             },
             DisplayRecipe = true
         },
@@ -1537,7 +1549,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Mark")
+                Collectible = "The Mark"
             },
             DisplayRecipe = true
         },
@@ -1551,7 +1563,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("The Scooper")
+                Collectible = "The Scooper"
             },
             DisplayRecipe = true
         },
@@ -1565,7 +1577,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Wire Coat Hanger")
+                Collectible = "Wire Coat Hanger"
             },
             DisplayRecipe = true
         },
@@ -1579,7 +1591,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = Isaac.GetItemIdByName("Wooden Spoon")
+                Collectible = "Wooden Spoon"
             },
             DisplayRecipe = true
         },

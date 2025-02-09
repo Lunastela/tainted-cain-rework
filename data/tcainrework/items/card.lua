@@ -17,7 +17,7 @@ return {
                 -- only accounts for vanilla cards. last card added, so will always be fallback
                 local cardConfig = Isaac.GetItemConfig():GetCard(entity.SubType)
                 if cardConfig:IsCard() and entity.SubType < Card.NUM_CARDS then
-                    return {[InventoryItemComponentData.CUSTOM_DESC] = utility.getLocalizedString("PocketItems", cardConfig.Name)}
+                    return {[InventoryItemComponentData.CARD_TYPE] = entity.SubType}
                 end 
                 return false
             end

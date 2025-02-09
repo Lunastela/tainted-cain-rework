@@ -107,9 +107,9 @@ function mod:loadRegistry(curLoad)
                     recipeLookupIndex[recipeName] = recipeData
                     if recipeData.ConditionTable then
                         for i, itemType in pairs(recipeData.ConditionTable) do
-                            local nameType = itemType
-                            if Isaac.GetItemIdByName(itemType) ~= -1 then
-                                nameType = "tcainrework:collectible" .. tostring(Isaac.GetItemIdByName(itemType))
+                            local nameType = utility.trimType(itemType)
+                            if utility.fastItemIDByName(itemType) ~= -1 then
+                                nameType = "tcainrework:collectible" .. tostring(utility.fastItemIDByName(itemType))
                             end
                             if not recipeReverseLookup[nameType] then
                                 recipeReverseLookup[nameType] = {}

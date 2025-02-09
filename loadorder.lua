@@ -40,6 +40,7 @@ return {
     rune
     dice_shard
     cracked_key
+    eden_essence
     poop
     poop_block
     wooden_doll

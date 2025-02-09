@@ -16,8 +16,8 @@ return {
             Condition = function(entity, player)
                 if (entity.SubType <= 22) then
                     return {
-                        [InventoryItemComponentData.CUSTOM_DESC] = "Major Arcana\n" 
-                        .. utility.getLocalizedString("PocketItems", Isaac.GetItemConfig():GetCard(entity.SubType).Name)
+                        [InventoryItemComponentData.CUSTOM_DESC] = "Major Arcana",
+                        [InventoryItemComponentData.CARD_TYPE] = entity.SubType
                     }
                 end
                 return false

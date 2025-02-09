@@ -144,7 +144,8 @@ local function checkRecipes()
                 recipeIngredientCount = recipeIngredientCount + 1
             end
             combinedString = combinedString .. ((craftingInventory[craftingIndex] and "#") or " ")
-            trueCombinedString = trueCombinedString .. ((craftingInventory[craftingIndex] and craftingInventory[craftingIndex].Type) or " ")
+            trueCombinedString = trueCombinedString .. ((craftingInventory[craftingIndex] 
+                and (inventoryHelper.conditionalItemLookupType(craftingInventory[craftingIndex]))) or " ")
         end
         if k < bottomRight.Y then
             combinedString = combinedString .. "\n"
@@ -246,6 +247,7 @@ local function inventoryShiftClick(inventorySet, itemInventory, itemIndex)
             end
         end
     end
+    inventoryHelper.recipeCraftableDirty = true
 end
 
 local function getConditionalFromAnyRecipe(recipe, inventory, index)
@@ -363,6 +365,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                         if inventory[itemIndex].Count <= 0 then
                             inventory[itemIndex] = nil
                         end
+                        inventoryHelper.recipeCraftableDirty = true
                     end
                 elseif cursorHeldItem then
                     -- releasing item stacks with cursor locks disabled
@@ -411,6 +414,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                                     cursorHeldItem = nil
                                 end
                             end
+                            inventoryHelper.recipeCraftableDirty = true
                         end
                     elseif ((inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_1) and not cursorHeldItemLock[Mouse.MOUSE_BUTTON_1]) 
                     or (inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_2) and not cursorHeldItemLock[Mouse.MOUSE_BUTTON_2]))
@@ -453,6 +457,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                         cursorHeldItem.Count = cursorHeldItem.Count + inventory[itemIndex].Count
                         inventory[itemIndex] = nil
                     end
+                    inventoryHelper.recipeCraftableDirty = true
                 end
 
                 if isLMBReleased or isRMBReleased then
@@ -592,6 +597,7 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
             pickupType,
             (optionalComponentData and optionalComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
         )
+        inventoryHelper.recipeCraftableDirty = true
     end
     return addedAny
 end
@@ -862,7 +868,8 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                 end
                                             end
                                             while times > 0 do
-                                                if inventoryHelper.checkRecipeCraftable(recipeFromName, inventoryHelper.getInventoryItemList(inventorySet, {craftingInventory})) then
+                                                inventoryHelper.recipeCraftableDirty = true
+                                                if inventoryHelper.checkRecipeCraftable(recipeName, recipeFromName, inventoryHelper.getInventoryItemList(inventorySet, {craftingInventory})) then
                                                     itemsNeeded = getRecipeItemList(recipeFromName)
                                                     -- create an assorted stack of items the recipe needs for later use
                                                     local sortedItemStack = {}
@@ -1086,6 +1093,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                             for snakedInventory, snakedIndices in pairs(cursorSnaking) do
                                 resetSnaking(snakedInventory)
                             end
+                            inventoryHelper.recipeCraftableDirty = true
                             cancelRecipeOverlay = true
                         end
                     else -- attempt dropping item
@@ -1104,6 +1112,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                 if cursorHeldItem.Count <= 0 then
                                     cursorHeldItem = nil
                                 end
+                                inventoryHelper.recipeCraftableDirty = true
                             end
                         end
                     end
@@ -1180,8 +1189,8 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                 end
             end
             inputHelper.Update()
+            -- print(Isaac.GetTime() - currentTime)
         end
-        -- print(Isaac.GetTime() - currentTime)
     end
 end)
 

@@ -121,7 +121,7 @@ for entry in os.listdir(localPath):
                     if recipeCondition == "":
                         recipeExport.write("nil, ")
                     else:
-                        recipeExport.write("\"{}\", ".format(recipeCondition))
+                        recipeExport.write("\"{}\", ".format(recipeCondition.replace("\"", "\\\"")))
 
                 # Recipe Result Table
                 recipeExport.write("},\n" + space * 3 + "Results = {\n" 
@@ -133,7 +133,7 @@ for entry in os.listdir(localPath):
                     if isinstance(recipeTable['collectible'], int) or recipeTable['collectible'].isnumeric():
                         recipeExport.write(",\n" + space * 4 + "Collectible = {}".format(recipeTable['collectible']))
                     else:
-                        recipeExport.write(",\n" + space * 4 + "Collectible = Isaac.GetItemIdByName(\"{}\")".format(recipeTable['collectible']))
+                        recipeExport.write(",\n" + space * 4 + "Collectible = \"{}\"".format(recipeTable['collectible']))
                 recipeExport.write("\n" + space * 3 + "},\n" + space * 3 + "DisplayRecipe = " + "{}\n".format(recipeTable['display']).lower() + space * 2 + "},\n")
             recipeExport.write(space + "},\n")
 

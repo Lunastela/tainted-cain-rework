@@ -29,6 +29,21 @@ function Utility.getIndexInTable(table, value)
     return nil
 end
 
+function Utility.trimType(itemType)
+    if string.find(itemType, "{") then
+        return itemType:sub(1, string.find(itemType, "{") - 1)
+    end
+    return itemType
+end
+
+local collectibleNameCache = {}
+function Utility.fastItemIDByName(name)
+    if not collectibleNameCache[name] then
+        collectibleNameCache[name] = Isaac.GetItemIdByName(name)
+    end
+    return collectibleNameCache[name]
+end
+
 local isaacItemConfig
 local collectibleCache = {}
 function Utility.getCollectibleConfig(collectibleID)
@@ -41,13 +56,28 @@ function Utility.getCollectibleConfig(collectibleID)
     return collectibleCache[collectibleID]
 end
 
+local cardCache = {}
+function Utility.getCardConfig(collectibleID)
+    if not cardCache[collectibleID] then
+        if not isaacItemConfig then
+            isaacItemConfig = Isaac.GetItemConfig()
+        end
+        cardCache[collectibleID] = isaacItemConfig:GetCard(collectibleID)
+    end
+    return cardCache[collectibleID]
+end
+
 local dummySprite = Sprite()
 dummySprite:Load("gfx/items/inventoryitem.anm2", false)
 local spriteLookupTable = {}
 local interval = 4
 function Utility.generateCollectibleData(collectibleType)
     -- try to obtain sprite if it exists
-    local itemConfig = Utility.getCollectibleConfig(collectibleType)
+    local collectibleID = Utility.fastItemIDByName(collectibleType)
+    if collectibleID == -1 then
+        collectibleID = collectibleType 
+    end
+    local itemConfig = Utility.getCollectibleConfig(collectibleID)
     if itemConfig then
         local lastIndex = string.find(itemConfig.GfxFileName, "/[^/]*$")
         local spritesheetPath = string.lower(itemConfig.GfxFileName:sub(lastIndex + 1))
@@ -75,9 +105,8 @@ function Utility.generateCollectibleData(collectibleType)
             ::spriteFound::
         end
         return {
-            [InventoryItemComponentData.CUSTOM_GFX] = ((spriteLookupTable[spritesheetPath] ~= -1) and spriteLookupTable[spritesheetPath]) or
-                nil,
-            [InventoryItemComponentData.COLLECTIBLE_ITEM] = collectibleType,
+            [InventoryItemComponentData.CUSTOM_GFX] = ((spriteLookupTable[spritesheetPath] ~= -1) and spriteLookupTable[spritesheetPath]) or nil,
+            [InventoryItemComponentData.COLLECTIBLE_ITEM] = collectibleID,
             [InventoryItemComponentData.COLLECTIBLE_CHARGES] = initialCharges or nil
         }
     end

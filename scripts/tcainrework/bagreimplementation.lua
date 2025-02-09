@@ -173,6 +173,7 @@ end
 
 local collectibleToRecipe = require("scripts.tcainrework.stored.collectible_to_recipe")
 local function salvageCollectible(player, pickup)
+    print('my salvage')
     if canSalvageItem(pickup.SubType) then
         local ptrHash = GetPtrHash(pickup)
         SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
@@ -215,13 +216,8 @@ local function salvageCollectible(player, pickup)
 end
 
 local function notShopItemOrBought(player, pickup)
-    if pickup:IsShopItem() 
-    and getEntityFromTable(pickup, false, player) then
-        if player:GetNumCoins() - pickup.Price >= 0 then
-            player:AddCoins(-pickup.Price)
-            pickup.EntityCollisionClass = EntityCollisionClass.ENTCOLL_NONE
-            return true
-        end
+    if pickup:IsShopItem() and getEntityFromTable(pickup, false, player) then
+        -- player:ForceCollide(pickup, false)
         return false
     end
     return true
@@ -276,9 +272,9 @@ local function renderBagOfCrafting(player, offset)
                             local knockbackDirection = (entity.Position - swipeCapsule:GetPosition()):Normalized()
                             local pickup = entity:ToPickup()
                             if (((pickup and (notShopItemOrBought(player, pickup) and pickup.Wait <= 0 
-                            and (not (pickup:GetSprite():GetAnimation() == "Collect"))))
-                            or (not pickup)) and not bagExclusions[entity.Type])
-                            and (entity:ForceCollide(player, false) ~= true) then
+                                and (not (pickup:GetSprite():GetAnimation() == "Collect"))))
+                                or (not pickup)) and not bagExclusions[entity.Type]) and (((entity:ForceCollide(player, false) ~= true) 
+                                or (pickup and pickup:IsShopItem()))) then
                                 local tcainPickup = (pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
                                     and (player:GetPlayerType() == PlayerType.PLAYER_CAIN_B)
                                 local itemTable, itemCondition = getEntityFromTable(entity, false, player)

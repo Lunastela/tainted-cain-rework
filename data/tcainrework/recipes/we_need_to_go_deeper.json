@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "X": "#tcainrework:ehwaz",
+    "X": "tcainrework:rune{\"card_type\":34,\"custom_gfx\":\"gfx\/items\/cards\/left_rune.png\"}",
     "#": "minecraft:stick"
   },
   "pattern": [

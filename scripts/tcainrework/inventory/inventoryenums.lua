@@ -87,6 +87,7 @@ InventoryItemComponentData = {
     PILL_COLOR = "pill_color",
     CUSTOM_GFX = "custom_gfx",
     CUSTOM_DESC = "custom_desc",
+    CARD_TYPE = "card_type",
     CUSTOM_NAME = "custom_name",
     COLLECTIBLE_ITEM = "collectible_item",
     COLLECTIBLE_CHARGES = "collectible_charges",

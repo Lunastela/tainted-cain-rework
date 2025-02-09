@@ -21,11 +21,7 @@ return {
             Amount = 1,
             Condition = function(entity, player)
                 if mtgCard[entity.SubType] then
-                    return {
-                        [InventoryItemComponentData.CUSTOM_DESC] = utility.getLocalizedString(
-                            "PocketItems", Isaac.GetItemConfig():GetCard(entity.SubType).Name
-                        )
-                    }
+                    return {[InventoryItemComponentData.CARD_TYPE] = entity.SubType}
                 end
                 return false
             end
