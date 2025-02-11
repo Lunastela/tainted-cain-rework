@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "b": "#tcainrework:bomb",
+    "V": "Sulfur"
+  },
+  "pattern": [
+    " b ",
+    "bVb",
+    " b "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Brimstone Bombs"
+  }
+}

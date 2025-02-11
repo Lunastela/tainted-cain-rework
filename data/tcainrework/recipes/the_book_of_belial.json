@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "H": "tcainrework:black_heart",
+    "#": "#book",
+    "C": "tcainrework:tarot_card{\"card_type\":16}"
+  },
+  "pattern": [
+    "H",
+    "C",
+    "#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": 34
+  }
+}

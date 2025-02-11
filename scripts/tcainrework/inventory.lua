@@ -314,7 +314,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                         recipeIngredientDisplay = getConditionalFromAnyRecipe(curDisplayingRecipe, inventory, itemIndex)
                         if recipeIngredientDisplay and itemTagLookup[recipeIngredientDisplay.Type] then
                             local itemTagTable = itemTagLookup[recipeIngredientDisplay.Type]
-                            recipeIngredientDisplay.Type = itemTagTable[math.floor(((Isaac.GetTime() - lastStartTime) / 1000) % (#itemTagTable)) + 1]
+                            recipeIngredientDisplay = inventoryHelper.createItem(itemTagTable[math.floor(((Isaac.GetTime() - lastStartTime) / 1000) % (#itemTagTable)) + 1])
                         end
                         fakeDisplayRecipe = (recipeIngredientDisplay ~= nil)
                     end
@@ -755,6 +755,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                             recipeBookFilter = inventoryHelper.setRecipeBookFilter(not recipeBookFilter)
                             SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
                             selectedPage = 0
+                            inventoryHelper.recipeCraftableDirty = true
                         end
                     end
                     local searchLayer = craftingInterface:GetLayer("search_bar_highlight")
@@ -825,6 +826,10 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                     if #filteredRecipes > 0 then
                         local recipeDisplacement = Vector.Zero
                         local chosenList = (recipeBookFilter and craftableRecipes) or filteredRecipes
+                        local maxPage = math.ceil(#chosenList / 20)
+                        if selectedPage > maxPage - 1 then
+                            selectedPage = maxPage - 1
+                        end
                         local pageDisplacement = (selectedPage * 20)
                         for i = 1, 20 do
                             local recipeName = chosenList[i + pageDisplacement]
@@ -901,7 +906,8 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                                     local inventoryLookupTable = {}
                                                                     for j in pairs(inventory) do
                                                                         if (inventory[j] and inventory[j].Type) and ((itemTagLookup[itemOrTag.Type] 
-                                                                        and utility.tableContains(itemTagLookup[itemOrTag.Type], inventory[j].Type)) 
+                                                                        and (utility.tableContains(itemTagLookup[itemOrTag.Type], inventory[j].Type)
+                                                                        or (utility.tableContains(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(inventory[j])))))
                                                                         or (inventory[j].Type == itemOrTag.Type)) then
                                                                             -- print(inventory[j].Type, itemOrTag.Type)
                                                                             table.insert(inventoryLookupTable, j)
@@ -909,8 +915,10 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                                     end
                                                                     if itemTagLookup[itemOrTag.Type] then
                                                                         table.sort(inventoryLookupTable, function(a, b)
-                                                                            return (utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventory[a].Type) 
-                                                                                < utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventory[b].Type))
+                                                                            return ((utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventory[a].Type) 
+                                                                                or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(inventory[a])))
+                                                                                < (utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventory[b].Type) 
+                                                                                or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(inventory[b]))))
                                                                         end)
                                                                     end
                                                                     -- for i in ipairs(inventoryLookupTable) do
@@ -919,7 +927,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                                     for j, inventoryItemIndex in ipairs(inventoryLookupTable) do
                                                                         local inventoryItem = inventory[inventoryItemIndex]
                                                                         if inventoryItem then
-                                                                            -- print("item item item atemt", item.Type, craftingInventory[itemIndex] and craftingInventory[itemIndex].Type)
+                                                                            -- print("item item item atemt", inventoryItem.Type, craftingInventory[itemIndex] and craftingInventory[itemIndex].Type)
                                                                             if inventoryHelper.itemCanStackWithTag(inventoryItem, itemOrTag) and ((not craftingInventory[itemIndex]) 
                                                                             or (inventoryHelper.itemCanStackWith(inventoryItem, craftingInventory[itemIndex]) 
                                                                             and craftingInventory[itemIndex].Count <= lowestNumber))
@@ -968,7 +976,6 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                         end
 
                         -- Page Switch Buttons
-                        local maxPage = math.ceil(#chosenList / 20)
                         if maxPage > 1 then
                             local centerRecipeBook = recipeDisplayDisplacement + Vector(60, 114)
                             if selectedPage >= 1 then

@@ -15,10 +15,7 @@ return {
             Amount = 1,
             Condition = function(entity, player)
                 if (entity.SubType <= 22) then
-                    return {
-                        [InventoryItemComponentData.CUSTOM_DESC] = "Major Arcana",
-                        [InventoryItemComponentData.CARD_TYPE] = entity.SubType
-                    }
+                    return {[InventoryItemComponentData.CARD_TYPE] = entity.SubType}
                 end
                 return false
             end

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "b": "minecraft:leather",
+    "V": "tcainrework:bone_heart"
+  },
+  "pattern": [
+    " b ",
+    "bVb",
+    " b "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Magic Skin"
+  }
+}

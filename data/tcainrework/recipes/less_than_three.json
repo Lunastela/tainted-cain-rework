@@ -3,14 +3,7 @@
   "category": "collectible",
   "ingredients": [
     "Yum Heart",
-    "tcainrework:bone_heart",
-    "tcainrework:heart",
-    "tcainrework:heart",
-    "tcainrework:heart",
-    "tcainrework:heart",
-    "tcainrework:heart",
-    "tcainrework:heart",
-    "tcainrework:heart"
+    "tcainrework:pill{\"pill_effect\":5}"
   ],
   "result": {
     "id": "tcainrework:collectible",

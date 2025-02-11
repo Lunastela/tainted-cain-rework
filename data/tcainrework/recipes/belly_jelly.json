@@ -2,12 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "#baby",
-    "Iron Bar",
-    "tcainrework:battery"
+    "The Bean",
+    "Candy Heart"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Robo-Baby"
+    "collectible": "Belly Jelly"
   }
 }

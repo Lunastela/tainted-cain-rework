@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "H": "#tcainrework:soul_heart",
+    "#": "#book",
+    "C": "tcainrework:tarot_card{\"card_type\":14}"
+  },
+  "pattern": [
+    "H",
+    "C",
+    "#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Necronomicon"
+  }
+}

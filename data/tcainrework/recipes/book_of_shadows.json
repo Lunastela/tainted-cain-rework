@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "H": "#book",
+    "#": "#tcainrework:soul_heart",
+    "C": "tcainrework:rune{\"card_type\":39}"
+  },
+  "pattern": [
+    " H ",
+    "#C#",
+    " # "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Book of Shadows"
+  }
+}

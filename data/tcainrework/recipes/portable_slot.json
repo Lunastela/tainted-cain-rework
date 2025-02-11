@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "L": "minecraft:lever",
+    "#": "#tcainrework:coin"
+  },
+  "pattern": [
+    " ##",
+    "L##",
+    " ##"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Portable Slot"
+  }
+}

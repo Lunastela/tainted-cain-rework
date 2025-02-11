@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "#tcainrework:soul_heart",
+    "E": "tcainrework:eternal_heart",
+    "P": "The Poop"
+  },
+  "pattern": [
+    "ESE",
+    "SPS",
+    "ESE"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Ankh"
+  }
+}

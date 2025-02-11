@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "b": "minecraft:leather",
+    "V": "tcainrework:reverse_tarot_card{\"card_type\":62}",
+    "h": "#tcainrework:heart"
+  },
+  "pattern": [
+    "hbh",
+    "bVb",
+    "hbh"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Magic Skin"
+  }
+}

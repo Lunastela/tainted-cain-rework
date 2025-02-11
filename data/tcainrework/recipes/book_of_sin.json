@@ -6,7 +6,7 @@
     "#tcainrework:bomb",
     "#tcainrework:soul_heart",
     "#tcainrework:key",
-    "minecraft:book"
+    "#book"
   ],
   "result": {
     "id": "tcainrework:collectible",

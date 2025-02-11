@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "#tcainrework:card",
+    "?": "tcainrework:card{\"card_type\":48}"
+  },
+  "pattern": [
+    " C ",
+    "C?C",
+    " C "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Blank Card"
+  }
+}

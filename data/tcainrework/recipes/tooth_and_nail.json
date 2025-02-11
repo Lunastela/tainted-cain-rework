@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "A": "tcainrework:rune{\"card_type\":39}",
+    "R": "The Small Rock",
+    "S": "#tcainrework:soul_heart",
+    "#": "minecraft:cobblestone"
+  },
+  "pattern": [
+    " A ",
+    "#R#",
+    "#S#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Tooth and Nail"
+  }
+}

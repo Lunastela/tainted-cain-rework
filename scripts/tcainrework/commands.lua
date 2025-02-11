@@ -32,7 +32,6 @@ mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, function(_, command, arguments)
     end
 end)
 
-local runSave = saveManager.GetRunSave()
 Console.RegisterCommand("reloadregistry", 
     "Reloads all T. Cain Rework Item Registries", 
     "Reloads all T. Cain Rework Item Registries", 
@@ -66,4 +65,3 @@ mod:AddCallback(ModCallbacks.MC_CONSOLE_AUTOCOMPLETE, function(_, command, argum
     table.sort(returnList)
     return returnList
 end, "inventoryadd")
--- ModCallbacks.MC_CONSOLE_AUTOCOMPLETE

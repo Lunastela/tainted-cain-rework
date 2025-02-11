@@ -36,12 +36,12 @@ function Utility.trimType(itemType)
     return itemType
 end
 
-local collectibleNameCache = {}
+local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 function Utility.fastItemIDByName(name)
-    if not collectibleNameCache[name] then
-        collectibleNameCache[name] = Isaac.GetItemIdByName(name)
+    if not collectibleStorage.nameToIDLookup[name] then
+        collectibleStorage.nameToIDLookup[name] = Isaac.GetItemIdByName(name)
     end
-    return collectibleNameCache[name]
+    return collectibleStorage.nameToIDLookup[name]
 end
 
 local isaacItemConfig

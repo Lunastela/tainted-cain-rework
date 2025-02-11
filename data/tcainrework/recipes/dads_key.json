@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:key",
+    "tcainrework:key",
+    "tcainrework:key",
+    "tcainrework:key",
+    "tcainrework:golden_key",
+    "tcainrework:key",
+    "tcainrework:key",
+    "tcainrework:key",
+    "tcainrework:key"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Dad's Key"
+  }
+}

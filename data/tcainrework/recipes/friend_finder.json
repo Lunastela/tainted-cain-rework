@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "Scissors",
+    "B": "BFFS!",
+    "#": "minecraft:paper"
+  },
+  "pattern": [
+    " S ",
+    "###",
+    " B "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Friend Finder"
+  }
+}
