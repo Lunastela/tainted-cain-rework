@@ -2,15 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "L": "minecraft:lever",
-    "#": "#tcainrework:small_coin"
+    "#": "minecraft:cobblestone",
+    "S": "The Small Rock",
+    "B": "tcainrework:bone_heart"
   },
   "pattern": [
-    "###",
-    "##L"
+    "#B#",
+    "BSB",
+    "#B#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Portable Slot"
+    "collectible": "Rock Bottom"
   }
 }

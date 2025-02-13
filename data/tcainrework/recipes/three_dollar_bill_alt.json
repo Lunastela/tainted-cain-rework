@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "A Dollar",
+    "A Dollar",
+    "A Dollar"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "3 Dollar Bill"
+  }
+}

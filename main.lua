@@ -127,11 +127,16 @@ function mod:loadRegistry(curLoad)
                             end
                         end
                     end
-                    -- TODO : fix recipes only giving the last !
                     if recipeData.Results
-                        and recipeData.Results.Collectible
-                        and recipeData.DisplayRecipe then
-                        collectibleToRecipe[utility.fastItemIDByName(recipeData.Results.Collectible)] = recipeName
+                    and recipeData.Results.Collectible
+                    and recipeData.DisplayRecipe then
+                        local collectible = utility.fastItemIDByName(recipeData.Results.Collectible)
+                        if not collectibleToRecipe[collectible] then
+                            collectibleToRecipe[collectible] = {}
+                        end
+                        if (not utility.tableContains(collectibleToRecipe[collectible], recipeName)) then
+                            table.insert(collectibleToRecipe[collectible], recipeName)
+                        end
                     end
                 end
             end
@@ -187,6 +192,18 @@ local hardcodedBabies = {
 
 -- the things we do for performance :sob:
 local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
+local function addToTag(tagName, itemName)
+    local myTag = getItemTag(tagName)
+    if not utility.tableContains(myTag, itemName) then
+        table.insert(myTag, itemName)
+        if not itemDescriptions[itemName].ItemTags then
+            itemDescriptions[itemName].ItemTags = {}
+        end
+        if not utility.tableContains(itemDescriptions[itemName].ItemTags, tagName) then
+            table.insert(itemDescriptions[itemName].ItemTags, tagName)
+        end
+    end
+end
 function mod:loadCollectibleCache()
     local itemConfig = Isaac.GetItemConfig()
     local curCollectible, iterator = nil, 1
@@ -199,27 +216,22 @@ function mod:loadCollectibleCache()
             collectibleStorage.nameToIDLookup[itemName] = iterator
             collectibleStorage.IDToNameLookup[iterator] = itemName
 
-            -- Check Familiar Types (for item tags with familiars in them)
-            if curCollectible.Type == ItemType.ITEM_FAMILIAR
-            and not utility.tableContains(getItemTag("#familiar"), itemName) then
-                table.insert(getItemTag("#familiar"), itemName)
-                if (string.find(string.lower(itemName), "baby")
-                or string.find(string.lower(itemName), "bum") or hardcodedBabies[iterator])
-                and not utility.tableContains(getItemTag("#baby"), itemName) then
-                    table.insert(getItemTag("#baby"), itemName)
-                end
-            end
-            -- Check if it is a Book for the Book item tag
-            if (curCollectible.Tags & ItemConfig.TAG_BOOK ~= 0)
-            and not utility.tableContains(getItemTag("#book"), itemName) then
-                table.insert(getItemTag("#book"), itemName)
-                print(itemName)
-            end
-
             itemDescriptions[itemName] = {
                 Rarity = curCollectible.Quality,
                 NumericID = (index + iterator)
             }
+            -- Check Familiar Types (for item tags with familiars in them)
+            if curCollectible.Type == ItemType.ITEM_FAMILIAR then
+                addToTag("#familiar", itemName)
+                if (string.find(string.lower(itemName), "baby")
+                or string.find(string.lower(itemName), "bum") or hardcodedBabies[iterator]) then
+                    addToTag("#baby", itemName)
+                end
+            end
+            -- Check if it is a Book for the Book item tag
+            if (curCollectible.Tags & ItemConfig.TAG_BOOK ~= 0) then
+                addToTag("#book", itemName) 
+            end
         end
         iterator = iterator + 1
     end

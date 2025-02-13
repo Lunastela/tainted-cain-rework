@@ -86,6 +86,11 @@ tooltipBackground:Load("gfx/ui/tooltip.anm2", false)
 tooltipBackground:ReplaceSpritesheet(0, "gfx/ui/background.png")
 tooltipBackground:LoadGraphics()
 
+local recipeBookSlice = Sprite()
+recipeBookSlice:Load("gfx/ui/tooltip.anm2", false)
+recipeBookSlice:ReplaceSpritesheet(0, "gfx/ui/recipe_book_9slice.png")
+recipeBookSlice:LoadGraphics()
+
 local tooltipFrame = Sprite()
 tooltipFrame:Load("gfx/ui/tooltip.anm2", false)
 tooltipFrame:ReplaceSpritesheet(0, "gfx/ui/frame.png")
@@ -570,11 +575,10 @@ end
 function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
     local addedAny = false
     for i = 1, amount do
-        local fakeItem = {Type = pickupType, Count = -1}
+        local fakeItem = inventoryHelper.createItem(pickupType, -1)
         if optionalComponentData then
             fakeItem.ComponentData = optionalComponentData
         end
-
         local freeSlotData = inventoryHelper.searchForFreeSlot({
             inventoryHelper.getInventory(InventoryTypes.HOTBAR), 
             inventoryHelper.getInventory(InventoryTypes.INVENTORY)
@@ -590,11 +594,7 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
         end
     end
     if addedAny then
-        inventoryHelper.unlockItemBatch({
-                Type = pickupType,
-                ComponentData = optionalComponentData
-            }
-        )
+        inventoryHelper.unlockItemBatch(inventoryHelper.createItem(pickupType))
         inventoryHelper.recipeCraftableDirty = true
     end
     return addedAny
@@ -843,7 +843,9 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                 inventoryHelper.renderItem(fakeItem, recipeDisplayDisplacement + recipeDisplacement + Vector.One * 4)
                                 if inventoryHelper.hoveringOver(mousePosition, recipeDisplayDisplacement + recipeDisplacement, 26, 26) then
                                     toRenderTooltip = fakeItem
-                                    if lmbTrigger then
+                                    if rmbTrigger then
+                                        SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
+                                    elseif lmbTrigger then
                                         SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
                                         -- attempt to craft recipe
                                         if isCraftableRecipe then
@@ -1045,6 +1047,8 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                 else
                     resetRecipeBook()
                 end
+
+                -- utility.renderNineSlice(recipeBookSlice, mousePosition, Vector.One * 32)
 
                 if cursorHeldItem then
                     RenderInventorySlot(mousePosition - Vector.One * 8, nil, 1, lmbTrigger, rmbTrigger, lmbRelease, rmbRelease, cursorHeldItem)

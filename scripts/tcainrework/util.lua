@@ -38,8 +38,12 @@ end
 
 local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 function Utility.fastItemIDByName(name)
-    if not collectibleStorage.nameToIDLookup[name] then
-        collectibleStorage.nameToIDLookup[name] = Isaac.GetItemIdByName(name)
+    if #collectibleStorage.nameToIDLookup <= 0 then
+        if not collectibleStorage.nameToIDLookup[name] then
+            collectibleStorage.nameToIDLookup[name] = Isaac.GetItemIdByName(name)
+        end
+    else
+        return -1
     end
     return collectibleStorage.nameToIDLookup[name]
 end

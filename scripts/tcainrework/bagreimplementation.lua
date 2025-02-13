@@ -178,7 +178,11 @@ local function salvageCollectible(player, pickup)
         SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 2, pickup.Position, Vector.Zero, pickup)
         -- Unlock Item Recipe
-        TCainRework:UnlockItemRecipe(collectibleToRecipe[pickup.SubType])
+        if collectibleToRecipe[pickup.SubType] then
+            for i, recipeName in ipairs(collectibleToRecipe[pickup.SubType]) do
+                TCainRework:UnlockItemRecipe(recipeName)
+            end
+        end
         -- Boss Rush / Challenge Room
         local roomType = Game():GetRoom():GetType()
         if roomType == RoomType.ROOM_BOSSRUSH or roomType == RoomType.ROOM_CHALLENGE then
@@ -241,6 +245,10 @@ function(_, entity, collider, low)
     end
 end, PickupVariant.PICKUP_COLLECTIBLE)
 
+local bagInteractPickups = {
+    [PickupVariant.PICKUP_GRAB_BAG] = true
+}
+
 local function renderBagOfCrafting(player, offset)
     if (bagSprites[player.Index] and player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)) then
         local bagSprite = bagSprites[player.Index]
@@ -293,7 +301,10 @@ local function renderBagOfCrafting(player, offset)
                                         end
                                     elseif pickup then 
                                         -- Attempt to Open Chest
-                                        player:ForceCollide(pickup)
+                                        if utility.chestVariants[pickup.Variant]
+                                        or bagInteractPickups[pickup.Variant] then
+                                            player:ForceCollide(pickup)
+                                        end
                                         if pickup.Variant == mod.minecraftItemID then
                                             local pickupData = saveManager.GetRoomFloorSave(entity) 
                                                 and saveManager.GetRoomFloorSave(entity).RerollSave

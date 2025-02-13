@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "minecraft:cobblestone",
+    "S": "#tcainrework:soul_heart",
+    "B": "tcainrework:bone_heart"
+  },
+  "pattern": [
+    " B ",
+    "S S",
+    "# #"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Orphan Socks"
+  }
+}

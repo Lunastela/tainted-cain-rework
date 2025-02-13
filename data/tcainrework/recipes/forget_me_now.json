@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:pill",
+    "S": "tcainrework:tarot_card{\"card_type\":1}",
+    "B": "tcainrework:bone_heart"
+  },
+  "pattern": [
+    " # ",
+    "BSB",
+    " # "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Forget Me Now"
+  }
+}

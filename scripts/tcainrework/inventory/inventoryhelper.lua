@@ -793,7 +793,6 @@ function inventoryHelper.runUnlockItem(item)
         runSave.obtainedItems = {}
     end
     local combinedNameType = inventoryHelper.conditionalItemLookupType(item)
-    print(combinedNameType)
     if not runSave.obtainedItems[combinedNameType] then
         runSave.obtainedItems[combinedNameType] = true
         if recipeReverseLookup[combinedNameType] then
@@ -804,8 +803,8 @@ function inventoryHelper.runUnlockItem(item)
                 if recipe and recipe.ConditionTable and recipe.DisplayRecipe then
                     for i, curType in pairs(recipe.ConditionTable) do
                         local fakeItem = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(curType))
-                        if not runSave.obtainedItems[curType]
-                        and not runSave.obtainedItems[fakeItem] then
+                        if (not runSave.obtainedItems[curType]
+                        and not runSave.obtainedItems[fakeItem]) then
                             goto skipUnlocking
                         end
                     end
@@ -821,6 +820,12 @@ function inventoryHelper.unlockItemBatch(item)
     if item.Type and itemRegistry[item.Type]
     and itemRegistry[item.Type].ItemTags then
         for i, itemTag in ipairs(itemRegistry[item.Type].ItemTags) do
+            inventoryHelper.runUnlockItem(inventoryHelper.createItem(itemTag))
+        end
+    end
+    local itemType = inventoryHelper.conditionalItemLookupType(item)
+    if itemType and itemRegistry[itemType] and itemRegistry[itemType].ItemTags then
+        for i, itemTag in ipairs(itemRegistry[itemType].ItemTags) do
             inventoryHelper.runUnlockItem(inventoryHelper.createItem(itemTag))
         end
     end

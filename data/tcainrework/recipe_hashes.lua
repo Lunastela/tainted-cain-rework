@@ -1664,7 +1664,7 @@ return {
             RecipeName = "tcainrework:portable_slot",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {nil, "#tcainrework:coin", "#tcainrework:coin", "minecraft:lever", "#tcainrework:coin", "#tcainrework:coin", nil, "#tcainrework:coin", "#tcainrework:coin", },
+            ConditionTable = {nil, "#tcainrework:small_coin", "#tcainrework:small_coin", "minecraft:lever", "#tcainrework:small_coin", "#tcainrework:small_coin", nil, "#tcainrework:small_coin", "#tcainrework:small_coin", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
