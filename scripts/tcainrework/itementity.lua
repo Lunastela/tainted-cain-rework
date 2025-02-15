@@ -26,6 +26,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
             pickupData.Type = numberToItems[math.random(1, #numberToItems)]
             pickupData.Count = 1
         end
+
         local renderType = mod.inventoryHelper.getItemRenderType(pickupData.Type)
         if not reflection then
             elapsedTimeTable[entityHash] = (elapsedTimeTable[entityHash] or 0) + 0.0375
@@ -58,6 +59,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
                         mod:AddItemToInventory(pickupData.Type, pickupData.Count, pickupData.ComponentData)
                         SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Pop"), 2, 2, false, math.random(16, 24) / 10, 0)
                         collectedItems[entityHash] = true
+                        elapsedTimeTable[entityHash] = nil
                         entity:Remove()
                     end
                 end
@@ -93,14 +95,30 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collid
     local pickupData = saveManager.GetRoomFloorSave(entity) 
         and saveManager.GetRoomFloorSave(entity).RerollSave
     if (collider.Type == EntityType.ENTITY_PLAYER) then
-        pickupData.pickupEntity = collider
+        if (mod.inventoryHelper.searchForFreeSlot(
+            {mod.inventoryHelper.getInventory(InventoryTypes.HOTBAR), mod.inventoryHelper.getInventory(InventoryTypes.INVENTORY)}, pickupData)
+        ) then
+            pickupData.pickupEntity = collider
+        end
         return true
     end
+
     if (collider.Type == EntityType.ENTITY_PICKUP and collider.Variant == minecraftItemID) then
-        -- local colliderData = saveManager.GetRoomFloorSave(collider) 
-        --     and saveManager.GetRoomFloorSave(collider).RerollSave
-        -- if mod.inventoryHelper.canStack
-        -- collider:Remove()
+        if Isaac.GetTime() % 4000 >= 3000 then
+            local colliderData = saveManager.GetRoomFloorSave(collider) 
+                and saveManager.GetRoomFloorSave(collider).RerollSave
+            if ((pickupData and pickupData.Count) and (colliderData and colliderData.Count)) 
+            and ((pickupData.Count >= colliderData.Count) and (mod.inventoryHelper.itemCanStackWith(pickupData, colliderData))) then
+                local removableAmount = math.min(colliderData.Count, mod.inventoryHelper.getMaxStackFor(pickupData.Type) - pickupData.Count)
+                if removableAmount > 0 then
+                    pickupData.Count = pickupData.Count + removableAmount
+                    colliderData.Count = colliderData.Count - removableAmount
+                    if colliderData.Count <= 0 then
+                        collider:Remove()
+                    end
+                end
+            end
+        end
         return true
     end
 end, minecraftItemID)

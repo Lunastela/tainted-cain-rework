@@ -1,0 +1,9 @@
+- Minecraft Items randomly disappear sometimes. Attempted a fix for this, but I'll have to wait and see.
+- Recipe Book "Alternate" Recipes and combining multiple recipes into one cell. 
+
+Low Priority:
+- Sparse arrays sorted when saving. SaveManager bug.
+- Poops can be collected even when broken. I'm not super motivated to fix this currently.
+- Jera & Curse of the Maze. Not on me, I'm waiting for Benny to update SaveManager.
+- Recipe Book could be optimized. Currently, the recursive nature causes it to create massive amounts of lag with over 1000 items.
+- Crawlspace fix might cause some issues in niche situations. Unsure if this matters, but it's good to note.

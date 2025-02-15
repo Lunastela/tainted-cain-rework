@@ -469,6 +469,18 @@ return {
             DisplayRecipe = true
         },
         {
+            RecipeName = "tcainrework:rock_bottom",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:cobblestone", "tcainrework:bone_heart", "minecraft:cobblestone", "tcainrework:bone_heart", "The Small Rock", "tcainrework:bone_heart", "minecraft:cobblestone", "tcainrework:bone_heart", "minecraft:cobblestone", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Rock Bottom"
+            },
+            DisplayRecipe = true
+        },
+        {
             RecipeName = "tcainrework:stigmata",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
@@ -537,6 +549,18 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Tiny Planet"
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:transcendence",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:cobblestone", "tcainrework:bone_heart", "minecraft:cobblestone", "tcainrework:bone_heart", "The Small Rock", "tcainrework:bone_heart", "minecraft:cobblestone", "tcainrework:bone_heart", "minecraft:cobblestone", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Transcendence"
             },
             DisplayRecipe = true
         },
@@ -848,6 +872,17 @@ return {
             },
             DisplayRecipe = true
         },
+        {
+            RecipeName = "tcainrework:three_dollar_bill_alt",
+            Category = "collectible",
+            ConditionTable = {"A Dollar", "A Dollar", "A Dollar", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "3 Dollar Bill"
+            },
+            DisplayRecipe = true
+        },
     },
     ["87d12c5a4ede0dc54b2552cd180f7c3f49266148"] = {
         {
@@ -1076,6 +1111,18 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Forever alone"
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:forget_me_now",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "#tcainrework:pill", nil, "tcainrework:bone_heart", "tcainrework:tarot_card{\"card_type\":1}", "tcainrework:bone_heart", nil, "#tcainrework:pill", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Forget Me Now"
             },
             DisplayRecipe = true
         },
@@ -1538,6 +1585,18 @@ return {
             },
             DisplayRecipe = true
         },
+        {
+            RecipeName = "tcainrework:portable_slot",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {"#tcainrework:small_coin", "#tcainrework:small_coin", "#tcainrework:small_coin", "#tcainrework:small_coin", "#tcainrework:small_coin", "minecraft:lever", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Portable Slot"
+            },
+            DisplayRecipe = true
+        },
     },
     ["774e6a979489881d43d415aff7bf7f7946e9e84a"] = {
         {
@@ -1659,16 +1718,16 @@ return {
             DisplayRecipe = true
         },
     },
-    ["57cea25f7fb0096b3db912435dee8491c7f0ea12"] = {
+    ["b546ea0eddeb6b68714618e47120bea87293ba99"] = {
         {
-            RecipeName = "tcainrework:portable_slot",
+            RecipeName = "tcainrework:orphan_socks",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {nil, "#tcainrework:small_coin", "#tcainrework:small_coin", "minecraft:lever", "#tcainrework:small_coin", "#tcainrework:small_coin", nil, "#tcainrework:small_coin", "#tcainrework:small_coin", },
+            ConditionTable = {nil, "tcainrework:bone_heart", nil, "#tcainrework:soul_heart", nil, "#tcainrework:soul_heart", "minecraft:cobblestone", nil, "minecraft:cobblestone", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = "Portable Slot"
+                Collectible = "Orphan Socks"
             },
             DisplayRecipe = true
         },

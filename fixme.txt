@@ -1,7 +1,0 @@
-- Recipes no longer appearing after certain unlocks? Maybe tags not registering recipes correctly?
-- Minecraft Items randomly disappear sometimes. This may be related to time in the run somehow? Try % elapsed time.
-- Items can still be collected when the inventory is full.
-- Jera & Curse of the Maze. Not on me, I'm waiting for Benny to update SaveManager.
-
-Low Priority:
-- Sparse arrays sorted when saving. Not a Rework bug, SaveManager bug.

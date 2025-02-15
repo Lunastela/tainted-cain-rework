@@ -594,7 +594,12 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
         end
     end
     if addedAny then
-        inventoryHelper.unlockItemBatch(inventoryHelper.createItem(pickupType))
+        local myItem = inventoryHelper.createItem(pickupType)
+        inventoryHelper.runUnlockItem(myItem)
+        if optionalComponentData then
+            myItem.ComponentData = optionalComponentData
+        end
+        inventoryHelper.unlockItemBatch(myItem)
         inventoryHelper.recipeCraftableDirty = true
     end
     return addedAny

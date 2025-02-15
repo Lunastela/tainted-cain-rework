@@ -15,15 +15,16 @@ end
 
 mod:AddPriorityCallback(ModCallbacks.MC_PRE_USE_ITEM, CallbackPriority.IMPORTANT, 
 function(_, id, rng, player, flags, slot)
+    local playerIndex = GetPtrHash(player)
     if (player:GetSprite():GetAnimation():find("Pickup")) then
         player:AnimateCollectible(id, "HideItem")
-    elseif (not bagSprites[player.Index]) 
-    or (bagSprites[player.Index] and not canRenderBagSprite(bagSprites[player.Index])) then
+    elseif (not bagSprites[playerIndex]) 
+    or (bagSprites[playerIndex] and not canRenderBagSprite(bagSprites[playerIndex])) then
         player:AnimateCollectible(id, "LiftItem", "PlayerPickup")
-        bagSprites[player.Index] = Sprite()
-        bagSprites[player.Index]:Load("gfx/008.004_bag of crafting.anm2", true)
-        bagSprites[player.Index]:Play("Idle", true)
-        bagCollisions[player.Index] = {}
+        bagSprites[playerIndex] = Sprite()
+        bagSprites[playerIndex]:Load("gfx/008.004_bag of crafting.anm2", true)
+        bagSprites[playerIndex]:Play("Idle", true)
+        bagCollisions[playerIndex] = {}
     end
     return true
 end, CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
@@ -31,11 +32,12 @@ end, CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
 mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, function(_, player)
     if (player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     and (player:GetSprite():GetAnimation():find("Pickup"))) then
-        local bagSprite = bagSprites[player.Index]
+        local playerIndex = GetPtrHash(player)
+        local bagSprite = bagSprites[playerIndex]
         if bagSprite and bagSprite:GetAnimation():find("Idle") then
             if player:GetShootingJoystick():LengthSquared() > 0 then
                 bagSprite:Play("Swing", true)
-                bagSpritesFrame[player.Index] = bagSprite:GetFrame()
+                bagSpritesFrame[playerIndex] = bagSprite:GetFrame()
                 bagSprite.Scale = player.SpriteScale
                 bagSprite.Rotation = ((player:GetShootingJoystick():GetAngleDegrees() - 90) + 360) % 360
                 player:AnimateCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING, "HideItem")
@@ -250,19 +252,20 @@ local bagInteractPickups = {
 }
 
 local function renderBagOfCrafting(player, offset)
-    if (bagSprites[player.Index] and player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)) then
-        local bagSprite = bagSprites[player.Index]
+    local playerIndex = GetPtrHash(player)
+    if (bagSprites[playerIndex] and player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)) then
+        local bagSprite = bagSprites[playerIndex]
         if canRenderBagSprite(bagSprite) then
             local bagPosition = Isaac.WorldToRenderPosition(player.Position) - (Vector(0, 3) * bagSprite.Scale)
             if not damageCancelRender(player) then
                 bagSprite:Render(bagPosition + offset)
             end
-            if not hasRenderedThisFrame[player.Index] 
+            if not hasRenderedThisFrame[playerIndex] 
             and (not Game():IsPaused())
             and Game():GetRoom():GetRenderMode() ~= RenderMode.RENDER_WATER_REFLECT then
-                hasRenderedThisFrame[player.Index] = true
+                hasRenderedThisFrame[playerIndex] = true
                 -- Null Frame Collisions
-                local currentFrame = bagSpritesFrame[player.Index]
+                local currentFrame = bagSpritesFrame[playerIndex]
                 if currentFrame < 2 and player:GetShootingJoystick():LengthSquared() > 0 then
                     bagSprite.Rotation = ((player:GetShootingJoystick():GetAngleDegrees() - 90) + 360) % 360
                 end
@@ -273,15 +276,17 @@ local function renderBagOfCrafting(player, offset)
                     local foundEntities = Isaac.FindInCapsule(swipeCapsule, 
                         EntityPartition.ENEMY | EntityPartition.PICKUP | EntityPartition.BULLET
                     )
+                    local isCrawlspace = (Game():GetRoom():GetType() == RoomType.ROOM_DUNGEON)
                     for i, entity in ipairs(foundEntities) do
                         local entityPointer = GetPtrHash(entity)
-                        if not utility.tableContains(bagCollisions[player.Index], entityPointer) then
+                        if not utility.tableContains(bagCollisions[playerIndex], entityPointer) then
                             local knockbackDirection = (entity.Position - swipeCapsule:GetPosition()):Normalized()
                             local pickup = entity:ToPickup()
                             if (((pickup and (notShopItemOrBought(player, pickup) and pickup.Wait <= 0 
                                 and (not (pickup:GetSprite():GetAnimation() == "Collect"))))
-                                or (not pickup)) and not bagExclusions[entity.Type]) and (((entity:ForceCollide(player, false) ~= true) 
-                                or (pickup and pickup:IsShopItem()))) then
+                                or (not pickup)) and not bagExclusions[entity.Type]) 
+                                and (((entity:ForceCollide(player, false) ~= true) 
+                                or isCrawlspace) or (pickup and pickup:IsShopItem())) then
                                 local tcainPickup = (pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
                                     and (player:GetPlayerType() == PlayerType.PLAYER_CAIN_B)
                                 local itemTable, itemCondition = getEntityFromTable(entity, false, player)
@@ -324,7 +329,7 @@ local function renderBagOfCrafting(player, offset)
                                     end
                                 else -- DESTROY item
                                     generateGenericEffect(entity)
-                                    table.insert(bagCollisions[player.Index], entityPointer)
+                                    table.insert(bagCollisions[playerIndex], entityPointer)
                                 end
                             elseif entity.Type == EntityType.ENTITY_PROJECTILE then
                                 local projectileEntity = entity:ToProjectile()
@@ -336,8 +341,8 @@ local function renderBagOfCrafting(player, offset)
                             end
                             if entity.Type ~= EntityType.ENTITY_FIREPLACE
                             and entity.Type ~= EntityType.ENTITY_POOP
-                            and not utility.tableContains(bagCollisions[player.Index], entityPointer) then
-                                table.insert(bagCollisions[player.Index], entityPointer)
+                            and not utility.tableContains(bagCollisions[playerIndex], entityPointer) then
+                                table.insert(bagCollisions[playerIndex], entityPointer)
                             end
                         end
                     end
@@ -347,9 +352,9 @@ local function renderBagOfCrafting(player, offset)
                         for i = 0, 8 do
                             for j = 0, 2 do
                                 local gridEntity = room:GetGridEntityFromPos(swipeCapsule:GetPosition() + Vector(20 * j, 0):Rotated(i * 45))
-                                if gridEntity then
+                                if gridEntity and gridEntity:GetType() ~= GridEntityType.GRID_GRAVITY then
                                     local positionHash = utility.sha1(tostring(gridEntity.Position.X) .. "." .. tostring(gridEntity.Position.Y))
-                                    if (not utility.tableContains(bagCollisions[player.Index], positionHash)) then
+                                    if (not utility.tableContains(bagCollisions[playerIndex], positionHash)) then
                                         local itemTable = getEntityFromTable(gridEntity, true, player)
                                         local ableToAddItem = itemTable and mod:AddItemToInventory(itemTable.Type, itemTable.Amount)
                                         if not ableToAddItem then
@@ -364,7 +369,7 @@ local function renderBagOfCrafting(player, offset)
                                                 replacementEntity:GetSprite():SetRenderFlags(1 << 2)
                                             end
                                         end
-                                        table.insert(bagCollisions[player.Index], positionHash)
+                                        table.insert(bagCollisions[playerIndex], positionHash)
                                     end
                                 end
                             end
@@ -374,7 +379,7 @@ local function renderBagOfCrafting(player, offset)
                 end
                 bagSprite:SetFrame(math.floor(currentFrame))
                 bagSprite:Update()
-                bagSpritesFrame[player.Index] = bagSpritesFrame[player.Index] + 0.5
+                bagSpritesFrame[playerIndex] = bagSpritesFrame[playerIndex] + 0.5
             end
         end
     end
@@ -409,8 +414,9 @@ mod:AddCallback(ModCallbacks.MC_POST_EFFECT_RENDER, function(_, effect, offset)
 end, EffectVariant.LADDER)
 
 local function renderBagOver(player)
-    local rotation = ((bagSprites[player.Index] and bagSprites[player.Index].Rotation) 
-        + ((math.min(bagSpritesFrame[player.Index] or 0, 4) * 180) / 4) % 360)
+    local playerIndex = GetPtrHash(player)
+    local rotation = ((bagSprites[playerIndex] and bagSprites[playerIndex].Rotation) 
+        + ((math.min(bagSpritesFrame[playerIndex] or 0, 4) * 180) / 4) % 360)
     if rotation > 90 and rotation < 270 then
         return true
     end
@@ -419,13 +425,13 @@ end
 
 mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_RENDER, function(_, player, offset)
     hasRenderedThisFrame = {}
-    if bagSprites[player.Index]
+    if bagSprites[GetPtrHash(player)]
     and (not renderBagOver(player)) then
         renderBagOfCrafting(player, offset)
     end
 end)
 mod:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, function(_, player, offset)
-    if bagSprites[player.Index]
+    if bagSprites[GetPtrHash(player)]
     and (renderBagOver(player)
     or damageCancelRender(player)) then
         renderBagOfCrafting(player, offset)
