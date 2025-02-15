@@ -4,6 +4,9 @@ TCainRework = mod
 
 local saveManager = require("scripts.save_manager")
 saveManager.Init(mod)
+
+include("scripts.tcainrework.deadseascrolls")
+
 local utility = require("scripts.tcainrework.util")
 include("scripts.tcainrework.inventory.inventoryenums")
 mod.inventoryHelper = include("scripts.tcainrework.inventory.inventoryhelper")

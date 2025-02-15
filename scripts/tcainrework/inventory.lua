@@ -626,6 +626,10 @@ local function resetRecipeBook()
     selectedPage = 0
 end
 
+
+-- mod:AddCallback(ModCallbacks.MC_PRE_RENDER, function(_)
+
+-- end)
 mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
     if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     and inventoryHelper.getUnlockedInventory() then
@@ -671,13 +675,21 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                         hotbarPosition.Y + CELL_SIZE - (minecraftFont:GetLineHeight() + 1))
                     inventoryHelper.renderMinecraftText(itemCountString, inventoryPositionText, InventoryItemRarity.COMMON, true)
                 end
+
+                if (inventoryState == InventoryStates.CLOSED)
+                and ((hotbarInventory[i + 1].ComponentData
+                and hotbarInventory[i + 1].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
+                and (not inventoryHelper.getCollectibleCrafted())) then
+                    inventoryHelper.getCollectibleCrafted(true)
+                end
             end
         end
 
         -- local currentTime = Isaac.GetTime()
         local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
         if (not Game():IsPaused()) and player then
-            if (not searchBarSelected) and Input.IsButtonTriggered(Keyboard.KEY_I, 0) then
+            if (not searchBarSelected) and Input.IsButtonTriggered(Keyboard.KEY_I, 0)
+            and (not (DeadSeaScrollsMenu and DeadSeaScrollsMenu:IsOpen()))  then
                 inventoryState = ((inventoryState == InventoryStates.CRAFTING) and InventoryStates.CLOSED) or InventoryStates.CRAFTING
             end
 
@@ -692,6 +704,10 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
             local rmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_2)
 
             if inventoryState ~= InventoryStates.CLOSED then
+                if DeadSeaScrollsMenu and DeadSeaScrollsMenu:IsOpen() then
+                    DeadSeaScrollsMenu.CloseMenu(true, true)
+                    SFXManager():Stop(Isaac.GetSoundIdByName("deadseascrolls_whoosh"))
+                end
                 -- Cache Mouse Information
                 local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
 

@@ -169,12 +169,12 @@ local function spawnSalvagePickup(pickup, salvageVariant)
         salvageSubtype = (heartSelectionList[poolType] or 1)
     end
     local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, salvageVariant, salvageSubtype, 
-        pickup.Position, pickup.GetRandomPickupVelocity(pickup.Position), pickup)
+        pickup.Position, EntityPickup.GetRandomPickupVelocity(pickup.Position), pickup)
     return itemPickup
 end
 
 local collectibleToRecipe = require("scripts.tcainrework.stored.collectible_to_recipe")
-local function salvageCollectible(player, pickup)
+local function salvageCollectible(pickup)
     if canSalvageItem(pickup.SubType) then
         local ptrHash = GetPtrHash(pickup)
         SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
@@ -200,7 +200,7 @@ local function salvageCollectible(player, pickup)
                 end, timeStep, times, false)
                 Isaac.CreateTimer(function(_)
                     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, BombSubType.BOMB_SUPERTROLL, 
-                        pickup.Position, pickup.GetRandomPickupVelocity(pickup.Position), pickup)
+                        pickup.Position, EntityPickup.GetRandomPickupVelocity(pickup.Position), pickup)
                 end, ((times + 1) * timeStep), 1, false)
             end
         end
@@ -222,30 +222,39 @@ end
 
 local function notShopItemOrBought(player, pickup)
     if pickup:IsShopItem() and getEntityFromTable(pickup, false, player) then
-        -- player:ForceCollide(pickup, false)
+        if ((pickup.Variant ~= PickupVariant.PICKUP_COLLECTIBLE)
+        and ((pickup.Price >= 0) and player:GetNumCoins() >= pickup.Price)) then
+            player:AddCoins(-pickup.Price)
+            return true
+        end
         return false
     end
     return true
 end
 
-mod:AddPriorityCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, CallbackPriority.LATE, 
-function(_, entity, collider, low)
-    if canSalvageItem(entity.SubType) then
-        local pickup = entity:ToPickup()
-        if ((collider.Type == EntityType.ENTITY_PLAYER 
-        and ((collider:ToPlayer():GetPlayerType() == PlayerType.PLAYER_CAIN_B) 
-        and (not collider:ToPlayer():IsHoldingItem())))
-        and notShopItemOrBought(collider:ToPlayer(), pickup)) then
-            if not salvagingList[GetPtrHash(entity)] then
-                Isaac.CreateTimer(function(_) 
-                    salvageCollectible(collider:ToPlayer(), pickup)
-                end, 2, 1, true)
-                salvagingList[GetPtrHash(entity)] = true
+local skipNext = false
+local function initializeSalvage(entity)
+    if not salvagingList[GetPtrHash(entity)] then
+        skipNext = true
+        salvageCollectible(entity)
+        salvagingList[GetPtrHash(entity)] = true
+        skipNext = false
+    end
+end
+
+mod:AddPriorityCallback(ModCallbacks.MC_POST_PICKUP_INIT, CallbackPriority.EARLY, 
+function(_, pickup)
+    if not skipNext then
+        local entityList = Isaac.FindInRadius(pickup.Position, 0, EntityPartition.PICKUP)
+        for i, entity in ipairs(entityList) do
+            if entity.Variant == PickupVariant.PICKUP_COLLECTIBLE
+            and (not entity.SpawnerEntity) then
+                initializeSalvage(entity)
+                pickup:Remove()
             end
-            return pickup:IsShopItem()
         end
     end
-end, PickupVariant.PICKUP_COLLECTIBLE)
+end)
 
 local bagInteractPickups = {
     [PickupVariant.PICKUP_GRAB_BAG] = true
@@ -318,8 +327,9 @@ local function renderBagOfCrafting(player, offset)
                                         and pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
                                             pickup:GetSprite():Play("Touched")
                                         elseif tcainPickup and not salvagingList[GetPtrHash(entity)] then
-                                            salvageCollectible(player, pickup)
-                                            salvagingList[GetPtrHash(entity)] = true
+                                            SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
+                                            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 2, pickup.Position, Vector.Zero, pickup)
+                                            player:SalvageCollectible(pickup)
                                         end
                                     end
                                     if not (pickup and (pickup.Variant == mod.minecraftItemID 
@@ -352,7 +362,7 @@ local function renderBagOfCrafting(player, offset)
                         for i = 0, 8 do
                             for j = 0, 2 do
                                 local gridEntity = room:GetGridEntityFromPos(swipeCapsule:GetPosition() + Vector(20 * j, 0):Rotated(i * 45))
-                                if gridEntity and gridEntity:GetType() ~= GridEntityType.GRID_GRAVITY then
+                                if gridEntity and gridEntity.CollisionClass ~= GridCollisionClass.COLLISION_NONE then
                                     local positionHash = utility.sha1(tostring(gridEntity.Position.X) .. "." .. tostring(gridEntity.Position.Y))
                                     if (not utility.tableContains(bagCollisions[playerIndex], positionHash)) then
                                         local itemTable = getEntityFromTable(gridEntity, true, player)

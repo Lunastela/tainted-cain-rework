@@ -154,6 +154,20 @@ function inventoryHelper.getUnlockedInventory(setUnlocked)
     return runSave.inventoryUnlocked
 end
 
+function inventoryHelper.getCollectibleCrafted(setUnlocked)
+    local runSave = saveManager.GetRunSave()
+    if not runSave.collectibleCrafted and setUnlocked then
+        TCainRework:CreateToast(
+            InventoryToastTypes.TUTORIAL, 
+            nil, "gfx/ui/right_click.png", 
+            "Consume a collectible", "Press §lRMB",
+            240
+        )
+        runSave.collectibleCrafted = setUnlocked
+    end
+    return runSave.collectibleCrafted
+end
+
 function inventoryHelper.getRecipeBookOpen()
     local settingsSave = saveManager.GetSettingsSave()
     if settingsSave then
