@@ -565,6 +565,41 @@ function inventoryHelper.itemGetFullName(pickup)
     return nameTable
 end
 
+local minecraftFont = include("scripts.tcainrework.font")
+function inventoryHelper.renderMinecraftText(string, textPosition, textRarity, renderShadow, formatText)
+    local textRarityColor = InventoryItemRarityColors[textRarity]
+    if renderShadow then
+        minecraftFont:DrawString(string, textPosition.X + 1, textPosition.Y + 1, textRarityColor.Shadow, 0, false, formatText)
+    end
+    minecraftFont:DrawString(string, textPosition.X, textPosition.Y, textRarityColor.Color, 0, false, formatText)
+end
+
+local tooltipBackground = Sprite()
+tooltipBackground:Load("gfx/ui/tooltip.anm2", false)
+tooltipBackground:ReplaceSpritesheet(0, "gfx/ui/background.png")
+tooltipBackground:LoadGraphics()
+
+local tooltipFrame = Sprite()
+tooltipFrame:Load("gfx/ui/tooltip.anm2", false)
+tooltipFrame:ReplaceSpritesheet(0, "gfx/ui/frame.png")
+tooltipFrame:LoadGraphics()
+
+function inventoryHelper.renderTooltip(mousePosition, stringTable)
+    local longestWidth = 0
+    for i, string in ipairs(stringTable) do
+        longestWidth = math.max(longestWidth, minecraftFont:GetStringWidth(string.String))
+    end
+    local lineSep = (minecraftFont:GetLineHeight() + 2)
+    local textboxPosition = mousePosition + Vector(10, (math.max(0, (#stringTable - 2) / 2)) * lineSep)
+    local nineSliceSize = Vector(longestWidth + 4, (lineSep * #stringTable) + 1)
+    utility.renderNineSlice(tooltipBackground, textboxPosition, nineSliceSize)
+    for i, subString in ipairs(stringTable) do
+        inventoryHelper.renderMinecraftText(subString.String, textboxPosition 
+            + Vector(2, (lineSep * ((i - 1) - (#stringTable / 2)))), subString.Rarity, true, true)
+    end
+    utility.renderNineSlice(tooltipFrame, textboxPosition, nineSliceSize)
+end
+
 function inventoryHelper.removePossibleAmount(inventory, itemIndex, removeAmount)
     local currentItem = inventory[itemIndex]
     if currentItem then
@@ -807,28 +842,23 @@ function inventoryHelper.runUnlockItem(item)
         runSave.obtainedItems = {}
     end
     local combinedNameType = inventoryHelper.conditionalItemLookupType(item)
-    -- print('attempting unlocks for', combinedNameType)
-    if not runSave.obtainedItems[combinedNameType] then
-        runSave.obtainedItems[combinedNameType] = true
-        if recipeReverseLookup[combinedNameType] then
-            -- obtain recipe associations
-            for i, recipeName in ipairs(recipeReverseLookup[combinedNameType]) do
-                -- obtain recipe from lookup table
-                local recipe = recipeLookupIndex[recipeName]
-                if recipe and recipe.ConditionTable and recipe.DisplayRecipe then
-                    for i, curType in pairs(recipe.ConditionTable) do
-                        local fakeItem = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(curType))
-                        if not (runSave.obtainedItems[curType]
-                        or runSave.obtainedItems[fakeItem]) then
-                            -- print('skipping unlocking', recipeName, "items:", curType, fakeItem)
-                            goto skipUnlocking
-                        end
+    runSave.obtainedItems[combinedNameType] = true
+    if recipeReverseLookup[combinedNameType] then
+        -- obtain recipe associations
+        for i, recipeName in ipairs(recipeReverseLookup[combinedNameType]) do
+            -- obtain recipe from lookup table
+            local recipe = recipeLookupIndex[recipeName]
+            if recipe and recipe.ConditionTable and recipe.DisplayRecipe then
+                for i, curType in pairs(recipe.ConditionTable) do
+                    local fakeItem = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(curType))
+                    if not (runSave.obtainedItems[curType]
+                    or runSave.obtainedItems[fakeItem]) then
+                        goto skipUnlocking
                     end
-                    -- print('succeeded unlocking', recipeName)
-                    TCainRework:UnlockItemRecipe(recipeName)
                 end
-                ::skipUnlocking::
+                TCainRework:UnlockItemRecipe(recipeName)
             end
+            ::skipUnlocking::
         end
     end
 end
@@ -954,15 +984,6 @@ function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, 
             end
         end
     end
-end
-
-local minecraftFont = include("scripts.tcainrework.font")
-function inventoryHelper.renderMinecraftText(string, textPosition, textRarity, renderShadow, formatText)
-    local textRarityColor = InventoryItemRarityColors[textRarity]
-    if renderShadow then
-        minecraftFont:DrawString(string, textPosition.X + 1, textPosition.Y + 1, textRarityColor.Shadow, 0, false, formatText)
-    end
-    minecraftFont:DrawString(string, textPosition.X, textPosition.Y, textRarityColor.Color, 0, false, formatText)
 end
 
 return inventoryHelper

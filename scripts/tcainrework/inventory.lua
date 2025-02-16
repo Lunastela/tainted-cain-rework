@@ -96,23 +96,6 @@ tooltipFrame:Load("gfx/ui/tooltip.anm2", false)
 tooltipFrame:ReplaceSpritesheet(0, "gfx/ui/frame.png")
 tooltipFrame:LoadGraphics()
 
-local function renderTooltip(mousePosition, currentItemTooltip)
-    local stringTable = inventoryHelper.itemGetFullName(currentItemTooltip)
-    local longestWidth = 0
-    for i, string in ipairs(stringTable) do
-        longestWidth = math.max(longestWidth, minecraftFont:GetStringWidth(string.String))
-    end
-    local lineSep = (minecraftFont:GetLineHeight() + 2)
-    local textboxPosition = mousePosition + Vector(10, (math.max(0, (#stringTable - 2) / 2)) * lineSep)
-    local nineSliceSize = Vector(longestWidth + 4, (lineSep * #stringTable) + 1)
-    utility.renderNineSlice(tooltipBackground, textboxPosition, nineSliceSize)
-    for i, subString in ipairs(stringTable) do
-        inventoryHelper.renderMinecraftText(subString.String, textboxPosition 
-            + Vector(2, (lineSep * ((i - 1) - (#stringTable / 2)))), subString.Rarity, true, true)
-    end
-    utility.renderNineSlice(tooltipFrame, textboxPosition, nineSliceSize)
-end
-
 -- Create Inventories
 local lastCombinedString = ""
 local recipeHashmap = require('scripts.tcainrework.stored.recipe_hashmap')
@@ -626,11 +609,33 @@ local function resetRecipeBook()
     selectedPage = 0
 end
 
+if EID then
+    local bagOfCraftingDescModifier = EID.ItemReminderDescriptionModifier["5.100.710"]
+    bagOfCraftingDescModifier.modifierFunction = function(descObj, _, inOverview)
 
--- mod:AddCallback(ModCallbacks.MC_PRE_RENDER, function(_)
+    end
+end
 
--- end)
+if EID then
+    -- Replace Bag Description Modifier
+    EID:addDescriptionModifier("TCainReworkBag", 
+    function(objectDescription)
+        if objectDescription.ObjType == EntityType.ENTITY_PICKUP
+        and objectDescription.ObjVariant == PickupVariant.PICKUP_COLLECTIBLE 
+        and objectDescription.ObjSubType == CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING then
+            return true
+        end
+    end, 
+    function(descObject)
+        descObject.description = ""
+        return descObject
+    end)
+end
+
 mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
+    if EID then
+        EID.CraftingIsHidden = true
+    end
     if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     and inventoryHelper.getUnlockedInventory() then
         activeInventories = getInventories()
@@ -1063,7 +1068,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                             + Vector(2, -(minecraftFont:GetLineHeight() / 2)), InventoryItemRarity.COMMON, true)
                         utility.renderNineSlice(tooltipFrame, tooltipPosition, nineSliceSize)
                     elseif toRenderTooltip then
-                        renderTooltip(mousePosition, toRenderTooltip)
+                        inventoryHelper.renderTooltip(mousePosition, inventoryHelper.itemGetFullName(toRenderTooltip))
                     end
                 else
                     resetRecipeBook()
@@ -1149,12 +1154,12 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                 end
                 if currentTooltipInformation then -- Render Tooltips
                     if currentTooltipInformation.FakeTooltip then
-                        renderTooltip(mousePosition, currentTooltipInformation.FakeTooltip)
+                        inventoryHelper.renderTooltip(mousePosition, inventoryHelper.itemGetFullName(currentTooltipInformation.FakeTooltip))
                     end
                     local currentItemTooltip = (currentTooltipInformation.Inventory[currentTooltipInformation.Index])
                     if currentItemTooltip and currentItemTooltip.Type then
                         if not cursorHeldItem then
-                            renderTooltip(mousePosition, currentItemTooltip)
+                            inventoryHelper.renderTooltip(mousePosition, inventoryHelper.itemGetFullName(currentItemTooltip))
                         end
 
                         -- Item Shift Clicking
@@ -1238,14 +1243,20 @@ mod:AddCallback(ModCallbacks.MC_POST_GLOWING_HOURGLASS_LOAD, resetInventories)
 mod:AddPriorityCallback(ModCallbacks.MC_PRE_PAUSE_SCREEN_RENDER,
 CallbackPriority.IMPORTANT,
 function(_, pauseBody, pauseStats) 
-    if inventoryState ~= InventoryStates.CLOSED then
+    if inventoryState ~= InventoryStates.CLOSED
+    or DeadSeaScrollsMenu:IsOpen() then
         PauseMenu.SetState(PauseMenuStates.CLOSED)
+        if (not EscClosesDSS) and DeadSeaScrollsMenu:IsOpen() then
+            DeadSeaScrollsMenu.CloseMenu(false, false)
+            -- DeadSeaScrollsMenu.back()
+        end
         inventoryState = InventoryStates.CLOSED
         return false
     end
 end)
 function mod:pageTurnStopSound(ID, Volume, FrameDelay, Loop, Pitch, Pan)
-    if inventoryState ~= InventoryStates.CLOSED then
+    if inventoryState ~= InventoryStates.CLOSED
+    or DeadSeaScrollsMenu:IsOpen() then
         return false
     end
 end

@@ -114,6 +114,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collid
                     pickupData.Count = pickupData.Count + removableAmount
                     colliderData.Count = colliderData.Count - removableAmount
                     if colliderData.Count <= 0 then
+                        collectedItems[GetPtrHash(collider)] = true
                         collider:Remove()
                     end
                 end

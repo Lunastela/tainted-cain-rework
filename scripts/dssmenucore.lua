@@ -720,7 +720,7 @@ function dssmenucore.init(DSSModName, MenuProvider)
                 if module.size == nil then module.size = fsize end
                 if module.height == nil then module.height = fontspacers[module.size] end
 
-                local fullstr = module.str
+                local fullstr = string.lower(module.str)
                 if type(module.str) == "table" then
                     fullstr = ''
                     for _, val in ipairs(module.str) do
@@ -3203,7 +3203,7 @@ function dssmenucore.init(DSSModName, MenuProvider)
         end
 
         function dssmenu.CanOpenGlobalMenu()
-            return dssmenu.MenuCount ~= 2 or #dssmenu.Changelogs.List > 1
+            return true
         end
 
         function dssmenu.GetCoreInput() -- allows overriding the menu's input
@@ -3285,28 +3285,32 @@ function dssmenucore.init(DSSModName, MenuProvider)
         function dssmod:CheckMenuOpen()
             openCalledRecently = false
 
-            if not StageAPI or not StageAPI.Loaded or StageAPI.IsPauseMenuOpen() then
+            if (not StageAPI or not StageAPI.Loaded or StageAPI.IsPauseMenuOpen()) or REPENTOGON then
                 dssmod.checkMenu()
             end
         end
 
-        function dssmod.CheckMenuOpenStageAPI(isPauseMenuOpen)
-            if not isPauseMenuOpen then
-                dssmod.checkMenu()
+        if not REPENTOGON then
+            function dssmod.CheckMenuOpenStageAPI(isPauseMenuOpen)
+                if not isPauseMenuOpen then
+                    dssmod.checkMenu()
+                end
             end
-        end
 
-        if StageAPI and StageAPI.Loaded then
-            StageAPI.UnregisterCallbacks("DeadSeaScrollsMenu")
-            StageAPI.AddCallback(
-                "DeadSeaScrollsMenu",
-                "POST_HUD_RENDER",
-                99,
-                dssmod.CheckMenuOpenStageAPI
-            )
-        end
+            if StageAPI and StageAPI.Loaded then
+                StageAPI.UnregisterCallbacks("DeadSeaScrollsMenu")
+                StageAPI.AddCallback(
+                    "DeadSeaScrollsMenu",
+                    "POST_HUD_RENDER",
+                    99,
+                    dssmod.CheckMenuOpenStageAPI
+                )
+            end
 
-        dssmod:AddCallback(ModCallbacks.MC_POST_RENDER, dssmod.CheckMenuOpen)
+            dssmod:AddCallback(ModCallbacks.MC_POST_RENDER, dssmod.CheckMenuOpen)
+        else
+            dssmod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.LATE, dssmod.CheckMenuOpen)
+        end
 
         local recentGameStart = false --- @type boolean | nil
         function dssmod:CloseMenuOnGameStart()
