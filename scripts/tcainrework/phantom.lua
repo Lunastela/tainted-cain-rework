@@ -68,7 +68,7 @@ end
 mod:AddCallback(ModCallbacks.MC_PRE_NPC_RENDER, function(_, entity, offset)
     if entity.Variant == phantomVariant then
         local reflected = Game():GetRoom():GetRenderMode() == RenderMode.RENDER_WATER_REFLECT
-        local localTime = Isaac.GetTime() / 1000.
+        local localTime = mod.elapsedTime
         local rotationX, rotationY = 0, phantomRestingPosition + (math.sin(localTime * math.pi / 2.) / 25)
         phantomRenderer.Color = baseColor
         local saveData = saveManager.GetFloorSave()
@@ -235,6 +235,16 @@ mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function(_)
                 if entity.Type == phantomID and entity.Variant == phantomVariant then
                     entity.Position = entity.Position + (roomSize * roomDifference)
                 end
+            end
+        end
+
+        if currentRoomDesc and currentRoomDesc.GridIndex ~= level:GetStartingRoomIndex() then
+            if (mod.getModSettings().doInsomnia or 1) == 2
+            and (#Isaac.FindByType(phantomID, phantomVariant) <= 0) then
+                if level:GetCurses() & LevelCurse.CURSE_OF_DARKNESS == 0 then
+                    level:AddCurse(LevelCurse.CURSE_OF_DARKNESS, false)
+                end
+                mod.summonPhantoms()
             end
         end
     end

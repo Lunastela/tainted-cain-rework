@@ -100,7 +100,6 @@ local dssMenuCore = include("scripts.dssmenucore")
 local deadSeaScrollsMod = dssMenuCore.init(DSSModName, MenuProvider)
 
 local minecraftFont = include("scripts.tcainrework.font")
-local splashTexts = include('data.splash_texts')
 
 local backgroundSprite = Sprite()
 backgroundSprite:Load("gfx/ui/dirtbackground.anm2", true)
@@ -167,7 +166,6 @@ local function menuWrapper(panel, pos, item, tbl)
     end
 end
 
-local utility = require("scripts.tcainrework.util")
 local leftRightPadding = 2
 local function renderButtonSize(position, buttonSize)
     local halfwayResize = Vector(100, 0)
@@ -179,27 +177,34 @@ end
 local stringTable = {
     ["Resume Game"] = "Back to Game",
     ["false"] = "OFF",
-    ["true"] = "ON"
+    ["true"] = "ON",
+    ["Fabulous"] = "§oFabulous!"
 }
 
 local selectedOption = nil
 local inputHelper = include("scripts.tcainrework.mouseinputs")
 local separationDistance = 24
+local scrollAmount, scrollSelected, lastMousePosition = 0, false, Vector.Zero
 local function settingsMenuRenderer(panel, pos, item, tbl)
     if minecraftStyledUI() then
         local isLMBPressed = inputHelper.isMouseButtonTriggered(MouseButton.LEFT)
+
+        -- Define Position Bounds
+        local topPosition, bottomPosition = Vector(0, 32), Vector(0, Isaac.GetScreenHeight() - 32)
+        local screenSpace = (bottomPosition - topPosition).Y
+        local fullSize = ((#item.buttons + 0.5) * separationDistance)
+        local differenceDistance = ((fullSize > screenSpace) and fullSize - screenSpace) or 0
+
+        -- dirt background
         local sizeVector = Vector(backgroundSprite.Scale.X, backgroundSprite.Scale.Y) * TEXTURE_SIZE
         for i = 0, math.ceil(Isaac.GetScreenWidth() / sizeVector.X) - 1 do
-            for j = 0, math.ceil(Isaac.GetScreenHeight() / sizeVector.Y) - 1 do
-                backgroundSprite:Render(Vector.Zero + Vector(i * sizeVector.X, j * sizeVector.Y))
+            for j = -1, math.ceil(math.max(fullSize, Isaac.GetScreenHeight()) / sizeVector.Y) - 1 do
+                backgroundSprite:Render(Vector.Zero + Vector(i * sizeVector.X, (j * sizeVector.Y) - (scrollAmount * differenceDistance)))
             end
         end
         -- Set Up Gradient Colors and Scale
         blackBG.Color = secondaryBlack
         blackGradient.Scale = Vector(Isaac.GetScreenWidth(), 1)
-
-        -- Define Position Bounds
-        local topPosition, bottomPosition = Vector(0, 32), Vector(0, Isaac.GetScreenHeight() - 32)
 
         -- Render Center Gradient
         blackBG.Scale = Vector(Isaac.GetScreenWidth(), (bottomPosition.Y - topPosition.Y))
@@ -218,7 +223,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         end
 
         for i, button in ipairs(item.buttons) do
-            local textPosition = Vector(leftBound, topPosition.Y + ((i - 0.5) * separationDistance))
+            local textPosition = Vector(leftBound, topPosition.Y + ((i - 0.5) * separationDistance) - (scrollAmount * differenceDistance))
             if not button.choices then
                 textPosition.X = (Isaac.GetScreenWidth() / 2) - (minecraftFont:GetStringWidth(button.str) / 2)
             end
@@ -253,7 +258,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                     local choiceText = stringTable[button.choices[button.setting]] or button.choices[button.setting]
                     mod.inventoryHelper.renderMinecraftText(choiceText, 
                         textPosition - Vector(minecraftFont:GetStringWidth(choiceText) / 2, (minecraftFont:GetLineHeight() / 2)), 
-                        InventoryItemRarity.COMMON, true
+                        InventoryItemRarity.COMMON, true, true
                     )
                 end
             end
@@ -264,16 +269,20 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         blackGradient.Scale.Y = -blackGradient.Scale.Y
         blackGradient:Render(bottomPosition)
 
+        -- Render top and bottom strips
+        renderDirtStrip(-topPosition.Y)
+        renderDirtStrip(bottomPosition.Y)
+
         -- Render scrollbar
-        local screenSpace = (bottomPosition - topPosition).Y
-        local fullSize = (#item.buttons * separationDistance)
         if fullSize > screenSpace then
             blackBG.Color = sliderBack
-            blackBG.Scale = Vector(6, (bottomPosition - topPosition).Y)
+            blackBG.Scale = Vector(6, screenSpace)
             blackBG:Render(Vector(rightBound + (separationDistance / 2), topPosition.Y))
 
             local sliderPosition = Vector(rightBound + (separationDistance / 2), topPosition.Y)
             local sliderSize = screenSpace * (screenSpace / fullSize)
+            local endScreenDistance = (screenSpace - sliderSize)
+            sliderPosition.Y = sliderPosition.Y + (scrollAmount * endScreenDistance)
             
             sliderSprite.Color = sliderMiddle
             sliderSprite.Scale = Vector(6, sliderSize)
@@ -282,11 +291,20 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
             sliderSprite.Color = sliderTop
             sliderSprite.Scale = Vector(5, sliderSize - 1)
             sliderSprite:Render(sliderPosition)
-        end
 
-        -- Render top and bottom strips
-        renderDirtStrip(-topPosition.Y)
-        renderDirtStrip(bottomPosition.Y)
+            if isLMBPressed
+            and mod.inventoryHelper.hoveringOver(mousePosition, sliderPosition, 6, screenSpace) then
+                scrollSelected = true
+            elseif not inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_LEFT) then
+                scrollSelected = false
+            end
+            if scrollSelected and lastMousePosition then
+                scrollAmount = scrollAmount + (mousePosition - lastMousePosition).Y / endScreenDistance
+            end
+            -- honestly menu scrolling in minecraft is pretty shitty with the mouse wheel so who cares?
+            scrollAmount = scrollAmount - ((Input:GetMouseWheel().Y * 8) / endScreenDistance)
+            scrollAmount = math.min(math.max(scrollAmount, 0), 1)
+        end
 
         -- Render Title Text
         mod.inventoryHelper.renderMinecraftText("Settings", 
@@ -340,6 +358,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
             mod.inventoryHelper.renderTooltip(mousePosition, stringTable)
         end
 
+        lastMousePosition = mousePosition
         inputHelper.Update()
         pos.Y = 900
         return
@@ -347,19 +366,15 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
     menuWrapper(panel, pos, item, tbl)
 end
 
-local splashTextChosen = nil
 local function mainMenuRenderer(panel, pos, item, tbl)
     if minecraftStyledUI() then
         local isLMBPressed = inputHelper.isMouseButtonTriggered(MouseButton.LEFT)
         blackBG.Color = primaryBlack
-        blackBG.Scale = Vector(Isaac.GetScreenWidth(), Isaac.GetScreenHeight())
-        blackBG:Render(Vector.Zero)
+        blackBG.Scale = Vector(Isaac.GetScreenWidth() + 16, Isaac.GetScreenHeight() + 16)
+        blackBG:Render(Vector.One * -8)
 
         local positionLogo = Vector(Isaac.GetScreenWidth() / 2, Isaac.GetScreenHeight() / 4)
         modLogo:Render(positionLogo)
-        if not splashTextChosen then
-            splashTextChosen = splashTexts[math.random(1, #splashTexts)]
-        end
         
         local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
         for i, button in ipairs(item.buttons) do
@@ -446,6 +461,7 @@ local function inputWrapper(panel, input, item, itemswitched, tbl)
             DeadSeaScrollsMenu.CloseMenu(true, true)
             SFXManager():Stop(Isaac.GetSoundIdByName("deadseascrolls_whoosh"))
         elseif action == "openmenu" then
+            scrollAmount = 0
             table.insert(directorykey.Path, { menuname = tbl.Name, item = item })
             if selectedOption.dest then
                 DeadSeaScrollsMenu.OpenMenuToPath(tbl.Name, selectedOption.dest, directorykey.Path)
@@ -666,7 +682,6 @@ local cainCraftingDirectoryKey = {
 DeadSeaScrollsMenu.AddMenu(displayName, {
     Run = deadSeaScrollsMod.runMenu,
     Open = function(tbl, openedFromNothing)
-        splashTextChosen = nil
         deadSeaScrollsMod.openMenu(tbl, openedFromNothing)
     end,
     Close = deadSeaScrollsMod.closeMenu,

@@ -22,21 +22,14 @@ minecraftFont.FontList = {
 }
 local defaultFont = minecraftFont.FontList[fontType.DEFAULT]
 
-local fontScale = 3
+minecraftFont.fontScale = 3
 function minecraftFont.GetStringWidth(minecraftFont, myString)
-    -- if REPENTANCE_PLUS then
-    --     local curLength = 0
-    --     for i = 1, string.len(myString) do
-    --         local character = string.sub(myString, i, i)
-    --         curLength = curLength + defaultFont:GetCharacterWidth(character) / fontScale
-    --     end
-    --     return curLength 
-    -- end
-    return defaultFont:GetStringWidth(myString) / fontScale
+    local cleanedString = myString:gsub("§.", "")
+    return defaultFont:GetStringWidth(cleanedString) / minecraftFont.fontScale
 end
 
 function minecraftFont.GetLineHeight(minecraftFont)
-    return defaultFont:GetLineHeight() / fontScale
+    return defaultFont:GetLineHeight() / minecraftFont.fontScale
 end
 
 local charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
@@ -64,7 +57,7 @@ local function drawTextWrapper(font, myString, posX, posY, scaleX, scaleY, color
 end
 function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, RenderColor, BoxWidth, Center, Format)
     local textType = fontType.DEFAULT
-    PositionX = PositionX - (1 / fontScale)
+    PositionX = PositionX - (1 / minecraftFont.fontScale)
     PositionX, PositionY = PositionX + Game().ScreenShakeOffset.X, PositionY + Game().ScreenShakeOffset.Y
     if Format then
         local stringsToFormat = {} 
@@ -103,7 +96,7 @@ function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, R
             drawTextWrapper(
                 minecraftFont.FontList[textType],
                 substring.String, PositionX + xDisplacement, PositionY, 
-                1 / fontScale, 1 / fontScale, RenderColor, BoxWidth, Center
+                1 / minecraftFont.fontScale, 1 / minecraftFont.fontScale, RenderColor, BoxWidth, Center
             )
             xDisplacement = xDisplacement + minecraftFont:GetStringWidth(substring.String)
         end
@@ -111,7 +104,7 @@ function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, R
         drawTextWrapper(
             minecraftFont.FontList[textType],
             String, PositionX, PositionY, 
-            1 / fontScale, 1 / fontScale, 
+            1 / minecraftFont.fontScale, 1 / minecraftFont.fontScale, 
             RenderColor, BoxWidth, Center
         )
     end
