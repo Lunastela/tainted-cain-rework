@@ -83,19 +83,55 @@ local function getCurseOfBlind()
     return false
 end
 
+local dummySprite = Sprite()
+dummySprite:Load("gfx/items/inventoryitem.anm2", false)
+
+local spriteLookupTable = {}
+local interval = 4
+local function getCustomCollectibleSprite(itemID)
+    local canDisplaySprites = TCainRework.getModSettings().customCollectibleSprites
+    if canDisplaySprites and (canDisplaySprites == 2) then
+        return -1
+    end
+    local itemConfig = utility.getCollectibleConfig(itemID)
+    local lastIndex = string.find(itemConfig.GfxFileName, "/[^/]*$")
+    local spritesheetPath = string.lower(itemConfig.GfxFileName:sub(lastIndex + 1))
+    local spriteFullPath = "gfx/isaac/items/" .. spritesheetPath
+    if not spriteLookupTable[spritesheetPath] then
+        dummySprite:ReplaceSpritesheet(0, spriteFullPath)
+        dummySprite:LoadGraphics()
+        dummySprite:SetFrame("Idle", 0)
+        for i = -16, 16, interval do
+            for j = -16, 16, interval do
+                local positionVector = Vector(i, j)
+                local result = dummySprite:GetTexel(positionVector, Vector.Zero, 1, 0)
+                if (result.Red ~= 0 or result.Green ~= 0
+                        or result.Blue ~= 0 or result.Alpha ~= 0) then
+                    spriteLookupTable[spritesheetPath] = spriteFullPath
+                    goto spriteFound
+                end
+            end
+        end
+        spriteLookupTable[spritesheetPath] = -1
+        ::spriteFound::
+    end
+    return spriteLookupTable[spritesheetPath]
+end
+
 function inventoryHelper.getItemGraphic(pickup)
     if pickup.ComponentData then
-        -- test for curse of blind prior
-        if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] and getCurseOfBlind() then
-            local customGfx = (pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX] ~= nil)
-            return ((customGfx and "gfx/isaac/items/questionmark.png") 
-                or "gfx/items/collectibles/questionmark.png")
-        end
         -- test custom gfx
         if pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX] then
             return pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX]
         end
         if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
+            local customGfx = getCustomCollectibleSprite(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
+            if getCurseOfBlind() then
+                return ((customGfx ~= -1) and "gfx/isaac/items/questionmark.png") or "gfx/items/collectibles/questionmark.png"
+            end
+            if customGfx ~= -1 then
+                return getCustomCollectibleSprite(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
+            end
             return utility.getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).GfxFileName
         end
     end
@@ -140,8 +176,14 @@ function inventoryHelper.hoveringOver(mousePosition, buttonPosition, buttonWidth
     return false
 end
 
+local function unlockWrapper()
+    local minecraftJumpscare = TCainRework.getModSettings().minecraftJumpscare
+    return ((minecraftJumpscare == 2) and saveManager.GetRunSave())
+        or saveManager.GetPersistentSave()
+end
+
 function inventoryHelper.getUnlockedInventory(setUnlocked)
-    local runSave = saveManager.GetRunSave()
+    local runSave = unlockWrapper()
     if not runSave.inventoryUnlocked and setUnlocked then
         TCainRework:CreateToast(
             InventoryToastTypes.TUTORIAL, 
@@ -155,7 +197,7 @@ function inventoryHelper.getUnlockedInventory(setUnlocked)
 end
 
 function inventoryHelper.getCollectibleCrafted(setUnlocked)
-    local runSave = saveManager.GetRunSave()
+    local runSave = unlockWrapper()
     if not runSave.collectibleCrafted and setUnlocked then
         TCainRework:CreateToast(
             InventoryToastTypes.TUTORIAL, 
@@ -925,7 +967,7 @@ function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, 
     local collectibleItem = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
     local originalRenderPosition = Vector(renderPosition.X, renderPosition.Y)
     local renderType = inventoryHelper.getItemRenderType(itemToDisplay.Type)
-    local renderFallback = ((collectibleItem ~= nil) and (not itemToDisplay.ComponentData[InventoryItemComponentData.CUSTOM_GFX]))
+    local renderFallback = ((collectibleItem ~= nil) and (getCustomCollectibleSprite(collectibleItem) == -1))
     if renderFallback then
         renderType = renderTypes.Collectible
     end

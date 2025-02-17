@@ -27,7 +27,11 @@ function mod:CreateToast(toastType, renderItems, renderIcon, toastText, toastSub
         ToastTime = toastTime or 180
     }
     table.insert(toastList, myToast)
-    SFXManager():Play(Isaac.GetSoundIdByName("Toast_InventoryIn"), 1, 2, false, 1, 0)
+
+    print(mod.getModSettings().toastControl)
+    if ((mod.getModSettings().toastControl or 1) <= 1) then
+        SFXManager():Play(Isaac.GetSoundIdByName("Toast_InventoryIn"), 1, 2, false, 1, 0)
+    end
     return myToast
 end
 
@@ -58,7 +62,9 @@ mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY,
             toast.X = 160 - (easeInCubic(toast.Time) * 160)
         else
             if not toast.Reverse then
-                SFXManager():Play(Isaac.GetSoundIdByName("Toast_InventoryOut"), 1, 2, false, 1, 0)
+                if ((mod.getModSettings().toastControl or 1) <= 1) then
+                    SFXManager():Play(Isaac.GetSoundIdByName("Toast_InventoryOut"), 1, 2, false, 1, 0)
+                end
                 toast.Reverse = true
                 toast.Time = 0
             else
@@ -69,39 +75,42 @@ mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY,
             toast.X = (easeInCubic(toast.Time) * 160)
         end
         local toastPosition = Vector(Isaac.GetScreenWidth() + (toast.X or 0), (32 * (i - 1)))
-        toastSprite:Render(toastPosition)
-        if toast.Type and toast.Text and toast.SubText then
-            -- Render Toasts and Icons
-            toastPosition = (toastPosition - Vector(160, 0)) + Vector(8, 8)
+        if ((mod.getModSettings().toastControl or 1) < 3) then
+            toastSprite:Render(toastPosition)
 
-            -- crafting table :sob:
-            if (toast.Type == InventoryToastTypes.STANDARD) then
-                inventoryHelper.renderItem({ Type = "minecraft:crafting_table", Count = 1 }, toastPosition - Vector(6, 6),
-                    Vector.One / 1.625)
-            end
+            if toast.Type and toast.Text and toast.SubText then
+                -- Render Toasts and Icons
+                toastPosition = (toastPosition - Vector(160, 0)) + Vector(8, 8)
 
-            -- Item Rendering
-            local itemToRender = toast.RenderItems[
-            math.min(math.max(math.ceil((toast.HoldTime * (#toast.RenderItems)) / toast.ToastTime), 1), #toast.RenderItems)
-            ]
-            if toast.RenderIcon then
-                if not itemToRender.ComponentData then
-                    itemToRender.ComponentData = {}
+                -- crafting table :sob:
+                if (toast.Type == InventoryToastTypes.STANDARD) then
+                    inventoryHelper.renderItem({ Type = "minecraft:crafting_table", Count = 1 }, toastPosition - Vector(6, 6),
+                        Vector.One / 1.625)
                 end
-                itemToRender.ComponentData[InventoryItemComponentData.CUSTOM_GFX] = toast.RenderIcon
-            end
-            inventoryHelper.renderItem(itemToRender, toastPosition)
 
-            -- Text Rendering
-            toastPosition.Y = toastPosition.Y - 2
-            toastPosition.X = toastPosition.X + 24
-            inventoryHelper.renderMinecraftText(toast.Text, toastPosition,
-                ((toast.Type == InventoryToastTypes.ADVANCEMENT) and InventoryItemRarity.UNCOMMON) or
-                InventoryItemRarity.TUTORIAL_PURPLE, false, true)
-            toastPosition.Y = toastPosition.Y + 11
-            inventoryHelper.renderMinecraftText(toast.SubText, toastPosition,
-                ((toast.Type == InventoryToastTypes.ADVANCEMENT) and InventoryItemRarity.COMMON) or
-                InventoryItemRarity.INVERT_TEXT, false, true)
+                -- Item Rendering
+                local itemToRender = toast.RenderItems[
+                math.min(math.max(math.ceil((toast.HoldTime * (#toast.RenderItems)) / toast.ToastTime), 1), #toast.RenderItems)
+                ]
+                if toast.RenderIcon then
+                    if not itemToRender.ComponentData then
+                        itemToRender.ComponentData = {}
+                    end
+                    itemToRender.ComponentData[InventoryItemComponentData.CUSTOM_GFX] = toast.RenderIcon
+                end
+                inventoryHelper.renderItem(itemToRender, toastPosition)
+
+                -- Text Rendering
+                toastPosition.Y = toastPosition.Y - 2
+                toastPosition.X = toastPosition.X + 24
+                inventoryHelper.renderMinecraftText(toast.Text, toastPosition,
+                    ((toast.Type == InventoryToastTypes.ADVANCEMENT) and InventoryItemRarity.UNCOMMON) or
+                    InventoryItemRarity.TUTORIAL_PURPLE, false, true)
+                toastPosition.Y = toastPosition.Y + 11
+                inventoryHelper.renderMinecraftText(toast.SubText, toastPosition,
+                    ((toast.Type == InventoryToastTypes.ADVANCEMENT) and InventoryItemRarity.COMMON) or
+                    InventoryItemRarity.INVERT_TEXT, false, true)
+            end
         end
     end
     if #flaggedForDeletion > 0 then

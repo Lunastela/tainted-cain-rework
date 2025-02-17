@@ -43,21 +43,35 @@ local targetPlayer = nil
 mod:AddCallback(ModCallbacks.MC_POST_RENDER, function(_)
     local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
     elapsedTime = elapsedTime + .05
+    local lmbTrigger = inputHelper.isMouseButtonTriggered(MouseButton.LEFT)
     for i, player in ipairs(playerTable) do
         local rotationX = 180 + (player.Rotation or 0)
         local position = Vector(Isaac.GetScreenWidth() + (i - (math.ceil(#playerTable / 2) + 0.5)) * 96, Isaac.GetScreenHeight()) / 2
 
         local width, height = 24, 48
-        if ((not targetPlayer and hoveringOver(mousePosition, position - (Vector(width, height) * playerRenderer.Scale) / 2, 
-            width * playerRenderer.Scale.X, height * playerRenderer.Scale.Y)) or (targetPlayer == player)) then
-            if inputHelper.isMouseButtonHeld(MouseButton.LEFT) then
+        -- if ((not targetPlayer and hoveringOver(mousePosition, position - (Vector(width, height) * playerRenderer.Scale) / 2, 
+        --     width * playerRenderer.Scale.X, height * playerRenderer.Scale.Y)) or (targetPlayer == player)) then
+        --     if inputHelper.isMouseButtonHeld(MouseButton.LEFT) then
+        --         player.RotationAcceleration = (player.RotationAcceleration or 0) + clamp((mousePosition - lastMousePosition).X / 2, 15)
+        --         targetPlayer = player
+        --     else
+        --         targetPlayer = nil
+        --     end
+        -- end
+        if inputHelper.isMouseButtonHeld(MouseButton.LEFT) then
+            if ((not targetPlayer) and hoveringOver(
+                mousePosition, position - (Vector(width, height) * playerRenderer.Scale) / 2, 
+                width * playerRenderer.Scale.X, height * playerRenderer.Scale.Y
+            )) or (targetPlayer == player) then
+                if lmbTrigger then
+                    targetPlayer = player
+                end
                 player.RotationAcceleration = (player.RotationAcceleration or 0) + clamp((mousePosition - lastMousePosition).X / 2, 15)
-                targetPlayer = player
-            else
-                targetPlayer = nil
             end
+        else
+            targetPlayer = nil
         end
-        player.RotationAcceleration = clamp((player.RotationAcceleration or 0) - signOf(player.RotationAcceleration) / 2., 60)
+        player.RotationAcceleration = clamp((player.RotationAcceleration or 0) - signOf(player.RotationAcceleration) / 2., 30)
         if (math.abs(player.RotationAcceleration) <= 0.5) then
             player.RotationAcceleration = 0
         end

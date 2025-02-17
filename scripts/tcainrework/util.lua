@@ -71,10 +71,6 @@ function Utility.getCardConfig(collectibleID)
     return cardCache[collectibleID]
 end
 
-local dummySprite = Sprite()
-dummySprite:Load("gfx/items/inventoryitem.anm2", false)
-local spriteLookupTable = {}
-local interval = 4
 function Utility.generateCollectibleData(collectibleType)
     -- try to obtain sprite if it exists
     local collectibleID = Utility.fastItemIDByName(collectibleType)
@@ -83,33 +79,11 @@ function Utility.generateCollectibleData(collectibleType)
     end
     local itemConfig = Utility.getCollectibleConfig(collectibleID)
     if itemConfig then
-        local lastIndex = string.find(itemConfig.GfxFileName, "/[^/]*$")
-        local spritesheetPath = string.lower(itemConfig.GfxFileName:sub(lastIndex + 1))
-        local spriteFullPath = "gfx/isaac/items/" .. spritesheetPath
         local initialCharges = ((itemConfig.Type == ItemType.ITEM_ACTIVE) and itemConfig.InitCharge) or nil
         if initialCharges == -1 then
             initialCharges = itemConfig.MaxCharges
         end
-        if not spriteLookupTable[spritesheetPath] then
-            dummySprite:ReplaceSpritesheet(0, spriteFullPath)
-            dummySprite:LoadGraphics()
-            dummySprite:SetFrame("Idle", 0)
-            for i = -16, 16, interval do
-                for j = -16, 16, interval do
-                    local positionVector = Vector(i, j)
-                    local result = dummySprite:GetTexel(positionVector, Vector.Zero, 1, 0)
-                    if (result.Red ~= 0 or result.Green ~= 0
-                            or result.Blue ~= 0 or result.Alpha ~= 0) then
-                        spriteLookupTable[spritesheetPath] = spriteFullPath
-                        goto spriteFound
-                    end
-                end
-            end
-            spriteLookupTable[spritesheetPath] = -1
-            ::spriteFound::
-        end
         return {
-            [InventoryItemComponentData.CUSTOM_GFX] = ((spriteLookupTable[spritesheetPath] ~= -1) and spriteLookupTable[spritesheetPath]) or nil,
             [InventoryItemComponentData.COLLECTIBLE_ITEM] = collectibleID,
             [InventoryItemComponentData.COLLECTIBLE_CHARGES] = initialCharges or nil
         }

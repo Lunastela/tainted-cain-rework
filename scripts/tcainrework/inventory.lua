@@ -9,10 +9,12 @@ local utility = require("scripts.tcainrework.util")
 
 -- Hide Bag of Crafting Inventory
 mod:AddCallback(ModCallbacks.MC_HUD_RENDER, function(_)
+    local hud = Game():GetHUD()
+    local craftingHUD = hud:GetCraftingSprite()
     if inventoryHelper.getUnlockedInventory() then
-        local hud = Game():GetHUD()
-        local craftingHUD = hud:GetCraftingSprite()
         craftingHUD:SetRenderFlags(1 << 2)
+    else
+        craftingHUD:SetRenderFlags(1)
     end
 end)
 

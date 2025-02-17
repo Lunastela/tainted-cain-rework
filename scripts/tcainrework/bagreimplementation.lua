@@ -326,7 +326,7 @@ local function renderBagOfCrafting(player, offset)
                                         elseif pickup.Variant == PickupVariant.PICKUP_COIN
                                         and pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
                                             pickup:GetSprite():Play("Touched")
-                                        elseif tcainPickup and not salvagingList[GetPtrHash(entity)] then
+                                        elseif tcainPickup and (not salvagingList[GetPtrHash(entity)] and canSalvageItem(entity.SubType)) then
                                             SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
                                             Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 2, pickup.Position, Vector.Zero, pickup)
                                             player:SalvageCollectible(pickup)
