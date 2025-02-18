@@ -242,9 +242,9 @@ local function initializeSalvage(entity)
     end
 end
 
-mod:AddPriorityCallback(ModCallbacks.MC_POST_PICKUP_INIT, CallbackPriority.EARLY, 
+mod:AddPriorityCallback(ModCallbacks.MC_POST_PICKUP_INIT, CallbackPriority.LATE, 
 function(_, pickup)
-    if not skipNext then
+    if not (skipNext or pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE) then
         local entityList = Isaac.FindInRadius(pickup.Position, 0, EntityPartition.PICKUP)
         for i, entity in ipairs(entityList) do
             if entity.Variant == PickupVariant.PICKUP_COLLECTIBLE

@@ -873,6 +873,7 @@ function TCainRework:UnlockItemRecipe(recipeName)
                 end
                 table.insert(toastStorage, itemTable)
             end
+            print('unlocking recipe:', recipeName)
             table.insert(runSave.unlockedRecipes, recipeName)
         end
     end
@@ -885,6 +886,7 @@ function inventoryHelper.runUnlockItem(item)
     end
     local combinedNameType = inventoryHelper.conditionalItemLookupType(item)
     runSave.obtainedItems[combinedNameType] = true
+    print(combinedNameType)
     if recipeReverseLookup[combinedNameType] then
         -- obtain recipe associations
         for i, recipeName in ipairs(recipeReverseLookup[combinedNameType]) do

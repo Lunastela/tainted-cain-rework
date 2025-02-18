@@ -163,7 +163,6 @@ local function checkRecipes()
         else
             outputSlotOccupied = false
             outputInventory[1] = nil
-            lastOutputItem = nil
         end
         lastCombinedString = trueCombinedString
     end
@@ -176,6 +175,8 @@ local function finalizeOutputs()
         if lastOutputItem then
             inventoryHelper.unlockItemBatch(lastOutputItem)
             lastOutputItem = nil
+        else
+            print('apparently no last output item? something is DEEPLY wrong')
         end
         for i in pairs(craftingInventory) do
             inventoryHelper.removePossibleAmount(craftingInventory, i, 1)
@@ -580,7 +581,6 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
     end
     if addedAny then
         local myItem = inventoryHelper.createItem(pickupType)
-        inventoryHelper.runUnlockItem(myItem)
         if optionalComponentData then
             myItem.ComponentData = optionalComponentData
         end
@@ -645,13 +645,26 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
         local screenSize = Vector(Isaac.GetScreenWidth(), Isaac.GetScreenHeight())
         local screenCenter = screenSize / 2
 
+        -- Cache Mouse Information
+        local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
+
+        local lmbTrigger, rmbTrigger = inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_1), inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_2)
+        local lmbRelease, rmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_1), inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_2)
+
         -- Render Hotbar before everything else
         hotbarInterface:Play("Idle", true)
-        hotbarInterface:Render(screenCenter + Vector(0, Isaac.GetScreenHeight() / 2))
+        local hotbarPosition = screenCenter + Vector(0, Isaac.GetScreenHeight() / 2)
+        hotbarInterface:Render(hotbarPosition)
         -- Update Hotbar Selection
-        if ((not Game():IsPaused()) and (inventoryState == InventoryStates.CLOSED)) then
+        if (not (Game():IsPaused() or DeadSeaScrollsMenu:IsOpen())) 
+        and (inventoryState == InventoryStates.CLOSED) then
             for i = 1, 10 do 
-                if (Input.IsButtonPressed(Keyboard.KEY_0 + i, 0)) then
+                local hotbarPosition = screenCenter + Vector(CELL_SIZE - 6, (Isaac.GetScreenHeight() / 2)) 
+                    - Vector((hotbarCellSize * 5) - ((i - 1) * hotbarCellSize), hotbarCellSize - 1)
+                local hoveringOverHotbar = (inventoryHelper.hoveringOver(mousePosition, hotbarPosition, hotbarCellSize, hotbarCellSize)
+                    and (inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_1) or inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_2)))
+
+                if ((i < 10) and hoveringOverHotbar) or (Input.IsButtonPressed(Keyboard.KEY_0 + i, 0)) then
                     hotbarSlotSelected = i
                     goto continueHotbar
                 end
@@ -703,20 +716,12 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
             if cursorGatherAll > 0 then
                 cursorGatherAll = cursorGatherAll - 1
             end
-                
-            local lmbTrigger = inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_1)
-            local rmbTrigger = inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_2)
-        
-            local lmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_1)
-            local rmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_2)
 
             if inventoryState ~= InventoryStates.CLOSED then
                 if DeadSeaScrollsMenu and DeadSeaScrollsMenu:IsOpen() then
                     DeadSeaScrollsMenu.CloseMenu(true, true)
                     SFXManager():Stop(Isaac.GetSoundIdByName("deadseascrolls_whoosh"))
                 end
-                -- Cache Mouse Information
-                local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
 
                 blackBG.Scale = screenSize
                 blackBG.Color = blackColor
