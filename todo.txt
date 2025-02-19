@@ -1,6 +1,7 @@
 - Add item tags for: flies, boxes, food
 - Make "conditional recipe items" display hardcoded attributes like pill color based on effect
 - Potentially(?) always reveal pills in recipe conditionals
+- Extended UI Controls (Q to drop in the inventory, number buttons to place items in slots, etc.)
 - Minecraft Items randomly disappear sometimes. Attempted a fix for this, but it didn't work. Not sure where to start.
 - Recipe Book "Alternate" Recipes and combining multiple recipes into one cell.
 - Sorting per all inventories in auto crafting as opposed to  

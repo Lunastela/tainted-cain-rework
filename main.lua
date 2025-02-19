@@ -55,6 +55,9 @@ local function sortItemTags()
 end
 
 local index = 0
+
+-- Define Load Order list
+mod.LoadOrder = {}
 function mod:loadRegistry(curLoad)
     -- Items
     registerFromLoadOrder(curLoad.Namespace, curLoad.Items, "items",
@@ -147,14 +150,20 @@ function mod:loadRegistry(curLoad)
     end
     -- sort item tags
     sortItemTags()
-    return curLoad
+
+    for i, loadedMod in ipairs(mod.LoadOrder) do
+        if (loadedMod.Namespace and curLoad.Namespace)
+        and (loadedMod.Namespace == curLoad.Namespace) then
+            mod.LoadOrder[i] = curLoad
+            return true
+        end
+    end
+    return table.insert(mod.LoadOrder, curLoad)
 end
 
--- Define Load Order list
-mod.LoadOrder = { -- If you wish to add your own items, add them to this list using table.insert() before MC_POST_MODS_LOADED
-    mod:loadRegistry(include("loadorder")),
-    mod:loadRegistry(include("loadorder_minecraft"))
-}
+mod:loadRegistry(include("loadorder"))
+mod:loadRegistry(include("loadorder_minecraft"))
+
 
 local function getItemTag(tagName)
     if not itemTagLookup[tagName] then
