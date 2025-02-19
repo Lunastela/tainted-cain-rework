@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "Compost",
+    "R": "Red Candle",
+    "H": "#tcainrework:heart",
+    "B": "#tcainrework:bomb"
+  },
+  "pattern": [
+    " B ",
+    "HRH",
+    "HCH"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Bird's Eye"
+  }
+}

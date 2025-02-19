@@ -156,21 +156,6 @@ mod.LoadOrder = { -- If you wish to add your own items, add them to this list us
     mod:loadRegistry(include("loadorder_minecraft"))
 }
 
-function mod:reloadRegistries()
-    local currentTime = Isaac.GetTime()
-    for _, curLoad in ipairs(mod.LoadOrder) do
-        mod:loadRegistry(curLoad)
-    end
-    local allIds = ""
-    for i, id in ipairs(loadedIDs) do
-        allIds = allIds .. id
-        if i < #loadedIDs then
-            allIds = allIds .. ", "
-        end
-    end
-    print("reloaded registries,", Isaac.GetTime() - currentTime, "ms elapsed", "{" .. allIds .. "}")
-end
-
 local function getItemTag(tagName)
     if not itemTagLookup[tagName] then
         itemTagLookup[tagName] = {}
@@ -238,10 +223,11 @@ function mod:loadCollectibleCache()
         end
         iterator = iterator + 1
     end
-    print(Isaac.GetTime() - currentTime)
+    collectibleStorage.constructed = true
+    print("loaded item cache in:", Isaac.GetTime() - currentTime)
     sortItemTags()
 end
-mod:AddPriorityCallback(ModCallbacks.MC_POST_MODS_LOADED, CallbackPriority.LATE, mod.loadCollectibleCache)
+-- mod:AddPriorityCallback(ModCallbacks.MC_POST_MODS_LOADED, CallbackPriority.LATE, mod.loadCollectibleCache)
 
 -- Load Supplementaries
 include("scripts.tcainrework.bagreimplementation")

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "#tcainrework:soul_heart",
+    "B": "tcainrework:micro_battery"
+  },
+  "pattern": [
+    "S  ",
+    "SBB",
+    "S  "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Night Light"
+  }
+}

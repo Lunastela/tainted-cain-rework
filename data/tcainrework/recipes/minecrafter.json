@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:giga_bomb",
+    "tcainrework:mega_battery"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Mine Crafter"
+  }
+}

@@ -28,7 +28,7 @@ function mod:CreateToast(toastType, renderItems, renderIcon, toastText, toastSub
     }
     table.insert(toastList, myToast)
 
-    print(mod.getModSettings().toastControl)
+    -- print(mod.getModSettings().toastControl)
     if ((mod.getModSettings().toastControl or 1) <= 1) then
         SFXManager():Play(Isaac.GetSoundIdByName("Toast_InventoryIn"), 1, 2, false, 1, 0)
     end

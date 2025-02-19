@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Compost",
+    "Eden's Soul"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Eden's Blessing"
+  }
+}

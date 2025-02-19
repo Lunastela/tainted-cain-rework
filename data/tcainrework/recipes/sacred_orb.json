@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "Midas' Touch",
+    "R": "Shard of Glass",
+    "#": "tcainrework:dice_shard"
+  },
+  "pattern": [
+    "C",
+    "R",
+    "#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Sacred Orb"
+  }
+}

@@ -3,9 +3,7 @@
     <name>[RGON] (BETA) Tainted Cain Rework</name>
     <directory>cain-crafting</directory>
     <id>3408837286</id>
-    <description>[h1]At the time of writing, I no longer feel like trying to actively maintain / finish / polish up this mod. I have, instead, decided to release it in a beta state.
-I hope this is acceptable, as there will be many bugs and glitches that could remain for however long until I gain the motivation to fix them.[/h1]
-    
+    <description>
 [h1]This mod requires [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]REPENTOGON[/url]. 
 If you do not yet have it, get it [url=https://repentogon.com]here[/url].[/h1]
 
@@ -34,14 +32,6 @@ Look no further than [b]Tainted Cain Rework![/b] Tainted Cain Rework makes sever
     [*] [b]Currently unavailable in multiplayer.[/b] This may change in the future, sorry!
 [/list]
 
-[h2]Credits:[/h2]
-[list]
-    [*] John Snail - Additional Recipes
-    [*] Mr. Headcrab - Additional Recipes
-    [*] Pread1129 - Additional Recipes, Wiki Boy
-    [*] EliteMasterEric - Additional Recipes
-    [*] Lynn Sharcys - "Eden Essence" Sprite
-[/list]
 </description>
     <version>1.6</version>
     <visibility>Private</visibility>

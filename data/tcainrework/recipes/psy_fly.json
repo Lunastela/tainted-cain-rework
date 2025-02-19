@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "O": "Lost Contact",
+    "F": "tcainrework:pill{\"pill_effect\":10}",
+    "B": "tcainrework:rune{\"card_type\":38}"
+  },
+  "pattern": [
+    "O",
+    "F",
+    "B"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Psy Fly"
+  }
+}

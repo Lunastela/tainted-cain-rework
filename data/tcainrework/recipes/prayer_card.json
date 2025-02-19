@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "B": "tcainrework:mega_battery",
+    "E": "tcainrework:eternal_heart",
+    "C": "#tcainrework:card"
+  },
+  "pattern": [
+    " B ",
+    "ECE"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Prayer Card"
+  }
+}

@@ -1,8 +1,10 @@
-- Dead Sea Scrolls Page is finished, but it needs settings.
-- Work on a Dead Sea Scrolls wrapper menu for main page with a logo and splash text.
-- Work on a Dead Sea Scrolls wrapper menu for the settings page based on the Controls menu.
-- Minecraft Items randomly disappear sometimes. Attempted a fix for this, but I'll have to wait and see.
-- Recipe Book "Alternate" Recipes and combining multiple recipes into one cell. 
+- Add item tags for: flies, boxes, food
+- Make "conditional recipe items" display hardcoded attributes like pill color based on effect
+- Potentially(?) always reveal pills in recipe conditionals
+- Minecraft Items randomly disappear sometimes. Attempted a fix for this, but it didn't work. Not sure where to start.
+- Recipe Book "Alternate" Recipes and combining multiple recipes into one cell.
+- Sorting per all inventories in auto crafting as opposed to  
+- Add a sprite for categories outside of search category.
 
 Low Priority:
 - Sparse arrays sorted when saving. SaveManager bug.

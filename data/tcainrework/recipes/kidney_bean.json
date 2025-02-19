@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "H": "tcainrework:heart",
+    "C": "Compost"
+  },
+  "pattern": [
+    " H ",
+    "HCH",
+    " H "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Kidney Bean"
+  }
+}

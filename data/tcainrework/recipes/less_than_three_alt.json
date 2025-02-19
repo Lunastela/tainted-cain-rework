@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:heart", "Yum Heart", "tcainrework:heart",
+    "tcainrework:heart", "tcainrework:heart", "tcainrework:heart",
+    "tcainrework:heart", "Yum Heart", "tcainrework:heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "<3"
+  }
+}

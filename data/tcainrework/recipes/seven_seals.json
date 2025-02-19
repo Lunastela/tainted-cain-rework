@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "p": "minecraft:paper",
+    "R": "Book of Revelations"
+  },
+  "pattern": [
+    " p ",
+    "pRp",
+    " p "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "7 Seals"
+  }
+}

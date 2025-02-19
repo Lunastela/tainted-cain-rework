@@ -7,9 +7,7 @@ mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, function(_, command, arguments)
     for char in string.gmatch(arguments, "[^%s]+") do
         table.insert(argList, char)
     end
-    if command == "reloadregistry" or command == "reloadregistries" then
-        mod:reloadRegistries()
-    elseif command == "unlockrecipes" then
+    if command == "unlockrecipes" then
         local runSave = saveManager.GetRunSave()
         runSave.unlockedRecipes = {}
         for recipeName in pairs(recipeLookupIndex) do
@@ -31,12 +29,6 @@ mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, function(_, command, arguments)
         mod.summonPhantoms()
     end
 end)
-
-Console.RegisterCommand("reloadregistry", 
-    "Reloads all T. Cain Rework Item Registries", 
-    "Reloads all T. Cain Rework Item Registries", 
-    true, AutocompleteType.NONE
-)
 
 Console.RegisterCommand("unlockrecipes", 
     "Unlocks all T. Cain Rework Recipes", 

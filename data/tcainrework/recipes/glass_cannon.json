@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "B": "#tcainrework:bomb",
+    "J": "The Jar",
+    "S": "Shard of Glass"
+  },
+  "pattern": [
+    " S ",
+    "BJB",
+    " B"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Glass Cannon"
+  }
+}

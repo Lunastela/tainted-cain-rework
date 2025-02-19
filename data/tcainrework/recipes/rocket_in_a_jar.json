@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:giga_bomb",
+    "The Jar"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Rocket in a Jar"
+  }
+}

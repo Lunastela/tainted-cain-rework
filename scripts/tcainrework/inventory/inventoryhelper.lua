@@ -825,16 +825,7 @@ end
 
 function inventoryHelper.conditionalItemFromRecipe(recipe, itemIndex)
     if recipe.ConditionTable and recipe.ConditionTable[itemIndex] then
-        local presumedItemType = recipe.ConditionTable[itemIndex]
-        local itemCollectibleData = utility.fastItemIDByName(presumedItemType)
-        if itemCollectibleData ~= -1 then
-            presumedItemType = "tcainrework:collectible"
-        end
-        local fakeResultItem = inventoryHelper.createItem(presumedItemType)
-        if itemCollectibleData ~= -1 then
-            fakeResultItem.ComponentData = utility.generateCollectibleData(itemCollectibleData)
-        end
-        return fakeResultItem
+        return inventoryHelper.createItem(recipe.ConditionTable[itemIndex])
     end
     return {Type = "minecraft:stick", Count = 1}
 end
@@ -873,7 +864,7 @@ function TCainRework:UnlockItemRecipe(recipeName)
                 end
                 table.insert(toastStorage, itemTable)
             end
-            print('unlocking recipe:', recipeName)
+            -- print('unlocking recipe:', recipeName)
             table.insert(runSave.unlockedRecipes, recipeName)
         end
     end
@@ -886,7 +877,6 @@ function inventoryHelper.runUnlockItem(item)
     end
     local combinedNameType = inventoryHelper.conditionalItemLookupType(item)
     runSave.obtainedItems[combinedNameType] = true
-    print(combinedNameType)
     if recipeReverseLookup[combinedNameType] then
         -- obtain recipe associations
         for i, recipeName in ipairs(recipeReverseLookup[combinedNameType]) do

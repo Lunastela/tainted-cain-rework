@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "tcainrework:tarot_card{\"card_type\":19}",
+    "R": "#tcainrework:rune",
+    "#": "tcainrework:soul_heart"
+  },
+  "pattern": [
+    "C#C",
+    "#R#",
+    "###"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Luna"
+  }
+}

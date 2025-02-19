@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Notched Axe",
+    "Undefined"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Dataminer"
+  }
+}

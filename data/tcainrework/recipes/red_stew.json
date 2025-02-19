@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "minecraft:bowl",
+    "<3",
+    "Lusty Blood"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Red Stew"
+  }
+}

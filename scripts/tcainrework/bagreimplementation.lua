@@ -212,11 +212,7 @@ local function salvageCollectible(pickup)
             spawnSalvagePickup(pickup, salvageVariant)
         end
         pickup:Remove()
-        -- There's Options
-        Isaac.CreateTimer(function(_) 
-            pickup:TriggerTheresOptionsPickup()
-            salvagingList[ptrHash] = nil
-        end, 8, 1, true)
+        salvagingList[ptrHash] = nil
     end
 end
 
@@ -330,6 +326,9 @@ local function renderBagOfCrafting(player, offset)
                                             SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
                                             Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 2, pickup.Position, Vector.Zero, pickup)
                                             player:SalvageCollectible(pickup)
+                                            Isaac.CreateTimer(function(_) 
+                                                pickup:TriggerTheresOptionsPickup()
+                                            end, 8, 1, true)
                                         end
                                     end
                                     if not (pickup and (pickup.Variant == mod.minecraftItemID 
@@ -447,7 +446,3 @@ mod:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, function(_, player, offset)
         renderBagOfCrafting(player, offset)
     end
 end)
-
--- mod:AddCallback(ModCallbacks.MC_PRE_SFX_PLAY, function(_, ID, Volume, FrameDelay, Loop, Pitch, Pan)
---     print(ID, Volume, FrameDelay, Loop, Pitch, Pan)
--- end)

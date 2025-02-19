@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "#familiar",
+    "#box",
+    "#familiar"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Box of Friends"
+  }
+}

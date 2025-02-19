@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "#fly",
+    "tcainrework:rune{\"card_type\":38}",
+    "#fly"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Halo of Flies"
+  }
+}

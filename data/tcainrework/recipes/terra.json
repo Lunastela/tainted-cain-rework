@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "R": "The Small Rock",
+    "T": "Tiny Planet",
+    "S": "#tcainrework:soul_heart",
+    "#": "minecraft:cobblestone"
+  },
+  "pattern": [
+    "#R#",
+    "#T#",
+    "S#S"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Terra"
+  }
+}

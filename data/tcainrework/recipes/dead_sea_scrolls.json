@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "minecraft:paper",
+    "tcainrework:eternal_heart",
+    "minecraft:paper"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Dead Sea Scrolls"
+  }
+}

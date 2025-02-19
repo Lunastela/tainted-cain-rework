@@ -1211,7 +1211,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                 not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] ~= nil),
                                 ActiveSlot.SLOT_PRIMARY
                             )
-                            print('first time taking active?:', not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] ~= nil))
+                            -- print('first time taking active?:', not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] ~= nil))
                             SFXManager():Play(SoundEffect.SOUND_POWERUP_SPEWER)
                             Isaac.CreateTimer(function(_) 
                                 Game():GetHUD():ShowItemText(player, configItem)

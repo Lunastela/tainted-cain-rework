@@ -604,7 +604,7 @@ local cainCraftingDirectory = {
                 tooltip = {strset = {"Go to sleep."}}
             },
             {
-                str = "Chaos Mode",
+                str = "Chaos Mode [NOT DONE]",
                 choices = {"false", "true"},
                 setting = 1,
                 variable = "chaosMode",

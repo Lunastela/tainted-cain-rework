@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "The Jar",
+    "#fly"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Jar of Flies"
+  }
+}

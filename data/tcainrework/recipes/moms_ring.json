@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "R": "#tcainrework:rune",
+    "#": "Midas' Touch"
+  },
+  "pattern": [
+    "R",
+    "#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Mom's Ring"
+  }
+}
