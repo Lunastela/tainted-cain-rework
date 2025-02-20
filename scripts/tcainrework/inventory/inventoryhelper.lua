@@ -583,7 +583,7 @@ function inventoryHelper.itemGetFullName(pickup)
                 Rarity = InventoryItemRarity.SUBTEXT
             })
             if debugStats and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] then
-                if (pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / itemConfig.MaxCharges < 1) then
+                if (pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / itemConfig.MaxCharges ~= 1) then
                     table.insert(nameTable, {
                         String = "Durability: " 
                         .. tostring(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES]) 

@@ -4,12 +4,13 @@
   "key": {
     "C": "Midas' Touch",
     "R": "Shard of Glass",
-    "#": "tcainrework:dice_shard"
+    "#": "tcainrework:dice_shard",
+    "E": "tcainrework:eternal_heart"
   },
   "pattern": [
-    "C",
-    "R",
-    "#"
+    "ECE",
+    "ERE",
+    " # "
   ],
   "result": {
     "id": "tcainrework:collectible",

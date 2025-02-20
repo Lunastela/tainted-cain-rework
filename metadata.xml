@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-    <name>[RGON] (BETA) Tainted Cain Rework</name>
+    <name>![RGON] T. Cain Rework</name>
     <directory>cain-crafting</directory>
     <id>3408837286</id>
     <description>
@@ -33,7 +33,7 @@ Look no further than [b]Tainted Cain Rework![/b] Tainted Cain Rework makes sever
 [/list]
 
 </description>
-    <version>1.7</version>
+    <version>1.0</version>
     <visibility>Private</visibility>
     <tag id="Lua"/>
     <tag id="Items"/>

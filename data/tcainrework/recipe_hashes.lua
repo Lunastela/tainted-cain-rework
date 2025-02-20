@@ -503,7 +503,7 @@ return {
             RecipeName = "tcainrework:magic_skin_alt",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {"#tcainrework:heart", "minecraft:leather", "#tcainrework:heart", "minecraft:leather", "tcainrework:reverse_tarot_card{\"card_type\":62}", "minecraft:leather", "#tcainrework:heart", "minecraft:leather", "#tcainrework:heart", },
+            ConditionTable = {"#tcainrework:heart", "minecraft:leather", "#tcainrework:heart", "minecraft:leather", "tcainrework:bone_heart", "minecraft:leather", "#tcainrework:heart", "minecraft:leather", "#tcainrework:heart", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
@@ -1347,7 +1347,7 @@ return {
             RecipeName = "tcainrework:magic_skin",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {nil, "minecraft:leather", nil, "minecraft:leather", "tcainrework:bone_heart", "minecraft:leather", nil, "minecraft:leather", nil, },
+            ConditionTable = {nil, "minecraft:leather", nil, "minecraft:leather", "tcainrework:reverse_tarot_card{\"card_type\":62}", "minecraft:leather", nil, "minecraft:leather", nil, },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
@@ -1624,18 +1624,6 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Redemption"
-            },
-            DisplayRecipe = true
-        },
-        {
-            RecipeName = "tcainrework:sacred_orb",
-            Category = "collectible",
-            RecipeSize = Vector(1, 3),
-            ConditionTable = {"Midas' Touch", "Shard of Glass", "tcainrework:dice_shard", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Sacred Orb"
             },
             DisplayRecipe = true
         },
@@ -2012,6 +2000,20 @@ return {
             DisplayRecipe = true
         },
     },
+    ["0fc11021996266a0e931f09c2d2b97bb56bd98f6"] = {
+        {
+            RecipeName = "tcainrework:pentagram",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:black_heart", nil, "tcainrework:black_heart", "tcainrework:black_heart", "tcainrework:black_heart", "tcainrework:black_heart", nil, "tcainrework:black_heart", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Pentagram"
+            },
+            DisplayRecipe = true
+        },
+    },
     ["1a621652a564abf23fcfb87339d59b0da6ff174e"] = {
         {
             RecipeName = "tcainrework:pyromaniac",
@@ -2022,6 +2024,18 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Pyromaniac"
+            },
+            DisplayRecipe = true
+        },
+        {
+            RecipeName = "tcainrework:sacred_orb",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:eternal_heart", "Midas' Touch", "tcainrework:eternal_heart", "tcainrework:eternal_heart", "Shard of Glass", "tcainrework:eternal_heart", nil, "tcainrework:dice_shard", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Sacred Orb"
             },
             DisplayRecipe = true
         },

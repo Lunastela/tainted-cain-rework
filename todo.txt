@@ -1,9 +1,11 @@
-- Add item tags for: flies, boxes, food
 - Make "conditional recipe items" display hardcoded attributes like pill color based on effect
 - Potentially(?) always reveal pills in recipe conditionals
+- Option to drop all items on death
 - Extended UI Controls (Q to drop in the inventory, number buttons to place items in slots, etc.)
+- "Salvage/Scrap" variants of items when they're not unlocked that can still be used for crafting items.
 - Minecraft Items randomly disappear sometimes. Attempted a fix for this, but it didn't work. Not sure where to start.
 - Recipe Book "Alternate" Recipes and combining multiple recipes into one cell.
+- Swappable Actives with Schoolbag on characters that aren't Tainted Cain.
 - Sorting per all inventories in auto crafting as opposed to  
 - Add a sprite for categories outside of search category.
 

@@ -20,7 +20,7 @@ function mod:CreateToast(toastType, renderItems, renderIcon, toastText, toastSub
         RenderItems = renderItems or { { Type = "minecraft:stick", Count = 1 } },
         RenderIcon = renderIcon,
         Text = toastText
-            or ((toastType == InventoryToastTypes.STANDARD) and "New Recipes Unlocked!")
+            or ((toastType == InventoryToastTypes.STANDARD) and "New Recipe(s) Unlocked!")
             or ((toastType == InventoryToastTypes.ADVANCEMENT) and "Advancement Made!") or "",
         SubText = toastSubtext
             or ((toastType == InventoryToastTypes.STANDARD) and "Check your recipe book") or "",

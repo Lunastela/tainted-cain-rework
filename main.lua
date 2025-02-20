@@ -187,6 +187,18 @@ local hardcodedBabies = {
     [CollectibleType.COLLECTIBLE_LIL_ABADDON] = true,
 }
 
+local itemTagCounterparts = {
+    [ItemConfig.TAG_FLY] = "#fly",
+    [ItemConfig.TAG_FOOD] = "#food",
+    [ItemConfig.TAG_BOOK] = "#book",
+    [ItemConfig.TAG_TEARS_UP] = "#tears_up",
+    [ItemConfig.TAG_MUSHROOM] = "#mushroom",
+    [ItemConfig.TAG_SPIDER] = "#spider",
+    [ItemConfig.TAG_POOP] = "#poop",
+    [ItemConfig.TAG_ANGEL] = "#seraphim",
+    [ItemConfig.TAG_DEVIL] = "#leviathan"
+}
+
 -- the things we do for performance :sob:
 local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 local function addToTag(tagName, itemName)
@@ -224,10 +236,17 @@ function mod:loadCollectibleCache()
                 or string.find(string.lower(itemName), "bum") or hardcodedBabies[iterator]) then
                     addToTag("#baby", itemName)
                 end
+            else
+                -- Check if it is a Box for the Box item tag
+                if (string.find(string.lower(itemName), "box")) then
+                    addToTag("#box", itemName)
+                end
             end
-            -- Check if it is a Book for the Book item tag
-            if (curCollectible.Tags & ItemConfig.TAG_BOOK ~= 0) then
-                addToTag("#book", itemName) 
+            -- Check associated config tags with different itemTags
+            for tagType, itemConfigTag in pairs(itemTagCounterparts) do
+                if (curCollectible.Tags & tagType ~= 0) then
+                    addToTag(itemConfigTag, itemName) 
+                end
             end
         end
         iterator = iterator + 1
@@ -236,7 +255,7 @@ function mod:loadCollectibleCache()
     print("loaded item cache in:", Isaac.GetTime() - currentTime)
     sortItemTags()
 end
--- mod:AddPriorityCallback(ModCallbacks.MC_POST_MODS_LOADED, CallbackPriority.LATE, mod.loadCollectibleCache)
+mod:AddPriorityCallback(ModCallbacks.MC_POST_MODS_LOADED, CallbackPriority.LATE, mod.loadCollectibleCache)
 
 -- Load Supplementaries
 include("scripts.tcainrework.bagreimplementation")

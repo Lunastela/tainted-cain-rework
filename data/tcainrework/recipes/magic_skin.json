@@ -3,7 +3,7 @@
   "category": "collectible",
   "key": {
     "b": "minecraft:leather",
-    "V": "tcainrework:bone_heart"
+    "V": "tcainrework:reverse_tarot_card{\"card_type\":62}"
   },
   "pattern": [
     " b ",
