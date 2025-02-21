@@ -38,7 +38,7 @@ local function clamp(value, clampBy)
 end
 
 local lastMousePosition = Vector.Zero
-local inputHelper = include("scripts.tcainrework.mouseinputs")
+local inputHelper = include("scripts.tcainrework.mouse_inputs")
 local targetPlayer = nil
 mod:AddCallback(ModCallbacks.MC_POST_RENDER, function(_)
     local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))

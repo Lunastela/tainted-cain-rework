@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "#tcainrework:metal"
+    "I": "Iron Bar",
+    "#": "tcainrework:heart"
   },
   "pattern": [
-    "##",
-    "##"
+    " I ",
+    "###",
+    " # "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "Blood Oath"
   }
 }

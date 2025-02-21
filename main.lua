@@ -9,7 +9,7 @@ local utility = require("scripts.tcainrework.util")
 include("scripts.tcainrework.inventory.inventoryenums")
 mod.inventoryHelper = include("scripts.tcainrework.inventory.inventoryhelper")
 
-include("scripts.tcainrework.deadseascrolls")
+include("scripts.tcainrework.dss.dead_sea_scrolls")
 
 -- Render Scale Options
 if Options.MaxRenderScale <= 3 then
@@ -255,11 +255,11 @@ function mod:loadCollectibleCache()
     print("loaded item cache in:", Isaac.GetTime() - currentTime)
     sortItemTags()
 end
-mod:AddPriorityCallback(ModCallbacks.MC_POST_MODS_LOADED, CallbackPriority.LATE, mod.loadCollectibleCache)
+-- mod:AddPriorityCallback(ModCallbacks.MC_POST_MODS_LOADED, CallbackPriority.LATE, mod.loadCollectibleCache)
 
 -- Load Supplementaries
-include("scripts.tcainrework.bagreimplementation")
-include("scripts.tcainrework.itementity")
+include("scripts.tcainrework.bag_of_crafting")
+include("scripts.tcainrework.item_entity")
 include("scripts.tcainrework.inventory")
 include("scripts.tcainrework.toasts")
 include("scripts.tcainrework.commands")

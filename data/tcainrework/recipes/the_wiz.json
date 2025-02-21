@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "#tcainrework:metal"
+    "P": "tcainrework:pill{\"pill_effect\":27}",
+    "#": "minecraft:paper"
   },
   "pattern": [
-    "##",
-    "##"
+    " # ",
+    "#P#",
+    "###"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "The Wiz"
   }
 }

@@ -720,12 +720,14 @@ function dssmenucore.init(DSSModName, MenuProvider)
                 if module.size == nil then module.size = fsize end
                 if module.height == nil then module.height = fontspacers[module.size] end
 
-                local fullstr = string.lower(module.str)
+                local fullstr = module.str
                 if type(module.str) == "table" then
                     fullstr = ''
                     for _, val in ipairs(module.str) do
                         fullstr = fullstr .. val.str
                     end
+                else
+                    fullstr = string.lower(fullstr)
                 end
 
                 local length, chr = getMenuStringLength(fullstr, module.size)

@@ -5,8 +5,8 @@
     "#": "tcainrework:black_heart"
   },
   "pattern": [
-    "###",
-    "###",
+    " # ",
+    "# #",
     "###"
   ],
   "result": {

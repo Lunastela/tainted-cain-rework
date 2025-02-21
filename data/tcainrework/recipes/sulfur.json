@@ -3,12 +3,13 @@
   "category": "collectible",
   "key": {
     "M": "The Mark",
-    "#": "tcainrework:black_heart"
+    "#": "tcainrework:black_heart",
+    "B": "tcainrework:battery"
   },
   "pattern": [
-    " # ",
-    "#M#",
-    " # "
+    "B",
+    "M",
+    "#"
   ],
   "result": {
     "id": "tcainrework:collectible",

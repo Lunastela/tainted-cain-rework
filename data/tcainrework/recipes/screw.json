@@ -6,7 +6,7 @@
     "P": "#tcainrework:pickup"
   },
   "pattern": [
-    "PPP",
+    "P#P",
     " # ",
     " # "
   ],

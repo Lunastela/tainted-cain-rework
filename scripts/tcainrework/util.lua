@@ -38,6 +38,9 @@ end
 
 local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 function Utility.fastItemIDByName(name)
+    if not collectibleStorage.constructed then
+        TCainRework:loadCollectibleCache()
+    end
     if (not (collectibleStorage.constructed and collectibleStorage.nameToIDLookup[name])
     and not (string.find(name, "tcainrework") or string.find(name, "minecraft"))) then
         local temporaryDesignation = Isaac.GetItemIdByName(name)

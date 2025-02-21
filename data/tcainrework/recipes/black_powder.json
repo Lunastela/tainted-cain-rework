@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "#tcainrework:metal"
+    "#": "minecraft:leather",
+    "B": "tcainrework:bomb",
+    "S": "#tcainrework:soul_heart"
   },
   "pattern": [
-    "##",
-    "##"
+    "#S#",
+    " B "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "Black Powder"
   }
 }

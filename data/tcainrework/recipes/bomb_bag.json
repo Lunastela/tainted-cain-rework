@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "#tcainrework:metal"
+    "#": "minecraft:leather",
+    "O": "tcainrework:giga_bomb"
   },
   "pattern": [
-    "##",
-    "##"
+    "#",
+    "O",
+    "#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "Bomb Bag"
   }
 }

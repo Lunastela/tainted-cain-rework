@@ -2,13 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "X": "tcainrework:rune{\"card_type\":34,\"custom_gfx\":\"gfx\/items\/cards\/left_rune.png\"}",
-    "#": "minecraft:stick"
+    "#": "tcainrework:rune{\"card_type\":34,\"custom_gfx\":\"gfx\/items\/cards\/left_rune.png\"}",
+    "I": "minecraft:stick",
+    "B": "Iron Bar"
   },
   "pattern": [
-    "X",
-    "#",
-    "#"
+    "I#I",
+    " I ",
+    " B "
   ],
   "result": {
     "id": "tcainrework:collectible",

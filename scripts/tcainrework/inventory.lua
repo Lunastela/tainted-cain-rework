@@ -1,7 +1,7 @@
 local mod = TCainRework
 
 -- load input helpers and utility helpers
-local inputHelper = include("scripts.tcainrework.mouseinputs")
+local inputHelper = include("scripts.tcainrework.mouse_inputs")
 local inventoryHelper = mod.inventoryHelper
 local minecraftFont = include("scripts.tcainrework.font")
 local saveManager = require("scripts.save_manager")
@@ -597,7 +597,7 @@ local hotbarCellSize = 20
 local inventorySize = Vector(178, 166)
 
 local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
-local recipeBookTabs = {"collectible"}
+local recipeBookTabs = {"collectible", "active", "passive", "misc"}
 local selectedTab = 1
 local selectedPage = 0
 local function resetRecipeBook()
@@ -1047,10 +1047,11 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                     end
 
                     -- Render Tabs
+                    local tabAdvancePosition = 0
                     for i = 1, #recipeBookTabs + 1 do
                         if i <= 1 or availableTabs[recipeBookTabs[i - 1]] then
                             recipeBookUI:SetFrame("Tab", (i == selectedTab and 0) or 1)
-                            local recipeBookTabPosition = recipeDisplayDisplacement - Vector(8, 15 - (27 * (i - 1)))
+                            local recipeBookTabPosition = recipeDisplayDisplacement - Vector(8, 15 - (27 * (tabAdvancePosition)))
                             recipeBookUI:ReplaceSpritesheet(4, "gfx/ui/" .. (recipeBookTabs[i - 1] or "search") .. ".png", true)
                             recipeBookUI:Render(recipeBookTabPosition)
                             if inventoryHelper.hoveringOver(mousePosition, recipeBookTabPosition - Vector(32, 13), 32, 26) then
@@ -1060,6 +1061,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                     selectedPage = 0
                                 end
                             end
+                            tabAdvancePosition = tabAdvancePosition + 1
                         end
                     end
 

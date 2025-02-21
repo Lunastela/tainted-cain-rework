@@ -1,16 +1,22 @@
+High Priority:
+- Minecraft Items randomly disappear sometimes. Attempted a fix for this, but it didn't work. Not sure where to start.
+
+- Sorting per all inventories in auto crafting as opposed to per single inventory
+- Support for Recipes that use an active item's charge instead of consuming the item
 - Make "conditional recipe items" display hardcoded attributes like pill color based on effect
 - Potentially(?) always reveal pills in recipe conditionals
 - Option to drop all items on death
+- Poops picked up by the bag should not drop anything
 - Extended UI Controls (Q to drop in the inventory, number buttons to place items in slots, etc.)
 - "Salvage/Scrap" variants of items when they're not unlocked that can still be used for crafting items.
-- Minecraft Items randomly disappear sometimes. Attempted a fix for this, but it didn't work. Not sure where to start.
 - Recipe Book "Alternate" Recipes and combining multiple recipes into one cell.
 - Swappable Actives with Schoolbag on characters that aren't Tainted Cain.
-- Sorting per all inventories in auto crafting as opposed to  
-- Add a sprite for categories outside of search category.
 
 Low Priority:
+- The bug. You know, the one.
+- Revelations Sand Castles should give Sand
 - Sparse arrays sorted when saving. SaveManager bug.
-- Jera & Curse of the Maze. Not on me, I'm waiting for Benny to update SaveManager.
+- Support for on the fly Item Tags in Recipes using json arrays in keys.
+- Potentially restructure Recipe system to use key & value system internally.
 - Recipe Book could be optimized. Currently, the recursive nature causes it to create massive amounts of lag with over 1000 items.
 - Crawlspace fix might cause some issues in niche situations. Unsure if this matters, but it's good to note.

@@ -1,3 +1,0 @@
-The recipe hasher has support for setting the collectible field to a string. 
-If the game detects this, it will get the id of the item by said string. I will get to testing this later,
-but it may have some issues with displaying localized string or names of modded items.

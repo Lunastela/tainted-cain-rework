@@ -2,8 +2,8 @@
 local mod = TCainRework
 local SaveManager = require('scripts.save_manager')
 
-local menuSaveData = (SaveManager.GetDeadSeaScrollsSave() and SaveManager.GetDeadSeaScrollsSave().saveData) or {}
 local function getSaveWrapper()
+    local menuSaveData = (SaveManager.GetDeadSeaScrollsSave() and SaveManager.GetDeadSeaScrollsSave().saveData) or {}
     local dssSave = SaveManager.GetDeadSeaScrollsSave()
     if dssSave then
         menuSaveData = dssSave.saveData or {}
@@ -17,7 +17,7 @@ end
 
 local function storeSaveData()
     local dssSave = SaveManager.GetDeadSeaScrollsSave()
-    dssSave.saveData = menuSaveData
+    dssSave.saveData = getSaveWrapper()
 end
 
 local DSSModName = "Dead Sea Scrolls (Tainted Cain Rework)"
@@ -182,7 +182,7 @@ local stringTable = {
 }
 
 local selectedOption = nil
-local inputHelper = include("scripts.tcainrework.mouseinputs")
+local inputHelper = include("scripts.tcainrework.mouse_inputs")
 local separationDistance = 24
 local scrollAmount, scrollSelected, lastMousePosition = 0, false, Vector.Zero
 local function settingsMenuRenderer(panel, pos, item, tbl)
@@ -339,16 +339,39 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                 })
             end
             if (anyHoveringOption.tooltip and anyHoveringOption.tooltip.strset) then 
-                local textString = ""
-                for i, string in ipairs(anyHoveringOption.tooltip.strset) do
-                    textString = textString .. string .. " "
-                    if string.len(textString) >= 28 then
+                -- minecraft tooltip lol
+                if not anyHoveringOption.tooltip.removeOriginalDesc then
+                    local textString = ""
+                    for i, string in ipairs(anyHoveringOption.tooltip.strset) do
+                        textString = textString .. string .. " "
+                        if string.len(textString) >= 28 then
+                            table.insert(stringTable, {String = textString, Rarity = InventoryItemRarity.COMMON})
+                            textString = ""
+                        end
+                    end
+                    if textString ~= "" then
                         table.insert(stringTable, {String = textString, Rarity = InventoryItemRarity.COMMON})
-                        textString = ""
                     end
                 end
-                if textString ~= "" then
-                    table.insert(stringTable, {String = textString, Rarity = InventoryItemRarity.COMMON})
+                local minecraftExtraDescription = anyHoveringOption.tooltip.extraMinecraftDescription
+                if type(minecraftExtraDescription) == "table" then
+                    minecraftExtraDescription = anyHoveringOption.tooltip.extraMinecraftDescription[anyHoveringOption.setting]
+                end
+                if minecraftExtraDescription then
+                    if not anyHoveringOption.tooltip.removeOriginalDesc then
+                        table.insert(stringTable, {String = "", Rarity = InventoryItemRarity.COMMON})
+                    end
+                    local myString = ""
+                    for subString in minecraftExtraDescription:gmatch("%S+") do
+                        myString = myString .. ((myString ~= "" and " ") or "") .. subString
+                        if string.len(myString) >= 28 then
+                            table.insert(stringTable, {String = myString, Rarity = InventoryItemRarity.COMMON})
+                            myString = ""
+                        end
+                    end
+                    if myString ~= "" then
+                        table.insert(stringTable, {String = myString, Rarity = InventoryItemRarity.COMMON})
+                    end
                 end
             end
             table.insert(stringTable, {
@@ -485,6 +508,7 @@ local function panelFrontWrapper(panel, pos, tbl)
     end
 end
 
+local recipeModeBlurb = "Progress from Discovery will carry over to Relaxed mode, but not the other way around."
 local cainCraftingDirectory = {
     main = {
         title = string.lower(displayName),
@@ -520,7 +544,7 @@ local cainCraftingDirectory = {
     settings = {
         title = 'settings',
         buttons = {
-            {str = "Gameplay", fsize = 2, nosel = true},
+            {str = "Cosmetic", fsize = 2, nosel = true},
             {str = "", fsize = 2, nosel = true},
             {
                 str = "DSS Style Change",
@@ -533,20 +557,10 @@ local cainCraftingDirectory = {
                 store = function (var)
                     getSaveWrapper().dssStyleChange = var
                 end,
-                tooltip = {strset = {"Toggle when", "DSS should", "use the", "Tainted Cain", "Rework skin."}}
-            },
-            {
-                str = "Active Item Style",
-                choices = {"Swap with last", "Destroy last"},
-                setting = 1,
-                variable = "activeItemStyle",
-                load = function ()
-                    return getSaveWrapper().activeItemStyle or 1
-                end,
-                store = function (var)
-                    getSaveWrapper().activeItemStyle = var
-                end,
-                tooltip = {strset = {"Changes the", "behavior of", "crafting a", "new active", "item."}}
+                tooltip = {
+                    strset = {"Toggle when", "DSS should", "use the", "Tainted Cain", "Rework skin."},
+                    extraMinecraftDescription = "The \"Minecraft\" style has more descriptive text below some options."
+                }
             },
             {
                 str = "Custom Sprites",
@@ -559,20 +573,10 @@ local cainCraftingDirectory = {
                 store = function (var)
                     getSaveWrapper().customCollectibleSprites = var
                 end,
-                tooltip = {strset = {"Whether to", "use custom", "sprites for", "collectibles", "whenever", "possible."}}
-            },
-            {
-                str = "Unlock Condition",
-                choices = {"Per Save", "Every Run"},
-                setting = 1,
-                variable = "minecraftJumpscare",
-                load = function ()
-                    return getSaveWrapper().minecraftJumpscare or 1
-                end,
-                store = function (var)
-                    getSaveWrapper().minecraftJumpscare = var
-                end,
-                tooltip = {strset = {"When the", "player should", "unlock certain", "conditions."}}
+                tooltip = {
+                    strset = {"Whether to", "use custom", "sprites for", "collectibles", "whenever", "possible."},
+                    extraMinecraftDescription = "The custom sprites appear for collectibles within the inventory. Disable this if you wish to easily distinguish between items."
+                }
             },
             {
                 str = "Display Pop-ups",
@@ -585,7 +589,91 @@ local cainCraftingDirectory = {
                 store = function (var)
                     getSaveWrapper().toastControl = var
                 end,
-                tooltip = {strset = {"Whether to", "display", "pop-ups", "whenever", "they appear."}}
+                tooltip = {
+                    strset = {"Whether to", "display", "pop-ups", "whenever", "they appear."},
+                    extraMinecraftDescription = "Serves as a way of shutting off those pesky toasts that appear whenever you unlock a new recipe.",
+                    removeOriginalDesc = true
+                },
+            },
+            {str = "", fsize = 2, nosel = true},
+            {str = "Gameplay", fsize = 2, nosel = true},
+            {str = "", fsize = 2, nosel = true},
+            {
+                str = "Active Item Style",
+                choices = {"Swap with last", "Destroy last"},
+                setting = 1,
+                variable = "activeItemStyle",
+                load = function ()
+                    return getSaveWrapper().activeItemStyle or 1
+                end,
+                store = function (var)
+                    getSaveWrapper().activeItemStyle = var
+                end,
+                tooltip = {
+                    strset = {"Changes the", "behavior of", "crafting a", "new active", "item."},
+                    extraMinecraftDescription = {
+                        "Currently, the last active item will swap back into the inventory when a new one is consumed.",
+                        "Currently, the last active item will be salvaged into pickups whenever a new one is consumed."
+                    }
+                }
+            },
+            {
+                str = "Recipe Unlocks",
+                choices = {"Discovery", "Relaxed"},
+                setting = 1,
+                variable = "recipeUnlockStyle",
+                load = function ()
+                    return getSaveWrapper().recipeUnlockStyle or 1
+                end,
+                store = function (var)
+                    getSaveWrapper().recipeUnlockStyle = var
+                end,
+                tooltip = {
+                    strset = {
+                        "Discovery:", "Recipes are", "unlocked", "per run.", "                                    ",
+                        "Relaxed:", "Recipes are", "unlocked", "forever."
+                    },
+                    extraMinecraftDescription = {
+                        "Currently, recipe progression will be reset upon starting a new run. Use this if you wish to memorize all of the recipes. Your progress from Relaxed will NOT carry over.",
+                        "Currently, recipe progression will persist between runs. Use this if you wish to have a more relaxed experienced, focusing on build-crafting rather than memorization or discovery. Your progress from Discovery will carry over."
+                    },
+                    removeOriginalDesc = true
+                },
+                
+            },
+            {
+                str = "Global Unlocks",
+                choices = {"Per Save", "Every Run"},
+                setting = 1,
+                variable = "minecraftJumpscare",
+                load = function ()
+                    return getSaveWrapper().minecraftJumpscare or 1
+                end,
+                store = function (var)
+                    getSaveWrapper().minecraftJumpscare = var
+                end,
+                tooltip = {
+                    strset = {"When the", "player should", "unlock certain", "conditions."},
+                    extraMinecraftDescription = {
+                        "Currently, the player will always have the inventory and hotbar unlocked.",
+                        "Currently, the player will unlock the inventory and hotbar per run whenever a pickup is placed in the Bag of Crafting."
+                    }
+                }
+            },
+            {
+                str = "Keep inventory after death",
+                choices = {"true", "false"},
+                setting = 1,
+                variable = "keepInventory",
+                load = function ()
+                    return getSaveWrapper().keepInventory or 1
+                end,
+                store = function (var)
+                    getSaveWrapper().keepInventory = var
+                end,
+                tooltip = {
+                    strset = {""},
+                }
             },
             {str = "", fsize = 2, nosel = true},
             {str = "Experimental", fsize = 2, nosel = true},
@@ -614,7 +702,9 @@ local cainCraftingDirectory = {
                 store = function (var)
                     getSaveWrapper().chaosMode = var
                 end,
-                tooltip = {strset = {"Shuffles all", "recipes", "similarly to", "the chaos", "item."}}
+                tooltip = {
+                    strset = {"Shuffles all", "recipes", "similarly to", "the Chaos", "item."}
+                }
             }
         },
         format = {
@@ -689,4 +779,4 @@ DeadSeaScrollsMenu.AddMenu(displayName, {
     DirectoryKey = cainCraftingDirectoryKey
 })
 
-include("scripts.tcainrework.changelogs")
+include("scripts.tcainrework.dss.changelogs")

@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
+    "#": "Fortune Cookie",
     "C": "#tcainrework:coin",
-    "B": "#tcainrework:bomb",
+    "H": "#tcainrework:heart",
     "K": "#tcainrework:key",
-    "H": "tcainrework:black_heart",
-    "#": "#book"
+    "B": "#tcainrework:bomb"
   },
   "pattern": [
-    "C B",
-    " # ",
-    "K H"
+    " H ",
+    "C#K",
+    " B "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "The Book of Sin"
+    "collectible": "Playdough Cookie"
   }
 }

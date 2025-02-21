@@ -17,6 +17,7 @@ return {
         iron_axe
         paper
         book
+        sand
         bucket
         cobblestone
         crafting_table

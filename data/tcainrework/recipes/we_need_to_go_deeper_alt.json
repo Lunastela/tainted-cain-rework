@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:rune{\"card_type\":34,\"custom_gfx\":\"gfx\/items\/cards\/left_rune.png\"}",
+    "minecraft:iron_shovel"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "We Need To Go Deeper!"
+  },
+  "show_notification": false
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "minecraft:cobblestone",
+    "Lil Gurdy",
+    "minecraft:cobblestone",
+    "minecraft:cobblestone",
+    "Eye Drops",
+    "minecraft:cobblestone",
+    "minecraft:cobblestone",
+    "The Jar",
+    "minecraft:cobblestone"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Rubber Cement"
+  }
+}

@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "#tcainrework:metal"
+    "#": "minecraft:leather",
+    "O": "#tcainrework:pickup"
   },
   "pattern": [
-    "##",
-    "##"
+    "O#O",
+    "OOO",
+    "O#O"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "Mystery Sack"
   }
 }

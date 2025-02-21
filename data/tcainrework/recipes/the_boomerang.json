@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "#tcainrework:metal"
+    "#": "#tcainrework:key",
+    "C": "tcainrework:tarot_card{\"card_type\":2}"
   },
   "pattern": [
-    "##",
-    "##"
+    " #",
+    "#C",
+    " #"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "The Boomerang"
   }
 }

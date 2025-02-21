@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Yum Heart",
+    "tcainrework:soul_heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "A Snack"
+  }
+}

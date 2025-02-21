@@ -182,6 +182,15 @@ local function unlockWrapper()
         or saveManager.GetPersistentSave()
 end
 
+local function recipeStorageWrapper()
+    local recipeUnlockStyle = TCainRework.getModSettings().recipeUnlockStyle
+    local saveStorage = ((recipeUnlockStyle == 2) and saveManager.GetPersistentSave()) or saveManager.GetRunSave()
+    if not saveStorage.unlockedRecipes then
+        saveStorage.unlockedRecipes = {}
+    end
+    return saveStorage.unlockedRecipes
+end
+
 function inventoryHelper.getUnlockedInventory(setUnlocked)
     local runSave = unlockWrapper()
     if not runSave.inventoryUnlocked and setUnlocked then
@@ -362,23 +371,47 @@ end
 
 function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inventorySet)
     local recipeList, craftableRecipeList, availableTabs = {}, {}, {}
-    local runSave = saveManager.TryGetRunSave()
-    if runSave and (runSave.unlockedRecipes and #runSave.unlockedRecipes > 0) then
-        for i, recipe in ipairs(runSave.unlockedRecipes) do
-            local recipeFromName = recipeLookupIndex[runSave.unlockedRecipes[i]]
+    local recipeSave = recipeStorageWrapper()
+    if recipeSave and (#recipeSave > 0) then
+        for i, recipe in ipairs(recipeSave) do
+            local recipeFromName = recipeLookupIndex[recipeSave[i]]
             availableTabs[recipeFromName.Category] = true
-            if (not recipeBookTab) or (recipeBookTab and recipeFromName.Category == recipeBookTab) then
-                local recipeCraftable = inventoryHelper.checkRecipeCraftable(
-                    runSave.unlockedRecipes[i], recipeFromName, inventoryHelper.getInventoryItemList(inventorySet)
-                )
-                cachedRecipeOutputs[runSave.unlockedRecipes[i]] = recipeCraftable
-                local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
-                if fakeItem then
-                    local itemName = string.lower(inventoryHelper.getNameFor(fakeItem))
-                    if (string.find(itemName, string.lower(searchBarText))) then
-                        table.insert(recipeList, recipe)
-                        if recipeCraftable then
-                            table.insert(craftableRecipeList, recipe)
+            if recipeFromName.Results then
+                local displayRecipe = (not recipeBookTab) or (recipeBookTab and (recipeFromName.Category == recipeBookTab))
+                local collectible = recipeFromName.Results.Collectible and utility.fastItemIDByName(recipeFromName.Results.Collectible)
+                if collectible and (collectible ~= -1) then
+                    -- collectible tab auto gen
+                    availableTabs["collectible"] = true
+                    if (recipeBookTab == "collectible") then
+                        displayRecipe = true
+                    end
+                    -- active tab auto gen
+                    local collectibleType = utility.getCollectibleConfig(collectible).Type
+                    if (collectibleType == ItemType.ITEM_ACTIVE) then
+                        availableTabs["active"] = true
+                        if recipeBookTab == "active" then
+                            displayRecipe = true
+                        end
+                    else
+                        availableTabs["passive"] = true
+                        if recipeBookTab == "passive" then
+                            displayRecipe = true
+                        end
+                    end
+                end
+                if displayRecipe then
+                    local recipeCraftable = inventoryHelper.checkRecipeCraftable(
+                        recipeSave[i], recipeFromName, inventoryHelper.getInventoryItemList(inventorySet)
+                    )
+                    cachedRecipeOutputs[recipeSave[i]] = recipeCraftable
+                    local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
+                    if fakeItem then
+                        local itemName = string.lower(inventoryHelper.getNameFor(fakeItem))
+                        if (string.find(itemName, string.lower(searchBarText))) then
+                            table.insert(recipeList, recipe)
+                            if recipeCraftable then
+                                table.insert(craftableRecipeList, recipe)
+                            end
                         end
                     end
                 end
@@ -583,7 +616,7 @@ function inventoryHelper.itemGetFullName(pickup)
                 Rarity = InventoryItemRarity.SUBTEXT
             })
             if debugStats and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] then
-                if (pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / itemConfig.MaxCharges ~= 1) then
+                if (itemConfig.MaxCharges > 0 and (pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / itemConfig.MaxCharges ~= 1)) then
                     table.insert(nameTable, {
                         String = "Durability: " 
                         .. tostring(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES]) 
@@ -850,12 +883,9 @@ local recipeLookupIndex = require('scripts.tcainrework.stored.name_to_recipe')
 local recipeReverseLookup = require('scripts.tcainrework.stored.recipe_from_ingredient')
 function TCainRework:UnlockItemRecipe(recipeName)
     if recipeName then
-        local runSave = saveManager.GetRunSave()
-        if not runSave.unlockedRecipes then
-            runSave.unlockedRecipes = {}
-        end
+        local recipeSave = recipeStorageWrapper()
         local recipe = recipeLookupIndex[recipeName]
-        if not utility.tableContains(runSave.unlockedRecipes, recipeName) then
+        if not utility.tableContains(recipeSave, recipeName) then
             local resultingType = (recipe.Results and recipe.Results.Type)
             if resultingType then
                 local itemTable = inventoryHelper.createItem(resultingType)
@@ -865,7 +895,17 @@ function TCainRework:UnlockItemRecipe(recipeName)
                 table.insert(toastStorage, itemTable)
             end
             -- print('unlocking recipe:', recipeName)
-            table.insert(runSave.unlockedRecipes, recipeName)
+            table.insert(recipeSave, recipeName)
+            -- Saving Recipes persistently
+            local persistentSave = saveManager.GetPersistentSave()
+            if persistentSave and (recipeSave ~= persistentSave.unlockedRecipes) then
+                if not persistentSave.unlockedRecipes then
+                    persistentSave.unlockedRecipes = {}
+                end
+                if not utility.tableContains(persistentSave.unlockedRecipes, recipeName) then
+                    table.insert(persistentSave.unlockedRecipes, recipeName)
+                end
+            end
         end
     end
 end

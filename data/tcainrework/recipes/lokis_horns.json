@@ -6,8 +6,9 @@
     "B": "tcainrework:bomb"
   },
   "pattern": [
-    "B B",
-    " # "
+    " B ",
+    "# #",
+    " B "
   ],
   "result": {
     "id": "tcainrework:collectible",

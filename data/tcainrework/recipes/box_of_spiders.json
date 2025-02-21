@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "minecraft:chest",
+    "tcainrework:pill{\"pill_effect\":34}"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Box of Spiders"
+  }
+}

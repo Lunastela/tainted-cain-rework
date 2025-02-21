@@ -2,14 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "#tcainrework:metal"
+    "#": "#tcainrework:soul_heart",
+    "I": "tcainrework:key"
   },
   "pattern": [
-    "##",
-    "##"
+    "#I",
+    "I#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "Safety Pin"
   }
 }

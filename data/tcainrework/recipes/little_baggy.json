@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "#tcainrework:metal"
+    "#": "tcainrework:pill",
+    "-": "minecraft:paper"
   },
   "pattern": [
-    "##",
-    "##"
+    "---",
+    "###",
+    "---"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "Little Baggy"
   }
 }

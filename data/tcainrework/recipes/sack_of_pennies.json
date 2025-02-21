@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "#tcainrework:metal"
+    "#": "minecraft:leather",
+    "O": "A Quarter"
   },
   "pattern": [
-    "##",
-    "##"
+    "#",
+    "O",
+    "#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "Sack of Pennies"
   }
 }

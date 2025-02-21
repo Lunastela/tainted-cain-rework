@@ -1,10 +1,15 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "collectible",
-  "ingredients": [
-    "tcainrework:heart", "Yum Heart", "tcainrework:heart",
-    "tcainrework:heart", "tcainrework:heart", "tcainrework:heart",
-    "tcainrework:heart", "Yum Heart", "tcainrework:heart"
+  "key": {
+    "H": "Yum Heart",
+    "B": "tcainrework:bone_heart",
+    "#": "tcainrework:heart"
+  },
+  "pattern": [
+    "#B#",
+    " H ",
+    " # "
   ],
   "result": {
     "id": "tcainrework:collectible",

@@ -160,13 +160,15 @@ local heartSelectionList = {
     [ItemPoolType.POOL_CURSE] = HeartSubType.HEART_ROTTEN,
     [ItemPoolType.POOL_ULTRA_SECRET] = HeartSubType.HEART_BONE,
 }
+
 local function spawnSalvagePickup(pickup, salvageVariant)
     local salvageSubtype = 0
     if salvageVariant == PickupVariant.PICKUP_HEART then
         local game = Game()
         local itemPool = game:GetItemPool()
         local poolType = math.max(0, itemPool:GetPoolForRoom(game:GetRoom():GetType(), pickup:GetDropRNG():GetSeed()))
-        salvageSubtype = (heartSelectionList[poolType] or 1)
+        local defaultHeartChance = ((pickup:GetDropRNG():RandomInt(1, 5) == 1) and 3) or 1
+        salvageSubtype = (heartSelectionList[poolType] or defaultHeartChance)
     end
     local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, salvageVariant, salvageSubtype, 
         pickup.Position, EntityPickup.GetRandomPickupVelocity(pickup.Position), pickup)
@@ -207,7 +209,7 @@ local function salvageCollectible(pickup)
         -- Spawn Salvage
         local itemQuality = Isaac.GetItemConfig():GetCollectible(pickup.SubType).Quality
         spawnSalvagePickup(pickup, PickupVariant.PICKUP_HEART)
-        for i = 1, ((3 + math.random(1, 3)) + itemQuality) do
+        for i = 1, (3 + pickup:GetDropRNG():RandomInt(1, 3) + itemQuality) do
             local salvageVariant = salvageOutcomes:PickOutcome(pickup:GetDropRNG())
             spawnSalvagePickup(pickup, salvageVariant)
         end
@@ -369,14 +371,15 @@ local function renderBagOfCrafting(player, offset)
                                         if not ableToAddItem then
                                             gridEntity:Hurt(3)
                                         else
-                                            local lastPosition = Vector(gridEntity.Position.X, gridEntity.Position.Y)
-                                            local gridIndex = gridEntity:GetGridIndex()
+                                            -- local lastPosition = Vector(gridEntity.Position.X, gridEntity.Position.Y)
+                                            -- local gridIndex = gridEntity:GetGridIndex()
                                             generateGenericEffect(gridEntity, true)
-                                            room:RemoveGridEntityImmediate(gridIndex, 0, false)
-                                            local replacementEntity = Isaac.GridSpawn(GridEntityType.GRID_DECORATION, 0, lastPosition, true)
-                                            if replacementEntity then
-                                                replacementEntity:GetSprite():SetRenderFlags(1 << 2)
-                                            end
+                                            gridEntity:Destroy(true)
+                                            -- room:RemoveGridEntityImmediate(gridIndex, 0, false)
+                                            -- local replacementEntity = Isaac.GridSpawn(GridEntityType.GRID_DECORATION, 0, lastPosition, true)
+                                            -- if replacementEntity then
+                                            --     replacementEntity:GetSprite():SetRenderFlags(1 << 2)
+                                            -- end
                                         end
                                         table.insert(bagCollisions[playerIndex], positionHash)
                                     end

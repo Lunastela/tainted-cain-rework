@@ -168,14 +168,24 @@ local rockToType = {
     [GridEntityType.GRID_ROCKT] = "minecraft:cobblestone",
     [GridEntityType.GRID_ROCK_SS] = "minecraft:cobblestone"
 }
+
+local rockTypeOverride = {
+    [BackdropType.CELLAR] = FiendFolio and "minecraft:oak_planks",
+    [BackdropType.BURNT_BASEMENT] = FiendFolio and "minecraft:oak_planks",
+    [BackdropType.DOWNPOUR] = FiendFolio and "minecraft:oak_planks"
+}
 mod:AddCallback(ModCallbacks.MC_POST_GRID_ROCK_DESTROY, function(_, rock, type)
     if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
-    and mod.inventoryHelper.getUnlockedInventory()
-    and rockToType[type] then
+    and mod.inventoryHelper.getUnlockedInventory() and rockToType[type] then
         local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, rock.Position, Vector.Zero, nil)
         local pickupData = saveManager.GetRoomFloorSave(itemPickup)
             and saveManager.GetRoomFloorSave(itemPickup).RerollSave
-        pickupData.Type = rockToType[type]
+
+        local conditionTable = rockTypeOverride[Game():GetRoom():GetBackdropType()]
+        if not conditionTable and StageAPI and StageAPI.CurrentStage then
+            conditionTable = rockTypeOverride[(StageAPI.CurrentStage.Name):match("([^%s]+)")]
+        end
+        pickupData.Type = conditionTable or rockToType[type]
         pickupData.Count = 1
     end
 end)
