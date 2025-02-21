@@ -7,9 +7,9 @@
     "s": "#tcainrework:soul_heart"
   },
   "pattern": [
-    "s#s",
+    "#s#",
     "#H#",
-    "s#s"
+    "#s#"
   ],
   "result": {
     "id": "tcainrework:collectible",

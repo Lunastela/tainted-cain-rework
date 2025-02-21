@@ -19,7 +19,6 @@ Low Priority:
 - Sparse arrays sorted when saving. SaveManager bug.
 - Support for on the fly Item Tags in Recipes using json arrays in keys.
 - Potentially restructure Recipe system to use key & value system internally.
-- Recipe Book could be optimized. Currently, the recursive nature causes it to create massive amounts of lag with over 1000 items.
 
 Notes:
 - Crawlspace fix might cause some issues in niche situations. Unsure if this matters, but it's good to note.

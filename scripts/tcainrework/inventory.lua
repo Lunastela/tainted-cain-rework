@@ -1230,6 +1230,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                     }
                                 }
                             end
+                            inventoryHelper.recipeCraftableDirty = true
                         end
                     end
                 end

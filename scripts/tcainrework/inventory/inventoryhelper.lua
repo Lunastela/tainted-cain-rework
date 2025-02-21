@@ -370,57 +370,70 @@ function inventoryHelper.checkRecipeCraftable(recipeName, recipe, storedItemCoun
     return true
 end
 
+local cachedRecipeTables = {}
+local lastSearchBarText, lastBookTab, lastRecipeCount = "stupid", nil, 0
 function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inventorySet)
     local recipeList, craftableRecipeList, availableTabs = {}, {}, {}
     local recipeSave = recipeStorageWrapper()
-    if recipeSave and (#recipeSave > 0) then
+    local currentRecipeCount = (recipeSave and #recipeSave) or 0
+    if (not (inventoryHelper.recipeCraftableDirty or (lastSearchBarText ~= searchBarText)
+    or (lastBookTab ~= recipeBookTab) or (lastRecipeCount ~= currentRecipeCount)) and (#cachedRecipeTables > 0)) then
+        return table.unpack(cachedRecipeTables)
+    end
+    if currentRecipeCount > 0 then
         for i, recipe in ipairs(recipeSave) do
             local recipeFromName = recipeLookupIndex[recipeSave[i]]
-            availableTabs[recipeFromName.Category] = true
-            if recipeFromName.Results then
-                local displayRecipe = (not recipeBookTab) or (recipeBookTab and (recipeFromName.Category == recipeBookTab))
-                local collectible = recipeFromName.Results.Collectible and collectibleStorage.fastItemIDByName(recipeFromName.Results.Collectible)
-                if collectible and (collectible ~= -1) then
-                    -- collectible tab auto gen
-                    availableTabs["collectible"] = true
-                    if (recipeBookTab == "collectible") then
-                        displayRecipe = true
-                    end
-                    -- active tab auto gen
-                    local collectibleType = utility.getCollectibleConfig(collectible).Type
-                    if (collectibleType == ItemType.ITEM_ACTIVE) then
-                        availableTabs["active"] = true
-                        if recipeBookTab == "active" then
+            if recipeFromName then
+                availableTabs[recipeFromName.Category] = true
+                if recipeFromName.Results then
+                    local displayRecipe = (not recipeBookTab) or (recipeBookTab and (recipeFromName.Category == recipeBookTab))
+                    local collectible = recipeFromName.Results.Collectible and collectibleStorage.fastItemIDByName(recipeFromName.Results.Collectible)
+                    if collectible and (collectible ~= -1) then
+                        -- collectible tab auto gen
+                        availableTabs["collectible"] = true
+                        if (recipeBookTab == "collectible") then
                             displayRecipe = true
                         end
-                    else
-                        availableTabs["passive"] = true
-                        if recipeBookTab == "passive" then
-                            displayRecipe = true
+                        -- active tab auto gen
+                        local collectibleType = utility.getCollectibleConfig(collectible).Type
+                        if (collectibleType == ItemType.ITEM_ACTIVE) then
+                            availableTabs["active"] = true
+                            if recipeBookTab == "active" then
+                                displayRecipe = true
+                            end
+                        else
+                            availableTabs["passive"] = true
+                            if recipeBookTab == "passive" then
+                                displayRecipe = true
+                            end
                         end
                     end
-                end
-                if displayRecipe then
-                    local recipeCraftable = inventoryHelper.checkRecipeCraftable(
-                        recipeSave[i], recipeFromName, inventoryHelper.getInventoryItemList(inventorySet)
-                    )
-                    cachedRecipeOutputs[recipeSave[i]] = recipeCraftable
-                    local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
-                    if fakeItem then
-                        local itemName = string.lower(inventoryHelper.getNameFor(fakeItem))
-                        if (string.find(itemName, string.lower(searchBarText))) then
-                            table.insert(recipeList, recipe)
-                            if recipeCraftable then
-                                table.insert(craftableRecipeList, recipe)
+                    if displayRecipe then
+                        local recipeCraftable = inventoryHelper.checkRecipeCraftable(
+                            recipeSave[i], recipeFromName, inventoryHelper.getInventoryItemList(inventorySet)
+                        )
+                        cachedRecipeOutputs[recipeSave[i]] = recipeCraftable
+                        local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
+                        if fakeItem then
+                            local itemName = string.lower(inventoryHelper.getNameFor(fakeItem))
+                            if (string.find(itemName, string.lower(searchBarText))) then
+                                table.insert(recipeList, recipe)
+                                if recipeCraftable then
+                                    table.insert(craftableRecipeList, recipe)
+                                end
                             end
                         end
                     end
                 end
             end
         end
+        lastSearchBarText = searchBarText
+        lastBookTab = recipeBookTab 
+        lastRecipeCount = currentRecipeCount
         inventoryHelper.recipeCraftableDirty = false
     end
-    return recipeList, craftableRecipeList, availableTabs
+    cachedRecipeTables = {recipeList, craftableRecipeList, availableTabs}
+    return table.unpack(cachedRecipeTables)
 end
 
 function inventoryHelper.getMaxInventorySize(inventory)

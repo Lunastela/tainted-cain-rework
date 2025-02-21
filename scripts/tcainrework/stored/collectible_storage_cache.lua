@@ -55,31 +55,28 @@ local function addToTag(tagName, itemName)
     end
 end
 
+collectibleStorage.itemIterator = 1
 collectibleStorage.constructed = false
 function collectibleStorage:loadCollectibleCache()
     if not collectibleStorage.constructed then
-        mod.maxItemIndex = 0
-        local itemConfig = Isaac.GetItemConfig()
-        local curCollectible, iterator = nil, 1
-        local currentTime = Isaac.GetTime()
-        while ((iterator < CollectibleType.NUM_COLLECTIBLES) or (curCollectible ~= nil)) do
-            curCollectible = itemConfig:GetCollectible(iterator)
+        local itemConfig, currentTime, curCollectible = Isaac.GetItemConfig(), Isaac.GetTime(), nil
+        while ((collectibleStorage.itemIterator < CollectibleType.NUM_COLLECTIBLES) or (curCollectible ~= nil)) do
+            curCollectible = itemConfig:GetCollectible(collectibleStorage.itemIterator)
             if curCollectible then
                 -- Create Registry Entry for item (so we don't have to use the shitty Name to ID function provided)
                 local itemName = utility.getLocalizedString("Items", curCollectible.Name)
-                collectibleStorage.nameToIDLookup[itemName] = iterator
-                collectibleStorage.IDToNameLookup[iterator] = itemName
+                collectibleStorage.nameToIDLookup[itemName] = collectibleStorage.itemIterator
+                collectibleStorage.IDToNameLookup[collectibleStorage.itemIterator] = itemName
 
                 itemDescriptions[itemName] = {
                     Rarity = curCollectible.Quality,
-                    NumericID = mod.maxItemIndex
+                    NumericID = collectibleStorage.itemIterator
                 }
-                mod.maxItemIndex = mod.maxItemIndex + 1
                 -- Check Familiar Types (for item tags with familiars in them)
                 if curCollectible.Type == ItemType.ITEM_FAMILIAR then
                     addToTag("#familiar", itemName)
                     if (string.find(string.lower(itemName), "baby")
-                    or string.find(string.lower(itemName), "bum") or hardcodedBabies[iterator]) then
+                    or string.find(string.lower(itemName), "bum") or hardcodedBabies[collectibleStorage.itemIterator]) then
                         addToTag("#baby", itemName)
                     end
                 else
@@ -95,10 +92,10 @@ function collectibleStorage:loadCollectibleCache()
                     end
                 end
             end
-            iterator = iterator + 1
+            collectibleStorage.itemIterator = collectibleStorage.itemIterator + 1
         end
         collectibleStorage.constructed = true
-        print("loaded item cache in:", Isaac.GetTime() - currentTime)
+        print("loaded item cache in:", Isaac.GetTime() - currentTime, "ms")
         mod:sortItemTags()
     end
 end

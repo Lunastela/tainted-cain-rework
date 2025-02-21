@@ -65,9 +65,9 @@ function mod:loadRegistry(curLoad)
     registerFromLoadOrder(curLoad.Namespace, curLoad.Items, "items",
         function(registryName, foundData)
             if foundData and foundData.Properties then
-                mod.maxItemIndex = (mod.maxItemIndex or 0) + 1
-                numberToItems[mod.maxItemIndex] = registryName
-                foundData.Properties.NumericID = mod.maxItemIndex
+                collectibleStorage.itemIterator = collectibleStorage.itemIterator + 1
+                numberToItems[collectibleStorage.itemIterator] = registryName
+                foundData.Properties.NumericID = collectibleStorage.itemIterator
                 itemDescriptions[registryName] = foundData.Properties
                 if foundData.ObtainedFrom then -- Register Entities that turn into this item
                     for _, entity in ipairs(foundData.ObtainedFrom) do
