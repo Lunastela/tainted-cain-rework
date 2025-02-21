@@ -44,7 +44,7 @@ local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
 local recipeReverseLookup = require("scripts.tcainrework.stored.recipe_from_ingredient")
 local collectibleToRecipe = require("scripts.tcainrework.stored.collectible_to_recipe")
 
-local function sortItemTags()
+function mod:sortItemTags()
     for tagName in pairs(itemTagLookup) do
         table.sort(itemTagLookup[tagName], function(a, b)
             return ((itemDescriptions[a].Rarity == itemDescriptions[b].Rarity)
@@ -54,7 +54,9 @@ local function sortItemTags()
     end
 end
 
-local index = 0
+-- Define and Load the collectible storage cache.
+local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
+collectibleStorage:loadCollectibleCache()
 
 -- Define Load Order list
 mod.LoadOrder = {}
@@ -63,9 +65,9 @@ function mod:loadRegistry(curLoad)
     registerFromLoadOrder(curLoad.Namespace, curLoad.Items, "items",
         function(registryName, foundData)
             if foundData and foundData.Properties then
-                index = index + 1
-                numberToItems[index] = registryName
-                foundData.Properties.NumericID = index
+                mod.maxItemIndex = (mod.maxItemIndex or 0) + 1
+                numberToItems[mod.maxItemIndex] = registryName
+                foundData.Properties.NumericID = mod.maxItemIndex
                 itemDescriptions[registryName] = foundData.Properties
                 if foundData.ObtainedFrom then -- Register Entities that turn into this item
                     for _, entity in ipairs(foundData.ObtainedFrom) do
@@ -136,7 +138,7 @@ function mod:loadRegistry(curLoad)
                     if recipeData.Results
                     and recipeData.Results.Collectible
                     and recipeData.DisplayRecipe then
-                        local collectible = utility.fastItemIDByName(recipeData.Results.Collectible)
+                        local collectible = collectibleStorage.fastItemIDByName(recipeData.Results.Collectible)
                         if not collectibleToRecipe[collectible] then
                             collectibleToRecipe[collectible] = {}
                         end
@@ -149,7 +151,7 @@ function mod:loadRegistry(curLoad)
         end
     end
     -- sort item tags
-    sortItemTags()
+    mod:sortItemTags()
 
     for i, loadedMod in ipairs(mod.LoadOrder) do
         if (loadedMod.Namespace and curLoad.Namespace)
@@ -161,101 +163,8 @@ function mod:loadRegistry(curLoad)
     return table.insert(mod.LoadOrder, curLoad)
 end
 
-mod:loadRegistry(include("loadorder"))
 mod:loadRegistry(include("loadorder_minecraft"))
-
-
-local function getItemTag(tagName)
-    if not itemTagLookup[tagName] then
-        itemTagLookup[tagName] = {}
-    end
-    return itemTagLookup[tagName]
-end
-
-local hardcodedBabies = {
-    [CollectibleType.COLLECTIBLE_BROTHER_BOBBY] = true,
-    [CollectibleType.COLLECTIBLE_SISTER_MAGGY] = true,
-    [CollectibleType.COLLECTIBLE_BUMBO] = true,
-    [CollectibleType.COLLECTIBLE_GUARDIAN_ANGEL] = true,
-    [CollectibleType.COLLECTIBLE_SWORN_PROTECTOR] = true,
-    [CollectibleType.COLLECTIBLE_LITTLE_CHAD] = true,
-    [CollectibleType.COLLECTIBLE_LOST_SOUL] = true,
-    [CollectibleType.COLLECTIBLE_ABEL] = true,
-    [CollectibleType.COLLECTIBLE_INCUBUS] = true,
-    [CollectibleType.COLLECTIBLE_TWISTED_PAIR] = true,
-    [CollectibleType.COLLECTIBLE_LIL_BRIMSTONE] = true,
-    [CollectibleType.COLLECTIBLE_LIL_ABADDON] = true,
-}
-
-local itemTagCounterparts = {
-    [ItemConfig.TAG_FLY] = "#fly",
-    [ItemConfig.TAG_FOOD] = "#food",
-    [ItemConfig.TAG_BOOK] = "#book",
-    [ItemConfig.TAG_TEARS_UP] = "#tears_up",
-    [ItemConfig.TAG_MUSHROOM] = "#mushroom",
-    [ItemConfig.TAG_SPIDER] = "#spider",
-    [ItemConfig.TAG_POOP] = "#poop",
-    [ItemConfig.TAG_ANGEL] = "#seraphim",
-    [ItemConfig.TAG_DEVIL] = "#leviathan"
-}
-
--- the things we do for performance :sob:
-local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
-local function addToTag(tagName, itemName)
-    local myTag = getItemTag(tagName)
-    if not utility.tableContains(myTag, itemName) then
-        table.insert(myTag, itemName)
-        if not itemDescriptions[itemName].ItemTags then
-            itemDescriptions[itemName].ItemTags = {}
-        end
-        if not utility.tableContains(itemDescriptions[itemName].ItemTags, tagName) then
-            table.insert(itemDescriptions[itemName].ItemTags, tagName)
-        end
-    end
-end
-function mod:loadCollectibleCache()
-    local itemConfig = Isaac.GetItemConfig()
-    local curCollectible, iterator = nil, 1
-    local currentTime = Isaac.GetTime()
-    while ((iterator < CollectibleType.NUM_COLLECTIBLES) or (curCollectible ~= nil)) do
-        curCollectible = itemConfig:GetCollectible(iterator)
-        if curCollectible then
-            -- Create Registry Entry for item (so we don't have to use the shitty Name to ID function provided)
-            local itemName = utility.getLocalizedString("Items", curCollectible.Name)
-            collectibleStorage.nameToIDLookup[itemName] = iterator
-            collectibleStorage.IDToNameLookup[iterator] = itemName
-
-            itemDescriptions[itemName] = {
-                Rarity = curCollectible.Quality,
-                NumericID = (index + iterator)
-            }
-            -- Check Familiar Types (for item tags with familiars in them)
-            if curCollectible.Type == ItemType.ITEM_FAMILIAR then
-                addToTag("#familiar", itemName)
-                if (string.find(string.lower(itemName), "baby")
-                or string.find(string.lower(itemName), "bum") or hardcodedBabies[iterator]) then
-                    addToTag("#baby", itemName)
-                end
-            else
-                -- Check if it is a Box for the Box item tag
-                if (string.find(string.lower(itemName), "box")) then
-                    addToTag("#box", itemName)
-                end
-            end
-            -- Check associated config tags with different itemTags
-            for tagType, itemConfigTag in pairs(itemTagCounterparts) do
-                if (curCollectible.Tags & tagType ~= 0) then
-                    addToTag(itemConfigTag, itemName) 
-                end
-            end
-        end
-        iterator = iterator + 1
-    end
-    collectibleStorage.constructed = true
-    print("loaded item cache in:", Isaac.GetTime() - currentTime)
-    sortItemTags()
-end
--- mod:AddPriorityCallback(ModCallbacks.MC_POST_MODS_LOADED, CallbackPriority.LATE, mod.loadCollectibleCache)
+mod:loadRegistry(include("loadorder"))
 
 -- Load Supplementaries
 include("scripts.tcainrework.bag_of_crafting")

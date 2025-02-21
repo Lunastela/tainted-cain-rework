@@ -2,6 +2,7 @@ local inventoryHelper = {}
 
 local saveManager = require("scripts.save_manager")
 local utility = require("scripts.tcainrework.util")
+local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 local itemRegistry = require("scripts.tcainrework.stored.id_to_iteminfo")
 local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items")
 --[[
@@ -267,11 +268,11 @@ function inventoryHelper.createItem(itemString, count)
             end
         end
     end
-    if utility.fastItemIDByName(itemString) ~= -1 then
+    if collectibleStorage.fastItemIDByName(itemString) ~= -1 then
         if not componentData then
             componentData = {}
         end
-        componentData[InventoryItemComponentData.COLLECTIBLE_ITEM] = utility.fastItemIDByName(itemString)
+        componentData[InventoryItemComponentData.COLLECTIBLE_ITEM] = collectibleStorage.fastItemIDByName(itemString)
         itemType = "tcainrework:collectible"
     end
     return {
@@ -378,7 +379,7 @@ function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inve
             availableTabs[recipeFromName.Category] = true
             if recipeFromName.Results then
                 local displayRecipe = (not recipeBookTab) or (recipeBookTab and (recipeFromName.Category == recipeBookTab))
-                local collectible = recipeFromName.Results.Collectible and utility.fastItemIDByName(recipeFromName.Results.Collectible)
+                local collectible = recipeFromName.Results.Collectible and collectibleStorage.fastItemIDByName(recipeFromName.Results.Collectible)
                 if collectible and (collectible ~= -1) then
                     -- collectible tab auto gen
                     availableTabs["collectible"] = true

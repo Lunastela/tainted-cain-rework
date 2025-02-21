@@ -36,22 +36,6 @@ function Utility.trimType(itemType)
     return itemType
 end
 
-local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
-function Utility.fastItemIDByName(name)
-    if not collectibleStorage.constructed then
-        TCainRework:loadCollectibleCache()
-    end
-    if (not (collectibleStorage.constructed and collectibleStorage.nameToIDLookup[name])
-    and not (string.find(name, "tcainrework") or string.find(name, "minecraft"))) then
-        local temporaryDesignation = Isaac.GetItemIdByName(name)
-        if temporaryDesignation ~= -1 then
-            collectibleStorage.nameToIDLookup[name] = temporaryDesignation
-            collectibleStorage.IDToNameLookup[temporaryDesignation] = name
-        end
-    end
-    return collectibleStorage.nameToIDLookup[name] or -1
-end
-
 local isaacItemConfig
 local collectibleCache = {}
 function Utility.getCollectibleConfig(collectibleID)
@@ -77,7 +61,8 @@ end
 
 function Utility.generateCollectibleData(collectibleType)
     -- try to obtain sprite if it exists
-    local collectibleID = Utility.fastItemIDByName(collectibleType)
+    local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
+    local collectibleID = collectibleStorage.fastItemIDByName(collectibleType)
     if collectibleID == -1 then
         collectibleID = collectibleType 
     end

@@ -178,7 +178,8 @@ local stringTable = {
     ["Resume Game"] = "Back to Game",
     ["false"] = "OFF",
     ["true"] = "ON",
-    ["Fabulous"] = "§oFabulous!"
+    ["Fabulous"] = "§oFabulous!",
+    ["drop pickups"] = "Keep inventory after death"
 }
 
 local selectedOption = nil
@@ -223,16 +224,17 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         end
 
         for i, button in ipairs(item.buttons) do
+            local buttonString = stringTable[button.str] or button.str
             local textPosition = Vector(leftBound, topPosition.Y + ((i - 0.5) * separationDistance) - (scrollAmount * differenceDistance))
             if not button.choices then
-                textPosition.X = (Isaac.GetScreenWidth() / 2) - (minecraftFont:GetStringWidth(button.str) / 2)
+                textPosition.X = (Isaac.GetScreenWidth() / 2) - (minecraftFont:GetStringWidth(buttonString) / 2)
             end
-            mod.inventoryHelper.renderMinecraftText(button.str, 
+            mod.inventoryHelper.renderMinecraftText(buttonString, 
                 textPosition, 
                 InventoryItemRarity.COMMON
             )
             if mouseWrapper(mousePosition, textPosition, 
-                minecraftFont:GetStringWidth(button.str), minecraftFont:GetLineHeight()) then
+                minecraftFont:GetStringWidth(buttonString), minecraftFont:GetLineHeight()) then
                 anyHoveringOption = button
             end
 
@@ -508,7 +510,6 @@ local function panelFrontWrapper(panel, pos, tbl)
     end
 end
 
-local recipeModeBlurb = "Progress from Discovery will carry over to Relaxed mode, but not the other way around."
 local cainCraftingDirectory = {
     main = {
         title = string.lower(displayName),
@@ -661,7 +662,7 @@ local cainCraftingDirectory = {
                 }
             },
             {
-                str = "Keep inventory after death",
+                str = "drop pickups",
                 choices = {"true", "false"},
                 setting = 1,
                 variable = "keepInventory",
@@ -672,7 +673,8 @@ local cainCraftingDirectory = {
                     getSaveWrapper().keepInventory = var
                 end,
                 tooltip = {
-                    strset = {""},
+                    strset = {"whether to", "drop pickups", "on death"},
+                    removeOriginalDesc = true
                 }
             },
             {str = "", fsize = 2, nosel = true},
