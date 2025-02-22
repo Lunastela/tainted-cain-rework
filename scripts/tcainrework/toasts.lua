@@ -6,7 +6,7 @@ local function easeInCubic(x)
 end
 
 local toastList = {}
-function mod:CreateToast(toastType, renderItems, renderIcon, toastText, toastSubtext, toastTime)
+function mod:CreateToast(toastType, renderItems, renderIcon, toastText, toastSubtext, toastTime, toastCondition)
     local toastSprite = Sprite()
     toastSprite:Load("gfx/ui/toast.anm2", false)
     toastSprite:Play("Idle", true)
@@ -24,7 +24,8 @@ function mod:CreateToast(toastType, renderItems, renderIcon, toastText, toastSub
             or ((toastType == InventoryToastTypes.ADVANCEMENT) and "Advancement Made!") or "",
         SubText = toastSubtext
             or ((toastType == InventoryToastTypes.STANDARD) and "Check your recipe book") or "",
-        ToastTime = toastTime or 180
+        ToastTime = toastTime or 180,
+        Condition = toastCondition or nil
     }
     table.insert(toastList, myToast)
 
@@ -54,13 +55,15 @@ mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY,
     for i, toast in pairs(toastList) do
         local toastSprite = toast.Sprite
         toast.Time = toast.Time + additionConstant
+
+        local condition = (toast.Condition and toast.Condition())
         if toast.HoldTime < toast.ToastTime then
             if toast.Time > 1 then
                 toast.Time = 1
                 toast.HoldTime = toast.HoldTime + 1
             end
             toast.X = 160 - (easeInCubic(toast.Time) * 160)
-        else
+        elseif (not toast.Condition) or condition then
             if not toast.Reverse then
                 if ((mod.getModSettings().toastControl or 1) <= 1) then
                     SFXManager():Play(Isaac.GetSoundIdByName("Toast_InventoryOut"), 1, 2, false, 1, 0)

@@ -1,9 +1,7 @@
 High Priority:
-- Sometimes salvaging doesn't work. Hopefully this has been fixed, but keep an eye out.
 - Minecraft Items randomly disappear sometimes. Attempted a fix for this, but it didn't work. Not sure where to start.
-- Support for Recipes that use an active item's charge instead of consuming the item
+- Support for Recipes that use an active item's charge instead of consuming the item.
 - Recipe Book "Alternate" Recipes and combining multiple recipes into one cell.
-- "Salvage/Scrap" variants of items when they're not unlocked that can still be used for crafting items.
 
 Mid Priority:
 - Potentially(?) always reveal pills in recipe conditionals

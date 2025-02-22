@@ -9,7 +9,8 @@ return {
                 Count = 1,
                 Collectible = "Abaddon"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:a_snack",
@@ -20,7 +21,8 @@ return {
                 Count = 1,
                 Collectible = "A Snack"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:belly_jelly",
@@ -31,7 +33,8 @@ return {
                 Count = 1,
                 Collectible = "Belly Jelly"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:black_bean",
@@ -42,7 +45,8 @@ return {
                 Count = 1,
                 Collectible = "The Black Bean"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:black_candle",
@@ -53,7 +57,8 @@ return {
                 Count = 1,
                 Collectible = "Black Candle"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:black_candle_alt",
@@ -64,7 +69,8 @@ return {
                 Count = 1,
                 Collectible = "Black Candle"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:blue_candle_alt",
@@ -75,7 +81,8 @@ return {
                 Count = 1,
                 Collectible = "The Candle"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:book_of_the_dead",
@@ -86,7 +93,8 @@ return {
                 Count = 1,
                 Collectible = "Book of the Dead"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:boom",
@@ -97,7 +105,8 @@ return {
                 Count = 1,
                 Collectible = "Boom!"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:box_of_spiders",
@@ -108,7 +117,8 @@ return {
                 Count = 1,
                 Collectible = "Box of Spiders"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:box_of_spiders_alt",
@@ -119,7 +129,8 @@ return {
                 Count = 1,
                 Collectible = "Box of Spiders"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:bucket_of_lard",
@@ -130,7 +141,8 @@ return {
                 Count = 1,
                 Collectible = "Bucket of Lard"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:compost",
@@ -141,7 +153,8 @@ return {
                 Count = 1,
                 Collectible = "Compost"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:dataminer",
@@ -152,7 +165,8 @@ return {
                 Count = 1,
                 Collectible = "Dataminer"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:dime_from_nickel",
@@ -162,7 +176,8 @@ return {
                 Type = "tcainrework:dime",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:edens_blessing",
@@ -173,7 +188,8 @@ return {
                 Count = 1,
                 Collectible = "Eden's Blessing"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:epic_fetus",
@@ -184,7 +200,8 @@ return {
                 Count = 1,
                 Collectible = "Epic Fetus"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:gnawed_leaf",
@@ -195,7 +212,8 @@ return {
                 Count = 1,
                 Collectible = "Gnawed Leaf"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:golden_battery",
@@ -205,7 +223,8 @@ return {
                 Type = "tcainrework:golden_battery",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:golden_bomb",
@@ -215,7 +234,8 @@ return {
                 Type = "tcainrework:golden_bomb",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:golden_heart",
@@ -225,7 +245,8 @@ return {
                 Type = "tcainrework:golden_heart",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:golden_key",
@@ -235,7 +256,8 @@ return {
                 Type = "tcainrework:golden_key",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:golden_penny",
@@ -245,7 +267,8 @@ return {
                 Type = "tcainrework:golden_penny",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:golden_pill",
@@ -255,7 +278,8 @@ return {
                 Type = "tcainrework:golden_pill",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:golden_razor",
@@ -266,7 +290,8 @@ return {
                 Count = 1,
                 Collectible = "Golden Razor"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:guppys_eye",
@@ -277,7 +302,8 @@ return {
                 Count = 1,
                 Collectible = "Guppy's Eye"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:heart",
@@ -287,7 +313,8 @@ return {
                 Type = "tcainrework:heart",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:ibs",
@@ -298,7 +325,8 @@ return {
                 Count = 1,
                 Collectible = "IBS"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:ibs_alt",
@@ -309,7 +337,8 @@ return {
                 Count = 1,
                 Collectible = "IBS"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:jar_of_flies",
@@ -320,7 +349,8 @@ return {
                 Count = 1,
                 Collectible = "Jar of Flies"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:kamikaze",
@@ -331,7 +361,8 @@ return {
                 Count = 1,
                 Collectible = "Kamikaze!"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:lemon_mishap",
@@ -342,7 +373,8 @@ return {
                 Count = 1,
                 Collectible = "Lemon Mishap"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:leo",
@@ -353,7 +385,8 @@ return {
                 Count = 1,
                 Collectible = "Leo"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:less_than_three",
@@ -364,7 +397,8 @@ return {
                 Count = 1,
                 Collectible = "<3"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:midas_touch",
@@ -375,7 +409,8 @@ return {
                 Count = 1,
                 Collectible = "Midas' Touch"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:midas_touch_alt",
@@ -386,7 +421,8 @@ return {
                 Count = 1,
                 Collectible = "Midas' Touch"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:midnight_snack",
@@ -397,7 +433,8 @@ return {
                 Count = 1,
                 Collectible = "Midnight Snack"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:mr_boom",
@@ -408,7 +445,8 @@ return {
                 Count = 1,
                 Collectible = "Mr. Boom"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:mr_mega",
@@ -419,7 +457,8 @@ return {
                 Count = 1,
                 Collectible = "Mr. Mega"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:number_one",
@@ -430,7 +469,8 @@ return {
                 Count = 1,
                 Collectible = "Number One"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:pop",
@@ -441,7 +481,8 @@ return {
                 Count = 1,
                 Collectible = "Pop!"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:red_candle_alt",
@@ -452,7 +493,8 @@ return {
                 Count = 1,
                 Collectible = "Red Candle"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:rocket_in_a_jar",
@@ -463,7 +505,8 @@ return {
                 Count = 1,
                 Collectible = "Rocket in a Jar"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:rotten_meat",
@@ -474,7 +517,8 @@ return {
                 Count = 1,
                 Collectible = "Rotten Meat"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:soul_heart",
@@ -484,7 +528,8 @@ return {
                 Type = "tcainrework:soul_heart",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:suplex",
@@ -495,7 +540,8 @@ return {
                 Count = 1,
                 Collectible = "Suplex!"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:teleport",
@@ -506,7 +552,8 @@ return {
                 Count = 1,
                 Collectible = "Teleport!"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:teleport_2",
@@ -517,7 +564,8 @@ return {
                 Count = 1,
                 Collectible = "Teleport 2.0"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:tropicamide",
@@ -528,7 +576,8 @@ return {
                 Count = 1,
                 Collectible = "Tropicamide"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:we_need_to_go_deeper_alt",
@@ -539,7 +588,8 @@ return {
                 Count = 1,
                 Collectible = "We Need To Go Deeper!"
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
     ["47b9f7adfdb636f43c05c63bbbd32a933e962f4a"] = {
@@ -553,7 +603,8 @@ return {
                 Count = 1,
                 Collectible = "Anarchist Cookbook"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:ankh",
@@ -565,7 +616,8 @@ return {
                 Count = 1,
                 Collectible = "Ankh"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:big_chubby",
@@ -577,7 +629,8 @@ return {
                 Count = 1,
                 Collectible = "Big Chubby"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:bird_cage",
@@ -589,7 +642,8 @@ return {
                 Count = 1,
                 Collectible = "Bird Cage"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:blood_bombs",
@@ -601,7 +655,8 @@ return {
                 Count = 1,
                 Collectible = "Blood Bombs"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:blood_of_the_martyr",
@@ -613,7 +668,8 @@ return {
                 Count = 1,
                 Collectible = "Blood of the Martyr"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:bogo_bombs",
@@ -625,7 +681,8 @@ return {
                 Count = 1,
                 Collectible = "BOGO Bombs"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:box",
@@ -637,7 +694,8 @@ return {
                 Count = 1,
                 Collectible = "Box"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:bum_friend",
@@ -649,7 +707,8 @@ return {
                 Count = 1,
                 Collectible = "Bum Friend"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:champion_belt",
@@ -661,7 +720,8 @@ return {
                 Count = 1,
                 Collectible = "Champion Belt"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:dark_bum",
@@ -673,7 +733,8 @@ return {
                 Count = 1,
                 Collectible = "Dark Bum"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:deck_of_cards",
@@ -685,7 +746,8 @@ return {
                 Count = 1,
                 Collectible = "Deck of Cards"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:echo_chamber",
@@ -697,7 +759,8 @@ return {
                 Count = 1,
                 Collectible = "Echo Chamber"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:giga_bomb",
@@ -708,7 +771,8 @@ return {
                 Type = "tcainrework:giga_bomb",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:hot_bombs",
@@ -720,7 +784,8 @@ return {
                 Count = 1,
                 Collectible = "Hot Bombs"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:lil_gurdy",
@@ -732,7 +797,8 @@ return {
                 Count = 1,
                 Collectible = "Lil Gurdy"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:little_baggy",
@@ -744,7 +810,8 @@ return {
                 Count = 1,
                 Collectible = "Little Baggy"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:little_chubby",
@@ -756,7 +823,8 @@ return {
                 Count = 1,
                 Collectible = "Little Chubby"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:luna",
@@ -768,7 +836,8 @@ return {
                 Count = 1,
                 Collectible = "Luna"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:magic_skin_alt",
@@ -780,7 +849,8 @@ return {
                 Count = 1,
                 Collectible = "Magic Skin"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:mama_mega",
@@ -792,7 +862,8 @@ return {
                 Count = 1,
                 Collectible = "Mama Mega!"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:moms_bracelet",
@@ -804,7 +875,8 @@ return {
                 Count = 1,
                 Collectible = "Mom's Bracelet"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:mystery_gift",
@@ -816,7 +888,8 @@ return {
                 Count = 1,
                 Collectible = "Mystery Gift"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:mystery_sack",
@@ -828,7 +901,8 @@ return {
                 Count = 1,
                 Collectible = "Mystery Sack"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:poop_block",
@@ -839,7 +913,8 @@ return {
                 Type = "tcainrework:poop_block",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:rock_bottom",
@@ -851,7 +926,8 @@ return {
                 Count = 1,
                 Collectible = "Rock Bottom"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:sol",
@@ -863,7 +939,8 @@ return {
                 Count = 1,
                 Collectible = "Sol"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:stigmata",
@@ -875,7 +952,8 @@ return {
                 Count = 1,
                 Collectible = "Stigmata"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:terra",
@@ -887,7 +965,8 @@ return {
                 Count = 1,
                 Collectible = "Terra"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_ladder",
@@ -899,7 +978,8 @@ return {
                 Count = 1,
                 Collectible = "The Ladder"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_pact",
@@ -911,7 +991,8 @@ return {
                 Count = 1,
                 Collectible = "The Pact"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_poop",
@@ -923,7 +1004,8 @@ return {
                 Count = 1,
                 Collectible = "The Poop"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_small_rock",
@@ -935,7 +1017,8 @@ return {
                 Count = 1,
                 Collectible = "The Small Rock"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_swarm",
@@ -947,7 +1030,8 @@ return {
                 Count = 1,
                 Collectible = "The Swarm"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:tiny_planet",
@@ -959,7 +1043,8 @@ return {
                 Count = 1,
                 Collectible = "Tiny Planet"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:transcendence",
@@ -971,7 +1056,8 @@ return {
                 Count = 1,
                 Collectible = "Transcendence"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:treasure_map",
@@ -983,7 +1069,8 @@ return {
                 Count = 1,
                 Collectible = "Treasure Map"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:wooden_doll",
@@ -994,7 +1081,8 @@ return {
                 Type = "tcainrework:wooden_doll",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:wooden_nickel",
@@ -1006,7 +1094,8 @@ return {
                 Count = 1,
                 Collectible = "Wooden Nickel"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:yuck_heart",
@@ -1018,7 +1107,8 @@ return {
                 Count = 1,
                 Collectible = "Yuck Heart"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:yum_heart",
@@ -1030,7 +1120,8 @@ return {
                 Count = 1,
                 Collectible = "Yum Heart"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["85f1ae3dcaf3a6c5984fbf8db91065c0489ade1a"] = {
@@ -1044,7 +1135,8 @@ return {
                 Count = 1,
                 Collectible = "Anarchist Cookbook"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:bomb_bag",
@@ -1056,7 +1148,8 @@ return {
                 Count = 1,
                 Collectible = "Bomb Bag"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:breakfast",
@@ -1068,7 +1161,8 @@ return {
                 Count = 1,
                 Collectible = "Breakfast"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:experimental_treatment",
@@ -1080,7 +1174,8 @@ return {
                 Count = 1,
                 Collectible = "Experimental Treatment"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:magneto",
@@ -1092,7 +1187,8 @@ return {
                 Count = 1,
                 Collectible = "Magneto"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:mega_blast",
@@ -1104,7 +1200,8 @@ return {
                 Count = 1,
                 Collectible = "Mega Blast"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:monster_manual",
@@ -1116,7 +1213,8 @@ return {
                 Count = 1,
                 Collectible = "Monster Manual"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:my_little_unicorn",
@@ -1128,7 +1226,8 @@ return {
                 Count = 1,
                 Collectible = "My Little Unicorn"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:my_reflection",
@@ -1140,7 +1239,8 @@ return {
                 Count = 1,
                 Collectible = "My Reflection"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:psy_fly",
@@ -1152,7 +1252,8 @@ return {
                 Count = 1,
                 Collectible = "Psy Fly"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:revelation",
@@ -1164,7 +1265,8 @@ return {
                 Count = 1,
                 Collectible = "Redemption"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:sack_of_pennies",
@@ -1176,7 +1278,8 @@ return {
                 Count = 1,
                 Collectible = "Sack of Pennies"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:spoon_bender",
@@ -1188,7 +1291,8 @@ return {
                 Count = 1,
                 Collectible = "Spoon Bender"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:sprinkler",
@@ -1200,7 +1304,8 @@ return {
                 Count = 1,
                 Collectible = "Sprinkler"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:sulfur",
@@ -1212,7 +1317,8 @@ return {
                 Count = 1,
                 Collectible = "Sulfur"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:telepathy_for_dummies",
@@ -1224,7 +1330,8 @@ return {
                 Count = 1,
                 Collectible = "Telepathy For Dummies"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_bible",
@@ -1236,7 +1343,8 @@ return {
                 Count = 1,
                 Collectible = "The Bible"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_book_of_belial",
@@ -1248,7 +1356,8 @@ return {
                 Count = 1,
                 Collectible = 34
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_necronomicon",
@@ -1260,7 +1369,8 @@ return {
                 Count = 1,
                 Collectible = "The Necronomicon"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["d6202ba69ed604b9d9ce657c38dc924b7bfb4897"] = {
@@ -1274,7 +1384,8 @@ return {
                 Count = 1,
                 Collectible = "Anemic"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:caffeine_pill",
@@ -1286,7 +1397,8 @@ return {
                 Count = 1,
                 Collectible = "Caffeine Pill"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["shapeless_085fbabd884e6a20267d051dfd7bf5c6c12ac53a"] = {
@@ -1299,7 +1411,8 @@ return {
                 Count = 1,
                 Collectible = "A Dollar"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:lil_spewer",
@@ -1310,7 +1423,8 @@ return {
                 Count = 1,
                 Collectible = "Lil Spewer"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:lil_spewer_alt",
@@ -1321,7 +1435,8 @@ return {
                 Count = 1,
                 Collectible = "Lil Spewer"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:shard_of_glass",
@@ -1332,7 +1447,23 @@ return {
                 Count = 1,
                 Collectible = "Shard of Glass"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
+    ["93572b414e21721b85aa52ce823174d3bf4603ae"] = {
+        {
+            RecipeName = "tcainrework:a_pound_of_flesh",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {"Blood Clot", nil, "A Quarter", "minecraft:stick", "tcainrework:black_heart", "minecraft:stick", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "A Pound of Flesh"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["shapeless_b5451b4643de849204a69f60936828cb3860930f"] = {
@@ -1345,7 +1476,8 @@ return {
                 Count = 1,
                 Collectible = "A Quarter"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:nickel_from_penny",
@@ -1355,7 +1487,8 @@ return {
                 Type = "tcainrework:nickel",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:quints",
@@ -1366,7 +1499,8 @@ return {
                 Count = 1,
                 Collectible = "Quints"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:sacred_heart",
@@ -1377,7 +1511,8 @@ return {
                 Count = 1,
                 Collectible = "Sacred Heart"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["shapeless_f41f66ee2efd7546bc450be521190b809d64c848"] = {
@@ -1390,7 +1525,8 @@ return {
                 Count = 1,
                 Collectible = "A Quarter"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:battery",
@@ -1400,7 +1536,8 @@ return {
                 Type = "tcainrework:battery",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:box_of_friends",
@@ -1411,7 +1548,8 @@ return {
                 Count = 1,
                 Collectible = "Box of Friends"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:chocolate_milk",
@@ -1422,7 +1560,8 @@ return {
                 Count = 1,
                 Collectible = "Chocolate Milk"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:crooked_penny",
@@ -1433,7 +1572,8 @@ return {
                 Count = 1,
                 Collectible = "Crooked Penny"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:c_section",
@@ -1444,7 +1584,8 @@ return {
                 Count = 1,
                 Collectible = "C Section"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:c_section_alt",
@@ -1455,7 +1596,8 @@ return {
                 Count = 1,
                 Collectible = "C Section"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:dead_cat",
@@ -1466,7 +1608,8 @@ return {
                 Count = 1,
                 Collectible = "Dead Cat"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:dead_sea_scrolls",
@@ -1477,7 +1620,8 @@ return {
                 Count = 1,
                 Collectible = "Dead Sea Scrolls"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:doctors_remote",
@@ -1488,7 +1632,8 @@ return {
                 Count = 1,
                 Collectible = "Doctor's Remote"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:dr_fetus",
@@ -1499,7 +1644,8 @@ return {
                 Count = 1,
                 Collectible = "Dr. Fetus"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:duality",
@@ -1510,7 +1656,8 @@ return {
                 Count = 1,
                 Collectible = "Duality"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:halo_of_flies",
@@ -1521,7 +1668,8 @@ return {
                 Count = 1,
                 Collectible = "Halo of Flies"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:key_bum",
@@ -1532,7 +1680,8 @@ return {
                 Count = 1,
                 Collectible = "Key Bum"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:match_book",
@@ -1543,7 +1692,8 @@ return {
                 Count = 1,
                 Collectible = "Match Book"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:mega_battery",
@@ -1553,7 +1703,8 @@ return {
                 Type = "tcainrework:mega_battery",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:pyro",
@@ -1564,7 +1715,8 @@ return {
                 Count = 1,
                 Collectible = "Pyro"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:red_key",
@@ -1575,7 +1727,8 @@ return {
                 Count = 1,
                 Collectible = "Red Key"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:red_stew",
@@ -1586,7 +1739,8 @@ return {
                 Count = 1,
                 Collectible = "Red Stew"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:robo_baby",
@@ -1597,7 +1751,8 @@ return {
                 Count = 1,
                 Collectible = "Robo-Baby"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:skeleton_key",
@@ -1608,7 +1763,8 @@ return {
                 Count = 1,
                 Collectible = "Skeleton Key"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_bean",
@@ -1619,7 +1775,8 @@ return {
                 Count = 1,
                 Collectible = "The Bean"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:three_dollar_bill_alt",
@@ -1630,7 +1787,8 @@ return {
                 Count = 1,
                 Collectible = "3 Dollar Bill"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["87d12c5a4ede0dc54b2552cd180f7c3f49266148"] = {
@@ -1644,7 +1802,8 @@ return {
                 Count = 1,
                 Collectible = "Bag of Crafting"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:birds_eye",
@@ -1656,7 +1815,8 @@ return {
                 Count = 1,
                 Collectible = "Bird's Eye"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:blue_candle",
@@ -1668,7 +1828,8 @@ return {
                 Count = 1,
                 Collectible = "The Candle"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:plum_flute",
@@ -1680,7 +1841,8 @@ return {
                 Count = 1,
                 Collectible = "Plum Flute"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:red_candle",
@@ -1692,7 +1854,8 @@ return {
                 Count = 1,
                 Collectible = "Red Candle"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_jar",
@@ -1704,7 +1867,8 @@ return {
                 Count = 1,
                 Collectible = "The Jar"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_wiz",
@@ -1716,7 +1880,8 @@ return {
                 Count = 1,
                 Collectible = "The Wiz"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:tooth_and_nail",
@@ -1728,7 +1893,8 @@ return {
                 Count = 1,
                 Collectible = "Tooth and Nail"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["shapeless_f97e973ef2ae2ba7b3e3713832927604afe3cae7"] = {
@@ -1741,7 +1907,8 @@ return {
                 Count = 1,
                 Collectible = "Battery Pack"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["shapeless_0453694150026183d94e13c2b2c72ad075c83a5c"] = {
@@ -1754,7 +1921,8 @@ return {
                 Count = 1,
                 Collectible = "Glitched Crown"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:booster_pack",
@@ -1765,7 +1933,8 @@ return {
                 Count = 1,
                 Collectible = "Booster Pack"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:consolation_prize",
@@ -1776,7 +1945,8 @@ return {
                 Count = 1,
                 Collectible = "Consolation Prize"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["1750d7f41f6d582bb32ad15a3c76c121fd1eee86"] = {
@@ -1790,7 +1960,8 @@ return {
                 Count = 1,
                 Collectible = "Black Powder"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:godhead",
@@ -1802,7 +1973,8 @@ return {
                 Count = 1,
                 Collectible = "Godhead"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["9830dfd9dbb24029b85cbe478591e547f65d1524"] = {
@@ -1816,7 +1988,8 @@ return {
                 Count = 1,
                 Collectible = "Blank Card"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:blood_clot",
@@ -1828,7 +2001,8 @@ return {
                 Count = 1,
                 Collectible = "Blood Clot"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:blood_oath",
@@ -1840,7 +2014,8 @@ return {
                 Count = 1,
                 Collectible = "Blood Oath"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:blood_rights",
@@ -1852,7 +2027,8 @@ return {
                 Count = 1,
                 Collectible = "Blood Rights"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:book_of_revelations",
@@ -1864,7 +2040,8 @@ return {
                 Count = 1,
                 Collectible = "Book of Revelations"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:book_of_shadows",
@@ -1876,7 +2053,8 @@ return {
                 Count = 1,
                 Collectible = "Book of Shadows"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:brimstone",
@@ -1888,7 +2066,8 @@ return {
                 Count = 1,
                 Collectible = "Brimstone"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:brimstone_bombs",
@@ -1900,7 +2079,8 @@ return {
                 Count = 1,
                 Collectible = "Brimstone Bombs"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:celtic_cross",
@@ -1912,7 +2092,8 @@ return {
                 Count = 1,
                 Collectible = "Celtic Cross"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:compass",
@@ -1924,7 +2105,8 @@ return {
                 Count = 1,
                 Collectible = "The Compass"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:compass_alt",
@@ -1936,7 +2118,8 @@ return {
                 Count = 1,
                 Collectible = "The Compass"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:crack_jacks",
@@ -1948,7 +2131,8 @@ return {
                 Count = 1,
                 Collectible = "Crack Jacks"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:curse_of_the_tower",
@@ -1960,7 +2144,8 @@ return {
                 Count = 1,
                 Collectible = "Curse of the Tower"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:distant_admiration",
@@ -1972,7 +2157,8 @@ return {
                 Count = 1,
                 Collectible = "Distant Admiration"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:edens_soul",
@@ -1984,7 +2170,8 @@ return {
                 Count = 1,
                 Collectible = "Eden's Soul"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:eye_drops",
@@ -1996,7 +2183,8 @@ return {
                 Count = 1,
                 Collectible = "Eye Drops"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:fire_mind",
@@ -2008,7 +2196,8 @@ return {
                 Count = 1,
                 Collectible = "Fire Mind"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:forever_alone",
@@ -2020,7 +2209,8 @@ return {
                 Count = 1,
                 Collectible = "Forever alone"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:forget_me_now",
@@ -2032,7 +2222,8 @@ return {
                 Count = 1,
                 Collectible = "Forget Me Now"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:fortune_cookie",
@@ -2044,7 +2235,8 @@ return {
                 Count = 1,
                 Collectible = "Fortune Cookie"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:friend_finder",
@@ -2056,7 +2248,8 @@ return {
                 Count = 1,
                 Collectible = "Friend Finder"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:holy_mantle",
@@ -2068,7 +2261,8 @@ return {
                 Count = 1,
                 Collectible = "Holy Mantle"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:kidney_bean",
@@ -2080,7 +2274,8 @@ return {
                 Count = 1,
                 Collectible = "Kidney Bean"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:linger_bean",
@@ -2092,7 +2287,8 @@ return {
                 Count = 1,
                 Collectible = "Linger Bean"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:magic_skin",
@@ -2104,7 +2300,8 @@ return {
                 Count = 1,
                 Collectible = "Magic Skin"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:mama_mega_alt",
@@ -2116,7 +2313,8 @@ return {
                 Count = 1,
                 Collectible = "Mama Mega!"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:meat_cleaver",
@@ -2128,7 +2326,8 @@ return {
                 Count = 1,
                 Collectible = "Meat Cleaver"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:moms_bottle_of_pills",
@@ -2140,7 +2339,8 @@ return {
                 Count = 1,
                 Collectible = "Mom's Bottle of Pills"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:playdough_cookie",
@@ -2152,7 +2352,8 @@ return {
                 Count = 1,
                 Collectible = "Playdough Cookie"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:sacrificial_dagger",
@@ -2164,7 +2365,8 @@ return {
                 Count = 1,
                 Collectible = "Sacrificial Dagger"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:sad_bombs",
@@ -2176,7 +2378,8 @@ return {
                 Count = 1,
                 Collectible = "Sad Bombs"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:seven_seals",
@@ -2188,7 +2391,8 @@ return {
                 Count = 1,
                 Collectible = "7 Seals"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:soul_locket",
@@ -2200,7 +2404,8 @@ return {
                 Count = 1,
                 Collectible = "Soul Locket"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["1a621652a564abf23fcfb87339d59b0da6ff174e"] = {
@@ -2214,7 +2419,8 @@ return {
                 Count = 1,
                 Collectible = "Bloodshot Eye"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:pyromaniac",
@@ -2226,7 +2432,8 @@ return {
                 Count = 1,
                 Collectible = "Pyromaniac"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:sacred_orb",
@@ -2238,7 +2445,8 @@ return {
                 Count = 1,
                 Collectible = "Sacred Orb"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_peeper",
@@ -2250,7 +2458,8 @@ return {
                 Count = 1,
                 Collectible = "The Peeper"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["0a42703fae8ea9b606d01c399e991711ce44d71b"] = {
@@ -2264,7 +2473,8 @@ return {
                 Count = 1,
                 Collectible = "Bob's Rotten Head"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:brother_bobby",
@@ -2276,7 +2486,8 @@ return {
                 Count = 1,
                 Collectible = "Brother Bobby"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["shapeless_cc630251aba90c8217236a47f7db67cf5dae30d4"] = {
@@ -2288,7 +2499,8 @@ return {
                 Type = "tcainrework:bomb",
                 Count = 9
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:fruity_plum",
@@ -2299,7 +2511,8 @@ return {
                 Count = 1,
                 Collectible = "Fruity Plum"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:nickel_from_dime",
@@ -2309,7 +2522,8 @@ return {
                 Type = "tcainrework:nickel",
                 Count = 2
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:penny_from_nickel",
@@ -2319,7 +2533,8 @@ return {
                 Type = "tcainrework:penny",
                 Count = 5
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:poop_from_block",
@@ -2329,7 +2544,8 @@ return {
                 Type = "tcainrework:poop",
                 Count = 9
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:robo_baby_2",
@@ -2340,7 +2556,8 @@ return {
                 Count = 1,
                 Collectible = "Robo-Baby 2.0"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:robo_baby_alt",
@@ -2351,7 +2568,8 @@ return {
                 Count = 1,
                 Collectible = "Robo-Baby"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["2d823eb11031f127fe012f4690bf9ba131a71c84"] = {
@@ -2365,7 +2583,8 @@ return {
                 Count = 1,
                 Collectible = "The Book of Sin"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:scissors",
@@ -2377,7 +2596,8 @@ return {
                 Count = 1,
                 Collectible = "Scissors"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["2c5c63c65ce617382b5cc58b59571a3c83e0549c"] = {
@@ -2391,7 +2611,8 @@ return {
                 Count = 1,
                 Collectible = "Ceremonial Robes"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["17b43ca59cc2279bbd8fb58974a49350d8c35ad3"] = {
@@ -2405,7 +2626,8 @@ return {
                 Count = 1,
                 Collectible = "Crystal Ball"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:magic_8_ball",
@@ -2417,7 +2639,8 @@ return {
                 Count = 1,
                 Collectible = "Magic 8 Ball"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:safety_pin",
@@ -2429,7 +2652,8 @@ return {
                 Count = 1,
                 Collectible = "Safety Pin"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["shapeless_83d0a6c92856cdf4681bcc6ff9cbfd7839630cc5"] = {
@@ -2442,7 +2666,8 @@ return {
                 Count = 1,
                 Collectible = "Dad's Key"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:dessert",
@@ -2453,7 +2678,8 @@ return {
                 Count = 1,
                 Collectible = "Dessert"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:rubber_cement",
@@ -2464,7 +2690,8 @@ return {
                 Count = 1,
                 Collectible = "Rubber Cement"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["e69e14100b282cb294eb74086b6a511a787ace6c"] = {
@@ -2478,7 +2705,8 @@ return {
                 Count = 1,
                 Collectible = "Dead Bird"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_mark",
@@ -2490,7 +2718,8 @@ return {
                 Count = 1,
                 Collectible = "The Mark"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_soul",
@@ -2502,7 +2731,8 @@ return {
                 Count = 1,
                 Collectible = "The Soul"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["d47a3e6d2c3eb56f2088d78cbc85421c6dfcfaef"] = {
@@ -2516,7 +2746,8 @@ return {
                 Count = 1,
                 Collectible = "Glass Cannon"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["46890bfeb2d40eaa5a302f3804bc265e538c901c"] = {
@@ -2530,7 +2761,8 @@ return {
                 Count = 1,
                 Collectible = "Hallowed Ground"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:prayer_card",
@@ -2542,7 +2774,8 @@ return {
                 Count = 1,
                 Collectible = "Prayer Card"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["8f679172b3f6fad7d638f452a8c4575bb41469e9"] = {
@@ -2556,7 +2789,8 @@ return {
                 Count = 1,
                 Collectible = "Iron Bar"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:jesus_juice",
@@ -2568,7 +2802,8 @@ return {
                 Count = 1,
                 Collectible = "Jesus Juice"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:minecrafter",
@@ -2580,7 +2815,8 @@ return {
                 Count = 1,
                 Collectible = "Mine Crafter"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:portable_slot",
@@ -2592,7 +2828,8 @@ return {
                 Count = 1,
                 Collectible = "Portable Slot"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:wirecoat_hanger",
@@ -2604,7 +2841,8 @@ return {
                 Count = 1,
                 Collectible = "Wire Coat Hanger"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["774e6a979489881d43d415aff7bf7f7946e9e84a"] = {
@@ -2618,7 +2856,8 @@ return {
                 Count = 1,
                 Collectible = "Isaac's Tears"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:milk",
@@ -2630,7 +2869,8 @@ return {
                 Count = 1,
                 Collectible = "Milk!"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:moms_ring",
@@ -2642,7 +2882,8 @@ return {
                 Count = 1,
                 Collectible = "Mom's Ring"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:sacred_heart_alt",
@@ -2654,7 +2895,8 @@ return {
                 Count = 1,
                 Collectible = "Sacred Heart"
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
     ["f52f60dac6d005ff67d31a07c8aec14f8b831593"] = {
@@ -2668,7 +2910,8 @@ return {
                 Count = 1,
                 Collectible = "Latch Key"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:lokis_horns",
@@ -2680,7 +2923,8 @@ return {
                 Count = 1,
                 Collectible = "Loki's Horns"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["bf0ce597399da0189aa7cbfbd8e1dd99f4a7e7d3"] = {
@@ -2694,7 +2938,8 @@ return {
                 Count = 1,
                 Collectible = "<3"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:notched_axe",
@@ -2706,7 +2951,8 @@ return {
                 Count = 1,
                 Collectible = "Notched Axe"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:screw",
@@ -2718,7 +2964,8 @@ return {
                 Count = 1,
                 Collectible = "Screw"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:we_need_to_go_deeper",
@@ -2730,7 +2977,8 @@ return {
                 Count = 1,
                 Collectible = "We Need To Go Deeper!"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["f71761186e8db41bf89b82603c38fca776d1aa85"] = {
@@ -2744,7 +2992,8 @@ return {
                 Count = 1,
                 Collectible = "Lucky Foot"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["9d279ab5b1f6764d89526923e04dd7e5afccf952"] = {
@@ -2758,7 +3007,8 @@ return {
                 Count = 1,
                 Collectible = "Mom's Heels"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["44600d7c35c35866fb9f08e866759ec6035cf79b"] = {
@@ -2772,7 +3022,8 @@ return {
                 Count = 1,
                 Collectible = "Night Light"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["b546ea0eddeb6b68714618e47120bea87293ba99"] = {
@@ -2786,7 +3037,8 @@ return {
                 Count = 1,
                 Collectible = "Orphan Socks"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["0fc11021996266a0e931f09c2d2b97bb56bd98f6"] = {
@@ -2800,7 +3052,8 @@ return {
                 Count = 1,
                 Collectible = "Pentagram"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["5c5b8251bdb4b62eff8c746f4021483bfae24eb7"] = {
@@ -2814,7 +3067,8 @@ return {
                 Count = 1,
                 Collectible = "Razor Blade"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:the_belt",
@@ -2826,7 +3080,8 @@ return {
                 Count = 1,
                 Collectible = "The Belt"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["46b25f7af6b30d95920ad663a42d9082d1d31ac7"] = {
@@ -2839,7 +3094,8 @@ return {
                 Type = "tcainrework:repentogon",
                 Count = 1
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
     ["d74f7b7e043999741277f9cb10fd064c51018064"] = {
@@ -2853,7 +3109,8 @@ return {
                 Count = 1,
                 Collectible = "Rotten Baby"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "tcainrework:squeezy",
@@ -2865,7 +3122,8 @@ return {
                 Count = 1,
                 Collectible = "Squeezy"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["1529f482eca6ade60777c0d419522cbab13522fd"] = {
@@ -2879,7 +3137,8 @@ return {
                 Count = 1,
                 Collectible = "Sister Maggy"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["93ac8946882128457cd9e283b30ca851945e6690"] = {
@@ -2893,7 +3152,8 @@ return {
                 Count = 1,
                 Collectible = "Super Bandage"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["c6e1469b0a4821fa70d39dfac0333f1ab1478a21"] = {
@@ -2907,7 +3167,8 @@ return {
                 Count = 1,
                 Collectible = "The Boomerang"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["c5c961319613156e68b369fc3decf324fa3a056d"] = {
@@ -2921,7 +3182,8 @@ return {
                 Count = 1,
                 Collectible = "The Scooper"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["c9c2a49183c4007e6360d3ce0980d85585150393"] = {
@@ -2935,7 +3197,8 @@ return {
                 Count = 1,
                 Collectible = "Wooden Spoon"
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
 }

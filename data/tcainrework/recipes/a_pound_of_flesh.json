@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "b": "Blood Clot",
+    "B": "tcainrework:black_heart",
+    "s": "minecraft:stick",
+    "q": "A Quarter"
+  },
+  "pattern": [
+    "b q",
+    "sBs"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "A Pound of Flesh"
+  }
+}

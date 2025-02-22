@@ -26,7 +26,7 @@ for entry in os.listdir(localPath):
                     shapeHash = ""
                     recipeCondition = []
                     Width, Height = (None, None)
-                    if data['type'] == "minecraft:crafting_shaped":
+                    if data['type'] != "minecraft:crafting_shapeless":
                         # Gather a list of keys and their replacements
                         keyReplacements = {" " : ""}
                         for mapKey in data['key']:
@@ -51,7 +51,7 @@ for entry in os.listdir(localPath):
 
                         # Create Recipe Shape Hash
                         shapeHash = hashlib.sha1(totalRecipeString.encode()).hexdigest()
-                    elif data['type'] == "minecraft:crafting_shapeless":
+                    else:
                         recipeCondition = []
                         for i in range(len(data['ingredients'])):
                             typeName = data['ingredients'][i]
@@ -85,6 +85,10 @@ for entry in os.listdir(localPath):
                     if data.get('show_notification') != None:
                         displayRecipe = data['show_notification']
 
+                    dischargeRecipe = False
+                    if data.get('discharge') != None:
+                        dischargeRecipe = data['discharge']
+
                     # Include Information about Recipes
                     if not recipeDictionary.get(shapeHash):
                         recipeDictionary[shapeHash] = []
@@ -96,7 +100,8 @@ for entry in os.listdir(localPath):
                         'collectible': collectibleType,
                         'display' : displayRecipe,
                         'width' : Width,
-                        'height' : Height
+                        'height' : Height,
+                        'discharge' : dischargeRecipe
                     })
                     namespaceRecipes += 1
 
@@ -134,7 +139,8 @@ for entry in os.listdir(localPath):
                         recipeExport.write(",\n" + space * 4 + "Collectible = {}".format(recipeTable['collectible']))
                     else:
                         recipeExport.write(",\n" + space * 4 + "Collectible = \"{}\"".format(recipeTable['collectible']))
-                recipeExport.write("\n" + space * 3 + "},\n" + space * 3 + "DisplayRecipe = " + "{}\n".format(recipeTable['display']).lower() + space * 2 + "},\n")
+                recipeExport.write("\n" + space * 3 + "},\n" + space * 3 + "DisplayRecipe = " + "{},\n".format(recipeTable['display']).lower())
+                recipeExport.write(space * 3 + "DischargeRecipe = " + "{},\n".format(recipeTable['discharge']).lower() + space * 2 + "},\n")
             recipeExport.write(space + "},\n")
 
         recipeExport.write("}")

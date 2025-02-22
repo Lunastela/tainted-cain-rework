@@ -688,6 +688,12 @@ local cellAnimationScales = {
     Vector(37, 49),
     defaultScale
 }
+
+local mouseSprite = Sprite()
+mouseSprite:Load("gfx/ui/cursor.anm2", true)
+mouseSprite:Play("Idle")
+mouseSprite.Scale = Vector.One / 2
+
 local lastItemName, slotTimer = "", 0
 function mod:RenderInventory()
     if EID then
@@ -1312,6 +1318,9 @@ function mod:RenderInventory()
                         end
                     end
                 end
+            end
+            if Options.Fullscreen then
+                mouseSprite:Render(mousePosition)
             end
             inputHelper.Update()
             -- print(Isaac.GetTime() - currentTime)

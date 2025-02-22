@@ -210,11 +210,18 @@ end
 function inventoryHelper.getUnlockedInventory(setUnlocked)
     local runSave = unlockWrapper()
     if not runSave.inventoryUnlocked and setUnlocked then
+        local hasPressedKey = false
         TCainRework:CreateToast(
             InventoryToastTypes.TUTORIAL, 
             nil, "gfx/ui/recipe_book.png", 
             "Open your inventory", "Press §lI",
-            240
+            240,
+            function()
+                if Input.IsButtonTriggered(Keyboard.KEY_I, 0) then
+                    hasPressedKey = true 
+                end
+                return hasPressedKey
+            end
         )
         runSave.inventoryUnlocked = setUnlocked
     end

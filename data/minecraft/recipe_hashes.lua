@@ -8,7 +8,8 @@ return {
                 Type = "minecraft:book",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["e3c5526e6452984587d4aeeb798ae3f2d93a4ab6"] = {
@@ -21,7 +22,8 @@ return {
                 Type = "minecraft:bowl",
                 Count = 4
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "minecraft:bucket",
@@ -32,7 +34,8 @@ return {
                 Type = "minecraft:bucket",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["17b43ca59cc2279bbd8fb58974a49350d8c35ad3"] = {
@@ -45,7 +48,8 @@ return {
                 Type = "minecraft:crafting_table",
                 Count = 1
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
     ["69c2162ab075f3bbf3f3989d6023c82e5f36d895"] = {
@@ -58,7 +62,8 @@ return {
                 Type = "minecraft:furnace",
                 Count = 1
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
     ["8c236058fa618e10ba50f50df586c5fa3f1c07c8"] = {
@@ -71,7 +76,8 @@ return {
                 Type = "minecraft:iron_axe",
                 Count = 1
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
     ["85f1ae3dcaf3a6c5984fbf8db91065c0489ade1a"] = {
@@ -84,7 +90,8 @@ return {
                 Type = "minecraft:iron_shovel",
                 Count = 1
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
     ["0e334c4a17fb8172b566841ae5e0a56ad99a2307"] = {
@@ -97,7 +104,8 @@ return {
                 Type = "minecraft:ladder",
                 Count = 3
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["774e6a979489881d43d415aff7bf7f7946e9e84a"] = {
@@ -110,7 +118,8 @@ return {
                 Type = "minecraft:lever",
                 Count = 1
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "minecraft:stick",
@@ -121,7 +130,8 @@ return {
                 Type = "minecraft:stick",
                 Count = 4
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
         {
             RecipeName = "minecraft:torch",
@@ -132,7 +142,8 @@ return {
                 Type = "minecraft:torch",
                 Count = 4
             },
-            DisplayRecipe = true
+            DisplayRecipe = true,
+            DischargeRecipe = false,
         },
     },
     ["93572b414e21721b85aa52ce823174d3bf4603ae"] = {
@@ -145,7 +156,8 @@ return {
                 Type = "minecraft:oak_boat",
                 Count = 1
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
     ["d6202ba69ed604b9d9ce657c38dc924b7bfb4897"] = {
@@ -158,7 +170,8 @@ return {
                 Type = "minecraft:oak_door",
                 Count = 3
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
     ["1a621652a564abf23fcfb87339d59b0da6ff174e"] = {
@@ -171,7 +184,8 @@ return {
                 Type = "minecraft:oak_sign",
                 Count = 3
             },
-            DisplayRecipe = false
+            DisplayRecipe = false,
+            DischargeRecipe = false,
         },
     },
 }

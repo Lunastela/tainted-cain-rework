@@ -167,7 +167,7 @@ local function spawnSalvagePickup(pickup, salvageVariant)
         local game = Game()
         local itemPool = game:GetItemPool()
         local poolType = math.max(0, itemPool:GetPoolForRoom(game:GetRoom():GetType(), pickup:GetDropRNG():GetSeed()))
-        local defaultHeartChance = ((pickup:GetDropRNG():RandomInt(1, 5) == 1) and 3) or 1
+        local defaultHeartChance = ((pickup:GetDropRNG():RandomInt(1, 8) == 1) and HeartSubType.HEART_SOUL) or HeartSubType.HEART_FULL
         salvageSubtype = (heartSelectionList[poolType] or defaultHeartChance)
     end
     local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, salvageVariant, salvageSubtype, 
@@ -230,9 +230,8 @@ local function notShopItemOrBought(player, pickup)
     return true
 end
 
-local skipNext, deleteNext = false, false
+local skipNext = false
 local function initializeSalvage(entity)
-    deleteNext = false
     if not salvagingList[GetPtrHash(entity)] then
         skipNext = true
         salvageCollectible(entity)
@@ -253,14 +252,15 @@ function(_, pickup)
             end
         end
     end
-    if deleteNext then
-        pickup:Remove()
-        deleteNext = false
+    -- delete pickups that spawn on deleted gridentities
+    local positionHash = utility.sha1(tostring(pickup.Position.X) .. "." .. tostring(pickup.Position.Y))
+    for i, playerCollisions in pairs(bagCollisions) do
+        for collisionHash in pairs(playerCollisions) do
+            if positionHash == collisionHash then
+                pickup:Remove()
+            end
+        end
     end
-end)
-
-mod:AddPriorityCallback(ModCallbacks.MC_PRE_ROOM_TRIGGER_CLEAR, CallbackPriority.EARLY, function(_)
-    deleteNext = false
 end)
 
 local bagInteractPickups = {
@@ -295,7 +295,7 @@ local function renderBagOfCrafting(player, offset)
                     local isCrawlspace = (Game():GetRoom():GetType() == RoomType.ROOM_DUNGEON)
                     for i, entity in ipairs(foundEntities) do
                         local entityPointer = GetPtrHash(entity)
-                        if not utility.tableContains(bagCollisions[playerIndex], entityPointer) then
+                        if not bagCollisions[playerIndex][entityPointer] then
                             local knockbackDirection = (entity.Position - swipeCapsule:GetPosition()):Normalized()
                             local pickup = entity:ToPickup()
                             if (((pickup and (notShopItemOrBought(player, pickup) and pickup.Wait <= 0 
@@ -349,7 +349,7 @@ local function renderBagOfCrafting(player, offset)
                                     end
                                 else -- DESTROY item
                                     generateGenericEffect(entity)
-                                    table.insert(bagCollisions[playerIndex], entityPointer)
+                                    bagCollisions[playerIndex][entityPointer] = entity
                                 end
                             elseif entity.Type == EntityType.ENTITY_PROJECTILE then
                                 local projectileEntity = entity:ToProjectile()
@@ -361,8 +361,8 @@ local function renderBagOfCrafting(player, offset)
                             end
                             if entity.Type ~= EntityType.ENTITY_FIREPLACE
                             and entity.Type ~= EntityType.ENTITY_POOP
-                            and not utility.tableContains(bagCollisions[playerIndex], entityPointer) then
-                                table.insert(bagCollisions[playerIndex], entityPointer)
+                            and not bagCollisions[playerIndex][entityPointer] then
+                                bagCollisions[playerIndex][entityPointer] = entity
                             end
                         end
                     end
@@ -374,9 +374,10 @@ local function renderBagOfCrafting(player, offset)
                                 local gridEntity = room:GetGridEntityFromPos(swipeCapsule:GetPosition() + Vector(20 * j, 0):Rotated(i * 45))
                                 if gridEntity and gridEntity.CollisionClass ~= GridCollisionClass.COLLISION_NONE then
                                     local positionHash = utility.sha1(tostring(gridEntity.Position.X) .. "." .. tostring(gridEntity.Position.Y))
-                                    if (not utility.tableContains(bagCollisions[playerIndex], positionHash)) then
+                                    if (not bagCollisions[playerIndex][positionHash]) then
                                         local itemTable = getEntityFromTable(gridEntity, true, player)
                                         local ableToAddItem = itemTable and mod:AddItemToInventory(itemTable.Type, itemTable.Amount)
+                                        bagCollisions[playerIndex][positionHash] = gridEntity
                                         if not ableToAddItem then
                                             gridEntity:Hurt(3)
                                         else
@@ -386,14 +387,11 @@ local function renderBagOfCrafting(player, offset)
                                             
                                             room:RemoveGridEntityImmediate(gridIndex, 0, false)
                                             local replacementEntity = Isaac.GridSpawn(gridEntity:GetType(), 0, lastPosition, true)
-                                            deleteNext = true
                                             replacementEntity:Destroy()
                                             if replacementEntity then
                                                 replacementEntity:GetSprite():SetRenderFlags(1 << 2)
                                             end
-                                            deleteNext = false
                                         end
-                                        table.insert(bagCollisions[playerIndex], positionHash)
                                     end
                                 end
                             end
