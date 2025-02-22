@@ -162,6 +162,9 @@ end
 
 function inventoryHelper.getInventory(inventoryType)
     local runSave = saveManager.GetRunSave()
+    if not runSave.Inventories then
+        runSave.Inventories = {}
+    end
     if not runSave.Inventories[inventoryType] then
         runSave.Inventories[inventoryType] = {}
     end
