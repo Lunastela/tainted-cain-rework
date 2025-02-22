@@ -207,37 +207,39 @@ mod:AddCallback(ModCallbacks.MC_POST_NPC_INIT, function(_, entity)
     end
 end, phantomID)
 
-local function getRoomIdx(column, row)
-    return math.floor(column + row * 13)
+-- Not too dissimilar from my original approach
+local function vectorFromIndex(index)
+    local x = index % 13
+    local y = math.floor(index / 13)
+    return Vector(x, y)
 end
 
-local function getRowColFromIdx(idx)
-    local row = math.floor(idx / 13)
-    local column = idx % 13
-    return column, row
+-- I got this code from Headcrab who got it from someone else who got it from someone else.
+local OFFSET_SIZE = Vector(520, 280)
+local ROOM_SIZE = Vector(600, 360)
+local function getQuadrantOffset(index) -- thanks tem! -- thanks cucco!
+    local level = Game():GetLevel()
+    local gridIdx = level:GetRoomByIdx(index).GridIndex
+    local quadrant = vectorFromIndex(index) - vectorFromIndex(gridIdx)
+    
+    return quadrant * OFFSET_SIZE
 end
 
 mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function(_)
     if Isaac.IsInGame() then
         local level = Game():GetLevel()
-        local currentRoomDesc = level:GetCurrentRoomDesc()
-        local lastRoomDesc = level:GetLastRoomDesc()
-        if currentRoomDesc and lastRoomDesc then
-            local curRow, curCol = getRowColFromIdx(currentRoomDesc.GridIndex)
-            local currentVector = Vector(curRow, curCol)
-
-            local lastRow, lastCol = getRowColFromIdx(lastRoomDesc.GridIndex)
-            local lastVector = Vector(lastRow, lastCol)
-
-            local roomDifference = lastVector - currentVector
-            local roomSize = Game():GetRoom():GetCenterPos() * 2
-            for i, entity in ipairs(Isaac.GetRoomEntities()) do
-                if entity.Type == phantomID and entity.Variant == phantomVariant then
-                    entity.Position = entity.Position + (roomSize * roomDifference)
-                end
+        local previousRoom = level:GetPreviousRoomIndex()
+        local currentRoom = level:GetCurrentRoomIndex()
+    
+        local posOffset = (getQuadrantOffset(currentRoom) - getQuadrantOffset(previousRoom))
+        local distance = (vectorFromIndex(currentRoom) - vectorFromIndex(previousRoom)) * ROOM_SIZE
+        for i, entity in ipairs(Isaac.GetRoomEntities()) do
+            if entity.Type == phantomID and entity.Variant == phantomVariant then
+                entity.Position = entity.Position - distance + posOffset
             end
         end
 
+        local currentRoomDesc = level:GetCurrentRoomDesc()
         if currentRoomDesc and currentRoomDesc.GridIndex ~= level:GetStartingRoomIndex() then
             if (mod.getModSettings().doInsomnia or 1) == 2
             and (#Isaac.FindByType(phantomID, phantomVariant) <= 0) then

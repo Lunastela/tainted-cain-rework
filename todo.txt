@@ -12,6 +12,7 @@ Mid Priority:
 Low Priority:
 - Update SaveManager.
 - The bug. You know, the one.
+- Fix animations in Item Renderer not consistent with in game animations.
 - Support for on the fly Item Tags in Recipes using json arrays in keys.
 - Potentially restructure Recipe system to use key & value system internally.
 

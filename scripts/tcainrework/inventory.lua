@@ -596,7 +596,7 @@ local function getInventories()
 end
 
 -- Add Item Logic
-local cellAnimation, lastSelectedSlot = {}, 0
+local cellAnimation = {}
 function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
     local addedAny = false
     for i = 1, amount do
@@ -617,9 +617,6 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
             freeSlotData.Inventory[freeSlotData.Slot] = fakeItem
             if freeSlotData.Inventory == inventoryHelper.getInventory(InventoryTypes.HOTBAR) then
                 cellAnimation[freeSlotData.Slot] = nil
-                if freeSlotData.Slot == lastSelectedSlot then
-                    lastSelectedSlot = 0
-                end
             end
             addedAny = true
         end
@@ -679,14 +676,15 @@ if EID then
     end)
 end
 
-local cellAnimationSpeed = 0.5
+local cellAnimationSpeed = 0.65
 local defaultScale = Vector(42, 46)
 local cellAnimationScales = {
-    Vector(22, 65),
-    Vector(26, 61),
-    Vector(30, 57),
-    Vector(34, 53),
-    Vector(40, 47),
+    Vector(14, 73),
+    Vector(18, 69),
+    Vector(21, 65),
+    Vector(29, 58),
+    Vector(33, 53),
+    Vector(37, 49),
     defaultScale
 }
 local lastItemName, slotTimer = "", 0
@@ -748,7 +746,7 @@ function mod:RenderInventory()
                 local myScale = cellAnimationScales[math.floor(cellAnimation[i])] / defaultScale
                 inventoryHelper.renderItem(
                     hotbarInventory[i], 
-                    (hotbarPosition + Vector(8, 12) - (Vector(8, 12) * myScale)), 
+                    (hotbarPosition + Vector(8, 16) - (Vector(8, 16) * myScale)), 
                     myScale
                 )
                 if hotbarSlot.Count > 1 then
@@ -759,13 +757,10 @@ function mod:RenderInventory()
                 end
 
                 if (hotbarSlotSelected == i) then
-                    if hotbarSlotSelected ~= lastSelectedSlot or not lastItemName then
-                        local itemName = inventoryHelper.itemGetFullName(hotbarSlot)[1]
-                        if (not lastItemName) or (lastItemName.String ~= itemName.String) then
-                            slotTimer = 400
-                            lastItemName = itemName
-                        end
-                        lastSelectedSlot = hotbarSlotSelected
+                    local itemName = inventoryHelper.itemGetFullName(hotbarSlot)[1]
+                    if (not lastItemName) or (lastItemName.String ~= itemName.String) then
+                        slotTimer = 400
+                        lastItemName = itemName
                     end
                     -- hacky text color render fix
                     local colorRarities = InventoryItemRarityColors

@@ -747,7 +747,7 @@ local cainCraftingDirectory = {
             {str = "special thanks", nosel = true},
             creditsWrapper("lynn sharcys", "detractor", {"www.", "gaywhiteboy", ".com"}),
             -- creditsWrapper("", "eden essence sprite", {""}, true),
-            creditsWrapper("cat", "detractor", {"shoutout", "to lizzie", "for pulling", "through and", "finishing this", "mod. i'm so", "proud of her."}),
+            creditsWrapper("keeteeh", "detractor", {"shoutout", "to lizzie", "for pulling", "through and", "finishing this", "mod. i'm so", "proud of her."}),
             creditsWrapper("snowystarfall", "particle", {"gatekeep", "", "graphics", "program", "", "girlboss"}),
             creditsWrapper("lily", "wife", {"i worked the", "hardestr for", "this mod."}),
             creditsWrapper("silentib", "\"balance\"", {"dirt rod", "challeng."}),

@@ -14,7 +14,7 @@ Look no further than [b]Tainted Cain Rework![/b] Tainted Cain Rework makes sever
 [b]
 [h2]Features:[/h2]
 [list]
-    [*] 200+ New Recipes!
+    [*] 245+ New Recipes!
     [*] New (and Consistent) Bag of Crafting Mechanics!
     [*] Involved Build-crafting and Item Synergizing / Strategizing!
     [*] Reworked Salvaging and gave the Bag of Crafting the ability to Salvage items.
@@ -35,7 +35,7 @@ Look no further than [b]Tainted Cain Rework![/b] Tainted Cain Rework makes sever
 [/list]
 
 </description>
-    <version>1.0</version>
+    <version>1.1</version>
     <visibility>Private</visibility>
     <tag id="Lua"/>
     <tag id="Items"/>
