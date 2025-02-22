@@ -38,11 +38,6 @@ local itemDescriptions = require("scripts.tcainrework.stored.id_to_iteminfo")
 local numberToItems = require("scripts.tcainrework.stored.num_to_id")
 local entityToItemConversions = require("scripts.tcainrework.stored.entityid_to_id")
 local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items")
--- Recipes
-local recipeStorage = require("scripts.tcainrework.stored.recipe_hashmap")
-local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
-local recipeReverseLookup = require("scripts.tcainrework.stored.recipe_from_ingredient")
-local collectibleToRecipe = require("scripts.tcainrework.stored.collectible_to_recipe")
 
 function mod:sortItemTags()
     for tagName in pairs(itemTagLookup) do
@@ -57,6 +52,8 @@ end
 -- Define and Load the collectible storage cache.
 local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 collectibleStorage:loadCollectibleCache()
+
+local recipeStorage = require("scripts.tcainrework.stored.recipe_storage_cache")
 
 -- Define Load Order list
 mod.LoadOrder = {}
@@ -116,22 +113,23 @@ function mod:loadRegistry(curLoad)
     local pathExists, foundData = pcall(include, recipePath)
     if pathExists then
         for key, value in pairs(foundData) do
-            if not recipeStorage[key] then
-                recipeStorage[key] = {}
+            -- Define keys for recipe hashmap
+            if not recipeStorage.recipeHashmap[key] then
+                recipeStorage.recipeHashmap[key] = {}
             end
             for i, recipeData in ipairs(value) do
-                table.insert(recipeStorage[key], recipeData)
-                local recipeName = recipeData and recipeData.RecipeName
-                if recipeName then
-                    recipeLookupIndex[recipeName] = recipeData
+                table.insert(recipeStorage.recipeHashmap[key], recipeData)
+                if recipeData and recipeData.RecipeName then
+                    recipeData.Namespace = curLoad.Namespace
+                    recipeStorage.nameToRecipe[recipeData.RecipeName] = recipeData
                     if recipeData.ConditionTable then
                         for i, itemType in pairs(recipeData.ConditionTable) do
                             local nameType = mod.inventoryHelper.conditionalItemLookupType(mod.inventoryHelper.createItem(itemType))
-                            if not recipeReverseLookup[nameType] then
-                                recipeReverseLookup[nameType] = {}
+                            if not recipeStorage.recipeFromIngredient[nameType] then
+                                recipeStorage.recipeFromIngredient[nameType] = {}
                             end
-                            if (not utility.tableContains(recipeReverseLookup[nameType], recipeName)) then
-                                table.insert(recipeReverseLookup[nameType], recipeName)
+                            if (not utility.tableContains(recipeStorage.recipeFromIngredient[nameType], recipeData.RecipeName)) then
+                                table.insert(recipeStorage.recipeFromIngredient[nameType], recipeData.RecipeName)
                             end
                         end
                     end
@@ -139,11 +137,11 @@ function mod:loadRegistry(curLoad)
                     and recipeData.Results.Collectible
                     and recipeData.DisplayRecipe then
                         local collectible = collectibleStorage.fastItemIDByName(recipeData.Results.Collectible)
-                        if not collectibleToRecipe[collectible] then
-                            collectibleToRecipe[collectible] = {}
+                        if not recipeStorage.itemRecipeLookup[collectible] then
+                            recipeStorage.itemRecipeLookup[collectible] = {}
                         end
-                        if (not utility.tableContains(collectibleToRecipe[collectible], recipeName)) then
-                            table.insert(collectibleToRecipe[collectible], recipeName)
+                        if (not utility.tableContains(recipeStorage.itemRecipeLookup[collectible], recipeData.RecipeName)) then
+                            table.insert(recipeStorage.itemRecipeLookup[collectible], recipeData.RecipeName)
                         end
                     end
                 end
@@ -173,4 +171,3 @@ include("scripts.tcainrework.inventory")
 include("scripts.tcainrework.toasts")
 include("scripts.tcainrework.commands")
 include("scripts.tcainrework.phantom")
--- include("scripts.tcainrework.player")

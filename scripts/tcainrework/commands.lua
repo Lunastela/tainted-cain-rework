@@ -1,7 +1,8 @@
 local mod = TCainRework
 
 local saveManager = require("scripts.save_manager")
-local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
+local itemRegistry = require("scripts.tcainrework.stored.id_to_iteminfo")
+local recipeStorage = require("scripts.tcainrework.stored.recipe_storage_cache")
 mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, function(_, command, arguments)
     local argList = {}
     for char in string.gmatch(arguments, "[^%s]+") do
@@ -10,16 +11,15 @@ mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, function(_, command, arguments)
     if command == "unlockrecipes" then
         local runSave = saveManager.GetRunSave()
         runSave.unlockedRecipes = {}
-        for recipeName in pairs(recipeLookupIndex) do
-            if argList[1] == "forced"
-            or recipeLookupIndex[recipeName].DisplayRecipe then
+        for recipeName in pairs(recipeStorage.nameToRecipe) do
+            if argList[1] == "forced" or recipeStorage.nameToRecipe[recipeName].DisplayRecipe then
                 table.insert(runSave.unlockedRecipes, recipeName)
             end
         end
     elseif command == "inventoryadd" then
         if #argList >= 1 then
             local itemID = argList[1]
-            if require("scripts.tcainrework.stored.id_to_iteminfo")[itemID] then
+            if itemRegistry[itemID] then
                 mod:AddItemToInventory(argList[1], tonumber(argList[2]) or 1)
             else
                 print("Invalid ItemID: Argument 1")
@@ -41,7 +41,6 @@ Console.RegisterCommand("inventoryadd",
     "inventoryadd [namespace:itemid] [item amount]", 
     true, AutocompleteType.CUSTOM
 )
-local itemRegistry = require("scripts.tcainrework.stored.id_to_iteminfo")
 mod:AddCallback(ModCallbacks.MC_CONSOLE_AUTOCOMPLETE, function(_, command, arguments)
     local argList = {}
     for char in string.gmatch(arguments, "[^%s]+") do

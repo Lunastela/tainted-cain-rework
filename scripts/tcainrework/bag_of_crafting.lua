@@ -175,7 +175,7 @@ local function spawnSalvagePickup(pickup, salvageVariant)
     return itemPickup
 end
 
-local collectibleToRecipe = require("scripts.tcainrework.stored.collectible_to_recipe")
+local collectibleToRecipe = require("scripts.tcainrework.stored.recipe_storage_cache").itemRecipeLookup
 local function salvageCollectible(pickup)
     if canSalvageItem(pickup.SubType) then
         local ptrHash = GetPtrHash(pickup)

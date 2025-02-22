@@ -100,10 +100,10 @@ tooltipFrame:LoadGraphics()
 
 -- Create Inventories
 local lastCombinedString = ""
-local recipeHashmap = require('scripts.tcainrework.stored.recipe_hashmap')
 local outputSlotOccupied = false
 local lastOutputItem = nil
 
+local recipeStorage = require("scripts.tcainrework.stored.recipe_storage_cache")
 local function checkRecipes()
     -- establish paradoxical bounds
     local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
@@ -147,8 +147,8 @@ local function checkRecipes()
         -- hash current string and update recipe
         local recipeHash = utility.sha1(combinedString)
         local shapelessHash = "shapeless_" .. utility.sha1("count_" .. tostring(recipeIngredientCount))
-        local recipeOutput = inventoryHelper.checkRecipeConditional(craftingInventory, recipeHashmap[recipeHash], topLeft, bottomRight)
-            or inventoryHelper.checkRecipeConditional(craftingInventory, recipeHashmap[shapelessHash], topLeft, bottomRight, true)
+        local recipeOutput = inventoryHelper.checkRecipeConditional(craftingInventory, recipeStorage.recipeHashmap[recipeHash], topLeft, bottomRight)
+            or inventoryHelper.checkRecipeConditional(craftingInventory, recipeStorage.recipeHashmap[shapelessHash], topLeft, bottomRight, true)
         local outputInventory = inventoryHelper.getInventory(InventoryTypes.OUTPUT)
         if recipeOutput then
             lastOutputItem = {
@@ -639,7 +639,6 @@ local craftingFontColor = KColor(craftingGray, craftingGray, craftingGray, 1)
 local hotbarCellSize = 20
 local inventorySize = Vector(178, 166)
 
-local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
 local recipeBookTabs = {"collectible", "active", "passive", "misc"}
 local selectedTab = 1
 local selectedPage = 0
@@ -949,7 +948,7 @@ function mod:RenderInventory()
                         local pageDisplacement = (selectedPage * 20)
                         for i = 1, 20 do
                             local recipeName = chosenList[i + pageDisplacement]
-                            local recipeFromName = recipeName and recipeLookupIndex[recipeName]
+                            local recipeFromName = recipeName and recipeStorage.nameToRecipe[recipeName]
                             if recipeFromName then
                                 local isCraftableRecipe = utility.tableContains(craftableRecipes, recipeName)
                                 recipeBookUI:SetFrame("CraftingSlot", 1 - ((isCraftableRecipe and 1) or 0))

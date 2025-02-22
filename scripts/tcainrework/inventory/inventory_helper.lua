@@ -2,9 +2,12 @@ local inventoryHelper = {}
 
 local saveManager = require("scripts.save_manager")
 local utility = require("scripts.tcainrework.util")
-local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
+
 local itemRegistry = require("scripts.tcainrework.stored.id_to_iteminfo")
 local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items")
+
+local recipeStorage = require("scripts.tcainrework.stored.recipe_storage_cache")
+local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 --[[
     Pardon the mess, I am currently in the process of rewriting large chunks of the inventory system to be
     modular for if ever in the future I decide I want to add more inventory types with ease.
@@ -304,8 +307,6 @@ function inventoryHelper.createItem(itemString, count)
     }
 end
 
-local recipeLookupIndex = require("scripts.tcainrework.stored.name_to_recipe")
-local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 function inventoryHelper.conditionalItemLookupType(item)
     local itemName = item.Type
     if item.ComponentData then
@@ -404,7 +405,7 @@ function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inve
     end
     if currentRecipeCount > 0 then
         for i, recipe in ipairs(recipeSave) do
-            local recipeFromName = recipeLookupIndex[recipeSave[i]]
+            local recipeFromName = recipeStorage.nameToRecipe[recipeSave[i]]
             if recipeFromName then
                 availableTabs[recipeFromName.Category] = true
                 if recipeFromName.Results then
@@ -922,12 +923,10 @@ function inventoryHelper.conditionalItemFromShapedRecipe(recipe, inventory, item
 end
 
 local toastStorage = require("scripts.tcainrework.stored.toast_storage")
-local recipeLookupIndex = require('scripts.tcainrework.stored.name_to_recipe')
-local recipeReverseLookup = require('scripts.tcainrework.stored.recipe_from_ingredient')
 function TCainRework:UnlockItemRecipe(recipeName)
     if recipeName then
         local recipeSave = recipeStorageWrapper()
-        local recipe = recipeLookupIndex[recipeName]
+        local recipe = recipeStorage.nameToRecipe[recipeName]
         if not utility.tableContains(recipeSave, recipeName) then
             local resultingType = (recipe.Results and recipe.Results.Type)
             if resultingType then
@@ -960,11 +959,11 @@ function inventoryHelper.runUnlockItem(item)
     end
     local combinedNameType = inventoryHelper.conditionalItemLookupType(item)
     runSave.obtainedItems[combinedNameType] = true
-    if recipeReverseLookup[combinedNameType] then
+    if recipeStorage.recipeFromIngredient[combinedNameType] then
         -- obtain recipe associations
-        for i, recipeName in ipairs(recipeReverseLookup[combinedNameType]) do
+        for i, recipeName in ipairs(recipeStorage.recipeFromIngredient[combinedNameType]) do
             -- obtain recipe from lookup table
-            local recipe = recipeLookupIndex[recipeName]
+            local recipe = recipeStorage.nameToRecipe[recipeName]
             if recipe and recipe.ConditionTable and recipe.DisplayRecipe then
                 if not (itemRegistry[item.Type] and itemRegistry[item.Type].UnlockAll) then
                     for i, curType in pairs(recipe.ConditionTable) do
