@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "tcainrework:tarot_card{\"card_type\":21}",
+    "c": "tcainrework:penny",
+    "#": "#tcainrework:pickup"
+  },
+  "pattern": [
+    "c#c",
+    "cCc",
+    "c#c"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Bum Friend"
+  }
+}

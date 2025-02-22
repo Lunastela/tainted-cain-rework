@@ -2,11 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "tcainrework:giga_bomb",
-    "tcainrework:mega_battery"
+    "Iron Bar",
+    "tcainrework:pill{\"pill_effect\":19}"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mr. Mega"
+    "collectible": "Teleport!"
   }
 }

@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "T": "minecraft:torch",
-    "B": "tcainrework:giga_bomb",
-    "C": "minecraft:chest"
+    "c": "#tcainrework:card",
+    "r": "#tcainrework:rune",
+    "#": "minecraft:cobblestone"
   },
   "pattern": [
-    "TBT",
-    "TCT"
+    "#c",
+    "r#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mine Crafter"
+    "collectible": "Magic 8 Ball"
   }
 }

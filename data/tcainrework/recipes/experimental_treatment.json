@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "G": "Shard of Glass",
+    "P": "tcainrework:pill{\"pill_effect\":49}",
+    "K": "#tcainrework:key"
+  },
+  "pattern": [
+    "G",
+    "P",
+    "K"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Experimental Treatment"
+  }
+}

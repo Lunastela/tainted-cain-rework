@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "B": "tcainrework:blended_heart",
+    "G": "Shard of Glass",
+    "C": "tcainrework:tarot_card{\"card_type\":11}",
+    "R": "tcainrework:rune{\"card_type\":36}"
+  },
+  "pattern": [
+    "BG",
+    "CR"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Crystal Ball"
+  }
+}

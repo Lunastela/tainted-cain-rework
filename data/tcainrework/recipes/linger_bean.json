@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "T": "minecraft:torch",
-    "B": "tcainrework:giga_bomb",
-    "C": "minecraft:chest"
+    "H": "tcainrework:poop",
+    "C": "Compost"
   },
   "pattern": [
-    "TBT",
-    "TCT"
+    " H ",
+    "HCH",
+    " H "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mine Crafter"
+    "collectible": "Linger Bean"
   }
 }

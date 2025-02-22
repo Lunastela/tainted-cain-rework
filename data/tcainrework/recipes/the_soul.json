@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:soul_heart",
+    "E": "tcainrework:eternal_heart",
+    "C": "tcainrework:reverse_tarot_card{\"card_type\":57}"
+  },
+  "pattern": [
+    " # ",
+    "ECE",
+    "# #"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Soul"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "minecraft:oak_planks",
+    "P": "minecraft:paper",
+    "C": "tcainrework:tarot_card{\"card_type\":9}"
+  },
+  "pattern": [
+    "#P#",
+    "#C#",
+    "###"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Box"
+  }
+}

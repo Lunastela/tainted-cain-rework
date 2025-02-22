@@ -2,11 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "tcainrework:giga_bomb",
-    "tcainrework:mega_battery"
+    "tcainrework:pill{\"pill_effect\":30}",
+    "The Poop"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mr. Mega"
+    "collectible": "IBS"
   }
 }

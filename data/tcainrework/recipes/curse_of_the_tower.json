@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "minecraft:paper",
+    "H": "tcainrework:half_heart",
+    "S": "tcainrework:half_soul_heart",
+    "C": "tcainrework:tarot_card{\"card_type\":17}"
+  },
+  "pattern": [
+    " # ",
+    "HCS",
+    " # "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Curse of the Tower"
+  }
+}

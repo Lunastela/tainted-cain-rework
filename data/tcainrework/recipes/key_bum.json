@@ -2,11 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "tcainrework:giga_bomb",
-    "tcainrework:mega_battery"
+    "tcainrework:tarot_card{\"card_type\":21}",
+    "minecraft:leather",
+    "#tcainrework:key"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mr. Mega"
+    "collectible": "Key Bum"
   }
 }

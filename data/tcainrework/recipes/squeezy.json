@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "#tcainrework:heart",
+    "S": "#tcainrework:soul_heart",
+    "P": "#tcainrework:pill",
+    "L": "minecraft:leather"
+  },
+  "pattern": [
+    "PSP",
+    " # ",
+    "L#L"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Squeezy"
+  }
+}

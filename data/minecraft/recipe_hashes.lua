@@ -21,7 +21,7 @@ return {
                 Type = "minecraft:bowl",
                 Count = 4
             },
-            DisplayRecipe = false
+            DisplayRecipe = true
         },
         {
             RecipeName = "minecraft:bucket",

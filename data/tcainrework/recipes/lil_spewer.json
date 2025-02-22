@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:pill{\"pill_effect\":21}",
+    "#tcainrework:pill",
+    "#tcainrework:soul_heart",
+    "#tcainrework:heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Lil Spewer"
+  }
+}

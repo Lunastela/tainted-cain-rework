@@ -2,16 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "tcainrework:key",
-    "B": "tcainrework:rune{\"card_type\":36}"
+    "#": "tcainrework:half_heart",
+    "I": "#tcainrework:key",
+    "C": "tcainrework:tarot_card{\"card_type\":14}"
   },
   "pattern": [
     " # ",
-    "#B#",
+    "ICI",
     " # "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "The Compass"
+    "collectible": "Blood Rights"
   }
 }

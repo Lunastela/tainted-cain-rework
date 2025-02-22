@@ -2,11 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "tcainrework:giga_bomb",
-    "tcainrework:mega_battery"
+    "Plum Flute"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mr. Mega"
+    "collectible": "Fruity Plum"
   }
 }

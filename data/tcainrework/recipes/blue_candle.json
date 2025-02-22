@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:soul_heart",
+    "w": "minecraft:oak_planks",
+    "b": "#tcainrework:bomb",
+    "B": "#tcainrework:battery"
+  },
+  "pattern": [
+    " # ",
+    "wbw",
+    "bBb"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Candle"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:card{\"card_type\":28}",
+    "tcainrework:lucky_penny",
+    "tcainrework:rune{\"card_type\":33,\"custom_gfx\":\"gfx\/items\/cards\/left_rune.png\"}"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Crooked Penny"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "tcainrework:tarot_card{\"card_type\":21}",
+    "H": "tcainrework:heart",
+    "B": "tcainrework:black_heart"
+  },
+  "pattern": [
+    "HHB",
+    "HCB",
+    "HBB"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Dark Bum"
+  }
+}

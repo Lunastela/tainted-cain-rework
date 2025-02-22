@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "minecraft:paper",
+    "G": "tcainrework:golden_bomb",
+    "J": "tcainrework:rune{\"card_type\":33,\"custom_gfx\":\"gfx\/items\/cards\/left_rune.png\"}"
+  },
+  "pattern": [
+    "#J#",
+    "#G#",
+    "###"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "BOGO Bombs"
+  }
+}

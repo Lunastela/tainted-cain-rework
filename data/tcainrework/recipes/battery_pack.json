@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "minecraft:paper",
+    "#tcainrework:battery",
+    "#tcainrework:battery",
+    "#tcainrework:battery",
+    "#tcainrework:battery",
+    "tcainrework:charged_key",
+    "minecraft:paper"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Battery Pack"
+  }
+}

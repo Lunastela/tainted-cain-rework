@@ -2,11 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "tcainrework:giga_bomb",
-    "tcainrework:mega_battery"
+    "Mom's Bracelet",
+    "Champion Belt"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Mr. Mega"
+    "collectible": "Suplex!"
   }
 }

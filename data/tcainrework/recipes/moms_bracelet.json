@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "minecraft:cobblestone",
+    "G": "#tcainrework:golden",
+    "C": "tcainrework:tarot_card{\"card_type\":12}"
+  },
+  "pattern": [
+    "###",
+    "#G#",
+    "#C#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Mom's Bracelet"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "minecraft:oak_planks",
+    "H": "tcainrework:heart",
+    "P": "tcainrework:pill{\"pill_effect\":38}"
+  },
+  "pattern": [
+    " P ",
+    "H##",
+    "H##"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Plum Flute"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:tarot_card{\"card_type\":12}",
+    "tcainrework:rune{\"card_type\":32,\"custom_gfx\":\"gfx\/items\/cards\/left_rune.png\"}"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Leo"
+  }
+}

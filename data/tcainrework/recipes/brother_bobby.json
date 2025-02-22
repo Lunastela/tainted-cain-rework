@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:rotten_heart",
+    "D": "tcainrework:wooden_doll",
+    "L": "minecraft:leather"
+  },
+  "pattern": [
+    " L ",
+    " D ",
+    "# #"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Brother Bobby"
+  }
+}

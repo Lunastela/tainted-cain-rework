@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:bone_heart",
+    "C": "#tcainrework:card",
+    "T": "tcainrework:reverse_tarot_card{\"card_type\":70}",
+    "P": "#tcainrework:pill"
+  },
+  "pattern": [
+    "#T#",
+    "P#C",
+    "P#C"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Echo Chamber"
+  }
+}
