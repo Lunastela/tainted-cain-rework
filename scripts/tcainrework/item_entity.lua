@@ -57,11 +57,14 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
                     pickupData.lerpTimer = math.min((pickupData.lerpTimer or 0) + 0.025, 1)
                     pickupData.overridePosition:Lerp(entity.Position - pickupData.pickupEntity.Position, pickupData.lerpTimer or 0)
                     if (pickupData.overridePosition - targetPosition):Length() <= 5 then
-                        mod:AddItemToInventory(pickupData.Type, pickupData.Count, pickupData.ComponentData)
-                        SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Pop"), 2, 2, false, math.random(16, 24) / 10, 0)
-                        collectedItems[entityHash] = true
-                        elapsedTimeTable[entityHash] = nil
-                        entity:Remove()
+                        if mod:AddItemToInventory(pickupData.Type, pickupData.Count, pickupData.ComponentData) then
+                            collectedItems[entityHash] = true
+                            elapsedTimeTable[entityHash] = nil
+                            entity:Remove()
+                            return false
+                        else
+                            pickupData.pickupEntity = nil
+                        end
                     end
                 end
 
@@ -96,7 +99,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collid
     local pickupData = saveManager.GetRoomFloorSave(entity) 
         and saveManager.GetRoomFloorSave(entity).RerollSave
     if (collider.Type == EntityType.ENTITY_PLAYER) then
-        if (mod.inventoryHelper.searchForFreeSlot(
+        if (entity.Wait <= 0) and (mod.inventoryHelper.searchForFreeSlot(
             {mod.inventoryHelper.getInventory(InventoryTypes.HOTBAR), mod.inventoryHelper.getInventory(InventoryTypes.INVENTORY)}, pickupData)
         ) then
             pickupData.pickupEntity = collider

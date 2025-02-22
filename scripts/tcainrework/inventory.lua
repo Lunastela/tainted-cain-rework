@@ -622,6 +622,7 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
         end
     end
     if addedAny then
+        SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Pop"), 2, 2, false, math.random(16, 24) / 10, 0)
         local myItem = inventoryHelper.createItem(pickupType)
         if optionalComponentData then
             myItem.ComponentData = optionalComponentData

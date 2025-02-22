@@ -5,6 +5,7 @@ return {
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#familiar", "#baby"},
         StackSize = 16,
+        UnlockAll = true,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false
     }

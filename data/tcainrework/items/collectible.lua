@@ -5,6 +5,7 @@ return {
         GFX = "gfx/isaac/items/questionmark.png",
         RenderModel = InventoryItemRenderType.Default,
         StackSize = 16,
+        UnlockAll = true,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false
     },

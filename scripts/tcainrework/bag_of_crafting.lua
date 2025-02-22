@@ -232,6 +232,7 @@ end
 
 local skipNext, deleteNext = false, false
 local function initializeSalvage(entity)
+    deleteNext = false
     if not salvagingList[GetPtrHash(entity)] then
         skipNext = true
         salvageCollectible(entity)

@@ -941,11 +941,13 @@ function inventoryHelper.runUnlockItem(item)
             -- obtain recipe from lookup table
             local recipe = recipeLookupIndex[recipeName]
             if recipe and recipe.ConditionTable and recipe.DisplayRecipe then
-                for i, curType in pairs(recipe.ConditionTable) do
-                    local fakeItem = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(curType))
-                    if not (runSave.obtainedItems[curType]
-                    or runSave.obtainedItems[fakeItem]) then
-                        goto skipUnlocking
+                if not (itemRegistry[item.Type] and itemRegistry[item.Type].UnlockAll) then
+                    for i, curType in pairs(recipe.ConditionTable) do
+                        local fakeItem = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(curType))
+                        if not (runSave.obtainedItems[curType]
+                        or runSave.obtainedItems[fakeItem]) then
+                            goto skipUnlocking
+                        end
                     end
                 end
                 TCainRework:UnlockItemRecipe(recipeName)
