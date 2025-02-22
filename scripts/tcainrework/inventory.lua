@@ -1273,7 +1273,8 @@ function mod:RenderInventory()
                 and hotbarInventory[hotbarSlotSelected].Type then
                     -- if collectible item
                     if hotbarInventory[hotbarSlotSelected].ComponentData
-                    and hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
+                    and hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
+                    and inventoryHelper.getItemUnlocked(hotbarInventory[hotbarSlotSelected]) then
                         local collectibleType = hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
                         -- Well aware this doesn't work with multiplayer. won't fix yet
                         if rmbTrigger and player and player:IsItemQueueEmpty() then

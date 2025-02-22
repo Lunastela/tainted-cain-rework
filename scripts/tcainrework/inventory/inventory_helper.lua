@@ -71,6 +71,17 @@ function inventoryHelper.getItemRenderType(pickupType)
     return renderTypes.Default
 end
 
+local persistentGameData = Isaac.GetPersistentGameData()
+function inventoryHelper.getItemUnlocked(item)
+    if item.ComponentData and item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
+        local collectibleConfig = utility.getCollectibleConfig(item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
+        if collectibleConfig and collectibleConfig.AchievementID then
+            return persistentGameData:Unlocked(collectibleConfig.AchievementID)
+        end
+    end
+    return true
+end
+
 local levelObject = (Game() and Game():GetLevel()) or nil
 TCainRework:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, function(_)
     levelObject = Game():GetLevel()
@@ -623,11 +634,18 @@ function inventoryHelper.itemGetFullName(pickup)
         end
         if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
             local itemConfig = utility.getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
-            if itemTypeTable[itemConfig.Type] then
+            if not inventoryHelper.getItemUnlocked(pickup) then
                 table.insert(nameTable, {
-                    String = itemTypeTable[itemConfig.Type],
-                    Rarity = InventoryItemRarity.EFFECT_POSITIVE
+                    String = "Locked, Inventory Only",
+                    Rarity = InventoryItemRarity.EFFECT_NEGATIVE
                 })
+            else
+                if itemTypeTable[itemConfig.Type] then
+                    table.insert(nameTable, {
+                        String = itemTypeTable[itemConfig.Type],
+                        Rarity = InventoryItemRarity.EFFECT_POSITIVE
+                    })
+                end
             end
             table.insert(nameTable, {
                 String = blindTextAppend .. utility.getLocalizedString("Items", itemConfig.Description),
