@@ -6,8 +6,8 @@ local saveManager = require("scripts.save_manager")
 saveManager.Init(mod)
 
 local utility = require("scripts.tcainrework.util")
-include("scripts.tcainrework.inventory.inventoryenums")
-mod.inventoryHelper = include("scripts.tcainrework.inventory.inventoryhelper")
+include("scripts.tcainrework.inventory.inventory_enums")
+mod.inventoryHelper = include("scripts.tcainrework.inventory.inventory_helper")
 
 include("scripts.tcainrework.dss.dead_sea_scrolls")
 
@@ -66,7 +66,7 @@ function mod:loadRegistry(curLoad)
         function(registryName, foundData)
             if foundData and foundData.Properties then
                 collectibleStorage.itemIterator = collectibleStorage.itemIterator + 1
-                numberToItems[collectibleStorage.itemIterator] = registryName
+                numberToItems[(collectibleStorage.itemIterator - collectibleStorage.itemOffset)] = registryName
                 foundData.Properties.NumericID = collectibleStorage.itemIterator
                 itemDescriptions[registryName] = foundData.Properties
                 if foundData.ObtainedFrom then -- Register Entities that turn into this item

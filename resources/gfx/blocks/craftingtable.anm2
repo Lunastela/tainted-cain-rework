@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="1/11/2025 5:17:56 AM" Version="106" Fps="30"/>
+	<Info CreatedBy="robot" CreatedOn="2/21/2025 8:17:41 PM" Version="108" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="..\minecraft\blocks\crafting_table.png" Id="0"/>

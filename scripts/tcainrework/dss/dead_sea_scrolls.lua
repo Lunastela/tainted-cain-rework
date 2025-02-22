@@ -179,11 +179,11 @@ local stringTable = {
     ["false"] = "OFF",
     ["true"] = "ON",
     ["Fabulous"] = "§oFabulous!",
-    ["drop pickups"] = "Keep inventory after death"
+    ["do not drop pickups"] = "Keep inventory after death"
 }
 
 local selectedOption = nil
-local inputHelper = include("scripts.tcainrework.mouse_inputs")
+local inputHelper = include("scripts.tcainrework.input_helper")
 local separationDistance = 24
 local scrollAmount, scrollSelected, lastMousePosition = 0, false, Vector.Zero
 local function settingsMenuRenderer(panel, pos, item, tbl)
@@ -662,8 +662,8 @@ local cainCraftingDirectory = {
                 }
             },
             {
-                str = "drop pickups",
-                choices = {"true", "false"},
+                str = "do not drop pickups",
+                choices = {"false", "true"},
                 setting = 1,
                 variable = "keepInventory",
                 load = function ()

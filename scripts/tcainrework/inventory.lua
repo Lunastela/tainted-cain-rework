@@ -1,7 +1,7 @@
 local mod = TCainRework
 
 -- load input helpers and utility helpers
-local inputHelper = include("scripts.tcainrework.mouse_inputs")
+local inputHelper = include("scripts.tcainrework.input_helper")
 local inventoryHelper = mod.inventoryHelper
 local minecraftFont = include("scripts.tcainrework.font")
 local saveManager = require("scripts.save_manager")
@@ -453,6 +453,44 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                 end
             end
         end
+        -- inventory controls thingies
+        if not searchBarSelected then
+            for i = 1, 10 do 
+                if (Input.IsButtonTriggered(Keyboard.KEY_0 + i, 0)) then
+                    local hotbarInventory = inventoryHelper.getInventory(InventoryTypes.HOTBAR)
+                    local lastHotbarItem, lastInventoryItem = hotbarInventory[i], inventory[itemIndex]
+                    inventory[itemIndex] = lastHotbarItem
+                    hotbarInventory[i] = lastInventoryItem
+
+                    if curDisplayingRecipe then
+                        local isOutput = inventory == inventoryHelper.getInventory(InventoryTypes.OUTPUT)
+                        local isCrafting = inventory == inventoryHelper.getInventory(InventoryTypes.CRAFTING)
+                        if isOutput or isCrafting then
+                            curDisplayingRecipe = false
+                        end
+                    end
+                end
+            end
+            if inventory[itemIndex] then
+                if (inputHelper.buttonHeldSticky(Keyboard.KEY_Q)) then
+                    local itemType, componentData = inventory[itemIndex].Type, inventory[itemIndex].ComponentData
+                    local amountRemoved = inventoryHelper.removePossibleAmount(inventory, itemIndex, 
+                        (inputHelper.isControlHeld() and 64) or 1
+                    )
+                    local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+                    if player and (amountRemoved > 0) then
+                        local minecraftItem = Isaac.Spawn(
+                            EntityType.ENTITY_PICKUP, mod.minecraftItemID, 0, 
+                            player.Position, (player.Velocity:Normalize() or Vector(0, 1)) * 2, player
+                        )
+                        local pickupData = saveManager.GetRoomFloorSave(minecraftItem) 
+                            and saveManager.GetRoomFloorSave(minecraftItem).RerollSave
+                        pickupData.Type, pickupData.ComponentData = itemType, componentData
+                        pickupData.Count = amountRemoved
+                    end
+                end
+            end
+        end
         currentTooltipInformation = {Index = itemIndex, Inventory = inventory}
         myItem = inventory[itemIndex]
     end
@@ -558,6 +596,7 @@ local function getInventories()
 end
 
 -- Add Item Logic
+local cellAnimation, lastSelectedSlot = {}, 0
 function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
     local addedAny = false
     for i = 1, amount do
@@ -576,6 +615,12 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
             local lastCount = (slotData and slotData.Count) or 0
             fakeItem.Count = lastCount + 1
             freeSlotData.Inventory[freeSlotData.Slot] = fakeItem
+            if freeSlotData.Inventory == inventoryHelper.getInventory(InventoryTypes.HOTBAR) then
+                cellAnimation[freeSlotData.Slot] = nil
+                if freeSlotData.Slot == lastSelectedSlot then
+                    lastSelectedSlot = 0
+                end
+            end
             addedAny = true
         end
     end
@@ -634,7 +679,18 @@ if EID then
     end)
 end
 
-mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
+local cellAnimationSpeed = 0.5
+local defaultScale = Vector(42, 46)
+local cellAnimationScales = {
+    Vector(22, 65),
+    Vector(26, 61),
+    Vector(30, 57),
+    Vector(34, 53),
+    Vector(40, 47),
+    defaultScale
+}
+local lastItemName, slotTimer = "", 0
+function mod:RenderInventory()
     if EID then
         EID.CraftingIsHidden = true
     end
@@ -683,12 +739,18 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
         hotbarInterface:Play("Selector", true)
         hotbarInterface:Render(screenCenter + Vector((hotbarSlotSelected - 1) * hotbarCellSize, Isaac.GetScreenHeight() / 2))
         local hotbarInventory = inventoryHelper.getInventory(InventoryTypes.HOTBAR)
-        for i = 0, inventoryHelper.getInventoryWidth(hotbarInventory) do
-            local hotbarSlot = hotbarInventory[i + 1]
+        for i = 1, inventoryHelper.getInventoryWidth(hotbarInventory) do
+            local hotbarSlot = hotbarInventory[i]
+            cellAnimation[i] = math.min((cellAnimation[i] or (1 - cellAnimationSpeed)) + cellAnimationSpeed, #cellAnimationScales)
             if hotbarSlot then
                 local hotbarPosition = screenCenter + Vector(CELL_SIZE - 6, (Isaac.GetScreenHeight() / 2)) 
-                    - Vector((hotbarCellSize * 5) - (i * hotbarCellSize), hotbarCellSize - 1)
-                inventoryHelper.renderItem(hotbarInventory[i + 1], hotbarPosition)
+                    - Vector((hotbarCellSize * 5) - ((i - 1) * hotbarCellSize), hotbarCellSize - 1)
+                local myScale = cellAnimationScales[math.floor(cellAnimation[i])] / defaultScale
+                inventoryHelper.renderItem(
+                    hotbarInventory[i], 
+                    (hotbarPosition + Vector(8, 12) - (Vector(8, 12) * myScale)), 
+                    myScale
+                )
                 if hotbarSlot.Count > 1 then
                     local itemCountString = tostring(hotbarSlot.Count)
                     local inventoryPositionText = Vector(hotbarPosition.X + (CELL_SIZE - minecraftFont:GetStringWidth(itemCountString)) - 1, 
@@ -696,12 +758,43 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                     inventoryHelper.renderMinecraftText(itemCountString, inventoryPositionText, InventoryItemRarity.COMMON, true)
                 end
 
+                if (hotbarSlotSelected == i) then
+                    if hotbarSlotSelected ~= lastSelectedSlot or not lastItemName then
+                        local itemName = inventoryHelper.itemGetFullName(hotbarSlot)[1]
+                        if (not lastItemName) or (lastItemName.String ~= itemName.String) then
+                            slotTimer = 400
+                            lastItemName = itemName
+                        end
+                        lastSelectedSlot = hotbarSlotSelected
+                    end
+                    -- hacky text color render fix
+                    local colorRarities = InventoryItemRarityColors
+                    if lastItemName and lastItemName.Rarity and lastItemName.String then
+                        local currentAlpha, currentAlphaShadow = colorRarities[lastItemName.Rarity].Color.Alpha, colorRarities[lastItemName.Rarity].Shadow.Alpha
+                        local myAlpha = math.max(math.min(slotTimer, 100) / 100, 0)
+                        -- Set colors to our alpha temporarily
+                        colorRarities[lastItemName.Rarity].Color.Alpha, colorRarities[lastItemName.Rarity].Shadow.Alpha = myAlpha, myAlpha
+                        -- Render text at center of hotbar
+                        inventoryHelper.renderMinecraftText(lastItemName.String, 
+                            screenCenter + Vector(-(minecraftFont:GetStringWidth(lastItemName.String) / 2), (Isaac.GetScreenHeight() / 2) - 46), 
+                            lastItemName.Rarity, true, true
+                        )
+                        -- Set color back to original colors
+                        colorRarities[lastItemName.Rarity].Color.Alpha, colorRarities[lastItemName.Rarity].Shadow.Alpha = currentAlpha, currentAlphaShadow
+                    end
+                    if slotTimer > 0 then
+                        slotTimer = slotTimer - 3
+                    end
+                end
+
                 if (inventoryState == InventoryStates.CLOSED)
-                and ((hotbarInventory[i + 1].ComponentData
-                and hotbarInventory[i + 1].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
+                and ((hotbarInventory[i].ComponentData
+                and hotbarInventory[i].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
                 and (not inventoryHelper.getCollectibleCrafted())) then
                     inventoryHelper.getCollectibleCrafted(true)
                 end
+            elseif (hotbarSlotSelected == i) then
+                lastItemName = ""
             end
         end
 
@@ -825,24 +918,12 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                             -- end
                             
                             local appendChar = keyResponse[1 + (alternateKey and 1 or 0)]
-                            if Input.IsButtonTriggered(key, 0) then
+                            if inputHelper.buttonHeldSticky(key) then
                                 if key == Keyboard.KEY_BACKSPACE then
                                     searchBarText = searchBarText.sub(searchBarText, 1, -2)
                                 elseif not exceededSearchBar then
                                     searchBarText = searchBarText .. appendChar
                                 end
-                            elseif Input.IsButtonPressed(key, 0) then
-                                utility.HeldKeysList[key] = (utility.HeldKeysList[key] or 0) + 1
-                                if utility.HeldKeysList[key] > 16 
-                                and utility.HeldKeysList[key] % 2 == 0 then
-                                    if key == Keyboard.KEY_BACKSPACE then
-                                        searchBarText = searchBarText.sub(searchBarText, 1, -2)
-                                    elseif not exceededSearchBar then
-                                        searchBarText = searchBarText .. appendChar
-                                    end
-                                end
-                            else
-                                utility.HeldKeysList[key] = nil
                             end
                         end
                     end
@@ -918,72 +999,73 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                                                     table.sort(sortedItemStack, function(a, b)
                                                         return inventoryHelper.sortTableByTags(itemsNeeded[a].Type, itemsNeeded[b].Type)
                                                     end)
-                                                    -- for i, assignedIndex in ipairs(sortedItemStack) do
-                                                    --     print(i, assignedIndex, itemsNeeded[assignedIndex].Type)
-                                                    -- end
-                                                    for i, inventory in ipairs(inventorySet) do
-                                                        if (inventory ~= craftingInventory
-                                                        and inventoryHelper.isValidInventory(inventory)) then
-                                                            -- Obtain the highest amount of items per slot able to be placed (based on previous configurations)
-                                                            local lowestNumber, highestAllowedNumber = nil, nil
-                                                            for index, itemIndex in ipairs(sortedItemStack) do
-                                                                local currentAmount = (craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or 0
-                                                                local currentMaxStack = (craftingInventory[itemIndex] and inventoryHelper.getMaxStackFor(craftingInventory[itemIndex].Type)) or 9999
-                                                                lowestNumber = math.min(currentAmount, ((lowestNumber ~= nil) and lowestNumber) or currentAmount)
-                                                                highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
-                                                            end
-                                                            lowestNumber = (lowestNumber or 1)
-                                                            -- Loop through necessary ingredients
-                                                            for index, itemIndex in ipairs(sortedItemStack) do
-                                                                local itemOrTag = itemsNeeded[itemIndex]
-                                                                if itemOrTag then
-                                                                    -- Get best items for the list in order
-                                                                    local inventoryLookupTable = {}
+                                                    
+                                                    -- Obtain the highest amount of items per slot able to be placed (based on previous configurations)
+                                                    local lowestNumber, highestAllowedNumber = nil, nil
+                                                    for index, itemIndex in ipairs(sortedItemStack) do
+                                                        local currentAmount = (craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or 0
+                                                        local currentMaxStack = (craftingInventory[itemIndex] and inventoryHelper.getMaxStackFor(craftingInventory[itemIndex].Type)) or 9999
+                                                        lowestNumber = math.min(currentAmount, ((lowestNumber ~= nil) and lowestNumber) or currentAmount)
+                                                        highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
+                                                    end
+                                                    lowestNumber = (lowestNumber or 1)
+
+                                                    -- Loop through necessary ingredients
+                                                    for index, itemIndex in ipairs(sortedItemStack) do
+                                                        local itemOrTag = itemsNeeded[itemIndex]
+                                                        if itemOrTag then
+                                                            -- Get best items for the list in order
+                                                            local itemLookupTable = {}
+                                                            for i, inventory in ipairs(inventorySet) do
+                                                                if (inventory ~= craftingInventory
+                                                                and inventoryHelper.isValidInventory(inventory)) then
                                                                     for j in pairs(inventory) do
                                                                         if (inventory[j] and inventory[j].Type) and ((itemTagLookup[itemOrTag.Type] 
                                                                         and (utility.tableContains(itemTagLookup[itemOrTag.Type], inventory[j].Type)
                                                                         or (utility.tableContains(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(inventory[j])))))
                                                                         or (inventory[j].Type == itemOrTag.Type)) then
                                                                             -- print(inventory[j].Type, itemOrTag.Type)
-                                                                            table.insert(inventoryLookupTable, j)
+                                                                            table.insert(itemLookupTable, {Inventory = inventory, Index = j})
                                                                         end
                                                                     end
-                                                                    if itemTagLookup[itemOrTag.Type] then
-                                                                        table.sort(inventoryLookupTable, function(a, b)
-                                                                            return ((utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventory[a].Type) 
-                                                                                or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(inventory[a])))
-                                                                                < (utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventory[b].Type) 
-                                                                                or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(inventory[b]))))
-                                                                        end)
-                                                                    end
-                                                                    -- for i in ipairs(inventoryLookupTable) do
-                                                                    --     print(inventory[inventoryLookupTable[i]].Type)
-                                                                    -- end
-                                                                    for j, inventoryItemIndex in ipairs(inventoryLookupTable) do
-                                                                        local inventoryItem = inventory[inventoryItemIndex]
-                                                                        if inventoryItem then
-                                                                            -- print("item item item atemt", inventoryItem.Type, craftingInventory[itemIndex] and craftingInventory[itemIndex].Type)
-                                                                            if inventoryHelper.itemCanStackWithTag(inventoryItem, itemOrTag) and ((not craftingInventory[itemIndex]) 
-                                                                            or (inventoryHelper.itemCanStackWith(inventoryItem, craftingInventory[itemIndex]) 
-                                                                            and craftingInventory[itemIndex].Count <= lowestNumber))
-                                                                            and (lowestNumber < highestAllowedNumber) then
-                                                                                local lastItemData = inventoryItem.ComponentData
-                                                                                local removeAmount = inventoryHelper.removePossibleAmount(inventory, inventoryItemIndex, 1)
-                                                                                if removeAmount > 0 then
-                                                                                    craftingInventory[itemIndex] = {
-                                                                                        Type = inventoryItem.Type,
-                                                                                        Count = ((craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or 0) + removeAmount,
-                                                                                        ComponentData = lastItemData
-                                                                                    }
-                                                                                    itemsNeeded[itemIndex] = nil
-                                                                                end
-                                                                            end
+                                                                end
+                                                            end
+                                                            if itemTagLookup[itemOrTag.Type] then
+                                                                table.sort(itemLookupTable, function(a, b)
+                                                                    return ((utility.getIndexInTable(itemTagLookup[itemOrTag.Type], a.Inventory[a.Index].Type) 
+                                                                        or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(a.Inventory[a.Index])))
+                                                                        < (utility.getIndexInTable(itemTagLookup[itemOrTag.Type], b.Inventory[b.Index].Type) 
+                                                                        or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(b.Inventory[b.Index]))))
+                                                                end)
+                                                            end
+                                                            -- for i in ipairs(inventoryLookupTable) do
+                                                            --     print(inventory[inventoryLookupTable[i]].Type)
+                                                            -- end
+                                                            for j, itemLookup in ipairs(itemLookupTable) do
+                                                                local inventoryItem = itemLookup.Inventory[itemLookup.Index]
+                                                                if inventoryItem then
+                                                                    -- print("item item item atemt", inventoryItem.Type, craftingInventory[itemIndex] and craftingInventory[itemIndex].Type)
+                                                                    if inventoryHelper.itemCanStackWithTag(inventoryItem, itemOrTag) and ((not craftingInventory[itemIndex]) 
+                                                                    or (inventoryHelper.itemCanStackWith(inventoryItem, craftingInventory[itemIndex]) 
+                                                                    and craftingInventory[itemIndex].Count <= lowestNumber))
+                                                                    and (lowestNumber < highestAllowedNumber) then
+                                                                        local lastItemData = inventoryItem.ComponentData
+                                                                        local removeAmount = inventoryHelper.removePossibleAmount(itemLookup.Inventory, itemLookup.Index, 1)
+                                                                        if removeAmount > 0 then
+                                                                            craftingInventory[itemIndex] = {
+                                                                                Type = inventoryItem.Type,
+                                                                                Count = ((craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or 0) + removeAmount,
+                                                                                ComponentData = lastItemData
+                                                                            }
+                                                                            itemsNeeded[itemIndex] = nil
                                                                         end
                                                                     end
                                                                 end
                                                             end
                                                         end
                                                     end
+                                                    --     end
+                                                    -- end
                                                 else
                                                     times = 0
                                                     goto endRecipes
@@ -1143,8 +1225,7 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
                     else -- attempt dropping item
                         if not (inventoryHelper.hoveringOver(mousePosition, screenCenter - (inventorySize / 2), inventorySize.X, inventorySize.Y)
                         or (recipeBookOpen and inventoryHelper.hoveringOver(mousePosition, screenCenter - (Vector(inventorySize.X - 30, 0) + (inventorySize / 2)),  inventorySize.X, inventorySize.Y))) then
-                            local dropPressed = Input.IsButtonPressed(Keyboard.KEY_Q, 0)
-                            local amount = (rmbRelease and 1) or (cursorHeldItem.Count or dropPressed)
+                            local amount = (rmbRelease and 1) or (cursorHeldItem.Count)
                             if lmbRelease or rmbRelease then
                                 cursorHeldItem.Count = cursorHeldItem.Count - amount
                                 local minecraftItem = Isaac.Spawn(EntityType.ENTITY_PICKUP, mod.minecraftItemID, 0, player.Position, (player.Velocity:Normalize() or Vector(0, 1)) * 2, player)
@@ -1239,7 +1320,30 @@ mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function(_)
             -- print(Isaac.GetTime() - currentTime)
         end
     end
-end)
+end
+
+if StageAPI and StageAPI.Loaded then
+    StageAPI.UnregisterCallbacks("CainCraftingTable")
+    StageAPI.AddCallback(
+        "CainCraftingTable",
+        "POST_HUD_RENDER",
+        CallbackPriority.DEFAULT,
+        function()
+            if PauseMenu.GetState() <= PauseMenuStates.CLOSED
+            and not StageAPI.IsHUDAnimationPlaying() then
+                mod:RenderInventory()
+            end
+        end
+    )
+    mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, function()
+        if ((PauseMenu.GetState() > PauseMenuStates.CLOSED)
+        or StageAPI.IsHUDAnimationPlaying()) then
+            mod:RenderInventory()
+        end
+    end)
+else
+    mod:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, mod.RenderInventory)
+end
 
 local function resetInventories(_)
     inventoryState = InventoryStates.CLOSED

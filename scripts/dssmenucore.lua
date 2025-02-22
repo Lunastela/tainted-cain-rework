@@ -3287,28 +3287,28 @@ function dssmenucore.init(DSSModName, MenuProvider)
         function dssmod:CheckMenuOpen()
             openCalledRecently = false
 
-            if (not StageAPI or not StageAPI.Loaded or StageAPI.IsPauseMenuOpen()) or REPENTOGON then
+            if (not StageAPI or not StageAPI.Loaded or StageAPI.IsPauseMenuOpen()) then
                 dssmod.checkMenu()
             end
         end
 
+        function dssmod.CheckMenuOpenStageAPI(isPauseMenuOpen)
+            if not isPauseMenuOpen then
+                dssmod.checkMenu()
+            end
+        end
+
+        if StageAPI and StageAPI.Loaded then
+            StageAPI.UnregisterCallbacks("DeadSeaScrollsMenu")
+            StageAPI.AddCallback(
+                "DeadSeaScrollsMenu",
+                "POST_HUD_RENDER",
+                99,
+                dssmod.CheckMenuOpenStageAPI
+            )
+        end
+
         if not REPENTOGON then
-            function dssmod.CheckMenuOpenStageAPI(isPauseMenuOpen)
-                if not isPauseMenuOpen then
-                    dssmod.checkMenu()
-                end
-            end
-
-            if StageAPI and StageAPI.Loaded then
-                StageAPI.UnregisterCallbacks("DeadSeaScrollsMenu")
-                StageAPI.AddCallback(
-                    "DeadSeaScrollsMenu",
-                    "POST_HUD_RENDER",
-                    99,
-                    dssmod.CheckMenuOpenStageAPI
-                )
-            end
-
             dssmod:AddCallback(ModCallbacks.MC_POST_RENDER, dssmod.CheckMenuOpen)
         else
             dssmod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.LATE, dssmod.CheckMenuOpen)

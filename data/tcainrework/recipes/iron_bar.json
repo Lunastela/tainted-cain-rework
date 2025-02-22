@@ -5,8 +5,8 @@
     "#": "#tcainrework:metal"
   },
   "pattern": [
-    "##",
-    "##"
+    "###",
+    "###"
   ],
   "result": {
     "id": "tcainrework:collectible",

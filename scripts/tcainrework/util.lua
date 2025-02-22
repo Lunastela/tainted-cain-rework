@@ -239,7 +239,6 @@ function Utility.renderNineSlice(sprite, position, boxScale)
 end
 
 -- https://github.com/Team-Compliance/libraryofisaac/blob/main/Input/KeyboardToString.lua
-Utility.HeldKeysList = {}
 Utility.KeyboardStringList = {
     [Keyboard.KEY_SPACE] = { " ", " " },
     [Keyboard.KEY_APOSTROPHE] = { "'", '"' },

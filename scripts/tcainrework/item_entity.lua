@@ -11,6 +11,7 @@ local minecraftItemID = mod.minecraftItemID
 local constantScale = Vector.One * 1.15
 local numberToItems = require("scripts.tcainrework.stored.num_to_id")
 local itemDescriptions = require("scripts.tcainrework.stored.id_to_iteminfo")
+local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 
 local simpleItemDisplacement = {
     0, 1, 3, -2, 1
@@ -124,6 +125,36 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collid
     end
 end, minecraftItemID)
 
+-- keepInventory
+mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, function(_, entity)
+    -- only if the player has the bag of crafting
+    local player = entity:ToPlayer()
+    if (player and player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+    and ((TCainRework.getModSettings().keepInventory or 1) == 1)) then
+        local inventoryHelper = mod.inventoryHelper
+        -- in the future, check individual player inventories
+        local inventoryList = saveManager.GetRunSave().Inventories
+        for i, inventory in pairs(inventoryList) do
+            if inventoryHelper.isValidInventory(inventory) then
+                for j, inventoryItem in pairs(inventory) do
+                    local itemPickup = Isaac.Spawn(
+                        EntityType.ENTITY_PICKUP, minecraftItemID, 0, player.Position, 
+                        EntityPickup.GetRandomPickupVelocity(player.Position), player
+                    )
+                    local pickupData = (saveManager.GetRoomFloorSave(itemPickup) 
+                        and saveManager.GetRoomFloorSave(itemPickup).RerollSave)
+                    -- shallow copy
+                    for k, v in pairs(inventory[j]) do
+                        pickupData[k] = v
+                    end
+                    inventory[j] = nil
+                end
+            end
+        end
+    end
+end, EntityType.ENTITY_PLAYER)
+
+
 local function numericID(string)
     return itemDescriptions[string].NumericID
 end
@@ -152,7 +183,7 @@ function mod:testChestOpening(chest)
                     local pickupData = saveManager.GetRoomFloorSave(itemPickup) 
                         and saveManager.GetRoomFloorSave(itemPickup).RerollSave
                     local dropOutcomes = chestDropRates[chest.Variant] or defaultDrop
-                    pickupData.Type = numberToItems[dropOutcomes:PickOutcome(chest:GetDropRNG())]
+                    pickupData.Type = numberToItems[dropOutcomes:PickOutcome(chest:GetDropRNG()) - collectibleStorage.itemOffset]
                     pickupData.Count = 1
                 end
             end

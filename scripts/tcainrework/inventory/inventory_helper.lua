@@ -147,10 +147,11 @@ end
 local inventoryInformation = {}
 function inventoryHelper.createInventory(width, height, name, renderFunction, resultOnly)
     local runSave = saveManager.GetRunSave()
-    if not runSave[name] then
-        runSave[name] = {}
+    if not runSave.Inventories then
+        runSave.Inventories = {}
     end
-    inventoryInformation[runSave[name]] = {
+    inventoryHelper.getInventory(name)
+    inventoryInformation[runSave.Inventories[name]] = {
         Width = width, 
         Height = height, 
         Name = name, 
@@ -161,10 +162,10 @@ end
 
 function inventoryHelper.getInventory(inventoryType)
     local runSave = saveManager.GetRunSave()
-    if not runSave[inventoryType] then
-        runSave[inventoryType] = {}
+    if not runSave.Inventories[inventoryType] then
+        runSave.Inventories[inventoryType] = {}
     end
-    return runSave[inventoryType]
+    return runSave.Inventories[inventoryType]
 end
 
 function inventoryHelper.hoveringOver(mousePosition, buttonPosition, buttonWidth, buttonHeight)

@@ -61,10 +61,10 @@ end
 local entityToItemLookupTable = require("scripts.tcainrework.stored.entityid_to_id")
 local function checkEntityConditional(entity, entityLookup, player)
     local checkedCondition = entityLookup.Condition and entityLookup.Condition(entity, player)
-    if not entityLookup.Condition or (checkedCondition ~= false) then
-        return entityLookup, checkedCondition
+    if (not entityLookup.Condition or (checkedCondition ~= false)) then
+        return entityLookup, checkedCondition, false
     end
-    return nil, nil
+    return nil, nil, true
 end
 
 local function getEntityFromTable(entity, gridEntity, player)
@@ -81,8 +81,8 @@ local function getEntityFromTable(entity, gridEntity, player)
                 return entityLookup, entityConditionTable
             else
                 for i, lookupTable in ipairs(entityToItemLookupTable[totalString]) do
-                    local entityLookup, entityConditionTable = checkEntityConditional(entity, lookupTable, player)
-                    if entityLookup then
+                    local entityLookup, entityConditionTable, continueNext = checkEntityConditional(entity, lookupTable, player)
+                    if not continueNext then
                         return entityLookup, entityConditionTable
                     end
                 end
@@ -230,7 +230,7 @@ local function notShopItemOrBought(player, pickup)
     return true
 end
 
-local skipNext = false
+local skipNext, deleteNext = false, false
 local function initializeSalvage(entity)
     if not salvagingList[GetPtrHash(entity)] then
         skipNext = true
@@ -252,6 +252,14 @@ function(_, pickup)
             end
         end
     end
+    if deleteNext then
+        pickup:Remove()
+        deleteNext = false
+    end
+end)
+
+mod:AddPriorityCallback(ModCallbacks.MC_PRE_ROOM_TRIGGER_CLEAR, CallbackPriority.EARLY, function(_)
+    deleteNext = false
 end)
 
 local bagInteractPickups = {
@@ -371,15 +379,18 @@ local function renderBagOfCrafting(player, offset)
                                         if not ableToAddItem then
                                             gridEntity:Hurt(3)
                                         else
-                                            -- local lastPosition = Vector(gridEntity.Position.X, gridEntity.Position.Y)
-                                            -- local gridIndex = gridEntity:GetGridIndex()
+                                            local lastPosition = Vector(gridEntity.Position.X, gridEntity.Position.Y)
+                                            local gridIndex = gridEntity:GetGridIndex()
                                             generateGenericEffect(gridEntity, true)
-                                            gridEntity:Destroy(true)
-                                            -- room:RemoveGridEntityImmediate(gridIndex, 0, false)
-                                            -- local replacementEntity = Isaac.GridSpawn(GridEntityType.GRID_DECORATION, 0, lastPosition, true)
-                                            -- if replacementEntity then
-                                            --     replacementEntity:GetSprite():SetRenderFlags(1 << 2)
-                                            -- end
+                                            
+                                            room:RemoveGridEntityImmediate(gridIndex, 0, false)
+                                            local replacementEntity = Isaac.GridSpawn(gridEntity:GetType(), 0, lastPosition, true)
+                                            deleteNext = true
+                                            replacementEntity:Destroy()
+                                            if replacementEntity then
+                                                replacementEntity:GetSprite():SetRenderFlags(1 << 2)
+                                            end
+                                            deleteNext = false
                                         end
                                         table.insert(bagCollisions[playerIndex], positionHash)
                                     end

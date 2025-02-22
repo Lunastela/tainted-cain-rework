@@ -56,6 +56,7 @@ local function addToTag(tagName, itemName)
 end
 
 collectibleStorage.itemIterator = 1
+collectibleStorage.itemOffset = 0
 collectibleStorage.constructed = false
 function collectibleStorage:loadCollectibleCache()
     if not collectibleStorage.constructed then
@@ -94,6 +95,7 @@ function collectibleStorage:loadCollectibleCache()
             end
             collectibleStorage.itemIterator = collectibleStorage.itemIterator + 1
         end
+        collectibleStorage.itemOffset = collectibleStorage.itemIterator
         collectibleStorage.constructed = true
         print("loaded item cache in:", Isaac.GetTime() - currentTime, "ms")
         mod:sortItemTags()
