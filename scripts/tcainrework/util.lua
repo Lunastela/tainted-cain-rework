@@ -175,10 +175,16 @@ function Utility.sha1(message)
     return string.format('%08x%08x%08x%08x%08x', h0, h1, h2, h3, h4);
 end
 
-function Utility.getLocalizedString(category, key)
-    local localizedString = Isaac.GetString(category, key)
-    if localizedString ~= "StringTable::InvalidKey" then
-        return localizedString
+function Utility.getLocalizedString(category, key, localized)
+    if localized then
+        local localizedString = Isaac.GetString(category, key)
+        if localizedString ~= "StringTable::InvalidKey" then
+            return localizedString
+        end
+    end
+    local englishString = Isaac.GetLocalizedString(category, key, "EN_US")
+    if englishString ~= "StringTable::InvalidKey" then
+        return englishString
     end
     return key
 end

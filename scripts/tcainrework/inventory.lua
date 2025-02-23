@@ -965,16 +965,19 @@ function mod:RenderInventory()
                                         -- attempt to craft recipe
                                         if isCraftableRecipe then
                                             local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
+                                            local outputInventory = inventoryHelper.getInventory(InventoryTypes.OUTPUT)
                                             local itemsNeeded = getRecipeItemList(recipeFromName)
-                                            -- Clear Crafting Inventory First
-                                            local inventoryWidth = inventoryHelper.getInventoryWidth(craftingInventory) - 1
-                                            local inventoryHeight = inventoryHelper.getInventoryHeight(craftingInventory) - 1
-                                            for j = 0, inventoryHeight do
-                                                for i = 0, inventoryWidth do
-                                                    local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
-                                                    if (craftingInventory[currentItemIndex] and ((not itemsNeeded[currentItemIndex])
-                                                    or (not inventoryHelper.itemCanStackWithTag(craftingInventory[currentItemIndex], itemsNeeded[currentItemIndex])))) then
-                                                        inventoryShiftClick(inventorySet, craftingInventory, currentItemIndex)
+                                            if not (outputInventory[1] and inventoryHelper.itemCanStackWithTag(outputInventory[1], inventoryHelper.resultItemFromRecipe(recipeFromName))) then
+                                                -- Clear Crafting Inventory First
+                                                local inventoryWidth = inventoryHelper.getInventoryWidth(craftingInventory) - 1
+                                                local inventoryHeight = inventoryHelper.getInventoryHeight(craftingInventory) - 1
+                                                for j = 0, inventoryHeight do
+                                                    for i = 0, inventoryWidth do
+                                                        local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
+                                                        if (craftingInventory[currentItemIndex]) then -- and ((not itemsNeeded[currentItemIndex])
+                                                        -- or (not inventoryHelper.itemCanStackWithTag(craftingInventory[currentItemIndex], itemsNeeded[currentItemIndex])))) then
+                                                            inventoryShiftClick(inventorySet, craftingInventory, currentItemIndex)
+                                                        end
                                                     end
                                                 end
                                             end
@@ -1004,10 +1007,12 @@ function mod:RenderInventory()
                                                     -- Obtain the highest amount of items per slot able to be placed (based on previous configurations)
                                                     local lowestNumber, highestAllowedNumber = nil, nil
                                                     for index, itemIndex in ipairs(sortedItemStack) do
-                                                        local currentAmount = (craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or 0
-                                                        local currentMaxStack = (craftingInventory[itemIndex] and inventoryHelper.getMaxStackFor(craftingInventory[itemIndex].Type)) or 9999
-                                                        lowestNumber = math.min(currentAmount, ((lowestNumber ~= nil) and lowestNumber) or currentAmount)
-                                                        highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
+                                                        local currentAmount = (craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or -1
+                                                        if currentAmount >= 0 then
+                                                            local currentMaxStack = (craftingInventory[itemIndex] and inventoryHelper.getMaxStackFor(craftingInventory[itemIndex].Type))
+                                                            lowestNumber = math.min(currentAmount, ((lowestNumber ~= nil) and lowestNumber) or currentAmount)
+                                                            highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
+                                                        end
                                                     end
                                                     lowestNumber = (lowestNumber or 1)
 
@@ -1049,7 +1054,7 @@ function mod:RenderInventory()
                                                                     if inventoryHelper.itemCanStackWithTag(inventoryItem, itemOrTag) and ((not craftingInventory[itemIndex]) 
                                                                     or (inventoryHelper.itemCanStackWith(inventoryItem, craftingInventory[itemIndex]) 
                                                                     and craftingInventory[itemIndex].Count <= lowestNumber))
-                                                                    and (lowestNumber < highestAllowedNumber) then
+                                                                    and ((not highestAllowedNumber) or (lowestNumber < highestAllowedNumber)) then
                                                                         local lastItemData = inventoryItem.ComponentData
                                                                         local removeAmount = inventoryHelper.removePossibleAmount(itemLookup.Inventory, itemLookup.Index, 1)
                                                                         if removeAmount > 0 then

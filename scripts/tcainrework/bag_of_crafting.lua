@@ -242,22 +242,25 @@ end
 
 mod:AddPriorityCallback(ModCallbacks.MC_POST_PICKUP_INIT, CallbackPriority.LATE, 
 function(_, pickup)
-    if not (skipNext or pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE) then
-        local entityList = Isaac.FindInRadius(pickup.Position, 0, EntityPartition.PICKUP)
-        for i, entity in ipairs(entityList) do
-            if entity.Variant == PickupVariant.PICKUP_COLLECTIBLE
-            and (not entity.SpawnerEntity) then
-                initializeSalvage(entity)
-                pickup:Remove()
+    if pickup.Variant ~= PickupVariant.PICKUP_COLLECTIBLE then
+        if not skipNext then
+            local entityList = Isaac.FindInRadius(pickup.Position, 0, EntityPartition.PICKUP)
+            for i, entity in ipairs(entityList) do
+                if entity.Variant == PickupVariant.PICKUP_COLLECTIBLE
+                and (not entity.SpawnerEntity) then
+                    initializeSalvage(entity)
+                    pickup:Remove()
+                end
             end
         end
-    end
-    -- delete pickups that spawn on deleted gridentities
-    local positionHash = utility.sha1(tostring(pickup.Position.X) .. "." .. tostring(pickup.Position.Y))
-    for i, playerCollisions in pairs(bagCollisions) do
-        for collisionHash in pairs(playerCollisions) do
-            if positionHash == collisionHash then
-                pickup:Remove()
+        -- delete pickups that spawn on deleted gridentities
+        local positionHash = utility.sha1(tostring(pickup.Position.X) .. "." .. tostring(pickup.Position.Y))
+        for i, playerCollisions in pairs(bagCollisions) do
+            for collisionHash in pairs(playerCollisions) do
+                if positionHash == collisionHash then
+                    print('removing pickup of position hash', positionHash)
+                    pickup:Remove()
+                end
             end
         end
     end
@@ -316,7 +319,7 @@ local function renderBagOfCrafting(player, offset)
                                     local forcedInclude = bagInclusions[entity.Type]
                                     if (not pickup and entity:IsVulnerableEnemy()) 
                                     or forcedInclude then
-                                        if entity:TakeDamage(6, 0, EntityRef(player), 5)
+                                        if entity:TakeDamage(8, 0, EntityRef(player), 5)
                                         and (not forcedInclude) then
                                             SFXManager():Play(SoundEffect.SOUND_MEATY_DEATHS, 1, 10, false, 1.5)
                                         end

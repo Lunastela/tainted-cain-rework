@@ -40,6 +40,10 @@ local entityToItemConversions = require("scripts.tcainrework.stored.entityid_to_
 local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items")
 
 function mod:sortItemTags()
+    -- Hardcoded Item Tags
+    itemTagLookup["#tcainrework:pill"] = {}
+
+    -- Sort Item Tags
     for tagName in pairs(itemTagLookup) do
         table.sort(itemTagLookup[tagName], function(a, b)
             return ((itemDescriptions[a].Rarity == itemDescriptions[b].Rarity)
@@ -47,6 +51,13 @@ function mod:sortItemTags()
                 or (itemDescriptions[a].Rarity) < (itemDescriptions[b].Rarity)
         end)
     end
+
+    -- Create Pill Item Tag
+    for i = 1, 13 do
+        local pillName = "tcainrework:pill{\"pill_color\":" .. i .. "}"
+        table.insert(itemTagLookup["#tcainrework:pill"], pillName)
+    end
+    table.insert(itemTagLookup["#tcainrework:pill"], "tcainrework:golden_pill")
 end
 
 -- Define and Load the collectible storage cache.

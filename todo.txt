@@ -1,20 +1,17 @@
 High Priority:
-- Minecraft Items randomly disappear sometimes. Attempted a fix for this, but it didn't work. Not sure where to start.
-- Support for Recipes that use an active item's charge instead of consuming the item.
 - Recipe Book "Alternate" Recipes and combining multiple recipes into one cell.
 
 Mid Priority:
-- Potentially(?) always reveal pills in recipe conditionals
+- Support for Recipes that use an active item's charge instead of consuming the item.
 - Swappable Actives with Schoolbag on characters that aren't Tainted Cain.
-- Make "conditional recipe items" display hardcoded attributes like pill color based on effect
 
 Low Priority:
 - Update SaveManager.
 - The bug. You know, the one.
 - Fix animations in Item Renderer not consistent with in game animations.
 - Support for on the fly Item Tags in Recipes using json arrays in keys.
-- Potentially restructure Recipe system to use key & value system internally.
 
 Notes:
 - Sparse arrays sorted when saving. SaveManager bug.
 - Crawlspace fix might cause some issues in niche situations. Unsure if this matters, but it's good to note.
+- Sometimes things don't go into the bag of crafting. Re-entering the room seems to fix this issue.

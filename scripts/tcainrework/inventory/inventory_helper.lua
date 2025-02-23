@@ -22,7 +22,7 @@ function inventoryHelper.getNameFor(pickup)
             return pickup.ComponentData[InventoryItemComponentData.CUSTOM_NAME]
         end
         if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
-            return utility.getLocalizedString("Items", utility.getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).Name)
+            return utility.getLocalizedString("Items", utility.getCollectibleConfig(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]).Name, true)
         end
     end
     if itemRegistry[pickup.Type]
@@ -139,6 +139,23 @@ function inventoryHelper.getItemGraphic(pickup)
         if pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX] then
             return pickup.ComponentData[InventoryItemComponentData.CUSTOM_GFX]
         end
+        -- Hardcoded Pill Colors
+        if (pickup.ComponentData[InventoryItemComponentData.PILL_COLOR]
+        or pickup.ComponentData[InventoryItemComponentData.PILL_EFFECT]) then
+            local gfxPath = ""
+            if pickup.ComponentData[InventoryItemComponentData.PILL_COLOR] then
+                local localizedColor, isHorsePill = utility.getPillColor(pickup.ComponentData[InventoryItemComponentData.PILL_COLOR])
+                gfxPath = "_" .. (isHorsePill and "horse" or "") .. gfxPath .. tostring(localizedColor)
+            elseif pickup.ComponentData[InventoryItemComponentData.PILL_EFFECT] then -- backup pill color if the pill is discovered
+                local itemPool = Game():GetItemPool()
+                local pillColor = itemPool:GetPillColor(pickup.ComponentData[InventoryItemComponentData.PILL_EFFECT])
+                if itemPool:IsPillIdentified(pillColor) then
+                    gfxPath = "_" .. pillColor
+                end
+            end
+            return  "gfx/items/pills/pill_base" .. gfxPath .. ".png"
+        end
+
         if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
             local customGfx = getCustomCollectibleSprite(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
             if getCurseOfBlind() then
@@ -555,20 +572,22 @@ end
 -- Item Names
 local pillLocalizationTable = {}
 local pillSubClassTable = {}
-function inventoryHelper.getPillNameIfFound(rawPillEffect)
+function inventoryHelper.getPillNameIfFound(rawPillEffect, forceIdentify)
     local itemPool = Game():GetItemPool()
-    if itemPool:IsPillIdentified(itemPool:GetPillColor(rawPillEffect)) then
-        if not pillLocalizationTable[rawPillEffect] then
+    local pillColor = itemPool:GetPillColor(rawPillEffect)
+    local pillExists = (pillColor ~= -1)
+    if itemPool:IsPillIdentified(pillColor) or forceIdentify then
+        if (not pillLocalizationTable[rawPillEffect]) then
             local itemConfig = Isaac.GetItemConfig():GetPillEffect(rawPillEffect)
-            pillLocalizationTable[rawPillEffect] = utility.getLocalizedString("PocketItems", itemConfig.Name)
+            pillLocalizationTable[rawPillEffect] = utility.getLocalizedString("PocketItems", itemConfig.Name, true)
             pillSubClassTable[rawPillEffect] = itemConfig.EffectSubClass
         end
-        return pillLocalizationTable[rawPillEffect]
+        return pillLocalizationTable[rawPillEffect], pillExists
     else
         pillLocalizationTable[rawPillEffect] = nil
         pillSubClassTable[rawPillEffect] = nil
     end
-    return "???"
+    return "???", pillExists
 end
 
 local function getComponentCount(pickup)
@@ -619,10 +638,19 @@ function inventoryHelper.itemGetFullName(pickup)
         end
         if pickup.ComponentData[InventoryItemComponentData.PILL_EFFECT] then
             local pillEffect = pickup.ComponentData[InventoryItemComponentData.PILL_EFFECT]
+            local pillName, pillExists = inventoryHelper.getPillNameIfFound(
+                pillEffect, (pickup.ComponentData[InventoryItemComponentData.PILL_COLOR] == nil)
+            )
             table.insert(nameTable, {
-                String = inventoryHelper.getPillNameIfFound(pillEffect),
+                String = pillName,
                 Rarity = InventoryItemRarity.SUBTEXT + (pillSubClassTable[pillEffect] or 0)
             })
+            if not pillExists then
+                table.insert(nameTable, {
+                    String = "Unavailable in this Run",
+                    Rarity = InventoryItemRarity.EFFECT_NEGATIVE
+                })
+            end
         end
         if pickup.ComponentData[InventoryItemComponentData.CUSTOM_DESC] then
             local descString = pickup.ComponentData[InventoryItemComponentData.CUSTOM_DESC]
@@ -636,7 +664,7 @@ function inventoryHelper.itemGetFullName(pickup)
         if pickup.ComponentData[InventoryItemComponentData.CARD_TYPE] then
             local cardConfig = utility.getCardConfig(pickup.ComponentData[InventoryItemComponentData.CARD_TYPE])
             table.insert(nameTable, {
-                String = utility.getLocalizedString("PocketItems", cardConfig.Name),
+                String = utility.getLocalizedString("PocketItems", cardConfig.Name, true),
                 Rarity = InventoryItemRarity.SUBTEXT
             })
         end
@@ -656,7 +684,7 @@ function inventoryHelper.itemGetFullName(pickup)
                 end
             end
             table.insert(nameTable, {
-                String = blindTextAppend .. utility.getLocalizedString("Items", itemConfig.Description),
+                String = blindTextAppend .. utility.getLocalizedString("Items", itemConfig.Description, true),
                 Rarity = InventoryItemRarity.SUBTEXT
             })
             if debugStats and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] then
@@ -710,6 +738,7 @@ function inventoryHelper.renderTooltip(mousePosition, stringTable)
     end
     local lineSep = (minecraftFont:GetLineHeight() + 2)
     local textboxPosition = mousePosition + Vector(10, (math.max(0, (#stringTable - 2) / 2)) * lineSep)
+    textboxPosition.X, textboxPosition.Y = math.floor(textboxPosition.X), math.floor(textboxPosition.Y)
     local nineSliceSize = Vector(longestWidth + 4, (lineSep * #stringTable) + 1)
     utility.renderNineSlice(tooltipBackground, textboxPosition, nineSliceSize)
     for i, subString in ipairs(stringTable) do
