@@ -1,20 +1,8 @@
 local utility = require("scripts.tcainrework.util")
-local runeList = {
-    [Card.RUNE_HAGALAZ] = "left",
-    [Card.RUNE_JERA] = "left",
-    [Card.RUNE_EHWAZ] = "left",
-    [Card.RUNE_DAGAZ] = "left",
-    [Card.RUNE_ANSUZ] = "right",
-    [Card.RUNE_PERTHRO] = "right",
-    [Card.RUNE_BERKANO] = "right",
-    [Card.RUNE_ALGIZ] = "right",
-    [Card.RUNE_BLANK] = "right",
-    [Card.RUNE_BLACK] = "black"
-}
 
 return {
     Properties = {
-        DisplayName = "Rune",
+        DisplayName = "Soul Stone",
         GFX = "gfx/items/cards/right_rune.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:rune", "#tcainrework:pickup"},
@@ -28,12 +16,13 @@ return {
             Amount = 1,
             Condition = function(entity, player)
                 local cardConfig = Isaac.GetItemConfig():GetCard(entity.SubType)
-                if cardConfig:IsRune() and runeList[entity.SubType] then
+                local localizedName = utility.getLocalizedString("PocketItems", cardConfig.Name)
+                if (cardConfig:IsRune() and string.find(string.lower(localizedName), "soul")) then
                     return { 
-                        [InventoryItemComponentData.CUSTOM_GFX] = "gfx/items/cards/" .. runeList[entity.SubType] .. "_rune" .. ".png",
+                        [InventoryItemComponentData.CUSTOM_GFX] = "gfx/items/cards/" .. string.lower(localizedName):gsub("% ", "_") .. ".png",
                         [InventoryItemComponentData.CARD_TYPE] = entity.SubType
                     }
-                end 
+                end
                 return false
             end
         }

@@ -6,6 +6,8 @@ local saveManager = require("scripts.save_manager")
 saveManager.Init(mod)
 
 local utility = require("scripts.tcainrework.util")
+utility.getCustomLocalizedString("", "")
+
 include("scripts.tcainrework.inventory.inventory_enums")
 mod.inventoryHelper = include("scripts.tcainrework.inventory.inventory_helper")
 
@@ -58,6 +60,8 @@ function mod:sortItemTags()
         table.insert(itemTagLookup["#tcainrework:pill"], pillName)
     end
     table.insert(itemTagLookup["#tcainrework:pill"], "tcainrework:golden_pill")
+
+    table.insert(itemTagLookup["#tcainrework:pill"], "tcainrework:pill")
 end
 
 -- Define and Load the collectible storage cache.

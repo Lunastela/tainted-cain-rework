@@ -843,8 +843,11 @@ function mod:RenderInventory()
                 -- Inventory Text Rendering
                 local gridAlignedTextX = screenCenter.X - (CELL_SIZE / 2)
                 local gridAlignedTextY = screenCenter.Y - (CELL_SIZE / 2) - 3
-                minecraftFont:DrawString("Inventory", gridAlignedTextX - (CELL_SIZE * 4) + 1, 
-                    gridAlignedTextY, craftingFontColor, 0, false)
+                minecraftFont:DrawString(
+                    utility.getCustomLocalizedString("container.inventory", "Inventory"), 
+                    gridAlignedTextX - (CELL_SIZE * 4) + 1, 
+                    gridAlignedTextY, craftingFontColor, 0, false
+                )
 
                 -- Secondary Inventories Rendering
                 for i, inventory in ipairs(inventorySet) do
@@ -896,7 +899,7 @@ function mod:RenderInventory()
 
                     -- Search bar for recipes
                     local searchPosition = recipeBookPosition + Vector(-34, -70)
-                    local displaySearchText = "§oSearch§r..."
+                    local displaySearchText = utility.getCustomLocalizedString("gui.recipebook.search_hint", "§oSearch§r...")
                     if lmbTrigger then
                         searchBarSelected = lmbTrigger and inventoryHelper.hoveringOver(mousePosition, searchPosition, 81, 14)
                         searchBarTimer = 0
@@ -1155,7 +1158,12 @@ function mod:RenderInventory()
 
                     if hoveringOver then
                         local tooltipPosition = mousePosition + Vector(8, 12)
-                        local textString = "Showing " .. (recipeBookFilter and "Craftable" or "All")
+                        -- local textString = "Showing " .. (recipeBookFilter and "Craftable" or "All")
+                        local textString = utility.getCustomLocalizedString(
+                            "gui.recipebook.toggleRecipes." .. ((recipeBookFilter and "craftable") or "all"), 
+                            (recipeBookFilter and "Showing Craftable") or "Showing All"
+                        )
+
                         local nineSliceSize = Vector(
                             minecraftFont:GetStringWidth(textString) + 4, 
                             minecraftFont:GetLineHeight() + 2

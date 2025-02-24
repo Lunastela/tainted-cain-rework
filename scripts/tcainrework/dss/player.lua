@@ -7,7 +7,7 @@ playerRenderer.Scale = Vector.One * 2
 
 local elapsedTime = 0
 local playerTable = {
-    {Name = "lunastela", Skin = "me"},
+    {Name = "", Skin = "me"},
     {Name = "jjohnsnaill", Skin = "john"},
     {Name = "Mr_Headcrab", Skin = "headcrab"},
     {Name = "EliteMasterEric", Skin = "eric"},

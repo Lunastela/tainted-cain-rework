@@ -155,10 +155,15 @@ salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_TAROTCARD, 15)
 local salvagingList = {}
 local heartSelectionList = {
     [ItemPoolType.POOL_SECRET] = HeartSubType.HEART_BONE,
+    [ItemPoolType.POOL_GREED_SECRET] = HeartSubType.HEART_BONE,
     [ItemPoolType.POOL_ANGEL] = HeartSubType.HEART_ETERNAL,
+    [ItemPoolType.POOL_GREED_ANGEL] = HeartSubType.HEART_ETERNAL,
     [ItemPoolType.POOL_DEVIL] = HeartSubType.HEART_BLACK,
+    [ItemPoolType.POOL_GREED_DEVIL] = HeartSubType.HEART_BLACK,
     [ItemPoolType.POOL_CURSE] = HeartSubType.HEART_ROTTEN,
+    [ItemPoolType.POOL_GREED_CURSE] = HeartSubType.HEART_ROTTEN,
     [ItemPoolType.POOL_ULTRA_SECRET] = HeartSubType.HEART_BONE,
+    [ItemPoolType.POOL_GREED_SECRET] = HeartSubType.HEART_BONE,
 }
 
 local function spawnSalvagePickup(pickup, salvageVariant)
@@ -260,6 +265,7 @@ function(_, pickup)
                 if positionHash == collisionHash then
                     print('removing pickup of position hash', positionHash)
                     pickup:Remove()
+                    playerCollisions[positionHash] = nil
                 end
             end
         end

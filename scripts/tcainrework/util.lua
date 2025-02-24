@@ -175,6 +175,19 @@ function Utility.sha1(message)
     return string.format('%08x%08x%08x%08x%08x', h0, h1, h2, h3, h4);
 end
 
+local localizationExists, localization = nil, nil
+--- Returns a localized custom string
+function Utility.getCustomLocalizedString(key, backupString)
+    key = string.gsub(string.lower(key), " ", "_")
+    if not (localizationExists or localization) then
+        localizationExists, localization = pcall(require, "scripts.tcainrework.lang." .. Options.Language)
+    end
+    if localizationExists and localization then
+        return (localization and localization[key]) or key
+    end
+    return backupString
+end
+
 function Utility.getLocalizedString(category, key, localized)
     if localized then
         local localizedString = Isaac.GetString(category, key)

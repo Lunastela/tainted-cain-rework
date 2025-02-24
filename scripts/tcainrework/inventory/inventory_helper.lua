@@ -27,7 +27,10 @@ function inventoryHelper.getNameFor(pickup)
     end
     if itemRegistry[pickup.Type]
     and itemRegistry[pickup.Type].DisplayName then
-        return itemRegistry[pickup.Type].DisplayName
+        return utility.getCustomLocalizedString(
+            "items." .. string.gsub(pickup.Type, ":", ".") .. ".name", 
+            itemRegistry[pickup.Type].DisplayName
+        )
     end
     return "Bone"
 end
@@ -499,7 +502,10 @@ end
 
 function inventoryHelper.getInventoryName(inventory)
     if inventoryInformation[inventory] then
-        return inventoryInformation[inventory].Name
+        return utility.getCustomLocalizedString(
+            "container." .. inventoryInformation[inventory].Name, 
+            inventoryInformation[inventory].Name
+        )
     end
     return "Inventory"
 end

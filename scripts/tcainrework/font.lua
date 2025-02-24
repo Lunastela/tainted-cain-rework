@@ -40,20 +40,8 @@ local fontSwitchCodes = {
     ["r"] = fontType.DEFAULT
 }
 
-local defaultSettings = REPENTANCE_PLUS and FontRenderSettings()
 local function drawTextWrapper(font, myString, posX, posY, scaleX, scaleY, color, boxWidth, center) 
-    if REPENTANCE_PLUS then
-    --     local curPosition = 0
-    --     for i = 1, string.len(myString) do
-    --         local character = string.sub(myString, i, i)
-    --         font:DrawString(character, posX + curPosition, posY, scaleX, scaleY, color, defaultSettings)
-    --         curPosition = curPosition + font:GetCharacterWidth(character) * scaleX
-    --     end
-        font:DrawString(myString, posX, posY, scaleX, scaleY, color, defaultSettings)
-    else
-        -- Rendering in Repentance works just fine
-        font:DrawStringScaled(myString, posX, posY, scaleX, scaleY, color, boxWidth, center)
-    end
+    font:DrawStringScaledUTF8(myString, posX, posY, scaleX, scaleY, color, boxWidth, center)
 end
 function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, RenderColor, BoxWidth, Center, Format)
     local textType = fontType.DEFAULT

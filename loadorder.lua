@@ -38,6 +38,8 @@ return {
     pill
     golden_pill
     rune
+    rune_shard
+    soul_stone
     dice_shard
     cracked_key
     eden_essence

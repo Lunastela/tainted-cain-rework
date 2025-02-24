@@ -1,6 +1,7 @@
 -- I stole this from Headcrab, who stole it from DSS repo, but I stole it from Headcrab
 local mod = TCainRework
 local SaveManager = require('scripts.save_manager')
+local utility = require("scripts.tcainrework.util")
 
 local function getSaveWrapper()
     local menuSaveData = (SaveManager.GetDeadSeaScrollsSave() and SaveManager.GetDeadSeaScrollsSave().saveData) or {}
@@ -224,7 +225,9 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         end
 
         for i, button in ipairs(item.buttons) do
-            local buttonString = stringTable[button.str] or button.str
+            local buttonString = (button.str ~= "") and utility.getCustomLocalizedString(
+                "gui.settings." .. (button.variable or button.str) .. ".name", stringTable[button.str] or button.str
+            ) or ""
             local textPosition = Vector(leftBound, topPosition.Y + ((i - 0.5) * separationDistance) - (scrollAmount * differenceDistance))
             if not button.choices then
                 textPosition.X = (Isaac.GetScreenWidth() / 2) - (minecraftFont:GetStringWidth(buttonString) / 2)
@@ -257,7 +260,10 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                 textPosition.Y = textPosition.Y + (minecraftFont:GetLineHeight() / 2)
                 renderButtonSize(textPosition, boxSize)
                 if button.choices[button.setting] then
-                    local choiceText = stringTable[button.choices[button.setting]] or button.choices[button.setting]
+                    local choiceText = utility.getCustomLocalizedString(
+                        "gui.settings.choices." .. button.choices[button.setting] .. ".name", 
+                        stringTable[button.choices[button.setting]] or button.choices[button.setting]
+                    )
                     mod.inventoryHelper.renderMinecraftText(choiceText, 
                         textPosition - Vector(minecraftFont:GetStringWidth(choiceText) / 2, (minecraftFont:GetLineHeight() / 2)), 
                         InventoryItemRarity.COMMON, true, true
@@ -309,7 +315,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         end
 
         -- Render Title Text
-        mod.inventoryHelper.renderMinecraftText("Settings", 
+        mod.inventoryHelper.renderMinecraftText(utility.getCustomLocalizedString("gui.settings", "Settings"), 
             Vector((Isaac.GetScreenWidth() / 2) - (minecraftFont:GetStringWidth("Settings") / 2), topPosition.Y / 2), 
             InventoryItemRarity.COMMON
         )
@@ -326,8 +332,9 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
             end
         end
         menuButton:Render(donePosition)
-        mod.inventoryHelper.renderMinecraftText("Done", 
-            donePosition - Vector(minecraftFont:GetStringWidth("Done") / 2, (minecraftFont:GetLineHeight() / 2)), 
+        local doneText = utility.getCustomLocalizedString("gui.done", "Done")
+        mod.inventoryHelper.renderMinecraftText(doneText, 
+            donePosition - Vector(minecraftFont:GetStringWidth(doneText) / 2, (minecraftFont:GetLineHeight() / 2)), 
             InventoryItemRarity.COMMON, true
         )
 
@@ -340,29 +347,18 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                     Rarity = InventoryItemRarity.UNCOMMON
                 })
             end
-            if (anyHoveringOption.tooltip and anyHoveringOption.tooltip.strset) then 
+            if (anyHoveringOption.tooltip and anyHoveringOption.tooltip.extraMinecraftDescription) then 
                 -- minecraft tooltip lol
-                if not anyHoveringOption.tooltip.removeOriginalDesc then
-                    local textString = ""
-                    for i, string in ipairs(anyHoveringOption.tooltip.strset) do
-                        textString = textString .. string .. " "
-                        if string.len(textString) >= 28 then
-                            table.insert(stringTable, {String = textString, Rarity = InventoryItemRarity.COMMON})
-                            textString = ""
-                        end
-                    end
-                    if textString ~= "" then
-                        table.insert(stringTable, {String = textString, Rarity = InventoryItemRarity.COMMON})
-                    end
-                end
-                local minecraftExtraDescription = anyHoveringOption.tooltip.extraMinecraftDescription
-                if type(minecraftExtraDescription) == "table" then
-                    minecraftExtraDescription = anyHoveringOption.tooltip.extraMinecraftDescription[anyHoveringOption.setting]
-                end
+                local isTable = type(anyHoveringOption.tooltip.extraMinecraftDescription) == "table"
+                local minecraftExtraDescription = (isTable and anyHoveringOption.tooltip.extraMinecraftDescription[anyHoveringOption.setting])
+                    or anyHoveringOption.tooltip.extraMinecraftDescription
+                
                 if minecraftExtraDescription then
-                    if not anyHoveringOption.tooltip.removeOriginalDesc then
-                        table.insert(stringTable, {String = "", Rarity = InventoryItemRarity.COMMON})
-                    end
+                    minecraftExtraDescription = utility.getCustomLocalizedString(
+                        "gui.settings." .. anyHoveringOption.variable .. ".desc" 
+                        .. (isTable and tostring(anyHoveringOption.setting) or ""), 
+                        minecraftExtraDescription
+                    ) or ""
                     local myString = ""
                     for subString in minecraftExtraDescription:gmatch("%S+") do
                         myString = myString .. ((myString ~= "" and " ") or "") .. subString
@@ -377,7 +373,10 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                 end
             end
             table.insert(stringTable, {
-                String = "Default: " .. anyHoveringOption.choices[1], 
+                String = utility.getCustomLocalizedString("editGamerule.default", "Default") .. ": " 
+                    .. utility.getCustomLocalizedString(
+                        "gui.settings.choices." .. anyHoveringOption.choices[1] .. ".name", anyHoveringOption.choices[1]
+                    ), 
                 Rarity = InventoryItemRarity.SUBTEXT
             })
             mod.inventoryHelper.renderTooltip(mousePosition, stringTable)
@@ -415,7 +414,7 @@ local function mainMenuRenderer(panel, pos, item, tbl)
                     end
                 end
                 menuButton:Render(buttonPosition)
-                local buttonName = stringTable[button.str] or button.str
+                local buttonName = utility.getCustomLocalizedString("gui." .. button.str, stringTable[button.str] or button.str)
                 mod.inventoryHelper.renderMinecraftText(buttonName, 
                     Vector(
                         buttonPosition.X - (minecraftFont:GetStringWidth(buttonName) / 2), 
@@ -560,7 +559,7 @@ local cainCraftingDirectory = {
                 end,
                 tooltip = {
                     strset = {"Toggle when", "DSS should", "use the", "Tainted Cain", "Rework skin."},
-                    extraMinecraftDescription = "The \"Minecraft\" style has more descriptive text below some options."
+                    extraMinecraftDescription = "Toggles whether or not to use the \"Minecraft\" skin for the §oDead Sea Scrolls§r menu. The \"Minecraft\" style has more descriptive text below some options."
                 }
             },
             {
@@ -593,13 +592,12 @@ local cainCraftingDirectory = {
                 tooltip = {
                     strset = {"Whether to", "display", "pop-ups", "whenever", "they appear."},
                     extraMinecraftDescription = "Serves as a way of shutting off those pesky toasts that appear whenever you unlock a new recipe.",
-                    removeOriginalDesc = true
                 },
             },
             {str = "", fsize = 2, nosel = true},
             {str = "Gameplay", fsize = 2, nosel = true},
             {str = "", fsize = 2, nosel = true},
-            {
+            --[[{
                 str = "Active Item Style",
                 choices = {"Swap with last", "Destroy last"},
                 setting = 1,
@@ -617,7 +615,7 @@ local cainCraftingDirectory = {
                         "Currently, the last active item will be salvaged into pickups whenever a new one is consumed."
                     }
                 }
-            },
+            },]]--
             {
                 str = "Recipe Unlocks",
                 choices = {"Discovery", "Relaxed"},
@@ -638,7 +636,6 @@ local cainCraftingDirectory = {
                         "Currently, recipe progression will be reset upon starting a new run. Use this if you wish to memorize all of the recipes. Your progress from Relaxed will NOT carry over.",
                         "Currently, recipe progression will persist between runs. Use this if you wish to have a more relaxed experienced, focusing on build-crafting rather than memorization or discovery. Your progress from Discovery will carry over."
                     },
-                    removeOriginalDesc = true
                 },
                 
             },
@@ -674,7 +671,6 @@ local cainCraftingDirectory = {
                 end,
                 tooltip = {
                     strset = {"whether to", "drop pickups", "on death"},
-                    removeOriginalDesc = true
                 }
             },
             {str = "", fsize = 2, nosel = true},
@@ -705,7 +701,8 @@ local cainCraftingDirectory = {
                     getSaveWrapper().chaosMode = var
                 end,
                 tooltip = {
-                    strset = {"Shuffles all", "recipes", "similarly to", "the Chaos", "item."}
+                    strset = {"Shuffles all", "recipes", "similarly to", "the Chaos", "item."},
+                    extraMinecraftDescription = "Shuffles all recipes, similarly to the Chaos item's effect."
                 }
             }
         },
