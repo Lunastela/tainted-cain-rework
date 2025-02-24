@@ -131,7 +131,7 @@ for entry in os.listdir(localPath):
                 # Recipe Result Table
                 recipeExport.write("},\n" + space * 3 + "Results = {\n" 
                     + space * 4 + "Type = \"{}\",\n{}Count = {}".format(
-                        recipeTable['result'][0], space * 4, 
+                        recipeTable['result'][0].replace("\"", "\\\""), space * 4, 
                         recipeTable['result'][1]) 
                 )
                 if recipeTable['collectible'] != None:

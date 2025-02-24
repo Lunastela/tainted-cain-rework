@@ -153,7 +153,8 @@ local function checkRecipes()
         if recipeOutput then
             lastOutputItem = {
                 Type = recipeOutput.Type,
-                Count = recipeOutput.Count
+                Count = recipeOutput.Count,
+                ComponentData = recipeOutput.ComponentData
             }
             if recipeOutput.Collectible then
                 lastOutputItem.ComponentData = utility.generateCollectibleData(recipeOutput.Collectible)
@@ -1017,7 +1018,9 @@ function mod:RenderInventory()
                                                             highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
                                                         end
                                                     end
-                                                    lowestNumber = (lowestNumber or 1)
+                                                    if not lowestNumber then
+                                                        lowestNumber = 0
+                                                    end
 
                                                     -- Loop through necessary ingredients
                                                     for index, itemIndex in ipairs(sortedItemStack) do
@@ -1056,7 +1059,7 @@ function mod:RenderInventory()
                                                                     -- print("item item item atemt", inventoryItem.Type, craftingInventory[itemIndex] and craftingInventory[itemIndex].Type)
                                                                     if inventoryHelper.itemCanStackWithTag(inventoryItem, itemOrTag) and ((not craftingInventory[itemIndex]) 
                                                                     or (inventoryHelper.itemCanStackWith(inventoryItem, craftingInventory[itemIndex]) 
-                                                                    and craftingInventory[itemIndex].Count <= lowestNumber))
+                                                                    and craftingInventory[itemIndex].Count < lowestNumber + 1))
                                                                     and ((not highestAllowedNumber) or (lowestNumber < highestAllowedNumber)) then
                                                                         local lastItemData = inventoryItem.ComponentData
                                                                         local removeAmount = inventoryHelper.removePossibleAmount(itemLookup.Inventory, itemLookup.Index, 1)

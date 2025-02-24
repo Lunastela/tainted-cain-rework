@@ -28,6 +28,7 @@ Look no further than [b]Tainted Cain Rework![/b] Tainted Cain Rework makes sever
 [h2]Notes:[/h2]
 [list]
     [*] As stated above, requires [b]REPENTOGON[/b].
+    [*] This mod has localization support! Currently, only English and Spanish are supported.
     [*] Not all recipes are done yet currently. It may be a while until they are. Recipes subject to change for balancing reasons.
     [*] Incompatible with modded items and pickups unless they provide support. There is, however, an extensive API for adding support with other mods, such as custom recipes and pickup types, that anyone is free to use.
     [*] [b]An example mod is provided![/b] Be sure to check it out after playing the mod if it'd interest you to add more content. :)

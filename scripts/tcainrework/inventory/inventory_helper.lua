@@ -857,8 +857,15 @@ function inventoryHelper.shiftClickSearchFree(inventorySet, curInventory, curIte
     return false, nil, nil
 end
 
+function inventoryHelper.resultItemFromRecipe(recipe, includeCount)
+    if recipe.Results then
+        return inventoryHelper.createItem(recipe.Results.Collectible or recipe.Results.Type, recipe.Results.Count)
+    end
+    return {Type = "minecraft:stick", Count = 1}
+end
+
 function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, topLeft, bottomRight, shapeless)
-    local anyReturn = false
+    local anyReturn = nil
     if recipeList then
         local craftingTable = craftingInventory
         if shapeless then
@@ -911,7 +918,7 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
                     index = index + 1
                 end
             end
-            anyReturn = recipe.Results
+            anyReturn = inventoryHelper.resultItemFromRecipe(recipe, true)
             ::recipeContinue::
             if anyReturn then
                 return anyReturn
@@ -919,20 +926,6 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
         end
     end
     return false
-end
-
-function inventoryHelper.resultItemFromRecipe(recipe, includeCount)
-    if recipe.Results then
-        local fakeResultItem = {
-            Type = recipe.Results.Type,
-            Count = (includeCount and recipe.Results.Count) or 1
-        }
-        if recipe.Results.Collectible then
-            fakeResultItem.ComponentData = utility.generateCollectibleData(recipe.Results.Collectible)
-        end
-        return fakeResultItem
-    end
-    return {Type = "minecraft:stick", Count = 1}
 end
 
 function inventoryHelper.conditionalItemFromRecipe(recipe, itemIndex)
