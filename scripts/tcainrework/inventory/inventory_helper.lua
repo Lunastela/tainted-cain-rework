@@ -136,6 +136,19 @@ local function getCustomCollectibleSprite(itemID)
     return spriteLookupTable[spritesheetPath]
 end
 
+local runeList = {
+    [Card.RUNE_HAGALAZ] = "left",
+    [Card.RUNE_JERA] = "left",
+    [Card.RUNE_EHWAZ] = "left",
+    [Card.RUNE_DAGAZ] = "left",
+    [Card.RUNE_ANSUZ] = "right",
+    [Card.RUNE_PERTHRO] = "right",
+    [Card.RUNE_BERKANO] = "right",
+    [Card.RUNE_ALGIZ] = "right",
+    [Card.RUNE_BLANK] = "right",
+    [Card.RUNE_BLACK] = "black"
+}
+
 function inventoryHelper.getItemGraphic(pickup)
     if pickup.ComponentData then
         -- test custom gfx
@@ -145,10 +158,11 @@ function inventoryHelper.getItemGraphic(pickup)
         -- Hardcoded Pill Colors
         if (pickup.ComponentData[InventoryItemComponentData.PILL_COLOR]
         or pickup.ComponentData[InventoryItemComponentData.PILL_EFFECT]) then
-            local gfxPath = ""
+            local gfxPath, isHorsePill = "", false
             if pickup.ComponentData[InventoryItemComponentData.PILL_COLOR] then
-                local localizedColor, isHorsePill = utility.getPillColor(pickup.ComponentData[InventoryItemComponentData.PILL_COLOR])
-                gfxPath = "_" .. (isHorsePill and "horse" or "") .. gfxPath .. tostring(localizedColor)
+                local localizedColor = -1
+                localizedColor, isHorsePill = utility.getPillColor(pickup.ComponentData[InventoryItemComponentData.PILL_COLOR])
+                gfxPath = "_" .. gfxPath .. tostring(localizedColor)
             elseif pickup.ComponentData[InventoryItemComponentData.PILL_EFFECT] then -- backup pill color if the pill is discovered
                 local itemPool = Game():GetItemPool()
                 local pillColor = itemPool:GetPillColor(pickup.ComponentData[InventoryItemComponentData.PILL_EFFECT])
@@ -156,7 +170,20 @@ function inventoryHelper.getItemGraphic(pickup)
                     gfxPath = "_" .. pillColor
                 end
             end
-            return  "gfx/items/pills/pill_base" .. gfxPath .. ".png"
+            return  "gfx/items/pills/" .. (isHorsePill and "horse" or "") .. "pill_base" .. gfxPath .. ".png"
+        end
+
+        -- hardcoding runes
+        if (pickup.ComponentData[InventoryItemComponentData.CARD_TYPE]) then
+            if (pickup.Type == "tcainrework:soul_stone") then
+                local localizedName = utility.getLocalizedString(
+                    "PocketItems", utility.getCardConfig(pickup.ComponentData[InventoryItemComponentData.CARD_TYPE]).Name
+                )
+                return "gfx/items/cards/" .. string.lower(localizedName):gsub("% ", "_") .. ".png"
+            end
+            if runeList[pickup.ComponentData[InventoryItemComponentData.CARD_TYPE]] then
+                return "gfx/items/cards/" .. runeList[pickup.ComponentData[InventoryItemComponentData.CARD_TYPE]] .. "_rune.png"
+            end
         end
 
         if pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
@@ -298,6 +325,9 @@ end
 local json = require("json")
 function inventoryHelper.createItem(itemString, count)
     local itemType, componentData = itemString, nil
+    if tonumber(itemString) then
+        itemString = utility.getCollectibleConfig(tonumber(itemString)).Name
+    end
     local splitPosition = itemString:find("{")
     if splitPosition then
         itemType = itemString:sub(1, splitPosition - 1)
@@ -322,7 +352,7 @@ function inventoryHelper.createItem(itemString, count)
     end
     return {
         Type = itemType,
-        Count = 1 or count,
+        Count = count or 1,
         ComponentData = componentData
     }
 end
@@ -684,7 +714,7 @@ function inventoryHelper.itemGetFullName(pickup)
             else
                 if itemTypeTable[itemConfig.Type] then
                     table.insert(nameTable, {
-                        String = itemTypeTable[itemConfig.Type],
+                        String = utility.getCustomLocalizedString("items.tooltip." .. itemTypeTable[itemConfig.Type] .. ".name", itemTypeTable[itemConfig.Type]),
                         Rarity = InventoryItemRarity.EFFECT_POSITIVE
                     })
                 end

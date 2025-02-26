@@ -44,6 +44,7 @@ local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items")
 function mod:sortItemTags()
     -- Hardcoded Item Tags
     itemTagLookup["#tcainrework:pill"] = {}
+    itemTagLookup["#tcainrework:rune"] = {}
 
     -- Sort Item Tags
     for tagName in pairs(itemTagLookup) do
@@ -60,8 +61,24 @@ function mod:sortItemTags()
         table.insert(itemTagLookup["#tcainrework:pill"], pillName)
     end
     table.insert(itemTagLookup["#tcainrework:pill"], "tcainrework:golden_pill")
-
     table.insert(itemTagLookup["#tcainrework:pill"], "tcainrework:pill")
+
+    -- Runes
+    for i = 32, 41 do
+        table.insert(
+            itemTagLookup["#tcainrework:rune"], 
+            "tcainrework:rune{\"card_type\":" .. i .. "}"
+        )
+    end
+    -- Soul Stones (base game)
+    for i = 81, 97 do
+        table.insert(
+            itemTagLookup["#tcainrework:rune"], 
+            "tcainrework:soul_stone{\"card_type\":" .. i .. "}"
+        )
+    end
+    table.insert(itemTagLookup["#tcainrework:rune"], "tcainrework:rune")
+    table.insert(itemTagLookup["#tcainrework:rune"], "tcainrework:soul_stone")
 end
 
 -- Define and Load the collectible storage cache.

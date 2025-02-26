@@ -61,11 +61,16 @@ return {
     ["items.tcainrework.reverse_tarot_card.name"] = "Carta del tarot",
     ["items.tcainrework.rotten_heart.name"] = "Corazón podrido",
     ["items.tcainrework.rune.name"] = "Runa",
+    ["items.tcainrework.rune_shard.name"] = "Fragmento de runa",
     ["items.tcainrework.soul_heart.name"] = "Corazón de alma",
     ["items.tcainrework.soul_stone.name"] = "Piedra de alma",
     ["items.tcainrework.tarot_card.name"] = "Carta del tarot",
     ["items.tcainrework.wild_card.name"] = "Carta de Uno",
     ["items.tcainrework.wooden_doll.name"] = "Muñeco de madera",
+
+    ["items.tooltip.passive_item.name"] = "Objeto Pasivo",
+    ["items.tooltip.active_item.name"] = "Objeto Activo",
+    ["items.tooltip.familiar.name"] = "Familiar",
 
     ["container."] = "", -- upsi
     ["container._"] = "", -- upsi

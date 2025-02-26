@@ -18,10 +18,7 @@ return {
                 local cardConfig = Isaac.GetItemConfig():GetCard(entity.SubType)
                 local localizedName = utility.getLocalizedString("PocketItems", cardConfig.Name)
                 if (cardConfig:IsRune() and string.find(string.lower(localizedName), "soul")) then
-                    return { 
-                        [InventoryItemComponentData.CUSTOM_GFX] = "gfx/items/cards/" .. string.lower(localizedName):gsub("% ", "_") .. ".png",
-                        [InventoryItemComponentData.CARD_TYPE] = entity.SubType
-                    }
+                    return {[InventoryItemComponentData.CARD_TYPE] = entity.SubType}
                 end
                 return false
             end
