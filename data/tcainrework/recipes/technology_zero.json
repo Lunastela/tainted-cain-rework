@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Technology",
+    "Isaac's Tears"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Technology Zero"
+  }
+}

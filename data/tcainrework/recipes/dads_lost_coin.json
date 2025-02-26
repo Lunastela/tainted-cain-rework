@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:golden_penny",
+    "tcainrework:bone_heart"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Dad's Lost Coin"
+  }
+}

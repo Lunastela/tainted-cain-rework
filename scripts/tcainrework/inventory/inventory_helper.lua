@@ -326,7 +326,7 @@ local json = require("json")
 function inventoryHelper.createItem(itemString, count)
     local itemType, componentData = itemString, nil
     if tonumber(itemString) then
-        itemString = utility.getCollectibleConfig(tonumber(itemString)).Name
+        itemString = utility.getLocalizedString("Items", utility.getCollectibleConfig(tonumber(itemString)).Name)
     end
     local splitPosition = itemString:find("{")
     if splitPosition then

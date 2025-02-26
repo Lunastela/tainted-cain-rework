@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "#tcainrework:black_heart",
-    "#": "#book",
-    "C": "tcainrework:reverse_tarot_card{\"card_type\":69}"
+    "P": "tcainrework:pill{\"pill_effect\":21}",
+    "#": "tcainrework:bone_heart"
   },
   "pattern": [
-    "HCH",
+    " # ",
+    "#P#",
     " # "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Book of the Dead"
+    "collectible": "Brittle Bones"
   }
 }

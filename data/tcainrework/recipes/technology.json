@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "Sharp Plug",
+    "P": "#eye",
+    "#": "#tcainrework:key"
+  },
+  "pattern": [
+    " S ",
+    "#P#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Technology"
+  }
+}

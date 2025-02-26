@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "tcainrework:charged_key",
+    "B": "IV Bag",
+    "M": "tcainrework:mega_battery"
+  },
+  "pattern": [
+    "C",
+    "B",
+    "M"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Sharp Plug"
+  }
+}

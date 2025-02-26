@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Technology",
+    "Meat Cleaver"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Tech.5"
+  }
+}

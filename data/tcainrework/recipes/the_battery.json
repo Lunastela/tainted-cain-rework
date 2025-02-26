@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "G": "Battery Pack",
+    "C": "tcainrework:charged_key",
+    "M": "tcainrework:mega_battery"
+  },
+  "pattern": [
+    "CGC",
+    " M "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Battery"
+  }
+}

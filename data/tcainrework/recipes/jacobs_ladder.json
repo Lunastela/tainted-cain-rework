@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "120 Volt",
+    "B": "Iron Bar",
+    "b": "#tcainrework:battery"
+  },
+  "pattern": [
+    "S",
+    "B",
+    "b"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Jacob's Ladder"
+  }
+}

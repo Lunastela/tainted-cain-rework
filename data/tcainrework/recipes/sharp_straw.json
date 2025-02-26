@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "K": "#tcainrework:key",
+    "H": "tcainrework:half_heart",
+    "#": "tcainrework:half_soul_heart"
+  },
+  "pattern": [
+    "HK",
+    "# ",
+    "H "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Sharp Straw"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "P": "tcainrework:pill{\"pill_effect\":14}",
+    "H": "#tcainrework:heart"
+  },
+  "pattern": [
+    "HHH",
+    "HPH",
+    "HHH"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Blood Bag"
+  }
+}

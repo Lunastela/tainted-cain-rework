@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "S": "Sharp Plug",
+    "B": "#tcainrework:soul_heart"
+  },
+  "pattern": [
+    "BSB",
+    " B "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "120 Volt"
+  }
+}

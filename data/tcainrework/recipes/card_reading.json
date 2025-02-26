@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:tarot_card{\"card_type\":5}",
+    "tcainrework:tarot_card{\"card_type\":18}",
+    "tcainrework:tarot_card{\"card_type\":19}",
+    "#tcainrework:battery"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Card Reading"
+  }
+}

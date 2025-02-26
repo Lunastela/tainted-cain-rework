@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "C": "minecraft:cobblestone",
+    "H": "tcainrework:tarot_card{\"card_type\":3}",
+    "K": "#tcainrework:key"
+  },
+  "pattern": [
+    "KHK",
+    "CKC"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Monstro's Tooth"
+  }
+}

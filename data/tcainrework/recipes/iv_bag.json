@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "R": "Razor Blade",
+    "H": "Blood Bag"
+  },
+  "pattern": [
+    "R",
+    "H"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "IV Bag"
+  }
+}

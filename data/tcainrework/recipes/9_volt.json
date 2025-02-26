@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "4.5 Volt",
+    "4.5 Volt"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "9 Volt"
+  }
+}

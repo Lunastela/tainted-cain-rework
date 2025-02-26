@@ -30,6 +30,15 @@ local hardcodedBabies = {
     [CollectibleType.COLLECTIBLE_LIL_ABADDON] = true,
 }
 
+local eyeItems = {
+    [CollectibleType.COLLECTIBLE_EYE_OF_BELIAL] = true,
+    [CollectibleType.COLLECTIBLE_EYE_OF_GREED] = true,
+    [CollectibleType.COLLECTIBLE_INNER_EYE] = true,
+    [CollectibleType.COLLECTIBLE_MOMS_EYE] = true,
+    [CollectibleType.COLLECTIBLE_BLOODSHOT_EYE] = true,
+    [CollectibleType.COLLECTIBLE_POP] = true,
+}
+
 local itemTagCounterparts = {
     [ItemConfig.TAG_FLY] = "#fly",
     [ItemConfig.TAG_FOOD] = "#food",
@@ -84,6 +93,10 @@ function collectibleStorage:loadCollectibleCache()
                     -- Check if it is a Box for the Box item tag
                     if (string.find(string.lower(itemName), "box")) then
                         addToTag("#box", itemName)
+                    end
+
+                    if eyeItems[collectibleStorage.itemIterator] then
+                        addToTag("#eye", itemName)
                     end
                 end
                 -- Check associated config tags with different itemTags

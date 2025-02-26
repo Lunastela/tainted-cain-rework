@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Battery Pack",
+    "tcainrework:wooden_doll"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Charged Baby"
+  }
+}

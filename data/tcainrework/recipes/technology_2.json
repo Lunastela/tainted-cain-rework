@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Technology",
+    "#tcainrework:battery"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Technology 2"
+  }
+}

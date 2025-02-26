@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "Monstro's Tooth",
+    "B": "Iron Bar"
+  },
+  "pattern": [
+    "#",
+    "B"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Tough Love"
+  }
+}

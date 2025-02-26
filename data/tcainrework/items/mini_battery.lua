@@ -3,7 +3,7 @@ return {
         DisplayName = "Micro Battery",
         GFX = "gfx/items/micro_battery.png",
         RenderModel = InventoryItemRenderType.Default,
-        ItemTags = {"#tcainrework:battery", "#tcainrework:small_pickup"},
+        ItemTags = {"#tcainrework:small_pickup"},
         StackSize = 64,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false

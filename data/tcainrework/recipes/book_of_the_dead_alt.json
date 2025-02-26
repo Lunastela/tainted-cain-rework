@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:bone_heart",
+    "The Necronomicon"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Book of the Dead"
+  }
+}
