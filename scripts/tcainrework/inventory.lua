@@ -497,7 +497,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
     end
     
     if ((not (held or fakeDisplayRecipe)) 
-    and (mouseover or utility.tableContains(cursorSnaking[inventory], itemIndex))) then
+    and (mouseover or (#cursorSnaking[inventory] > 1 and utility.tableContains(cursorSnaking[inventory], itemIndex)))) then
         blackBG.Color = cellColorRGB
         blackBG:Render(inventoryPosition)
     end
