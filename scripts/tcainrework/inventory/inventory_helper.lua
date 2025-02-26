@@ -887,7 +887,7 @@ function inventoryHelper.shiftClickSearchFree(inventorySet, curInventory, curIte
     return false, nil, nil
 end
 
-function inventoryHelper.resultItemFromRecipe(recipe, includeCount)
+function inventoryHelper.resultItemFromRecipe(recipe)
     if recipe.Results then
         return inventoryHelper.createItem(recipe.Results.Collectible or recipe.Results.Type, recipe.Results.Count)
     end
@@ -948,7 +948,7 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
                     index = index + 1
                 end
             end
-            anyReturn = inventoryHelper.resultItemFromRecipe(recipe, true)
+            anyReturn = inventoryHelper.resultItemFromRecipe(recipe)
             ::recipeContinue::
             if anyReturn then
                 return anyReturn

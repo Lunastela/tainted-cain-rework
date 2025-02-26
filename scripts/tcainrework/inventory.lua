@@ -298,7 +298,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                 if not ((#cursorSnaking[inventory] > 1) and utility.tableContains(cursorSnaking[inventory], itemIndex)) then
                     if isOutput then
                         fakeDisplayRecipe = true
-                        recipeIngredientDisplay = inventoryHelper.resultItemFromRecipe(curDisplayingRecipe, true)
+                        recipeIngredientDisplay = inventoryHelper.resultItemFromRecipe(curDisplayingRecipe)
                         blackBG.Color = cellColorRed
                         blackBG.Scale = Vector.One * 24
                         cellOffset = -Vector(4, 4)
@@ -514,6 +514,9 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
             local itemCount = (myItem and myItem.Count) or 0
             if fakeDisplaySnaking and not falseSnake then
                 itemCount = (held and snakeCursorRemainder) or (itemCount + snakeFakeItemCount[inventory][itemIndex])
+            end
+            if recipeIngredientDisplay and recipeIngredientDisplay.Count then
+                itemCount = recipeIngredientDisplay.Count
             end
 
             local itemCountString = tostring(itemCount)
@@ -958,7 +961,7 @@ function mod:RenderInventory()
                                 recipeBookUI:SetFrame("CraftingSlot", 1 - ((isCraftableRecipe and 1) or 0))
                                 recipeBookUI:Render(recipeDisplayDisplacement + recipeDisplacement)
                                 
-                                local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName, true)
+                                local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
                                 inventoryHelper.renderItem(fakeItem, recipeDisplayDisplacement + recipeDisplacement + Vector.One * 4)
                                 if inventoryHelper.hoveringOver(mousePosition, recipeDisplayDisplacement + recipeDisplacement, 26, 26) then
                                     toRenderTooltip = fakeItem
@@ -971,7 +974,7 @@ function mod:RenderInventory()
                                             local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
                                             local outputInventory = inventoryHelper.getInventory(InventoryTypes.OUTPUT)
                                             local itemsNeeded = getRecipeItemList(recipeFromName)
-                                            if not (outputInventory[1] and inventoryHelper.itemCanStackWithTag(outputInventory[1], inventoryHelper.resultItemFromRecipe(recipeFromName, true))) then
+                                            if not (outputInventory[1] and inventoryHelper.itemCanStackWithTag(outputInventory[1], inventoryHelper.resultItemFromRecipe(recipeFromName))) then
                                                 -- Clear Crafting Inventory First
                                                 local inventoryWidth = inventoryHelper.getInventoryWidth(craftingInventory) - 1
                                                 local inventoryHeight = inventoryHelper.getInventoryHeight(craftingInventory) - 1
