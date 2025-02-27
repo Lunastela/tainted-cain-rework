@@ -7,6 +7,7 @@
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Tech.5"
+    "collectible": "Tech.5",
+    "count": 2
   }
 }

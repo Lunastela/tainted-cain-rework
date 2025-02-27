@@ -4,11 +4,12 @@
   "key": {
     "G": "Battery Pack",
     "C": "tcainrework:charged_key",
-    "M": "tcainrework:mega_battery"
+    "B": "tcainrework:golden_battery"
   },
   "pattern": [
-    "CGC",
-    " M "
+    "C",
+    "G",
+    "B"
   ],
   "result": {
     "id": "tcainrework:collectible",

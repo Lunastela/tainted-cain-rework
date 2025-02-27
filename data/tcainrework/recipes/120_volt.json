@@ -2,12 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "S": "Sharp Plug",
-    "B": "#tcainrework:soul_heart"
+    "C": "tcainrework:charged_key",
+    "S": "#tcainrework:soul_heart",
+    "B": "#tcainrework:battery"
   },
   "pattern": [
-    "BSB",
-    " B "
+    "SCS",
+    "BSB"
   ],
   "result": {
     "id": "tcainrework:collectible",

@@ -2,13 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "tcainrework:soul_heart",
-    "#": "#book",
-    "C": "tcainrework:tarot_card{\"card_type\":2}"
+    "T": "Telekinesis",
+    "#": "#book"
   },
   "pattern": [
-    "H",
-    "C",
+    "T",
     "#"
   ],
   "result": {

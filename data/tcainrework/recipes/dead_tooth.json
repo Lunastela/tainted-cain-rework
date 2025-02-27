@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "category": "collectible",
+    "ingredients": [
+      "Monstro's Tooth",
+      "tcainrework:rotten_heart"
+    ],
+    "result": {
+      "id": "tcainrework:collectible",
+      "collectible": "Dead Tooth"
+    }
+}

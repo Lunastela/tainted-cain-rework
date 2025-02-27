@@ -4,12 +4,12 @@
   "key": {
     "S": "120 Volt",
     "B": "Iron Bar",
-    "b": "#tcainrework:battery"
+    "G": "tcainrework:golden_battery"
   },
   "pattern": [
     "S",
     "B",
-    "b"
+    "G"
   ],
   "result": {
     "id": "tcainrework:collectible",

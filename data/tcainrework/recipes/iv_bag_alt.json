@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "T": "tcainrework:tarot_card{\"card_type\":15}",
+    "J": "tcainrework:tarot_card{\"card_type\":21}",
+    "H": "#tcainrework:heart"
+  },
+  "pattern": [
+    "HTH",
+    "HJH"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "IV Bag"
+  }
+}

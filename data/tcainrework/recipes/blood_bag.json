@@ -1,14 +1,9 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "collectible",
-  "key": {
-    "P": "tcainrework:pill{\"pill_effect\":14}",
-    "H": "#tcainrework:heart"
-  },
-  "pattern": [
-    "HHH",
-    "HPH",
-    "HHH"
+  "ingredients": [
+    "#tcainrework:heart", "tcainrework:pill{\"pill_effect\":14}", "#tcainrework:heart",
+    "#tcainrework:heart", "Yum Heart", "#tcainrework:heart"
   ],
   "result": {
     "id": "tcainrework:collectible",
