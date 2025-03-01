@@ -59,7 +59,7 @@ function Utility.getCardConfig(collectibleID)
     return cardCache[collectibleID]
 end
 
-function Utility.generateCollectibleData(collectibleType)
+function Utility.generateCollectibleData(collectibleType, optionalCharge)
     -- try to obtain sprite if it exists
     local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
     local collectibleID = collectibleStorage.fastItemIDByName(collectibleType)
@@ -71,6 +71,9 @@ function Utility.generateCollectibleData(collectibleType)
         local initialCharges = ((itemConfig.Type == ItemType.ITEM_ACTIVE) and itemConfig.InitCharge) or nil
         if initialCharges == -1 then
             initialCharges = itemConfig.MaxCharges
+        end
+        if optionalCharge then
+            initialCharges = optionalCharge
         end
         return {
             [InventoryItemComponentData.COLLECTIBLE_ITEM] = collectibleID,

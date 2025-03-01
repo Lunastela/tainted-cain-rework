@@ -4,12 +4,12 @@
   "key": {
     "I": "Iron Bar",
     "G": "Wooden Spoon",
-    "S": "tcainrework:tarot_card{\"card_type\":2}"
+    "S": "Telepathy For Dummies"
   },
   "pattern": [
-    "I",
-    "G",
-    "S"
+    " I ",
+    " G ",
+    "ISI"
   ],
   "result": {
     "id": "tcainrework:collectible",

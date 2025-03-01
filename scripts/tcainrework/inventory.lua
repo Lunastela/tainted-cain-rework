@@ -158,6 +158,7 @@ local function checkRecipes()
             }
             if recipeOutput.Collectible then
                 lastOutputItem.ComponentData = utility.generateCollectibleData(recipeOutput.Collectible)
+                print(lastOutputItem.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES])
             end
             outputInventory[1] = lastOutputItem
             outputSlotOccupied = true
@@ -1444,7 +1445,7 @@ function mod:RenderInventory()
                             player:AddCollectible(
                                 collectibleType, 
                                 hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES], 
-                                not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] ~= nil),
+                                not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE]),
                                 ActiveSlot.SLOT_PRIMARY
                             )
                             -- print('first time taking active?:', not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] ~= nil))

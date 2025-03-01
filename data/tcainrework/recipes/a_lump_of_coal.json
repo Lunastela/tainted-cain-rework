@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "minecraft:oak_planks", "tcainrework:black_heart", "minecraft:oak_planks",
+    "tcainrework:black_heart", "minecraft:oak_planks", "tcainrework:black_heart",
+    "minecraft:oak_planks", "tcainrework:black_heart", "minecraft:oak_planks"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "A Lump of Coal"
+  }
+}

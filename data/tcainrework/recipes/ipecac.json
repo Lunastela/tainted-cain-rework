@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:pill{\"pill_effect\":44}",
+    "Rubber Cement"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Ipecac"
+  }
+}

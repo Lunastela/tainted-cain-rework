@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "I": "tcainrework:soul_heart",
+    "G": "Isaac's Tears",
+    "S": "tcainrework:tarot_card{\"card_type\":2}"
+  },
+  "pattern": [
+    "S",
+    "I",
+    "G"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Tractor Beam"
+  }
+}

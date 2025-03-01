@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:golden_bomb",
+    "Rubber Cement",
+    "tcainrework:golden_bomb"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Ipecac"
+  }
+}

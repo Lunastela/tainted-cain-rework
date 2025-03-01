@@ -197,12 +197,12 @@ for i in pairs(utility.chestVariants) do
     mod:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, mod.testChestOpening, i)
 end
 
+-- Cobblestone
 local rockToType = {
     [GridEntityType.GRID_ROCK] = "minecraft:cobblestone",
     [GridEntityType.GRID_ROCKT] = "minecraft:cobblestone",
-    [GridEntityType.GRID_ROCK_SS] = "minecraft:cobblestone"
+    [GridEntityType.GRID_ROCK_SS] = "minecraft:cobblestone",
 }
-
 local rockTypeOverride = {
     [BackdropType.CELLAR] = FiendFolio and "minecraft:oak_planks",
     [BackdropType.BURNT_BASEMENT] = FiendFolio and "minecraft:oak_planks",
@@ -210,16 +210,41 @@ local rockTypeOverride = {
 }
 mod:AddCallback(ModCallbacks.MC_POST_GRID_ROCK_DESTROY, function(_, rock, type)
     if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
-    and mod.inventoryHelper.getUnlockedInventory() and rockToType[type] then
-        local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, rock.Position, Vector.Zero, nil)
-        local pickupData = saveManager.GetRoomFloorSave(itemPickup)
-            and saveManager.GetRoomFloorSave(itemPickup).RerollSave
-
+    and mod.inventoryHelper.getUnlockedInventory() and (rockToType[type]) then
         local conditionTable = rockTypeOverride[Game():GetRoom():GetBackdropType()]
         if not conditionTable and StageAPI and StageAPI.CurrentStage then
             conditionTable = rockTypeOverride[(StageAPI.CurrentStage.Name):match("([^%s]+)")]
         end
-        pickupData.Type = conditionTable or rockToType[type]
+        local itemType = conditionTable or rockToType[type]
+        if itemType then
+            local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, rock.Position, Vector.Zero, nil)
+            local pickupData = saveManager.GetRoomFloorSave(itemPickup)
+                and saveManager.GetRoomFloorSave(itemPickup).RerollSave
+    
+            pickupData.Type = itemType
+            pickupData.Count = 1
+        end
+    end
+end)
+
+-- Mushrooms
+local mushroomBackdrops = {
+    [BackdropType.SECRET] = true,
+    [BackdropType.FLOODED_CAVES] = true,
+    [BackdropType.CATACOMBS] = true,
+    [BackdropType.CAVES] = true,
+    [BackdropType.ASHPIT] = true,
+    [BackdropType.MINES] = true
+}
+mod:AddCallback(ModCallbacks.MC_POST_GRID_ROCK_DESTROY, function(_, rock, type)
+    if (PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+    and mod.inventoryHelper.getUnlockedInventory() and (type == GridEntityType.GRID_ROCK_ALT))
+    and (mushroomBackdrops[Game():GetRoom():GetBackdropType()]) then
+        local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, rock.Position, Vector.Zero, nil)
+        local pickupData = saveManager.GetRoomFloorSave(itemPickup)
+            and saveManager.GetRoomFloorSave(itemPickup).RerollSave
+        
+        pickupData.Type = (((math.random(10) <= 5) and "minecraft:red_mushroom") or "minecraft:brown_mushroom")
         pickupData.Count = 1
     end
 end)

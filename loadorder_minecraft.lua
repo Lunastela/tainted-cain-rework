@@ -21,6 +21,8 @@ return {
         bucket
         cobblestone
         crafting_table
+        red_mushroom
+        brown_mushroom
         furnace
         monster_spawner
     ]]

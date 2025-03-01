@@ -2,6 +2,7 @@ return {
     -- Minecraft
     ["items.minecraft.book.name"] = "Libro",
     ["items.minecraft.bowl.name"] = "Bol",
+    ["items.minecraft.brown_mushroom.name"] = "Hongo café",
     ["items.minecraft.bucket.name"] = "Cubeta",
     ["items.minecraft.cobblestone.name"] = "Piedra labrada",
     ["items.minecraft.crafting_table.name"] = "Mesa de trabajo",
@@ -18,6 +19,7 @@ return {
     ["items.minecraft.oak_planks.name"] = "Tablones de roble",
     ["items.minecraft.oak_sign.name"] = "Letrero de roble",
     ["items.minecraft.paper.name"] = "Papel",
+    ["items.minecraft.red_mushroom.name"] = "Hongo rojo",
     ["items.minecraft.sand.name"] = "Arena",
     ["items.minecraft.stick.name"] = "Palo",
     ["items.minecraft.torch.name"] = "Antorcha",

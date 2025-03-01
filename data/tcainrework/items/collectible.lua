@@ -14,7 +14,7 @@ return {
             EntityID = "5.100",
             Amount = 1,
             Condition = function(entity, player)
-                return utility.generateCollectibleData(entity.SubType)
+                return utility.generateCollectibleData(entity.SubType, entity:ToPickup().Charge)
             end
         }
     }

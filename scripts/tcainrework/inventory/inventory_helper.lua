@@ -344,10 +344,7 @@ function inventoryHelper.createItem(itemString, count)
         end
     end
     if collectibleStorage.fastItemIDByName(itemString) ~= -1 then
-        if not componentData then
-            componentData = {}
-        end
-        componentData[InventoryItemComponentData.COLLECTIBLE_ITEM] = collectibleStorage.fastItemIDByName(itemString)
+        componentData = utility.generateCollectibleData(collectibleStorage.fastItemIDByName(itemString))
         itemType = "tcainrework:collectible"
     end
     return {
