@@ -584,7 +584,8 @@ local function canStackComponentData(item1, item2, soft)
                 and isActiveFromComponent(item1.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]))
                 or (item2.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
                 and isActiveFromComponent(item2.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]))) then
-                    return ((item1.Count or 0) + (item2.Count or 0)) <= 1        
+                    return false -- ((item1.Count or 0) + (item2.Count or 0)) <= 1
+                    -- I sincerely hope that wasn't important
                 end
             end
         end
@@ -1098,6 +1099,12 @@ itemSprite3d:Load("gfx/items/inventoryitem.anm2", false)
 itemSprite3d:Play("Idle", true)
 itemSprite3d:SetCustomShader("shaders/item_renderer")
 
+-- 3D Collectible Renderer
+local collectibleSprite3d = Sprite()
+collectibleSprite3d:Load("gfx/itemanimation.anm2", true)
+collectibleSprite3d:Play("Idle", true)
+collectibleSprite3d:SetCustomShader("shaders/item_renderer")
+
 local durabilityBar = Sprite()
 durabilityBar:Load("gfx/items/inventoryitem.anm2", false)
 durabilityBar:ReplaceSpritesheet(0, "gfx/ui/durability.png")
@@ -1114,20 +1121,22 @@ function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, 
     local originalRenderPosition = Vector(renderPosition.X, renderPosition.Y)
     local renderType = inventoryHelper.getItemRenderType(itemToDisplay.Type)
     local renderFallback = ((collectibleItem ~= nil) and (getCustomCollectibleSprite(collectibleItem) == -1))
+    local renderSprite = (((renderType == renderTypes.Default) and (elapsedTime and itemSprite3d))
+        or ((renderType == renderTypes.SimpleBlock) and blockSprite)
+        or ((renderType == renderTypes.CraftingTable) and craftingTableSprite) or itemSprite)
     if renderFallback then
         renderType = renderTypes.Collectible
+        renderSprite = (elapsedTime and collectibleSprite3d) or defaultCollectibleSprite
     end
-    local renderSprite = (((renderType == renderTypes.Default) and (elapsedTime and itemSprite3d))
-        or ((renderType == renderTypes.SimpleBlock) and blockSprite) or ((renderType == renderTypes.Collectible) and defaultCollectibleSprite)
-        or ((renderType == renderTypes.CraftingTable) and craftingTableSprite) or itemSprite)
     renderSprite:ReplaceSpritesheet(0, inventoryHelper.getItemGraphic(itemToDisplay))
     renderSprite:LoadGraphics()
     local isEnchanted = inventoryHelper.getDefaultEnchanted(itemToDisplay)
+    local spriteSize = ((renderType == renderTypes.Collectible) and 32) or 16
     renderSprite.Color = Color(
         1, 1, 1, 1, 
         0, 0, 0, 
         (((elapsedTime ~= nil) and elapsedTime) or ((renderType == renderTypes.Default) and TCainRework.elapsedTime)) or 0, 
-        0, 0, isEnchanted and TCainRework.elapsedTime or 0
+        spriteSize, spriteSize, isEnchanted and TCainRework.elapsedTime or 0
     )
     renderSprite.Scale = renderScale or Vector.One
     if renderFallback then

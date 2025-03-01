@@ -35,7 +35,7 @@ const float MAX_DIST = 20.0;
 
 const float pi = 3.14159;
 
-const vec2 pixelSize = vec2(16.0, 16.0);
+vec2 pixelSize = vec2(ColorizeOut.g, ColorizeOut.b);
 vec2 adjustUV(vec2 uv) {
     ivec2 textureSize2d = textureSize(Texture0, 0);
     float myTextureSize = float(textureSize2d.y) / pixelSize.y;

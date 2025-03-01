@@ -469,6 +469,18 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:ipecac",
+            Category = "collectible",
+            ConditionTable = {"tcainrework:pill{\"pill_effect\":44}", "Rubber Cement", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Ipecac"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:jar_of_flies",
             Category = "collectible",
             ConditionTable = {"The Jar", "#fly", },
@@ -1472,19 +1484,6 @@ return {
             DischargeRecipe = false,
         },
         {
-            RecipeName = "tcainrework:spoon_bender",
-            Category = "collectible",
-            RecipeSize = Vector(1, 3),
-            ConditionTable = {"Iron Bar", "Wooden Spoon", "tcainrework:tarot_card{\"card_type\":2}", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Spoon Bender"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
             RecipeName = "tcainrework:sprinkler",
             Category = "collectible",
             RecipeSize = Vector(1, 3),
@@ -1558,6 +1557,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "The Necronomicon"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:tractor_beam",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"tcainrework:tarot_card{\"card_type\":2}", "tcainrework:soul_heart", "Isaac's Tears", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Tractor Beam"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -2134,6 +2146,56 @@ return {
             DischargeRecipe = false,
         },
     },
+    ["shapeless_83d0a6c92856cdf4681bcc6ff9cbfd7839630cc5"] = {
+        {
+            RecipeName = "tcainrework:a_lump_of_coal",
+            Category = "collectible",
+            ConditionTable = {"minecraft:oak_planks", "tcainrework:black_heart", "minecraft:oak_planks", "tcainrework:black_heart", "minecraft:oak_planks", "tcainrework:black_heart", "minecraft:oak_planks", "tcainrework:black_heart", "minecraft:oak_planks", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "A Lump of Coal"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:dads_key",
+            Category = "collectible",
+            ConditionTable = {"tcainrework:key", "tcainrework:key", "tcainrework:key", "tcainrework:key", "tcainrework:golden_key", "tcainrework:key", "tcainrework:key", "tcainrework:key", "tcainrework:key", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Dad's Key"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:dessert",
+            Category = "collectible",
+            ConditionTable = {"#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:card", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Dessert"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:rubber_cement",
+            Category = "collectible",
+            ConditionTable = {"minecraft:cobblestone", "Lil Gurdy", "minecraft:cobblestone", "minecraft:cobblestone", "Eye Drops", "minecraft:cobblestone", "minecraft:cobblestone", "The Jar", "minecraft:cobblestone", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Rubber Cement"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
     ["93572b414e21721b85aa52ce823174d3bf4603ae"] = {
         {
             RecipeName = "tcainrework:a_pound_of_flesh",
@@ -2350,6 +2412,18 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Halo of Flies"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:ipecac_alt",
+            Category = "collectible",
+            ConditionTable = {"tcainrework:golden_bomb", "Rubber Cement", "tcainrework:golden_bomb", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Ipecac"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -3090,44 +3164,6 @@ return {
             DischargeRecipe = false,
         },
     },
-    ["shapeless_83d0a6c92856cdf4681bcc6ff9cbfd7839630cc5"] = {
-        {
-            RecipeName = "tcainrework:dads_key",
-            Category = "collectible",
-            ConditionTable = {"tcainrework:key", "tcainrework:key", "tcainrework:key", "tcainrework:key", "tcainrework:golden_key", "tcainrework:key", "tcainrework:key", "tcainrework:key", "tcainrework:key", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Dad's Key"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:dessert",
-            Category = "collectible",
-            ConditionTable = {"#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:heart", "#tcainrework:card", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Dessert"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:rubber_cement",
-            Category = "collectible",
-            ConditionTable = {"minecraft:cobblestone", "Lil Gurdy", "minecraft:cobblestone", "minecraft:cobblestone", "Eye Drops", "minecraft:cobblestone", "minecraft:cobblestone", "The Jar", "minecraft:cobblestone", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Rubber Cement"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-    },
     ["e69e14100b282cb294eb74086b6a511a787ace6c"] = {
         {
             RecipeName = "tcainrework:dead_bird",
@@ -3505,6 +3541,21 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Sister Maggy"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
+    ["b079a02f3f473b59250af2a598d0157077f20692"] = {
+        {
+            RecipeName = "tcainrework:spoon_bender",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "Iron Bar", nil, nil, "Wooden Spoon", nil, "Iron Bar", "Telepathy For Dummies", "Iron Bar", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Spoon Bender"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
