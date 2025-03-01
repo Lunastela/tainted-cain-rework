@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "tcainrework:dime",
+    "tcainrework:nickel",
+    "tcainrework:nickel",
+    "tcainrework:penny",
+    "tcainrework:penny",
+    "tcainrework:penny",
+    "tcainrework:penny",
+    "tcainrework:penny"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "A Quarter"
+  }
+}

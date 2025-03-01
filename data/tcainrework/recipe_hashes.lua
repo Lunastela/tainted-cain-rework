@@ -78,19 +78,6 @@ return {
             DisplayRecipe = true,
             DischargeRecipe = false,
         },
-        {
-            RecipeName = "tcainrework:wirecoat_hanger",
-            Category = "collectible",
-            RecipeSize = Vector(3, 2),
-            ConditionTable = {"#tcainrework:pickup", "#tcainrework:key", "#tcainrework:pickup", "#tcainrework:key", "#tcainrework:key", "#tcainrework:key", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Wire Coat Hanger"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
     },
     ["shapeless_aab12288cac8fd7738ff727162096cc65fc80bcd"] = {
         {
@@ -1224,19 +1211,6 @@ return {
             DischargeRecipe = false,
         },
         {
-            RecipeName = "tcainrework:transcendence",
-            Category = "collectible",
-            RecipeSize = Vector(3, 3),
-            ConditionTable = {"minecraft:cobblestone", "tcainrework:bone_heart", "minecraft:cobblestone", "tcainrework:bone_heart", "The Small Rock", "tcainrework:bone_heart", "minecraft:cobblestone", "tcainrework:bone_heart", "minecraft:cobblestone", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Transcendence"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
             RecipeName = "tcainrework:treasure_map",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
@@ -1311,6 +1285,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Anarchist Cookbook"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:best_friend",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"minecraft:leather", "tcainrework:wooden_doll", "Mr. Boom", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Best Friend"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -1571,6 +1558,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "The Necronomicon"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:transcendence",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"minecraft:leather", "tcainrework:bone_heart", "tcainrework:tarot_card{\"card_type\":13}", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Transcendence"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -2074,6 +2074,18 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:a_quarter_alt_2",
+            Category = "collectible",
+            ConditionTable = {"tcainrework:dime", "tcainrework:nickel", "tcainrework:nickel", "tcainrework:nickel", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "A Quarter"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:card_reading",
             Category = "collectible",
             ConditionTable = {"tcainrework:tarot_card{\"card_type\":5}", "tcainrework:tarot_card{\"card_type\":18}", "tcainrework:tarot_card{\"card_type\":19}", "#tcainrework:battery", },
@@ -2457,6 +2469,34 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "3 Dollar Bill"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
+    ["shapeless_510c3bbd0b5f9d9e51ed2d85f8714f95edf63c33"] = {
+        {
+            RecipeName = "tcainrework:a_quarter_alt_3",
+            Category = "collectible",
+            ConditionTable = {"tcainrework:dime", "tcainrework:nickel", "tcainrework:nickel", "tcainrework:penny", "tcainrework:penny", "tcainrework:penny", "tcainrework:penny", "tcainrework:penny", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "A Quarter"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
+    ["shapeless_f97e973ef2ae2ba7b3e3713832927604afe3cae7"] = {
+        {
+            RecipeName = "tcainrework:a_quarter_alt_4",
+            Category = "collectible",
+            ConditionTable = {"tcainrework:dime", "tcainrework:dime", "tcainrework:penny", "tcainrework:penny", "tcainrework:penny", "tcainrework:penny", "tcainrework:penny", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "A Quarter"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -2995,6 +3035,19 @@ return {
             DisplayRecipe = true,
             DischargeRecipe = false,
         },
+        {
+            RecipeName = "tcainrework:wire_coat_hanger",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "#tcainrework:key", nil, "#tcainrework:pickup", nil, "#tcainrework:pickup", "#tcainrework:key", "#tcainrework:key", "#tcainrework:key", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Wire Coat Hanger"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
     },
     ["17b43ca59cc2279bbd8fb58974a49350d8c35ad3"] = {
         {
@@ -3317,7 +3370,7 @@ return {
             RecipeName = "tcainrework:night_light",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {"#tcainrework:soul_heart", nil, nil, "#tcainrework:soul_heart", "tcainrework:micro_battery", "tcainrework:micro_battery", "#tcainrework:soul_heart", nil, nil, },
+            ConditionTable = {"#tcainrework:soul_heart", nil, nil, "#tcainrework:soul_heart", "tcainrework:mini_battery", "tcainrework:mini_battery", "#tcainrework:soul_heart", nil, nil, },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,

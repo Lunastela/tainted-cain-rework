@@ -3,7 +3,7 @@
   "category": "collectible",
   "key": {
     "S": "#tcainrework:soul_heart",
-    "B": "tcainrework:micro_battery"
+    "B": "tcainrework:mini_battery"
   },
   "pattern": [
     "S  ",

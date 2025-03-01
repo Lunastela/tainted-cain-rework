@@ -239,13 +239,20 @@ local function inventoryShiftClick(inventorySet, itemInventory, itemIndex)
     inventoryHelper.recipeCraftableDirty = true
 end
 
-local function getConditionalFromAnyRecipe(recipe, inventory, index)
+local lastStartTime = 0
+local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items") 
+local function getConditionalFromAnyRecipe(recipe, inventory, index, noTag)
+    local recipeIngredientDisplay = nil
     if recipe.RecipeSize then
-        return inventoryHelper.conditionalItemFromShapedRecipe(recipe, inventory, index)
+        recipeIngredientDisplay = inventoryHelper.conditionalItemFromShapedRecipe(recipe, inventory, index)
     elseif recipe.ConditionTable[index] then
-        return inventoryHelper.conditionalItemFromRecipe(recipe, index)
+        recipeIngredientDisplay = inventoryHelper.conditionalItemFromRecipe(recipe, index)
     end
-    return nil
+    if not noTag and recipeIngredientDisplay and itemTagLookup[recipeIngredientDisplay.Type] then
+        local itemTagTable = itemTagLookup[recipeIngredientDisplay.Type]
+        return inventoryHelper.createItem(itemTagTable[math.floor(((Isaac.GetTime() - lastStartTime) / 1000) % (#itemTagTable)) + 1])
+    end
+    return recipeIngredientDisplay
 end
 
 local function getRecipeItemList(recipe)
@@ -256,15 +263,13 @@ local function getRecipeItemList(recipe)
     for j = 0, inventoryHeight do
         for i = 0, inventoryWidth do
             local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
-            local getItem = getConditionalFromAnyRecipe(recipe, craftingInventory, currentItemIndex)
+            local getItem = getConditionalFromAnyRecipe(recipe, craftingInventory, currentItemIndex, true)
             itemsNeeded[currentItemIndex] = getItem
         end
     end
     return itemsNeeded
 end
 
-local lastStartTime = 0
-local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items") 
 local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLMBPress, isRMBPress, isLMBReleased, isRMBReleased, held)
     local myItem = held or inventory[itemIndex]
     local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
@@ -304,10 +309,6 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                         cellOffset = -Vector(4, 4)
                     elseif isCrafting then
                         recipeIngredientDisplay = getConditionalFromAnyRecipe(curDisplayingRecipe, inventory, itemIndex)
-                        if recipeIngredientDisplay and itemTagLookup[recipeIngredientDisplay.Type] then
-                            local itemTagTable = itemTagLookup[recipeIngredientDisplay.Type]
-                            recipeIngredientDisplay = inventoryHelper.createItem(itemTagTable[math.floor(((Isaac.GetTime() - lastStartTime) / 1000) % (#itemTagTable)) + 1])
-                        end
                         fakeDisplayRecipe = (recipeIngredientDisplay ~= nil)
                     end
                     if fakeDisplayRecipe then
@@ -637,6 +638,136 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
     return addedAny
 end
 
+local function attemptAutocraftItem(selectedRecipeData, inventorySet)
+    SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
+    recipeFromName = recipeStorage.nameToRecipe[selectedRecipeData.Name]
+    if selectedRecipeData.Craftable then
+        local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
+        local outputInventory = inventoryHelper.getInventory(InventoryTypes.OUTPUT)
+        local itemsNeeded = getRecipeItemList(recipeFromName)
+        if (not (outputInventory[1] and inventoryHelper.itemCanStackWithTag(
+            outputInventory[1], inventoryHelper.resultItemFromRecipe(recipeFromName)))) then
+            -- Clear Crafting Inventory First
+            local inventoryWidth = inventoryHelper.getInventoryWidth(craftingInventory) - 1
+            local inventoryHeight = inventoryHelper.getInventoryHeight(craftingInventory) - 1
+            for j = 0, inventoryHeight do
+                for i = 0, inventoryWidth do
+                    local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
+                    if (craftingInventory[currentItemIndex]) then -- and ((not itemsNeeded[currentItemIndex])
+                    -- or (not inventoryHelper.itemCanStackWithTag(craftingInventory[currentItemIndex], itemsNeeded[currentItemIndex])))) then
+                        inventoryShiftClick(inventorySet, craftingInventory, currentItemIndex)
+                    end
+                end
+            end
+        end
+        local times = 1
+        if inputHelper.isShiftHeld() then
+            times = 64
+            for i, item in pairs(itemsNeeded) do
+                if item and item.Type then
+                    times = math.min(times, inventoryHelper.getMaxStackFor(item.Type) + 1)
+                end
+            end
+        end
+        while times > 0 do
+            inventoryHelper.recipeCraftableDirty = true
+            if inventoryHelper.checkRecipeCraftable(selectedRecipeData.Name, recipeFromName, inventoryHelper.getInventoryItemList(inventorySet, {craftingInventory})) then
+                itemsNeeded = getRecipeItemList(recipeFromName)
+                -- create an assorted stack of items the recipe needs for later use
+                local sortedItemStack = {}
+                for i, item in pairs(itemsNeeded) do
+                    table.insert(sortedItemStack, i)
+                end
+                -- sort the stacks by order of least accessible to most accessible
+                table.sort(sortedItemStack, function(a, b)
+                    return inventoryHelper.sortTableByTags(itemsNeeded[a].Type, itemsNeeded[b].Type)
+                end)
+                
+                -- Obtain the highest amount of items per slot able to be placed (based on previous configurations)
+                local lowestNumber, highestAllowedNumber = nil, nil
+                for index, itemIndex in ipairs(sortedItemStack) do
+                    local currentAmount = (craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or -1
+                    if currentAmount >= 0 then
+                        local currentMaxStack = (craftingInventory[itemIndex] and inventoryHelper.getMaxStackFor(craftingInventory[itemIndex].Type))
+                        lowestNumber = math.min(currentAmount, ((lowestNumber ~= nil) and lowestNumber) or currentAmount)
+                        highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
+                    end
+                end
+                if not lowestNumber then
+                    lowestNumber = 0
+                end
+
+                -- Loop through necessary ingredients
+                for index, itemIndex in ipairs(sortedItemStack) do
+                    local itemOrTag = itemsNeeded[itemIndex]
+                    if itemOrTag then
+                        -- Get best items for the list in order
+                        local itemLookupTable = {}
+                        for i, inventory in ipairs(inventorySet) do
+                            if (inventory ~= craftingInventory
+                            and inventoryHelper.isValidInventory(inventory)) then
+                                for j in pairs(inventory) do
+                                    if (inventory[j] and inventory[j].Type) and ((itemTagLookup[itemOrTag.Type] 
+                                    and (utility.tableContains(itemTagLookup[itemOrTag.Type], inventory[j].Type)
+                                    or (utility.tableContains(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(inventory[j])))))
+                                    or (inventory[j].Type == itemOrTag.Type)) then
+                                        -- print(inventory[j].Type, itemOrTag.Type)
+                                        table.insert(itemLookupTable, {Inventory = inventory, Index = j})
+                                    end
+                                end
+                            end
+                        end
+                        if itemTagLookup[itemOrTag.Type] then
+                            table.sort(itemLookupTable, function(a, b)
+                                return ((utility.getIndexInTable(itemTagLookup[itemOrTag.Type], a.Inventory[a.Index].Type) 
+                                    or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(a.Inventory[a.Index])))
+                                    < (utility.getIndexInTable(itemTagLookup[itemOrTag.Type], b.Inventory[b.Index].Type) 
+                                    or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(b.Inventory[b.Index]))))
+                            end)
+                        end
+                        -- for i in ipairs(inventoryLookupTable) do
+                        --     print(inventory[inventoryLookupTable[i]].Type)
+                        -- end
+                        for j, itemLookup in ipairs(itemLookupTable) do
+                            local inventoryItem = itemLookup.Inventory[itemLookup.Index]
+                            if inventoryItem then
+                                -- print("item item item atemt", inventoryItem.Type, craftingInventory[itemIndex] and craftingInventory[itemIndex].Type)
+                                if inventoryHelper.itemCanStackWithTag(inventoryItem, itemOrTag) and ((not craftingInventory[itemIndex]) 
+                                or (inventoryHelper.itemCanStackWith(inventoryItem, craftingInventory[itemIndex]) 
+                                and craftingInventory[itemIndex].Count < lowestNumber + 1))
+                                and ((not highestAllowedNumber) or (lowestNumber < highestAllowedNumber)) then
+                                    local lastItemData = inventoryItem.ComponentData
+                                    local removeAmount = inventoryHelper.removePossibleAmount(itemLookup.Inventory, itemLookup.Index, 1)
+                                    if removeAmount > 0 then
+                                        craftingInventory[itemIndex] = {
+                                            Type = inventoryItem.Type,
+                                            Count = ((craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or 0) + removeAmount,
+                                            ComponentData = lastItemData
+                                        }
+                                        itemsNeeded[itemIndex] = nil
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            else
+                times = 0
+                goto endRecipes
+            end
+            times = times - 1
+        end
+        ::endRecipes::
+        curDisplayingRecipe = nil
+        lastCombinedString = ""
+    else
+        -- otherwise just display recipe
+        curDisplayingRecipe = recipeFromName
+        lastStartTime = Isaac.GetTime()
+        cancelRecipeOverlay = false
+    end
+end
+
 local craftingGray = 55 / 255
 local craftingFontColor = KColor(craftingGray, craftingGray, craftingGray, 1)
 
@@ -646,6 +777,8 @@ local inventorySize = Vector(178, 166)
 local recipeBookTabs = {"collectible", "active", "passive", "misc"}
 local selectedTab = 1
 local selectedPage = 0
+local currentRecipeCycle, lastSelectedRecipe = 1, nil
+local recipeOverlayDisplay, hoveringOverRecipe = nil, nil
 local function resetRecipeBook()
     curDisplayingRecipe = nil
     lastStartTime = 0
@@ -655,6 +788,10 @@ local function resetRecipeBook()
     end
     selectedTab = 1
     selectedPage = 0
+    -- Recipe Book Cycling
+    currentRecipeCycle = 1
+    lastSelectedRecipe = nil
+    recipeOverlayDisplay = nil
 end
 
 if EID then
@@ -713,6 +850,12 @@ function mod:RenderInventory()
         local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
 
         local lmbTrigger, rmbTrigger = inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_1), inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_2)
+        if (not (hoveringOverRecipe and (lmbTrigger and not rmbTrigger)))
+            and (recipeOverlayDisplay and (lmbTrigger or rmbTrigger)) then
+            recipeOverlayDisplay = nil
+            lmbTrigger, rmbTrigger = false, false
+        end
+
         local lmbRelease, rmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_1), inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_2)
 
         -- Render Hotbar before everything else
@@ -944,7 +1087,9 @@ function mod:RenderInventory()
                     local recipeDisplayDisplacement = recipeBookPosition - Vector(48, 52)
     
                     local toRenderTooltip = nil
-                    local filteredRecipes, craftableRecipes, availableTabs = inventoryHelper.getRecipeBookRecipes(recipeBookTabs[selectedTab - 1], searchBarText, inventorySet)
+                    local filteredRecipes, recipeLookup, craftableRecipes, availableTabs = inventoryHelper.getRecipeBookRecipes(
+                        recipeBookTabs[selectedTab - 1], searchBarText, inventorySet
+                    )
                     if #filteredRecipes > 0 then
                         local recipeDisplacement = Vector.Zero
                         local chosenList = (recipeBookFilter and craftableRecipes) or filteredRecipes
@@ -954,148 +1099,69 @@ function mod:RenderInventory()
                         end
                         local pageDisplacement = (selectedPage * 20)
                         for i = 1, 20 do
-                            local recipeName = chosenList[i + pageDisplacement]
-                            local recipeFromName = recipeName and recipeStorage.nameToRecipe[recipeName]
-                            if recipeFromName then
-                                local isCraftableRecipe = utility.tableContains(craftableRecipes, recipeName)
+                            local recipeNames = recipeLookup[chosenList[i + pageDisplacement]]
+                            if recipeNames then
+                                local isCraftableRecipe = ((chosenList == craftableRecipes) 
+                                    or utility.tableContains(craftableRecipes, chosenList[i + pageDisplacement]))
                                 recipeBookUI:SetFrame("CraftingSlot", 1 - ((isCraftableRecipe and 1) or 0))
                                 recipeBookUI:Render(recipeDisplayDisplacement + recipeDisplacement)
                                 
-                                local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
-                                inventoryHelper.renderItem(fakeItem, recipeDisplayDisplacement + recipeDisplacement + Vector.One * 4)
+                                -- mark recipe amount 
+                                local recipeAmount = #recipeNames
+                                if (chosenList == craftableRecipes) then
+                                    recipeAmount = 0
+                                    for i, recipeData in ipairs(recipeNames) do
+                                        if recipeData.Craftable then
+                                            recipeAmount = recipeAmount + 1
+                                        end
+                                    end
+                                end
+                                local recipeDisplayIndex = 1
+                                for _, recipeData in ipairs(recipeNames) do
+                                    local recipe = recipeStorage.nameToRecipe[recipeData.Name]
+                                    local fakeItem = inventoryHelper.resultItemFromRecipe(recipe)
+                                    if ((chosenList ~= craftableRecipes) or recipeData.Craftable) then
+                                        local itemDisplacement = 4 + ((recipeDisplayIndex - recipeAmount) * 2) + (recipeAmount - 1) * 1
+                                        inventoryHelper.renderItem(
+                                            fakeItem, recipeDisplayDisplacement 
+                                            + recipeDisplacement + (Vector.One * itemDisplacement)
+                                        )
+                                        recipeDisplayIndex = recipeDisplayIndex + 1
+                                    end
+                                end
                                 if inventoryHelper.hoveringOver(mousePosition, recipeDisplayDisplacement + recipeDisplacement, 26, 26) then
-                                    toRenderTooltip = fakeItem
+                                    -- early recipe detection for prioritizing recipes that are craftable
+                                    local lastRecipeCycle = currentRecipeCycle
+                                    if lmbTrigger then
+                                        if (lastSelectedRecipe ~= chosenList[i + pageDisplacement]) then
+                                            -- attempt to select a craftable recipe
+                                            currentRecipeCycle = 1
+                                            for i, recipeData in ipairs(recipeNames) do
+                                                if recipeData.Craftable then
+                                                    currentRecipeCycle = i
+                                                    break
+                                                end
+                                            end
+                                            lastSelectedRecipe = chosenList[i + pageDisplacement]
+                                        else
+                                            -- advance recipes only if the output slot is full
+                                            if (curDisplayingRecipe or (inventoryHelper.getInventory(InventoryTypes.OUTPUT)[1] ~= nil)) then
+                                                currentRecipeCycle = (currentRecipeCycle % (#recipeNames)) + 1
+                                                while ((chosenList == craftableRecipes) and (not recipeNames[currentRecipeCycle].Craftable)) do
+                                                    currentRecipeCycle = (currentRecipeCycle % (#recipeNames)) + 1
+                                                end
+                                            end
+                                        end
+                                    end
+                                    local recipeFromName = recipeStorage.nameToRecipe[recipeNames[1].Name]
+                                    toRenderTooltip = inventoryHelper.resultItemFromRecipe(recipeFromName)
+                                    toRenderTooltip.MultipleRecipes = true
                                     if rmbTrigger then
                                         SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
+                                        recipeOverlayDisplay = {Recipes = recipeNames, Position = Vector(recipeDisplacement.X, recipeDisplacement.Y)}
                                     elseif lmbTrigger then
-                                        SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
-                                        -- attempt to craft recipe
-                                        if isCraftableRecipe then
-                                            local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
-                                            local outputInventory = inventoryHelper.getInventory(InventoryTypes.OUTPUT)
-                                            local itemsNeeded = getRecipeItemList(recipeFromName)
-                                            if not (outputInventory[1] and inventoryHelper.itemCanStackWithTag(outputInventory[1], inventoryHelper.resultItemFromRecipe(recipeFromName))) then
-                                                -- Clear Crafting Inventory First
-                                                local inventoryWidth = inventoryHelper.getInventoryWidth(craftingInventory) - 1
-                                                local inventoryHeight = inventoryHelper.getInventoryHeight(craftingInventory) - 1
-                                                for j = 0, inventoryHeight do
-                                                    for i = 0, inventoryWidth do
-                                                        local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
-                                                        if (craftingInventory[currentItemIndex]) then -- and ((not itemsNeeded[currentItemIndex])
-                                                        -- or (not inventoryHelper.itemCanStackWithTag(craftingInventory[currentItemIndex], itemsNeeded[currentItemIndex])))) then
-                                                            inventoryShiftClick(inventorySet, craftingInventory, currentItemIndex)
-                                                        end
-                                                    end
-                                                end
-                                            end
-                                            local times = 1
-                                            if inputHelper.isShiftHeld() then
-                                                times = 64
-                                                for i, item in pairs(itemsNeeded) do
-                                                    if item and item.Type then
-                                                        times = math.min(times, inventoryHelper.getMaxStackFor(item.Type) + 1)
-                                                    end
-                                                end
-                                            end
-                                            while times > 0 do
-                                                inventoryHelper.recipeCraftableDirty = true
-                                                if inventoryHelper.checkRecipeCraftable(recipeName, recipeFromName, inventoryHelper.getInventoryItemList(inventorySet, {craftingInventory})) then
-                                                    itemsNeeded = getRecipeItemList(recipeFromName)
-                                                    -- create an assorted stack of items the recipe needs for later use
-                                                    local sortedItemStack = {}
-                                                    for i, item in pairs(itemsNeeded) do
-                                                        table.insert(sortedItemStack, i)
-                                                    end
-                                                    -- sort the stacks by order of least accessible to most accessible
-                                                    table.sort(sortedItemStack, function(a, b)
-                                                        return inventoryHelper.sortTableByTags(itemsNeeded[a].Type, itemsNeeded[b].Type)
-                                                    end)
-                                                    
-                                                    -- Obtain the highest amount of items per slot able to be placed (based on previous configurations)
-                                                    local lowestNumber, highestAllowedNumber = nil, nil
-                                                    for index, itemIndex in ipairs(sortedItemStack) do
-                                                        local currentAmount = (craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or -1
-                                                        if currentAmount >= 0 then
-                                                            local currentMaxStack = (craftingInventory[itemIndex] and inventoryHelper.getMaxStackFor(craftingInventory[itemIndex].Type))
-                                                            lowestNumber = math.min(currentAmount, ((lowestNumber ~= nil) and lowestNumber) or currentAmount)
-                                                            highestAllowedNumber = math.min(currentMaxStack, ((highestAllowedNumber ~= nil) and highestAllowedNumber) or currentMaxStack)
-                                                        end
-                                                    end
-                                                    if not lowestNumber then
-                                                        lowestNumber = 0
-                                                    end
-
-                                                    -- Loop through necessary ingredients
-                                                    for index, itemIndex in ipairs(sortedItemStack) do
-                                                        local itemOrTag = itemsNeeded[itemIndex]
-                                                        if itemOrTag then
-                                                            -- Get best items for the list in order
-                                                            local itemLookupTable = {}
-                                                            for i, inventory in ipairs(inventorySet) do
-                                                                if (inventory ~= craftingInventory
-                                                                and inventoryHelper.isValidInventory(inventory)) then
-                                                                    for j in pairs(inventory) do
-                                                                        if (inventory[j] and inventory[j].Type) and ((itemTagLookup[itemOrTag.Type] 
-                                                                        and (utility.tableContains(itemTagLookup[itemOrTag.Type], inventory[j].Type)
-                                                                        or (utility.tableContains(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(inventory[j])))))
-                                                                        or (inventory[j].Type == itemOrTag.Type)) then
-                                                                            -- print(inventory[j].Type, itemOrTag.Type)
-                                                                            table.insert(itemLookupTable, {Inventory = inventory, Index = j})
-                                                                        end
-                                                                    end
-                                                                end
-                                                            end
-                                                            if itemTagLookup[itemOrTag.Type] then
-                                                                table.sort(itemLookupTable, function(a, b)
-                                                                    return ((utility.getIndexInTable(itemTagLookup[itemOrTag.Type], a.Inventory[a.Index].Type) 
-                                                                        or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(a.Inventory[a.Index])))
-                                                                        < (utility.getIndexInTable(itemTagLookup[itemOrTag.Type], b.Inventory[b.Index].Type) 
-                                                                        or utility.getIndexInTable(itemTagLookup[itemOrTag.Type], inventoryHelper.conditionalItemLookupType(b.Inventory[b.Index]))))
-                                                                end)
-                                                            end
-                                                            -- for i in ipairs(inventoryLookupTable) do
-                                                            --     print(inventory[inventoryLookupTable[i]].Type)
-                                                            -- end
-                                                            for j, itemLookup in ipairs(itemLookupTable) do
-                                                                local inventoryItem = itemLookup.Inventory[itemLookup.Index]
-                                                                if inventoryItem then
-                                                                    -- print("item item item atemt", inventoryItem.Type, craftingInventory[itemIndex] and craftingInventory[itemIndex].Type)
-                                                                    if inventoryHelper.itemCanStackWithTag(inventoryItem, itemOrTag) and ((not craftingInventory[itemIndex]) 
-                                                                    or (inventoryHelper.itemCanStackWith(inventoryItem, craftingInventory[itemIndex]) 
-                                                                    and craftingInventory[itemIndex].Count < lowestNumber + 1))
-                                                                    and ((not highestAllowedNumber) or (lowestNumber < highestAllowedNumber)) then
-                                                                        local lastItemData = inventoryItem.ComponentData
-                                                                        local removeAmount = inventoryHelper.removePossibleAmount(itemLookup.Inventory, itemLookup.Index, 1)
-                                                                        if removeAmount > 0 then
-                                                                            craftingInventory[itemIndex] = {
-                                                                                Type = inventoryItem.Type,
-                                                                                Count = ((craftingInventory[itemIndex] and craftingInventory[itemIndex].Count) or 0) + removeAmount,
-                                                                                ComponentData = lastItemData
-                                                                            }
-                                                                            itemsNeeded[itemIndex] = nil
-                                                                        end
-                                                                    end
-                                                                end
-                                                            end
-                                                        end
-                                                    end
-                                                    --     end
-                                                    -- end
-                                                else
-                                                    times = 0
-                                                    goto endRecipes
-                                                end
-                                                times = times - 1
-                                            end
-                                            ::endRecipes::
-                                            curDisplayingRecipe = nil
-                                            lastCombinedString = ""
-                                        else
-                                            -- otherwise just display recipe
-                                            curDisplayingRecipe = recipeFromName
-                                            lastStartTime = Isaac.GetTime()
-                                            cancelRecipeOverlay = false
-                                        end
+                                        local selectedRecipeData = recipeNames[currentRecipeCycle]
+                                        attemptAutocraftItem(selectedRecipeData, inventorySet)
                                     end
                                 end
 
@@ -1178,14 +1244,80 @@ function mod:RenderInventory()
                         inventoryHelper.renderMinecraftText(textString, tooltipPosition 
                             + Vector(2, -(minecraftFont:GetLineHeight() / 2)), InventoryItemRarity.COMMON, true)
                         utility.renderNineSlice(tooltipFrame, tooltipPosition, nineSliceSize)
-                    elseif toRenderTooltip then
+                    elseif (not recipeOverlayDisplay) and toRenderTooltip then
                         inventoryHelper.renderTooltip(mousePosition, inventoryHelper.itemGetFullName(toRenderTooltip))
+                    end
+                
+                    -- Recipe Peeking
+                    if recipeOverlayDisplay then
+                        local maxWidth = 5
+                        local recipeList = recipeOverlayDisplay.Recipes
+                        if recipeBookFilter then
+                            recipeList = {}
+                            for i, recipeData in ipairs(recipeOverlayDisplay.Recipes) do
+                                if recipeData.Craftable then
+                                    table.insert(recipeList, recipeData)
+                                end
+                            end
+                        end
+                        local width, height = math.min(maxWidth, #recipeList), math.ceil(#recipeList / maxWidth)
+                        local sizeVector = (Vector(width, height) * 25) + (Vector.One * 2)
+                        local recipePeekPosition = (recipeDisplayDisplacement + recipeOverlayDisplay.Position 
+                            + ((Vector(0, sizeVector.Y) - (Vector.One * 2)) / 2) + (Vector.One * 4))
+                        while ((recipePeekPosition + sizeVector).X > (Isaac.GetScreenWidth() / 2)) do
+                            recipePeekPosition.X = recipePeekPosition.X - 25
+                        end
+                        while ((recipePeekPosition + sizeVector).Y > (recipeDisplayDisplacement.Y + 175)) do
+                            recipePeekPosition.Y = recipePeekPosition.Y - 25
+                        end
+                        utility.renderNineSlice(
+                            recipeBookSlice, 
+                            recipePeekPosition, 
+                            sizeVector
+                        )
+
+                        local overlayRenderPosition = Vector.Zero
+                        local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
+                        local inventoryWidth = inventoryHelper.getInventoryWidth(craftingInventory) - 1
+                        local inventoryHeight = inventoryHelper.getInventoryHeight(craftingInventory) - 1
+                        hoveringOverRecipe = nil
+                        for i, recipe in ipairs(recipeList) do
+                            local isCraftableOverlay = recipe.Craftable
+                            local totalOverlayPosition = (recipePeekPosition - Vector(-1, (12 * height) - (2 / height) + 2)) + overlayRenderPosition
+                            local hoveringOver = inventoryHelper.hoveringOver(mousePosition, totalOverlayPosition, 24, 24)
+                            recipeBookUI:SetFrame("Overlay", (2 - ((isCraftableOverlay and 2) or 0)) + ((hoveringOver and 1) or 0))
+                            recipeBookUI:Render(totalOverlayPosition)
+                            if hoveringOver then
+                                hoveringOverRecipe = i
+                            end
+                            if (hoveringOverRecipe == i) and lmbTrigger then
+                                attemptAutocraftItem(recipe, inventorySet)
+                            end
+                            -- Render Mini Recipe Overlay
+                            for j = 0, inventoryHeight do
+                                for i = 0, inventoryWidth do
+                                    local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
+                                    local fakeItem = getConditionalFromAnyRecipe(recipeStorage.nameToRecipe[recipe.Name], craftingInventory, currentItemIndex)
+                                    if fakeItem then
+                                        inventoryHelper.renderItem(fakeItem, 
+                                            totalOverlayPosition + (Vector(j, i) * 7) + (Vector.One * 2.5), 
+                                            Vector.One / 3
+                                        )
+                                    end
+                                end
+                            end
+
+                            overlayRenderPosition.X = overlayRenderPosition.X + 25
+                            if (i % maxWidth <= 0) then
+                                overlayRenderPosition.X = 0
+                                overlayRenderPosition.Y = overlayRenderPosition.Y + 25
+                            end
+                        end
+                        lmbTrigger, rmbTrigger = false, false
                     end
                 else
                     resetRecipeBook()
                 end
-
-                -- utility.renderNineSlice(recipeBookSlice, mousePosition, Vector.One * 32)
 
                 if cursorHeldItem then
                     RenderInventorySlot(mousePosition - Vector.One * 8, nil, 1, lmbTrigger, rmbTrigger, lmbRelease, rmbRelease, cursorHeldItem)

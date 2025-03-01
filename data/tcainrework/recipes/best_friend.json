@@ -2,17 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "L": "minecraft:leather",
-    "H": "tcainrework:tarot_card{\"card_type\":13}",
-    "#": "tcainrework:bone_heart"
+    "#": "Mr. Boom",
+    "D": "tcainrework:wooden_doll",
+    "L": "minecraft:leather"
   },
   "pattern": [
     "L",
-    "#",
-    "H"
+    "D",
+    "#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Transcendence"
+    "collectible": "Best Friend"
   }
 }

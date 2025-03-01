@@ -71,6 +71,8 @@ return {
     ["items.tooltip.passive_item.name"] = "Objeto Pasivo",
     ["items.tooltip.active_item.name"] = "Objeto Activo",
     ["items.tooltip.familiar.name"] = "Familiar",
+    ["items.tooltip.more_recipes.name"] = "Has clic derecho para ver más",
+    ["items.tooltip.components.name"] = "componente(s)",
 
     ["container."] = "", -- upsi
     ["container._"] = "", -- upsi

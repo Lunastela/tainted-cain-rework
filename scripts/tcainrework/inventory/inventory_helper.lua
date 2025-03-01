@@ -445,8 +445,9 @@ end
 
 local cachedRecipeTables = {}
 local lastSearchBarText, lastBookTab, lastRecipeCount = "stupid", nil, 0
+--- Returns a list of recipe book recipes.
 function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inventorySet)
-    local recipeList, craftableRecipeList, availableTabs = {}, {}, {}
+    local recipeList, craftableRecipeList, recipeLookup, availableTabs = {}, {}, {}, {}
     local recipeSave = recipeStorageWrapper()
     local currentRecipeCount = (recipeSave and #recipeSave) or 0
     if (not (inventoryHelper.recipeCraftableDirty or (lastSearchBarText ~= searchBarText)
@@ -490,10 +491,17 @@ function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inve
                         if fakeItem then
                             local itemName = string.lower(inventoryHelper.getNameFor(fakeItem))
                             if (string.find(itemName, string.lower(searchBarText))) then
-                                table.insert(recipeList, recipe)
-                                if recipeCraftable then
-                                    table.insert(craftableRecipeList, recipe)
+                                local itemCondition = inventoryHelper.conditionalItemLookupType(fakeItem)
+                                if not utility.tableContains(recipeList, itemCondition) then
+                                    table.insert(recipeList, itemCondition)
                                 end
+                                if (recipeCraftable and not utility.tableContains(craftableRecipeList, itemCondition)) then
+                                    table.insert(craftableRecipeList, itemCondition)
+                                end
+                                if not recipeLookup[itemCondition] then
+                                    recipeLookup[itemCondition] = {}
+                                end
+                                table.insert(recipeLookup[itemCondition], {Name = recipe, Craftable = recipeCraftable})
                             end
                         end
                     end
@@ -505,7 +513,7 @@ function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inve
         lastRecipeCount = currentRecipeCount
         inventoryHelper.recipeCraftableDirty = false
     end
-    cachedRecipeTables = {recipeList, craftableRecipeList, availableTabs}
+    cachedRecipeTables = {recipeList, recipeLookup, craftableRecipeList, availableTabs}
     return table.unpack(cachedRecipeTables)
 end
 
@@ -741,8 +749,15 @@ function inventoryHelper.itemGetFullName(pickup)
             Rarity = InventoryItemRarity.DEBUG_TEXT
         })
         table.insert(nameTable, {
-            String = getComponentCount(pickup) .. " component(s)",
+            String = getComponentCount(pickup) .. " " .. utility.getCustomLocalizedString("items.tooltip.components.name", "component(s)"),
             Rarity = InventoryItemRarity.DEBUG_TEXT
+        })
+    end
+    -- Recipe Stuff
+    if pickup.MultipleRecipes then
+        table.insert(nameTable, {
+            String = utility.getCustomLocalizedString("items.tooltip.more_recipes.name", "Right Click for More"),
+            Rarity = InventoryItemRarity.COMMON
         })
     end
     return nameTable
@@ -1106,10 +1121,8 @@ function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, 
         renderType = renderTypes.Collectible
     end
     local renderSprite = (((renderType == renderTypes.Default) and (elapsedTime and itemSprite3d))
-                      or ((renderType == renderTypes.SimpleBlock) and blockSprite)
-                      or ((renderType == renderTypes.Collectible) and defaultCollectibleSprite)
-                      or ((renderType == renderTypes.CraftingTable) and craftingTableSprite)
-                      or itemSprite)
+        or ((renderType == renderTypes.SimpleBlock) and blockSprite) or ((renderType == renderTypes.Collectible) and defaultCollectibleSprite)
+        or ((renderType == renderTypes.CraftingTable) and craftingTableSprite) or itemSprite)
     renderSprite:ReplaceSpritesheet(0, inventoryHelper.getItemGraphic(itemToDisplay))
     renderSprite:LoadGraphics()
     local isEnchanted = inventoryHelper.getDefaultEnchanted(itemToDisplay)
@@ -1122,7 +1135,7 @@ function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, 
     renderSprite.Scale = renderScale or Vector.One
     if renderFallback then
         renderSprite.Scale = renderSprite.Scale / 2
-        renderPosition = renderPosition + Vector(8, 13)
+        renderPosition = renderPosition + Vector(8, 13) * (renderScale or Vector.One)
     end
     renderSprite:Play("Idle", true)
     renderSprite:Render(renderPosition)
