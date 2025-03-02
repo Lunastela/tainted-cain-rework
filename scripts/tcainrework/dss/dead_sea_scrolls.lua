@@ -752,7 +752,7 @@ local cainCraftingDirectory = {
             creditsWrapper("madeline", "silly creature", {"40 dead", "309 injured", ":3 :3 :3"}),
             creditsWrapper("glasscanyon", "warframe", {"hi"}),
             creditsWrapper("benevolusgoat", "goat", {"hmmm", "no wait"}),
-            creditsWrapper("wofsauge", "font kerning issue", {""}),
+            creditsWrapper("wofsauge", "font keming issue", {""}),
             creditsWrapper("you", "playing the mod", {"[          ]", "write your", "quote here!"})
         }
     },

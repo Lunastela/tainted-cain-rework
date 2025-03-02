@@ -5,6 +5,7 @@ return {
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#book"},
         StackSize = 64,
+        UnlockAll = true,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false
     }

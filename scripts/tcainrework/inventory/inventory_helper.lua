@@ -926,6 +926,10 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
             local myConditionTable = {}
             for i, type in pairs(recipe.ConditionTable) do
                 myConditionTable[i] = inventoryHelper.createItem(type)
+                if myConditionTable[i].ComponentData 
+                and myConditionTable[i].ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] then
+                    myConditionTable[i].ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] = nil
+                end
             end
             if shapeless then
                 for i, item in pairs(craftingInventory) do

@@ -3010,6 +3010,17 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:hierophant",
+            Category = "misc",
+            ConditionTable = {"tcainrework:tarot_card{\"card_type\":6}", },
+            Results = {
+                Type = "tcainrework:soul_heart",
+                Count = 2
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:nickel_from_dime",
             Category = "misc",
             ConditionTable = {"tcainrework:dime", },
