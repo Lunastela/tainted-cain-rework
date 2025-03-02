@@ -5,6 +5,7 @@ return {
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:golden", "#tcainrework:pill"},
         StackSize = 1,
+        UnlockAll = true,
         Rarity = InventoryItemRarity.RARE,
         Enchanted = true
     },

@@ -21,8 +21,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
     local entityHash = GetPtrHash(entity)
     if not collectedItems[entityHash] then
         local reflection = Game():GetRoom():GetRenderMode() == RenderMode.RENDER_WATER_REFLECT
-        local pickupData = saveManager.GetRoomFloorSave(entity)
-            and saveManager.GetRoomFloorSave(entity).RerollSave
+        local pickupData = saveManager.GetRerollPickupSave(entity)
         if not pickupData.Type or not pickupData.Count then
             pickupData.Type = numberToItems[math.random(1, #numberToItems)]
             pickupData.Count = 1
@@ -96,8 +95,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
 end, minecraftItemID)
 
 mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collider, low)
-    local pickupData = saveManager.GetRoomFloorSave(entity) 
-        and saveManager.GetRoomFloorSave(entity).RerollSave
+    local pickupData = saveManager.GetRerollPickupSave(entity)
     if (collider.Type == EntityType.ENTITY_PLAYER) then
         if (entity.Wait <= 0) and (mod.inventoryHelper.searchForFreeSlot(
             {mod.inventoryHelper.getInventory(InventoryTypes.HOTBAR), mod.inventoryHelper.getInventory(InventoryTypes.INVENTORY)}, pickupData)
@@ -109,8 +107,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collid
 
     if (collider.Type == EntityType.ENTITY_PICKUP and collider.Variant == minecraftItemID) then
         if Isaac.GetTime() % 4000 >= 3000 then
-            local colliderData = saveManager.GetRoomFloorSave(collider) 
-                and saveManager.GetRoomFloorSave(collider).RerollSave
+            local colliderData = saveManager.GetRerollPickupSave(collider)
             if ((pickupData and pickupData.Count) and (colliderData and colliderData.Count)) 
             and ((pickupData.Count >= colliderData.Count) and (mod.inventoryHelper.itemCanStackWith(pickupData, colliderData))) then
                 local removableAmount = math.min(colliderData.Count, mod.inventoryHelper.getMaxStackFor(pickupData.Type) - pickupData.Count)
@@ -144,8 +141,7 @@ mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, function(_, entity)
                         EntityType.ENTITY_PICKUP, minecraftItemID, 0, player.Position, 
                         EntityPickup.GetRandomPickupVelocity(player.Position), player
                     )
-                    local pickupData = (saveManager.GetRoomFloorSave(itemPickup) 
-                        and saveManager.GetRoomFloorSave(itemPickup).RerollSave)
+                    local pickupData = saveManager.GetRerollPickupSave(itemPickup)
                     -- shallow copy
                     for k, v in pairs(inventory[j]) do
                         pickupData[k] = v
@@ -183,8 +179,7 @@ function mod:testChestOpening(chest)
             if lootList and (#lootList:GetEntries() > 0) then
                 for i = 1, math.random(2, 3 + ((chest.Variant == PickupVariant.PICKUP_CHEST and 0) or 3)) do
                     local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, chest.Position, chest.GetRandomPickupVelocity(chest.Position), chest)
-                    local pickupData = saveManager.GetRoomFloorSave(itemPickup) 
-                        and saveManager.GetRoomFloorSave(itemPickup).RerollSave
+                    local pickupData = saveManager.GetRerollPickupSave(itemPickup)
                     local dropOutcomes = chestDropRates[chest.Variant] or defaultDrop
                     pickupData.Type = numberToItems[dropOutcomes:PickOutcome(chest:GetDropRNG()) - collectibleStorage.itemOffset]
                     pickupData.Count = 1
@@ -218,9 +213,7 @@ mod:AddCallback(ModCallbacks.MC_POST_GRID_ROCK_DESTROY, function(_, rock, type)
         local itemType = conditionTable or rockToType[type]
         if itemType then
             local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, rock.Position, Vector.Zero, nil)
-            local pickupData = saveManager.GetRoomFloorSave(itemPickup)
-                and saveManager.GetRoomFloorSave(itemPickup).RerollSave
-    
+            local pickupData = saveManager.GetRerollPickupSave(itemPickup)
             pickupData.Type = itemType
             pickupData.Count = 1
         end
@@ -241,9 +234,7 @@ mod:AddCallback(ModCallbacks.MC_POST_GRID_ROCK_DESTROY, function(_, rock, type)
     and mod.inventoryHelper.getUnlockedInventory() and (type == GridEntityType.GRID_ROCK_ALT))
     and (mushroomBackdrops[Game():GetRoom():GetBackdropType()]) then
         local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, rock.Position, Vector.Zero, nil)
-        local pickupData = saveManager.GetRoomFloorSave(itemPickup)
-            and saveManager.GetRoomFloorSave(itemPickup).RerollSave
-        
+        local pickupData = saveManager.GetRerollPickupSave(itemPickup)
         pickupData.Type = (((math.random(10) <= 5) and "minecraft:red_mushroom") or "minecraft:brown_mushroom")
         pickupData.Count = 1
     end

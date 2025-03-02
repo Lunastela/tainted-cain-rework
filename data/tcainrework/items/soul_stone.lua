@@ -7,6 +7,7 @@ return {
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:rune", "#tcainrework:pickup"},
         StackSize = 16,
+        UnlockAll = true,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false
     },

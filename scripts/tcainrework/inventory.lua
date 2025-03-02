@@ -486,8 +486,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                             EntityType.ENTITY_PICKUP, mod.minecraftItemID, 0, 
                             player.Position, (player.Velocity:Normalize() or Vector(0, 1)) * 2, player
                         )
-                        local pickupData = saveManager.GetRoomFloorSave(minecraftItem) 
-                            and saveManager.GetRoomFloorSave(minecraftItem).RerollSave
+                        local pickupData = saveManager.GetRerollPickupSave(minecraftItem)
                         pickupData.Type, pickupData.ComponentData = itemType, componentData
                         pickupData.Count = amountRemoved
                     end
@@ -1382,8 +1381,7 @@ function mod:RenderInventory()
                             if lmbRelease or rmbRelease then
                                 cursorHeldItem.Count = cursorHeldItem.Count - amount
                                 local minecraftItem = Isaac.Spawn(EntityType.ENTITY_PICKUP, mod.minecraftItemID, 0, player.Position, (player.Velocity:Normalize() or Vector(0, 1)) * 2, player)
-                                local pickupData = saveManager.GetRoomFloorSave(minecraftItem) 
-                                    and saveManager.GetRoomFloorSave(minecraftItem).RerollSave
+                                local pickupData = saveManager.GetRerollPickupSave(minecraftItem)
                                 pickupData.Type = cursorHeldItem.Type
                                 pickupData.Count = amount
                                 pickupData.ComponentData = cursorHeldItem.ComponentData

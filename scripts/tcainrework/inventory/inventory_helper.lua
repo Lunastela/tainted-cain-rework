@@ -1027,7 +1027,7 @@ function TCainRework:UnlockItemRecipe(recipeName)
     end
 end
 
-function inventoryHelper.runUnlockItem(item)
+function inventoryHelper.runUnlockItem(item, forceUnlockAll)
     local runSave = saveManager.GetRunSave()
     if not runSave.obtainedItems then
         runSave.obtainedItems = {}
@@ -1040,7 +1040,7 @@ function inventoryHelper.runUnlockItem(item)
             -- obtain recipe from lookup table
             local recipe = recipeStorage.nameToRecipe[recipeName]
             if recipe and recipe.ConditionTable and recipe.DisplayRecipe then
-                if not (itemRegistry[item.Type] and itemRegistry[item.Type].UnlockAll) then
+                if not (itemRegistry[item.Type] and (itemRegistry[item.Type].UnlockAll or forceUnlockAll)) then
                     for i, curType in pairs(recipe.ConditionTable) do
                         local fakeItem = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(curType))
                         if not (runSave.obtainedItems[curType]
@@ -1055,6 +1055,15 @@ function inventoryHelper.runUnlockItem(item)
         end
     end
 end
+
+TCainRework:AddCallback(ModCallbacks.MC_USE_PILL, function(_, pillEffect, entityPlayer, useFlags)
+    if (inventoryHelper.getUnlockedInventory()
+    and entityPlayer:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)) then
+        inventoryHelper.runUnlockItem(
+            inventoryHelper.createItem("tcainrework:pill{\"pill_effect\":" .. tostring(pillEffect) .. "}"), true
+        )
+    end
+end)
 
 function inventoryHelper.unlockItemBatch(item)
     if item.Type and itemRegistry[item.Type]

@@ -336,8 +336,7 @@ local function renderBagOfCrafting(player, offset)
                                             player:ForceCollide(pickup)
                                         end
                                         if pickup.Variant == mod.minecraftItemID then
-                                            local pickupData = saveManager.GetRoomFloorSave(entity) 
-                                                and saveManager.GetRoomFloorSave(entity).RerollSave
+                                            local pickupData = saveManager.GetRerollPickupSave(entity)
                                             pickupData.pickupEntity = player
                                         elseif pickup.Variant == PickupVariant.PICKUP_COIN
                                         and pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
