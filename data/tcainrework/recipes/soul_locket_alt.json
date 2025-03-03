@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:soul_heart",
+    "I": "Iron Bar"
+  },
+  "pattern": [
+    " I ",
+    "I#I",
+    " I "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Soul Locket"
+  }
+}

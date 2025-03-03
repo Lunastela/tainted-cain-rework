@@ -3,7 +3,7 @@ local mod = TCainRework
 local utility = require("scripts.tcainrework.util")
 local saveManager = require("scripts.save_manager")
 
-local elapsedTimeTable = {}
+local elapsedTimeTable, trackingPlayer = {}, {}
 local collectedItems = {}
 mod.minecraftItemID = 25565
 local minecraftItemID = mod.minecraftItemID
@@ -13,9 +13,11 @@ local numberToItems = require("scripts.tcainrework.stored.num_to_id")
 local itemDescriptions = require("scripts.tcainrework.stored.id_to_iteminfo")
 local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
 
-local simpleItemDisplacement = {
-    0, 1, 3, -2, 1
-}
+local simpleItemDisplacement = {0, 1, 3, -2, 1}
+
+mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function(_)
+    elapsedTimeTable, trackingPlayer = {}, {}
+end)
 
 mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
     local entityHash = GetPtrHash(entity)
@@ -26,7 +28,6 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
             pickupData.Type = numberToItems[math.random(1, #numberToItems)]
             pickupData.Count = 1
         end
-
         local renderType = mod.inventoryHelper.getItemRenderType(pickupData.Type)
         if not reflection then
             elapsedTimeTable[entityHash] = (elapsedTimeTable[entityHash] or 0) + 0.0375
@@ -46,30 +47,39 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
                     itemPosition.Y = itemPosition.Y - (reflection and -1 or 1) * 5
                 end
 
-                if pickupData.pickupEntity
-                and not (entity.Wait > 0) then
-                    if not pickupData.overridePosition then
-                        pickupData.overridePosition = Vector.Zero
-                        entity:SetShadowSize(0)
-                    end
-                    local targetPosition = entity.Position - pickupData.pickupEntity.Position
-                    pickupData.lerpTimer = math.min((pickupData.lerpTimer or 0) + 0.025, 1)
-                    pickupData.overridePosition:Lerp(entity.Position - pickupData.pickupEntity.Position, pickupData.lerpTimer or 0)
-                    if (pickupData.overridePosition - targetPosition):Length() <= 5 then
-                        if mod:AddItemToInventory(pickupData.Type, pickupData.Count, pickupData.ComponentData) then
-                            collectedItems[entityHash] = true
-                            elapsedTimeTable[entityHash] = nil
-                            entity:Remove()
-                            return false
-                        else
-                            pickupData.pickupEntity = nil
+                local overrideVector = Vector.Zero
+                if (not (Game():IsPaused() or reflection)) then
+                    if trackingPlayer[GetPtrHash(entity)]
+                    and not (entity.Wait > 0) then
+                        if not pickupData.overridePosition then
+                            pickupData.overridePosition = {X = 0, Y = 0}
+                            entity:SetShadowSize(0)
                         end
+                        local targetPosition = entity.Position - trackingPlayer[GetPtrHash(entity)].Position
+                        pickupData.lerpTimer = math.min((pickupData.lerpTimer or 0) + 0.025, 1)
+                        overrideVector = Vector(pickupData.overridePosition.X, pickupData.overridePosition.Y)
+                        overrideVector:Lerp(entity.Position - trackingPlayer[GetPtrHash(entity)].Position, pickupData.lerpTimer or 0)
+                        if (overrideVector - targetPosition):Length() <= 5 then
+                            if mod:AddItemToInventory(pickupData.Type, pickupData.Count, pickupData.ComponentData) then
+                                collectedItems[entityHash] = true
+                                elapsedTimeTable[entityHash] = nil
+                                entity:Remove()
+                                return false
+                            else
+                                trackingPlayer[GetPtrHash(entity)] = nil
+                            end
+                        end
+                        pickupData.overridePosition.X, pickupData.overridePosition.Y = overrideVector.X, overrideVector.Y
+                    else
+                        pickupData.overridePosition = nil
                     end
+                elseif pickupData.overridePosition then
+                    overrideVector = Vector(pickupData.overridePosition.X, pickupData.overridePosition.Y)
                 end
 
-                local renderPosition = Isaac.WorldToScreen(entity.Position - ((itemPosition * itemScale) + (pickupData.overridePosition or Vector.Zero)))
+                local renderPosition = Isaac.WorldToScreen(entity.Position - ((itemPosition * itemScale) + overrideVector))
                 if reflection then
-                    renderPosition = Isaac.WorldToRenderPosition(entity.Position - ((itemPosition * itemScale) + (pickupData.overridePosition or Vector.Zero))) + offset 
+                    renderPosition = Isaac.WorldToRenderPosition(entity.Position - ((itemPosition * itemScale) + overrideVector)) + offset 
                 end
                 if entitySprite:GetAnimation() ~= "Appear"
                 or (entitySprite:GetFrame() > 4) then
@@ -100,7 +110,8 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collid
         if (entity.Wait <= 0) and (mod.inventoryHelper.searchForFreeSlot(
             {mod.inventoryHelper.getInventory(InventoryTypes.HOTBAR), mod.inventoryHelper.getInventory(InventoryTypes.INVENTORY)}, pickupData)
         ) then
-            pickupData.pickupEntity = collider
+            pickupData.lerpTimer = 0
+            trackingPlayer[GetPtrHash(entity)] = collider
         end
         return true
     end
@@ -229,6 +240,7 @@ local mushroomBackdrops = {
     [BackdropType.ASHPIT] = true,
     [BackdropType.MINES] = true
 }
+
 mod:AddCallback(ModCallbacks.MC_POST_GRID_ROCK_DESTROY, function(_, rock, type)
     if (PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     and mod.inventoryHelper.getUnlockedInventory() and (type == GridEntityType.GRID_ROCK_ALT))

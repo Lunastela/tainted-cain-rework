@@ -6,7 +6,7 @@ local saveManager = require("scripts.save_manager")
 local bagSprites = {}
 local bagSpritesFrame = {}
 local hasRenderedThisFrame = {}
-local bagCollisions = {}
+local bagCollisions, removedEntities = {}, {}
 
 local function canRenderBagSprite(bagSprite) 
     return not bagSprite:GetAnimation():find("Idle")
@@ -183,7 +183,6 @@ end
 local collectibleToRecipe = require("scripts.tcainrework.stored.recipe_storage_cache").itemRecipeLookup
 local function salvageCollectible(pickup)
     if canSalvageItem(pickup.SubType) then
-        local ptrHash = GetPtrHash(pickup)
         SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 2, false, 1)
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 2, pickup.Position, Vector.Zero, pickup)
         -- Unlock Item Recipe
@@ -219,7 +218,6 @@ local function salvageCollectible(pickup)
             spawnSalvagePickup(pickup, salvageVariant)
         end
         pickup:Remove()
-        salvagingList[ptrHash] = nil
     end
 end
 
@@ -239,11 +237,18 @@ local skipNext = false
 local function initializeSalvage(entity)
     if not salvagingList[GetPtrHash(entity)] then
         skipNext = true
-        salvageCollectible(entity)
         salvagingList[GetPtrHash(entity)] = true
+        salvageCollectible(entity)
         skipNext = false
     end
 end
+
+mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function(_)
+    salvagingList, removedEntities = {}, {}
+    for playerIndex in pairs(bagCollisions) do
+        bagCollisions[playerIndex] = {}
+    end
+end)
 
 mod:AddPriorityCallback(ModCallbacks.MC_POST_PICKUP_INIT, CallbackPriority.LATE, 
 function(_, pickup)
@@ -262,10 +267,10 @@ function(_, pickup)
         local positionHash = utility.sha1(tostring(pickup.Position.X) .. "." .. tostring(pickup.Position.Y))
         for i, playerCollisions in pairs(bagCollisions) do
             for collisionHash in pairs(playerCollisions) do
-                if positionHash == collisionHash then
-                    print('removing pickup of position hash', positionHash)
+                if removedEntities[positionHash] and positionHash == collisionHash then
+                    print('removing', pickup.Type, pickup.Variant, pickup.SubType, 'of position hash', positionHash)
                     pickup:Remove()
-                    playerCollisions[positionHash] = nil
+                    playerCollisions[positionHash], removedEntities[positionHash] = nil, nil
                 end
             end
         end
@@ -393,6 +398,7 @@ local function renderBagOfCrafting(player, offset)
                                             local gridIndex = gridEntity:GetGridIndex()
                                             generateGenericEffect(gridEntity, true)
                                             
+                                            removedEntities[positionHash] = gridEntity
                                             room:RemoveGridEntityImmediate(gridIndex, 0, false)
                                             local replacementEntity = Isaac.GridSpawn(gridEntity:GetType(), 0, lastPosition, true)
                                             replacementEntity:Destroy()

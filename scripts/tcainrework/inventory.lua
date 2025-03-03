@@ -273,7 +273,6 @@ end
 
 local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLMBPress, isRMBPress, isLMBReleased, isRMBReleased, held)
     local myItem = held or inventory[itemIndex]
-    local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
     if inventory then
         if not cursorSnaking[inventory] then
             cursorSnaking[inventory] = {}
@@ -284,10 +283,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
     end
 
     -- mouseover collision check
-    local mouseover = mousePosition.X >= inventoryPosition.X - 1
-        and mousePosition.X < inventoryPosition.X + CELL_SIZE - 1
-        and mousePosition.Y >= inventoryPosition.Y - 1
-        and mousePosition.Y < inventoryPosition.Y + CELL_SIZE - 1
+    local mouseover = inputHelper.hoveringOver(inventoryPosition - Vector.One, CELL_SIZE, CELL_SIZE)
 
     -- render background box
     local fakeDisplayRecipe, recipeIngredientDisplay = false, nil
@@ -829,11 +825,6 @@ local cellAnimationScales = {
     defaultScale
 }
 
-local mouseSprite = Sprite()
-mouseSprite:Load("gfx/ui/cursor.anm2", true)
-mouseSprite:Play("Idle")
-mouseSprite.Scale = Vector.One / 2
-
 local lastItemName, slotTimer = "", 0
 function mod:RenderInventory()
     if EID then
@@ -847,8 +838,7 @@ function mod:RenderInventory()
         local screenCenter = screenSize / 2
 
         -- Cache Mouse Information
-        local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
-
+        local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
         local lmbTrigger, rmbTrigger = inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_1), inputHelper.isMouseButtonTriggered(Mouse.MOUSE_BUTTON_2)
         if (not (hoveringOverRecipe and (lmbTrigger and not rmbTrigger)))
             and (recipeOverlayDisplay and (lmbTrigger or rmbTrigger)) then
@@ -863,12 +853,12 @@ function mod:RenderInventory()
         local hotbarPosition = screenCenter + Vector(0, Isaac.GetScreenHeight() / 2)
         hotbarInterface:Render(hotbarPosition)
         -- Update Hotbar Selection
-        if (not (Game():IsPaused() or DeadSeaScrollsMenu:IsOpen())) 
-        and (inventoryState == InventoryStates.CLOSED) then
+        local inventoryClosed = (not (Game():IsPaused() or DeadSeaScrollsMenu:IsOpen())) and (inventoryState == InventoryStates.CLOSED)
+        if inventoryClosed then
             for i = 1, 10 do 
                 local hotbarPosition = screenCenter + Vector(CELL_SIZE - 6, (Isaac.GetScreenHeight() / 2)) 
                     - Vector((hotbarCellSize * 5) - ((i - 1) * hotbarCellSize), hotbarCellSize - 1)
-                local hoveringOverHotbar = (inventoryHelper.hoveringOver(mousePosition, hotbarPosition, hotbarCellSize, hotbarCellSize)
+                local hoveringOverHotbar = (inputHelper.hoveringOver(hotbarPosition, hotbarCellSize, hotbarCellSize)
                     and (inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_1) or inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_2)))
 
                 if ((i < 10) and hoveringOverHotbar) or (Input.IsButtonPressed(Keyboard.KEY_0 + i, 0)) then
@@ -947,9 +937,8 @@ function mod:RenderInventory()
         end
 
         -- local currentTime = Isaac.GetTime()
-        local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
         if (not Game():IsPaused()) and player then
-            if (not searchBarSelected) and Input.IsButtonTriggered(Keyboard.KEY_I, 0)
+            if (not searchBarSelected) and (Input.IsButtonTriggered(Keyboard.KEY_I, 0) or Input.IsButtonTriggered(Controller.RSTICK_PRESS, player.ControllerIndex))
             and (not (DeadSeaScrollsMenu and DeadSeaScrollsMenu:IsOpen()))  then
                 inventoryState = ((inventoryState == InventoryStates.CRAFTING) and InventoryStates.CLOSED) or InventoryStates.CRAFTING
             end
@@ -959,6 +948,7 @@ function mod:RenderInventory()
             end
 
             if inventoryState ~= InventoryStates.CLOSED then
+                local mousePosition = inputHelper.getMousePosition()
                 if DeadSeaScrollsMenu and DeadSeaScrollsMenu:IsOpen() then
                     DeadSeaScrollsMenu.CloseMenu(true, true)
                     SFXManager():Stop(Isaac.GetSoundIdByName("deadseascrolls_whoosh"))
@@ -975,7 +965,7 @@ function mod:RenderInventory()
                 local buttonLayer = craftingInterface:GetLayerFrameData(2)
                 if buttonLayer then
                     local buttonPosition = screenCenter + (Vector((recipeBookOpen and (inventorySize.X / 2)) or 0, 0) + (buttonLayer:GetPos()))
-                    if inventoryHelper.hoveringOver(mousePosition, buttonPosition, 20, 20) then
+                    if inputHelper.hoveringOver(buttonPosition, 20, 20) then
                         craftingInterface:SetFrame("Idle", 1)
                         if lmbTrigger then
                             recipeBookOpen = inventoryHelper.setRecipeBookOpen(not recipeBookOpen)
@@ -1027,7 +1017,7 @@ function mod:RenderInventory()
                     local filterLayer = craftingInterface:GetLayerFrameData(3)
                     if filterLayer then
                         local filterPosition = recipeBookPosition + (filterLayer:GetPos())
-                        hoveringOver = inventoryHelper.hoveringOver(mousePosition, filterPosition, 26, 16)
+                        hoveringOver = inputHelper.hoveringOver(filterPosition, 26, 16)
                         if hoveringOver and lmbTrigger then
                             recipeBookFilter = inventoryHelper.setRecipeBookFilter(not recipeBookFilter)
                             SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
@@ -1048,7 +1038,7 @@ function mod:RenderInventory()
                     local searchPosition = recipeBookPosition + Vector(-34, -70)
                     local displaySearchText = utility.getCustomLocalizedString("gui.recipebook.search_hint", "§oSearch§r...")
                     if lmbTrigger then
-                        searchBarSelected = lmbTrigger and inventoryHelper.hoveringOver(mousePosition, searchPosition, 81, 14)
+                        searchBarSelected = lmbTrigger and inputHelper.hoveringOver(searchPosition, 81, 14)
                         searchBarTimer = 0
                     end
                     displaySearchText = (searchBarSelected or searchBarText ~= "") and searchBarText or displaySearchText
@@ -1129,7 +1119,7 @@ function mod:RenderInventory()
                                         recipeDisplayIndex = recipeDisplayIndex + 1
                                     end
                                 end
-                                if inventoryHelper.hoveringOver(mousePosition, recipeDisplayDisplacement + recipeDisplacement, 26, 26) then
+                                if inputHelper.hoveringOver(recipeDisplayDisplacement + recipeDisplacement, 26, 26) then
                                     -- early recipe detection for prioritizing recipes that are craftable
                                     local lastRecipeCycle = currentRecipeCycle
                                     if lmbTrigger then
@@ -1179,7 +1169,7 @@ function mod:RenderInventory()
                             if selectedPage >= 1 then
                                 local leftPos = centerRecipeBook - Vector(21, 0)
                                 recipeBookUI:SetFrame("Left", 0)
-                                if inventoryHelper.hoveringOver(mousePosition, leftPos - Vector(12, 8), 12, 18) then
+                                if inputHelper.hoveringOver(leftPos - Vector(12, 8), 12, 18) then
                                     recipeBookUI:SetFrame("Left", 1)
                                     if lmbTrigger then
                                         SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
@@ -1197,7 +1187,7 @@ function mod:RenderInventory()
                             if maxPage > selectedPage + 1 then
                                 local rightPos = centerRecipeBook + Vector(22, 0)
                                 recipeBookUI:SetFrame("Right", 0)
-                                if inventoryHelper.hoveringOver(mousePosition, rightPos - Vector(0, 8), 11, 18) then
+                                if inputHelper.hoveringOver(rightPos - Vector(0, 8), 11, 18) then
                                     recipeBookUI:SetFrame("Right", 1)
                                     if lmbTrigger then
                                         SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
@@ -1217,7 +1207,7 @@ function mod:RenderInventory()
                             local recipeBookTabPosition = recipeDisplayDisplacement - Vector(8, 15 - (27 * (tabAdvancePosition)))
                             recipeBookUI:ReplaceSpritesheet(4, "gfx/ui/" .. (recipeBookTabs[i - 1] or "search") .. ".png", true)
                             recipeBookUI:Render(recipeBookTabPosition)
-                            if inventoryHelper.hoveringOver(mousePosition, recipeBookTabPosition - Vector(32, 13), 32, 26) then
+                            if inputHelper.hoveringOver(recipeBookTabPosition - Vector(32, 13), 32, 26) then
                                 if lmbTrigger then
                                     SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
                                     selectedTab = i
@@ -1284,7 +1274,7 @@ function mod:RenderInventory()
                         for i, recipe in ipairs(recipeList) do
                             local isCraftableOverlay = recipe.Craftable
                             local totalOverlayPosition = (recipePeekPosition - Vector(-1, (12 * height) - (2 / height) + 2)) + overlayRenderPosition
-                            local hoveringOver = inventoryHelper.hoveringOver(mousePosition, totalOverlayPosition, 24, 24)
+                            local hoveringOver = inputHelper.hoveringOver(totalOverlayPosition, 24, 24)
                             recipeBookUI:SetFrame("Overlay", (2 - ((isCraftableOverlay and 2) or 0)) + ((hoveringOver and 1) or 0))
                             recipeBookUI:Render(totalOverlayPosition)
                             if hoveringOver then
@@ -1375,8 +1365,8 @@ function mod:RenderInventory()
                             cancelRecipeOverlay = true
                         end
                     else -- attempt dropping item
-                        if not (inventoryHelper.hoveringOver(mousePosition, screenCenter - (inventorySize / 2), inventorySize.X, inventorySize.Y)
-                        or (recipeBookOpen and inventoryHelper.hoveringOver(mousePosition, screenCenter - (Vector(inventorySize.X - 30, 0) + (inventorySize / 2)),  inventorySize.X, inventorySize.Y))) then
+                        if not (inputHelper.hoveringOver(screenCenter - (inventorySize / 2), inventorySize.X, inventorySize.Y, true)
+                        or (recipeBookOpen and inputHelper.hoveringOver(screenCenter - (Vector(inventorySize.X - 30, 0) + (inventorySize / 2)),  inventorySize.X, inventorySize.Y, true))) then
                             local amount = (rmbRelease and 1) or (cursorHeldItem.Count)
                             if lmbRelease or rmbRelease then
                                 cursorHeldItem.Count = cursorHeldItem.Count - amount
@@ -1468,10 +1458,11 @@ function mod:RenderInventory()
                     end
                 end
             end
-            if Options.Fullscreen and not Options.MouseControl then
-                mouseSprite:Render(mousePosition)
-            end
-            inputHelper.Update()
+
+            inputHelper.Update(
+                ((not (Game():IsPaused() or DeadSeaScrollsMenu:IsOpen()) 
+                and (inventoryState ~= InventoryStates.CLOSED)) and player.ControllerIndex > 0)
+            )
             -- print(Isaac.GetTime() - currentTime)
         end
     end

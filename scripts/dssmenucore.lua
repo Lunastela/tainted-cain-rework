@@ -2287,12 +2287,12 @@ function dssmenucore.init(DSSModName, MenuProvider)
                 'works',
             },
         },
-        setting = 1,
+        setting = 2,
         load = function()
             return DeadSeaScrollsMenu.GetGamepadToggleSetting()
         end,
         store = function(var)
-            DeadSeaScrollsMenu.SaveGamepadToggleSetting(var)
+            DeadSeaScrollsMenu.SaveGamepadToggleSetting(math.max(2, var))
         end,
         displayif = sharedButtonDisplayCondition
     }

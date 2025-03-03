@@ -3,7 +3,7 @@
 
 local game = Game()
 local SaveManager = {}
-SaveManager.VERSION = 2.16
+SaveManager.VERSION = 2.2
 SaveManager.Utility = {}
 
 SaveManager.Debug = false
@@ -50,19 +50,19 @@ SaveManager.Utility.ErrorMessages = {
 	NOT_INITIALIZED = "The save manager cannot be used without initializing it first!",
 	DATA_NOT_LOADED = "An attempt to use save data was made before it was loaded!",
 	BAD_DATA = "An attempt to save invalid data was made!",
-	BAD_DATA_WARNING = "Data saved with warning!",
+	BAD_DATA_WARNING = "Data type saved with warning!",
 	COPY_ERROR =
 	"An error was made when copying from cached data to what would be saved! This could be due to a circular reference.",
-	INVALID_ENTITY_TYPE = "The save manager cannot support non-persistent entities!",
+	INVALID_ENTITY_TYPE = "Error using entity type \"%s\": The save manager cannot support non-persistent entities!",
 	INVALID_TYPE_WITH_SAVE =
-	"This entity type does not support this save data as it does not persist between floors/move between rooms."
+	"An error was made using entity type \"%s\": This entity type does not support this save data as it does not persist between floors or move between rooms."
 }
 SaveManager.Utility.JsonIncompatibilityType = {
 	SPARSE_ARRAY = "Sparse arrays, or arrays with gaps between indexes, will fill gaps with null when encoded.",
-	INVALID_KEY_TYPE = "Tables that have non-string or non-integer (decimal or non-number) keys cannot be encoded.",
-	MIXED_TABLES = "Tables with mixed key types cannot be encoded.",
+	INVALID_KEY_TYPE = "Error at index \"%s\" with value \"%s\", type \"%s\": Tables that have non-string or non-integer (decimal or non-number) keys cannot be encoded.",
+	MIXED_TABLES = "Index \"%s\" with value \"%s\", type \"%s\", found in table with initial type \"%s\": Tables with mixed key types cannot be encoded.",
 	NAN_VALUE = "Tables with invalid numbers (NaN, -inf, inf) cannot be encoded.",
-	INVALID_VALUE = "Tables containing anything other than strings, numbers, booleans, or other tables cannot be encoded.",
+	INVALID_VALUE = "Error at index \"%s\" with value \"%s\", type \"%s\": Tables containing anything other than strings, numbers, booleans, or other tables cannot be encoded.",
 	CIRCULAR_TABLE = "Tables that contain themselves cannot be encoded.",
 }
 
@@ -178,6 +178,8 @@ function SaveManager.Utility.CanHavePersistentData(ent)
 	elseif type(ent) == "userdata" then
 		---@cast ent Entity
 		return ent:ToNPC() and ent:HasEntityFlags(EntityFlag.FLAG_PERSISTENT)
+	elseif entType >= 10 then
+		return true
 	end
 	return false
 end
@@ -416,23 +418,26 @@ function SaveManager.Utility.ValidateForJson(tab)
 
 	-- check for mixed table
 	local indexType
-	for index in pairs(tab) do
+	for index, value in pairs(tab) do
 		if not indexType then
 			indexType = type(index)
 		end
 
 		if type(index) ~= indexType then
-			return SaveManager.Utility.ValidityState.INVALID, SaveManager.Utility.JsonIncompatibilityType.MIXED_TABLES
+			local valType = type(value) == "userdata" and getmetatable(value).__type or type(value)
+			return SaveManager.Utility.ValidityState.INVALID, SaveManager.Utility.JsonIncompatibilityType.MIXED_TABLES:format(index, tostring(value), valType, indexType)
 		end
 
 		if type(index) ~= "string" and type(index) ~= "number" then
+			local valType = type(value) == "userdata" and getmetatable(value).__type or type(value)
 			return SaveManager.Utility.ValidityState.INVALID,
-				SaveManager.Utility.JsonIncompatibilityType.INVALID_KEY_TYPE
+				SaveManager.Utility.JsonIncompatibilityType.INVALID_KEY_TYPE:format(index, tostring(value), valType)
 		end
 
 		if type(index) == "number" and mFloor(index) ~= index then
+			local valType = type(value) == "userdata" and getmetatable(value).__type or type(value)
 			return SaveManager.Utility.ValidityState.INVALID,
-				SaveManager.Utility.JsonIncompatibilityType.INVALID_KEY_TYPE
+				SaveManager.Utility.JsonIncompatibilityType.INVALID_KEY_TYPE:format(index, tostring(value), valType)
 		end
 	end
 
@@ -445,7 +450,7 @@ function SaveManager.Utility.ValidateForJson(tab)
 		return SaveManager.Utility.ValidityState.INVALID, SaveManager.Utility.JsonIncompatibilityType.CIRCULAR_TABLE
 	end
 
-	for _, value in pairs(tab) do
+	for index, value in pairs(tab) do
 		-- check for NaN and infinite values
 		-- http://lua-users.org/wiki/InfAndNanComparisons
 		if type(value) == "number" then
@@ -460,8 +465,8 @@ function SaveManager.Utility.ValidateForJson(tab)
 				hasWarning = error
 			end
 		elseif type(value) ~= "string" and type(value) ~= "boolean" then
-			print(type(value))
-			return SaveManager.Utility.ValidityState.INVALID, SaveManager.Utility.JsonIncompatibilityType.INVALID_VALUE
+			local valType = type(value) == "userdata" and getmetatable(value).__type or type(value)
+			return SaveManager.Utility.ValidityState.INVALID, SaveManager.Utility.JsonIncompatibilityType.INVALID_VALUE:format(index, tostring(value), valType)
 		end
 	end
 
@@ -494,7 +499,7 @@ function SaveManager.Utility.IsDataTypeAllowed(entType, saveType)
 	if type(entType) == "number"
 		and not SaveManager.Utility.CanHavePersistentData(entType)
 	then
-		SaveManager.Utility.SendError(SaveManager.Utility.ErrorMessages.INVALID_ENTITY_TYPE)
+		SaveManager.Utility.SendError(SaveManager.Utility.ErrorMessages.INVALID_ENTITY_TYPE:format(entType))
 		return false
 	end
 	if type(entType) == "number"
@@ -506,7 +511,7 @@ function SaveManager.Utility.IsDataTypeAllowed(entType, saveType)
 			or saveType == "floor"
 		)
 	then
-		SaveManager.Utility.SendError(SaveManager.Utility.ErrorMessages.INVALID_TYPE_WITH_SAVE)
+		SaveManager.Utility.SendError(SaveManager.Utility.ErrorMessages.INVALID_TYPE_WITH_SAVE:format(entType))
 		return false
 	end
 	return true
@@ -979,6 +984,10 @@ local function storeAndPopulateAscent()
 					ascentRoomData[saveIndex] = saveData
 				end
 			end
+		elseif roomSaveData then
+			SaveManager.Utility.DebugLog("RoomType", roomSaveData.__SAVEMANAGER_ROOM_TYPE, "is not a treasure/boss room")
+		else
+			SaveManager.Utility.DebugLog("Failed locating room save with ListIndex", listIndex)
 		end
 		checkLastIndex = false
 	elseif currentRoomDesc.Data.Type == RoomType.ROOM_TREASURE

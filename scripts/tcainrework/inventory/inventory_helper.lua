@@ -232,16 +232,6 @@ function inventoryHelper.getInventory(inventoryType)
     return runSave.Inventories[inventoryType]
 end
 
-function inventoryHelper.hoveringOver(mousePosition, buttonPosition, buttonWidth, buttonHeight)
-    if mousePosition.X >= buttonPosition.X
-    and mousePosition.Y >= buttonPosition.Y
-    and mousePosition.X < buttonPosition.X + buttonWidth
-    and mousePosition.Y < buttonPosition.Y + buttonHeight then
-        return true
-    end
-    return false
-end
-
 local function unlockWrapper()
     local minecraftJumpscare = TCainRework.getModSettings().minecraftJumpscare
     return ((minecraftJumpscare == 2) and saveManager.GetRunSave())

@@ -213,13 +213,13 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         blackBG:Render(topPosition)
 
         -- Render ui elements
-        local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
+        local mousePosition = inputHelper.getMousePosition()
         local anyHoveringOption = nil
         local leftBound = (Isaac.GetScreenWidth() / 2) - (TEXTURE_SIZE / 2)
         local rightBound = (Isaac.GetScreenWidth() / 2) + (TEXTURE_SIZE / 2)
-        local function mouseWrapper(mousePosition, position, length, width)
+        local function mouseWrapper(position, length, width)
             if mousePosition.Y > (topPosition.Y + 1) and mousePosition.Y < (bottomPosition.Y - 1) then
-                return mod.inventoryHelper.hoveringOver(mousePosition, position, length, width)
+                return inputHelper.hoveringOver(position, length, width)
             end
             return false
         end
@@ -236,7 +236,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                 textPosition, 
                 InventoryItemRarity.COMMON
             )
-            if mouseWrapper(mousePosition, textPosition, 
+            if mouseWrapper(textPosition, 
                 minecraftFont:GetStringWidth(buttonString), minecraftFont:GetLineHeight()) then
                 anyHoveringOption = button
             end
@@ -245,7 +245,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                 local boxSize = 90
                 textPosition.X = rightBound - (boxSize / 2)
                 menuButton:SetFrame("Idle", 0)
-                if mouseWrapper(mousePosition, textPosition - Vector(boxSize / 2, 5), boxSize + leftRightPadding, 20) then
+                if mouseWrapper(textPosition - Vector(boxSize / 2, 5), boxSize + leftRightPadding, 20) then
                     menuButton:SetFrame("Idle", 1)
                     anyHoveringOption = button
                     if isLMBPressed then
@@ -301,7 +301,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
             sliderSprite:Render(sliderPosition)
 
             if isLMBPressed
-            and mod.inventoryHelper.hoveringOver(mousePosition, sliderPosition, 6, screenSpace) then
+            and inputHelper.hoveringOver(sliderPosition, 6, screenSpace) then
                 scrollSelected = true
             elseif not inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_LEFT) then
                 scrollSelected = false
@@ -323,7 +323,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         -- Done button
         local donePosition = bottomPosition + Vector(Isaac.GetScreenWidth() / 2, 16)
         menuButton:SetFrame("Idle", 0)
-        if mod.inventoryHelper.hoveringOver(mousePosition, donePosition - Vector(100, 10), 200, 20) then
+        if inputHelper.hoveringOver(donePosition - Vector(100, 10), 200, 20) then
             menuButton:SetFrame("Idle", 1)
             if isLMBPressed then
                 SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
@@ -383,7 +383,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         end
 
         lastMousePosition = mousePosition
-        inputHelper.Update()
+        inputHelper.Update(Isaac.GetPlayer(0).ControllerIndex > 0)
         pos.Y = 900
         return
     end
@@ -400,12 +400,11 @@ local function mainMenuRenderer(panel, pos, item, tbl)
         local positionLogo = Vector(Isaac.GetScreenWidth() / 2, Isaac.GetScreenHeight() / 4)
         modLogo:Render(positionLogo)
         
-        local mousePosition = Isaac.WorldToScreen(Input.GetMousePosition(true))
         for i, button in ipairs(item.buttons) do
             if button.str ~= "changelogs" then
                 local buttonPosition = positionLogo + Vector(0, (Isaac.GetScreenHeight() / 8) + (i * 25))
                 menuButton:SetFrame("Idle", 0)
-                if mod.inventoryHelper.hoveringOver(mousePosition, buttonPosition - Vector(100, 10), 200, 20) then
+                if inputHelper.hoveringOver(buttonPosition - Vector(100, 10), 200, 20) then
                     menuButton:SetFrame("Idle", 1)
                     -- run submenu when triggered mouse button 
                     if isLMBPressed then
@@ -451,7 +450,7 @@ local function mainMenuRenderer(panel, pos, item, tbl)
             InventoryItemRarity.COMMON, true
         )
 
-        inputHelper.Update()
+        inputHelper.Update(Isaac.GetPlayer(0).ControllerIndex > 0)
         pos.Y = 900
         return
     end
