@@ -183,6 +183,7 @@ local stringTable = {
     ["do not drop pickups"] = "Keep inventory after death"
 }
 
+
 local selectedOption = nil
 local inputHelper = include("scripts.tcainrework.input_helper")
 local separationDistance = 24
@@ -213,7 +214,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         blackBG:Render(topPosition)
 
         -- Render ui elements
-        local mousePosition = inputHelper.getMousePosition()
+        local mousePosition, mouseVector = inputHelper.getMousePosition()
         local anyHoveringOption = nil
         local leftBound = (Isaac.GetScreenWidth() / 2) - (TEXTURE_SIZE / 2)
         local rightBound = (Isaac.GetScreenWidth() / 2) + (TEXTURE_SIZE / 2)
@@ -300,17 +301,23 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
             sliderSprite.Scale = Vector(5, sliderSize - 1)
             sliderSprite:Render(sliderPosition)
 
-            if isLMBPressed
-            and inputHelper.hoveringOver(sliderPosition, 6, screenSpace) then
-                scrollSelected = true
-            elseif not inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_LEFT) then
-                scrollSelected = false
+            if mouseVector and Input.IsButtonPressed(Controller.CROSS, 
+                PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING).ControllerIndex) then
+                scrollAmount = scrollAmount + (mouseVector.Y / endScreenDistance)
+                inputHelper.setMousePosition(sliderPosition + Vector(3, topPosition.Y + (scrollAmount * endScreenDistance)))
+            else
+                if isLMBPressed
+                and inputHelper.hoveringOver(sliderPosition, 6, screenSpace, true) then
+                    scrollSelected = true
+                elseif not inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_LEFT) then
+                    scrollSelected = false
+                end
+                if scrollSelected and lastMousePosition then
+                    scrollAmount = scrollAmount + (mousePosition - lastMousePosition).Y / endScreenDistance
+                end
+                -- honestly menu scrolling in minecraft is pretty shitty with the mouse wheel so who cares?
+                scrollAmount = scrollAmount - ((Input.GetMouseWheel().Y * 8) / endScreenDistance)
             end
-            if scrollSelected and lastMousePosition then
-                scrollAmount = scrollAmount + (mousePosition - lastMousePosition).Y / endScreenDistance
-            end
-            -- honestly menu scrolling in minecraft is pretty shitty with the mouse wheel so who cares?
-            scrollAmount = scrollAmount - ((Input:GetMouseWheel().Y * 8) / endScreenDistance)
             scrollAmount = math.min(math.max(scrollAmount, 0), 1)
         end
 
@@ -392,6 +399,7 @@ end
 
 local function mainMenuRenderer(panel, pos, item, tbl)
     if minecraftStyledUI() then
+        local mousePosition = inputHelper.getMousePosition()
         local isLMBPressed = inputHelper.isMouseButtonTriggered(MouseButton.LEFT)
         blackBG.Color = primaryBlack
         blackBG.Scale = Vector(Isaac.GetScreenWidth() + 16, Isaac.GetScreenHeight() + 16)

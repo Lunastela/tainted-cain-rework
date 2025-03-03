@@ -21,10 +21,10 @@ local mouseMap = {
     [Mouse.MOUSE_BUTTON_2] = Controller.SQUARE
 }
 function InputHelper.isMouseButtonTriggered(mouseButton)
-    local mouseButtonPress = Input.IsMouseBtnPressed(mouseButton)
+    local mouseButtonPress = (mouseMap[mouseButton] and Input.IsMouseBtnPressed(mouseButton))
     local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     if player and (player.ControllerIndex > 0) then
-        mouseButtonPress = Input.IsButtonTriggered(mouseMap[mouseButton], player.ControllerIndex)
+        mouseButtonPress = Input.IsButtonTriggered(mouseMap[mouseButton] or mouseButton, player.ControllerIndex)
     end
     if mouseButtonPress then
         local lastMouseHeld = mouseHeld[mouseButton] or false
@@ -37,16 +37,17 @@ end
 function InputHelper.resetMousePosition()
     return (Vector(Isaac.GetScreenWidth(), Isaac.GetScreenHeight()) / 2)
 end
+
 local controllerMouseVector = nil
 local outerPadding = 32
 local mouseUpdated = false
 function InputHelper.getMousePosition(dontUpdate)
     local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     if player and (player.ControllerIndex > 0) then
-        local mouseDirection = Vector(
+        local mouseDirection = (Vector(
             Input.GetActionValue(ButtonAction.ACTION_RIGHT, player.ControllerIndex) - Input.GetActionValue(ButtonAction.ACTION_LEFT, player.ControllerIndex),
             Input.GetActionValue(ButtonAction.ACTION_DOWN, player.ControllerIndex) - Input.GetActionValue(ButtonAction.ACTION_UP, player.ControllerIndex)
-        ):Normalized() * 5
+        ):Normalized() * 5)
         if not controllerMouseVector then
             controllerMouseVector = InputHelper.resetMousePosition()
         end
@@ -95,10 +96,10 @@ end
 
 -- Behavior for Minecraft Sticky Buttons (chat / Q in crafting menu)
 local heldKeysList = {}
-function InputHelper.buttonHeldSticky(key)
-    if Input.IsButtonTriggered(key, 0) then
+function InputHelper.buttonHeldSticky(key, controllerIndex)
+    if Input.IsButtonTriggered(key, controllerIndex) then
         return true
-    elseif Input.IsButtonPressed(key, 0) then
+    elseif Input.IsButtonPressed(key, controllerIndex) then
         heldKeysList[key] = (heldKeysList[key] or 0) + 1
         if heldKeysList[key] > 24 
         and heldKeysList[key] % 3 == 0 then

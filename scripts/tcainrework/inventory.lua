@@ -471,13 +471,13 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                 end
             end
             if inventory[itemIndex] then
-                if (inputHelper.buttonHeldSticky(Keyboard.KEY_Q)) then
+                local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+                if player and (inputHelper.buttonHeldSticky(((player.ControllerIndex > 0) and Controller.CIRCLE) or Keyboard.KEY_Q, player.ControllerIndex)) then
                     local itemType, componentData = inventory[itemIndex].Type, inventory[itemIndex].ComponentData
                     local amountRemoved = inventoryHelper.removePossibleAmount(inventory, itemIndex, 
                         (inputHelper.isControlHeld() and 64) or 1
                     )
-                    local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
-                    if player and (amountRemoved > 0) then
+                    if (amountRemoved > 0) then
                         local minecraftItem = Isaac.Spawn(
                             EntityType.ENTITY_PICKUP, mod.minecraftItemID, 0, 
                             player.Position, (player.Velocity:Normalize() or Vector(0, 1)) * 2, player
@@ -1059,7 +1059,7 @@ function mod:RenderInventory()
                             -- end
                             
                             local appendChar = keyResponse[1 + (alternateKey and 1 or 0)]
-                            if inputHelper.buttonHeldSticky(key) then
+                            if inputHelper.buttonHeldSticky(key, 0) then
                                 if key == Keyboard.KEY_BACKSPACE then
                                     searchBarText = searchBarText.sub(searchBarText, 1, -2)
                                 elseif not exceededSearchBar then
@@ -1394,8 +1394,9 @@ function mod:RenderInventory()
                         end
 
                         -- Item Shift Clicking
-                        if (inputHelper.isShiftHeld() and (((not cursorHeldItem) and (lmbTrigger or rmbTrigger))
-                        or ((cursorHeldItem) and (lmbRelease or rmbRelease)))) then
+                        if (player.ControllerIndex > 0 and (inputHelper.isMouseButtonTriggered(Controller.TRIANGLE))) 
+                        or ((player.ControllerIndex <= 0) and (inputHelper.isShiftHeld() and (((not cursorHeldItem) and (lmbTrigger or rmbTrigger))
+                        or ((cursorHeldItem) and (lmbRelease or rmbRelease))))) then
                             inventoryShiftClick(
                                 inventorySet, 
                                 currentTooltipInformation.Inventory, 
@@ -1532,6 +1533,7 @@ end, InputHook.GET_ACTION_VALUE)
 local excludeDisable = {
     [ButtonAction.ACTION_MENUBACK] = true
 }
+
 mod:AddCallback(ModCallbacks.MC_INPUT_ACTION, function(_, entity, inputHook, buttonAction)
     if inventoryState ~= InventoryStates.CLOSED
     and inputHook ~= InputHook.GET_ACTION_VALUE then
