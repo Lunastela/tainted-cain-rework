@@ -4,6 +4,7 @@ return {
         GFX = "gfx/items/cards/holy_card.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:card", "#tcainrework:pickup"},
+        ClassicID = BagOfCraftingPickup.BOC_CARD,
         StackSize = 1,
         UnlockAll = true,
         Rarity = InventoryItemRarity.RARE,

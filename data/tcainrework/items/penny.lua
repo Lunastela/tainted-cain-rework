@@ -4,6 +4,7 @@ return {
         GFX = "gfx/items/penny.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:small_coin", "#tcainrework:small_pickup"},
+        ClassicID = BagOfCraftingPickup.BOC_PENNY,
         StackSize = 16,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false

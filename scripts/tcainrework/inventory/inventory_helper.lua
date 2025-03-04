@@ -8,6 +8,7 @@ local itemTagLookup = require("scripts.tcainrework.stored.itemtag_to_items")
 
 local recipeStorage = require("scripts.tcainrework.stored.recipe_storage_cache")
 local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
+local classicCrafting = include("scripts.tcainrework.inventory.classic_recipes")
 --[[
     Pardon the mess, I am currently in the process of rewriting large chunks of the inventory system to be
     modular for if ever in the future I decide I want to add more inventory types with ease.
@@ -282,7 +283,15 @@ function inventoryHelper.getCollectibleCrafted(setUnlocked)
     return runSave.collectibleCrafted
 end
 
+--- Classic Crafting Wrapper
+function inventoryHelper.isClassicCrafting()
+    return classicCrafting.getClassicRecipeEnabled()
+end
+
 function inventoryHelper.getRecipeBookOpen()
+    if classicCrafting.getClassicRecipeEnabled() then
+        return false
+    end
     local settingsSave = saveManager.GetSettingsSave()
     if settingsSave then
         return settingsSave.RecipeBookEnabled
@@ -897,8 +906,26 @@ function inventoryHelper.resultItemFromRecipe(recipe)
     return {Type = "minecraft:stick", Count = 1}
 end
 
+--- used to actually craft and check if recipes are craftable
 function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, topLeft, bottomRight, shapeless)
     local anyReturn = nil
+    -- Classic Crafting
+    if classicCrafting.getClassicRecipeEnabled() then
+        -- compile a list of ingredients
+        local itemList = {}
+        for i, item in pairs(craftingInventory) do
+            local itemID = itemRegistry[item.Type] and itemRegistry[item.Type].ClassicID
+            if itemID and (#itemList < 9) then
+                table.insert(itemList, itemID)
+            end
+        end
+        if #itemList == 8 then
+            local fakePlayer = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+            return inventoryHelper.createItem(classicCrafting.emulateRecipe(fakePlayer, itemList))
+        end
+        return false
+    end
+    -- T. Cain Rework
     if recipeList then
         local craftingTable = craftingInventory
         if shapeless then
@@ -1059,13 +1086,17 @@ function inventoryHelper.unlockItemBatch(item)
     if item.Type and itemRegistry[item.Type]
     and itemRegistry[item.Type].ItemTags then
         for i, itemTag in ipairs(itemRegistry[item.Type].ItemTags) do
-            inventoryHelper.runUnlockItem(inventoryHelper.createItem(itemTag))
+            inventoryHelper.runUnlockItem(inventoryHelper.createItem(itemTag), 
+                itemRegistry[item.Type] and itemRegistry[item.Type].UnlockTags
+            )
         end
     end
     local itemType = inventoryHelper.conditionalItemLookupType(item)
     if itemType and itemRegistry[itemType] and itemRegistry[itemType].ItemTags then
         for i, itemTag in ipairs(itemRegistry[itemType].ItemTags) do
-            inventoryHelper.runUnlockItem(inventoryHelper.createItem(itemTag))
+            inventoryHelper.runUnlockItem(inventoryHelper.createItem(itemTag), 
+                itemRegistry[item.Type] and itemRegistry[item.Type].UnlockTags
+            )
         end
     end
     inventoryHelper.runUnlockItem(item)

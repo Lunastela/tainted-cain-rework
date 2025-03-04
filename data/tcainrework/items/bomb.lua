@@ -4,6 +4,7 @@ return {
         GFX = "gfx/items/bomb.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:bomb", "#tcainrework:pickup"},
+        ClassicID = BagOfCraftingPickup.BOC_BOMB,
         StackSize = 16,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false

@@ -5,6 +5,7 @@ return {
         GFX = "gfx/items/cards/tarot.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:card", "#tcainrework:pickup"},
+        ClassicID = BagOfCraftingPickup.BOC_CARD,
         StackSize = 16,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false

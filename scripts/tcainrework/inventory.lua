@@ -964,12 +964,16 @@ function mod:RenderInventory()
                 craftingInterface:SetFrame("Idle", 0)
                 local buttonLayer = craftingInterface:GetLayerFrameData(2)
                 if buttonLayer then
-                    local buttonPosition = screenCenter + (Vector((recipeBookOpen and (inventorySize.X / 2)) or 0, 0) + (buttonLayer:GetPos()))
-                    if inputHelper.hoveringOver(buttonPosition, 20, 20) then
-                        craftingInterface:SetFrame("Idle", 1)
-                        if lmbTrigger then
-                            recipeBookOpen = inventoryHelper.setRecipeBookOpen(not recipeBookOpen)
-                            SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
+                    local regularCrafting = not inventoryHelper.isClassicCrafting()
+                    craftingInterface:GetLayer(2):SetVisible(regularCrafting)
+                    if regularCrafting then
+                        local buttonPosition = screenCenter + (Vector((recipeBookOpen and (inventorySize.X / 2)) or 0, 0) + (buttonLayer:GetPos()))
+                        if inputHelper.hoveringOver(buttonPosition, 20, 20) then
+                            craftingInterface:SetFrame("Idle", 1)
+                            if lmbTrigger then
+                                recipeBookOpen = inventoryHelper.setRecipeBookOpen(not recipeBookOpen)
+                                SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
+                            end
                         end
                     end
                 end

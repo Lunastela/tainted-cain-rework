@@ -5,6 +5,7 @@ return {
         GFX = "gfx/items/cards/right_rune.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:rune", "#tcainrework:pickup"},
+        ClassicID = BagOfCraftingPickup.BOC_RUNE,
         StackSize = 16,
         UnlockAll = true,
         Rarity = InventoryItemRarity.COMMON,

@@ -4,6 +4,7 @@ return {
         GFX = "gfx/items/cracked_key.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:key", "#tcainrework:pickup"},
+        ClassicID = BagOfCraftingPickup.BOC_CRACKED_KEY,
         StackSize = 1,
         UnlockAll = true,
         Rarity = InventoryItemRarity.EPIC,

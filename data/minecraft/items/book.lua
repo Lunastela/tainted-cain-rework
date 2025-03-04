@@ -6,6 +6,7 @@ return {
         ItemTags = {"#book"},
         StackSize = 64,
         UnlockAll = true,
+        UnlockTags = true,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false
     }

@@ -1,15 +1,19 @@
-High Priority:
-- Recipe Book "Alternate" Recipes and combining multiple recipes into one cell.
+High Priority: 
+- Find a goddamn solution for the controller??? Please???
+- LB / RB switching recipes in the recipe book
+- Controller B Button not correct
 
 Mid Priority:
+- Controller Helper inputs in the Inventory
+- Controller Issue with Mod Config Menu (ew)
+- "Classic" Mode
+
+Low Priority:
 - Rewrite recipe "craftable" check with simulations of the recipes internally.
 This would fix every issue with the recipe book's weird nature of sometimes not understanding recipes.
 - Rewrite / Un-Hardcode generics with a custom graphics selection field in the properties table
 - Support for Recipes that use an active item's charge instead of consuming the item. Requires above change to be made.
 - Swappable Actives with Schoolbag on characters that aren't Tainted Cain.
-
-Low Priority:
-- Update SaveManager.
 - The bug. You know, the one.
 - Fix animations in Item Renderer not consistent with in game animations.
 - Support for on the fly Item Tags in Recipes using json arrays in keys.

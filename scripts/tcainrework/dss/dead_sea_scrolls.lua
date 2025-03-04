@@ -138,6 +138,17 @@ local sliderTop = Color(1, 1, 1, 1, 192 / 255, 192 / 255, 192 / 255)
 
 local TEXTURE_SIZE = 256
 
+local spriteFont = Sprite()
+spriteFont:Load("gfx/ui/spritefont.anm2", true)
+spriteFont:SetFrame("Char", 0)
+spriteFont.Scale = Vector.One / 3
+
+local spriteFontMap = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()1234567890-={}[]?,"
+local constructedFontMap = {}
+for i = 1, string.len(spriteFontMap) do
+    constructedFontMap[string.sub(spriteFontMap, i, i)] = i - 1
+end
+
 local function minecraftStyledUI()
     return ((getSaveWrapper().dssStyleChange ~= 2) and mod.inventoryHelper.getUnlockedInventory())
 end
@@ -182,7 +193,6 @@ local stringTable = {
     ["Fabulous"] = "§oFabulous!",
     ["do not drop pickups"] = "Keep inventory after death"
 }
-
 
 local selectedOption = nil
 local inputHelper = include("scripts.tcainrework.input_helper")
@@ -301,8 +311,8 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
             sliderSprite.Scale = Vector(5, sliderSize - 1)
             sliderSprite:Render(sliderPosition)
 
-            if mouseVector and Input.IsButtonPressed(Controller.CROSS, 
-                PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING).ControllerIndex) then
+            if mouseVector and inputHelper.hoveringOver(sliderPosition, 6, screenSpace, true) 
+            and Input.IsButtonPressed(Controller.CROSS, PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING).ControllerIndex) then
                 scrollAmount = scrollAmount + (mouseVector.Y / endScreenDistance)
                 inputHelper.setMousePosition(sliderPosition + Vector(3, topPosition.Y + (scrollAmount * endScreenDistance)))
             else
@@ -397,6 +407,248 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
     menuWrapper(panel, pos, item, tbl)
 end
 
+local minecraftGeneric = Sprite()
+minecraftGeneric:Load("gfx/ui/tooltip.anm2", false)
+minecraftGeneric:ReplaceSpritesheet(0, "gfx/ui/recipe_book_9slice.png")
+minecraftGeneric:LoadGraphics()
+
+local minecraftInner = Sprite()
+minecraftInner:Load("gfx/ui/tooltip.anm2", false)
+minecraftInner:ReplaceSpritesheet(0, "gfx/ui/inverse_inventory_9slice.png")
+minecraftInner:LoadGraphics()
+
+local repentogonStage = {
+[==[
+IMPORTANT NOTICE:
+
+Tainted Cain Rework requires 
+REPENTOGON.
+
+REPENTOGON makes a lot of 
+really cool things possible, 
+like shaders for enchantment 
+glints and 3d block models.
+
+If you would like to experience 
+this mod to it's fullest potential, 
+then please use REPENTOGON!
+I promise you, it will not disappoint!
+
+Otherwise, stability cannot be 
+promised, as a lot of things 
+are impossible without it.
+]==],
+[==[
+IMPORTANT NOTICE:
+
+Tainted Cain Rework requires 
+REPENTOGON.
+
+bla bla bla bla bla repentogon
+repentogon bla bla bla bla bla 
+bla bla bla shaders bla bla 
+bla bla bla 3d blocks
+
+something something blah bla
+blah bla blah bla blah bla
+
+blah bla blah bla blah bla
+what are you still doing here
+please install repentogon or 
+i will be really sad
+]==],
+[==[
+IMPORTANT NOTICE:
+
+Tainted Cain Rework requires 
+REPENTOGON.
+
+please?
+]==],
+[==[
+Listen, I know this is really annoying. 
+You can make it go away if you just 
+install REPENTOGON. 
+
+Please?
+
+
+...
+
+
+...
+
+
+...
+
+
+Please???
+]==],
+[==[
+IMPORTANT NOTICE:
+
+How are you still playing this mod
+and enjoying it without REPENTOGON?
+shouldn't it be completely broken?
+]==],
+[==[
+IMPORTANT NOTICE:
+
+okay, if you're still playing
+without repentogon, I think you're
+just trying to get a kick out of me
+that's pretty mean :(
+]==],
+[==[
+IMPORTANT NOTICE:
+
+Spongebob, if I were trapped at the 
+bottom of a well for three years, 
+with nothing to eat but REPENTOGON, 
+I'd eat my own legs first! 
+]==],
+[==[
+IMPORTANT NOTICE:
+
+listen i appreciate your dedication
+but your win streak probably doesn't
+]==],
+[==[
+IMPORTANT NOTICE:
+
+would it help if I gave you an item
+to start with or something? 
+as incentive?
+]==],
+[==[
+IMPORTANT NOTICE:
+
+would it help if I gave you an item
+to start with or something? 
+as incentive?
+]==],
+[==[
+IMPORTANT NOTICE:
+
+please repentogon
+]==],
+[==[
+IMPORTANT NOTICE:
+
+please repentogon please repentogon
+please repentogonplease repentogon
+]==],
+[==[
+IMPORTANT NOTICE:
+
+please please please please please please please
+]==],
+[==[
+IMPORTANT NOTICE:
+pleaserepentogon please repentogon please repentogon pleaserepentogon
+pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
+please repentogon please repentogon pleaserepentogonpleaserepentogon
+pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
+pleaserepentogon please repentogon pleaser epentogonpleaserepentogon
+pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
+pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
+pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
+pleaserepentogon please repentogon pleaserepentogonple aserepentogon
+pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
+pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
+pleaserepentogon please repentogon plea serepentogonpleaserepentogon
+plea serepentogon please repentogon pleaserepentogonpleaserepentogon
+pleaserepentogon please repentogon pleaserepentogonpleaser epentogon
+pleaserepentogon please repentogon pleaserepe ntogonpleaserepentogon
+pleas erepentogon please repentogon pleaserepentogonpleas erepentogon
+pleaserepentogon please r epentogon pleaserepentogonpleaserepentogon
+pleaserepentogon please repentogon pleaserepe ntogonpleaserepentogon
+]==],
+[==[
+IMPORTANT NOTICE:
+
+
+]==],
+[==[
+]==],
+[==[
+youre still here?
+]==],
+[==[
+please download repentogon :(
+]==],
+}
+function rgonNoticeMenu(panel, pos, item, tbl)
+    local uiSize = Vector(200, 0)
+    local uiPosition = Vector(Isaac.GetScreenWidth(), Isaac.GetScreenHeight()) / 2
+    if minecraftStyledUI() then
+        local mousePosition = inputHelper.getMousePosition()
+        local isLMBPressed = inputHelper.isMouseButtonTriggered(MouseButton.LEFT)
+        -- repentogon text
+        local repentogonPlease = utility.getCustomLocalizedString(
+            "gui.settings.repentogon_notice.desc", repentogonStage[1]
+        )
+        local stringTable = {}
+        for subString in repentogonPlease:gmatch("(.-)\n") do
+            table.insert(stringTable, subString)
+        end
+        uiSize.Y = (minecraftFont:GetLineHeight() * #stringTable) + 48
+        utility.renderNineSlice(
+            minecraftGeneric, 
+            uiPosition - Vector(uiSize.X / 2, 0), 
+            uiSize
+        )
+        local paddingInverse = 12
+        local inverseBottomPadding = 24
+        utility.renderNineSlice(
+            minecraftInner, 
+            uiPosition - Vector((uiSize.X - paddingInverse) / 2, (inverseBottomPadding / 2)), 
+            (uiSize - Vector(paddingInverse, paddingInverse + inverseBottomPadding))
+        )    
+        local stringPosition = Vector(uiPosition.X, uiPosition.Y - ((uiSize.Y / 2) - 16))
+        for i, subString in ipairs(stringTable) do
+            mod.inventoryHelper.renderMinecraftText(subString, 
+                stringPosition - Vector(minecraftFont:GetStringWidth(subString) / 2, (minecraftFont:GetLineHeight() / 2)), 
+                InventoryItemRarity.COMMON, true, true
+            )
+            stringPosition.Y = stringPosition.Y + minecraftFont:GetLineHeight()
+        end
+
+        local buttonPosition = uiPosition + Vector(-1, (uiSize.Y / 2) - 12)
+        menuButton:SetFrame("Idle", 0)
+        if inputHelper.hoveringOver(buttonPosition - Vector((uiSize.X - 8) / 2, 10), (uiSize.X - 8) + leftRightPadding, 20) then
+            menuButton:SetFrame("Idle", 1)
+            if isLMBPressed then
+                SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
+                DeadSeaScrollsMenu.CloseMenu(false, false)
+                SFXManager():Stop(Isaac.GetSoundIdByName("deadseascrolls_pop"))
+            end
+        end
+        renderButtonSize(buttonPosition, uiSize.X - 8)
+        local fineText = "Just let me play the mod"
+        mod.inventoryHelper.renderMinecraftText(fineText, 
+            buttonPosition - Vector(minecraftFont:GetStringWidth(fineText) / 2, (minecraftFont:GetLineHeight() / 2)), 
+            InventoryItemRarity.COMMON, true, true
+        )
+
+        inputHelper.Update()
+        return
+    end
+    menuWrapper(panel, pos, item, tbl)
+end
+
+local splashTexts = include("data.splash_texts")
+local splashTable = {}
+for splash in splashTexts:gmatch("(.-)\n") do
+    table.insert(splashTable, splash)
+end
+
+local splashText = ""
+local textRotation, textSize = -18, 1
+local rotationAngle = Vector.FromAngle(textRotation)
+
+local splashYellow, splashShadow = Color(255 / 255, 255 / 255, 0 / 255, 1), 
+    Color(62 / 255, 62 / 255, 0 / 255, 1)
 local function mainMenuRenderer(panel, pos, item, tbl)
     if minecraftStyledUI() then
         local mousePosition = inputHelper.getMousePosition()
@@ -407,6 +659,28 @@ local function mainMenuRenderer(panel, pos, item, tbl)
 
         local positionLogo = Vector(Isaac.GetScreenWidth() / 2, Isaac.GetScreenHeight() / 4)
         modLogo:Render(positionLogo)
+
+        -- splash text rendering
+        if splashText == "" then
+            splashText = splashTable[math.random(1, #splashTable)]
+        end
+        local splashTextPosition = Vector(positionLogo.X + 120, positionLogo.Y - 8)
+        textSize = (1.5 - (math.abs(math.sin(mod.elapsedTime * math.pi * 2.5)) / 10)) * 0.75
+        splashTextPosition = splashTextPosition - ((minecraftFont:GetStringWidth(splashText) / 2) * textSize * rotationAngle)
+        for i = 1, string.len(splashText) do
+            local currentCharacter = string.sub(splashText, i, i)
+            local characterIndex = constructedFontMap[currentCharacter]
+            if characterIndex then
+                spriteFont.Scale = ((Vector.One * textSize) / 3)
+                spriteFont.Rotation = textRotation
+                spriteFont:SetFrame("Char", characterIndex)
+                spriteFont.Color = splashShadow
+                spriteFont:Render(splashTextPosition + Vector.One:Rotated(textRotation) * textSize)
+                spriteFont.Color = splashYellow
+                spriteFont:Render(splashTextPosition)
+            end
+            splashTextPosition = splashTextPosition + (minecraftFont:GetStringWidth(currentCharacter) * textSize * rotationAngle)
+        end
         
         for i, button in ipairs(item.buttons) do
             if button.str ~= "changelogs" then
@@ -505,9 +779,15 @@ local function inputWrapper(panel, input, item, itemswitched, tbl)
     end
     selectedOption = nil
 end
+local whoosh = Isaac.GetSoundIdByName("deadseascrolls_whoosh")
 local function panelBackWrapper(panel, pos, tbl)
     if not minecraftStyledUI() then
         deadSeaScrollsMod.defaultPanelRenderBack(panel, pos, tbl)
+    else
+        if SFXManager():IsPlaying(whoosh) then
+            SFXManager():Stop(whoosh)
+            splashText = ""
+        end
     end
 end
 local function panelFrontWrapper(panel, pos, tbl)
@@ -697,6 +977,25 @@ local cainCraftingDirectory = {
                 tooltip = {strset = {"Go to sleep."}}
             },
             {
+                str = "Classic Crafting",
+                choices = {"Disabled", "Enabled"},
+                setting = 1,
+                variable = "classicCrafting",
+                load = function ()
+                    return getSaveWrapper().classicCrafting or 1
+                end,
+                store = function (var)
+                    getSaveWrapper().classicCrafting = var
+                end,
+                tooltip = {
+                    strset = {"uses classic", "tainted cain", "recipes for", "items instead", "", "not balanced"},
+                    extraMinecraftDescription = {
+                        "Currently, recipes are fixed and use the Tainted Cain Rework style.",
+                        "Currently, recipes all require 8 items, are randomized, and will use the vanilla crafting system. §lNot §lbalanced."
+                    }
+                }
+            },
+            {
                 str = "Chaos Mode [NOT DONE]",
                 choices = {"false", "true"},
                 setting = 1,
@@ -748,6 +1047,9 @@ local cainCraftingDirectory = {
             creditsWrapper("pread1129", "liminal", {"play tainted", "blue baby"}),
             creditsWrapper("elitemastereric", "thinking about it", {""}),
             {str = "", nosel = true},
+            {str = "translations", nosel = true},
+            creditsWrapper("scribble", "french", {"i like", "flowers", "n bats"}),
+            {str = "", nosel = true},
             {str = "special thanks", nosel = true},
             creditsWrapper("lynn sharcys", "detractor", {"www.", "gaywhiteboy", ".com"}),
             -- creditsWrapper("", "eden essence sprite", {""}, true),
@@ -763,6 +1065,46 @@ local cainCraftingDirectory = {
             creditsWrapper("you", "playing the mod", {"[          ]", "write your", "quote here!"})
         }
     },
+    rgonpopup = {
+		title = "repentogon notice",
+		fsize = 1,
+		buttons = {
+            {str = "", nosel = true, fsize = 1},
+            {str = "tainted cain rework needs", nosel = true, fsize = 1},
+            {str = "repentogon to function!", nosel = true, fsize = 1},
+            {str = "", nosel = true, fsize = 1},
+            {str = "by running the mod without", nosel = true, fsize = 1},
+            {str = "repentogon, you are running", nosel = true, fsize = 1},
+            {str = "the mod at your own risk", nosel = true, fsize = 1},
+            {str = "", nosel = true, fsize = 1},
+            {str = "many errors can occur, and", nosel = true, fsize = 1},
+            {str = "general lag and instability.", nosel = true, fsize = 1},
+            {str = "", nosel = true, fsize = 1},
+            {str = "", nosel = true, fsize = 1},
+            {str = "you can find repentogon at", nosel = true, fsize = 1},
+            {str = "repentogon.com", nosel = true, fsize = 1},
+            {str = "", nosel = true, fsize = 1},
+			{
+				str = "i understand",
+				action = "resume",
+				fsize = 3,
+				glowcolor = 3,
+			},
+		},
+        format = {
+            Panels = {
+                {
+                    Panel = deadSeaScrollsMod.panels.main,
+                    Offset = Vector(0, 10),
+                    RenderBack = panelBackWrapper,
+                    RenderFront = panelFrontWrapper,
+                    HandleInputs = inputWrapper,
+                    Draw = rgonNoticeMenu,
+                    Color = 1,
+                },
+            }
+        }
+	},
 }
 
 local cainCraftingDirectoryKey = {

@@ -4,6 +4,7 @@ return {
         GFX = "gfx/items/golden_battery.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:golden", "#tcainrework:battery", "#tcainrework:pickup"},
+        ClassicID = BagOfCraftingPickup.BOC_GOLD_BATTERY,
         StackSize = 1,
         UnlockAll = true,
         Rarity = InventoryItemRarity.RARE,

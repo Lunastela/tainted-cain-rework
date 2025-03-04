@@ -43,7 +43,8 @@ local additionConstant = 0.025
 local toastStorage = require("scripts.tcainrework.stored.toast_storage")
 local activeRecipeToast = nil
 mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY, function(_)
-    if #toastStorage > 0 and (not activeRecipeToast) then
+    if (not mod.inventoryHelper.isClassicCrafting())
+    and (#toastStorage > 0 and (not activeRecipeToast)) then
         activeRecipeToast = TCainRework:CreateToast(
             InventoryToastTypes.STANDARD,
             toastStorage, nil,

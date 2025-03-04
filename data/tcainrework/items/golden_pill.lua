@@ -4,6 +4,7 @@ return {
         GFX = "gfx/items/pills/pill_base_14.png",
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:golden", "#tcainrework:pill"},
+        ClassicID = BagOfCraftingPickup.BOC_GOLD_PILL,
         StackSize = 1,
         UnlockAll = true,
         Rarity = InventoryItemRarity.RARE,
