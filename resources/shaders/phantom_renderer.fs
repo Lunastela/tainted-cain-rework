@@ -53,9 +53,10 @@ const float zoomFactor = 1. / 16.;
 const float sizeTexture = 64.;
 
 const float positionConstant = (sizeTexture * zoomFactor) / 16.;
-Cube cubes[8] = Cube[](
-    // head
-    Cube(
+#define MAX_CUBES 8
+Cube cubes[MAX_CUBES];
+void initCubes() {
+    cubes[0] = Cube(
         vec3(0., -.625, 3.) * positionConstant,
         vec3(7., 3., 5.) * zoomFactor, 
         vec3(0.0, 0.0, 0.0),
@@ -66,9 +67,8 @@ Cube cubes[8] = Cube[](
         vec2(17., 5.), // back
         vec2(12., 5.), // right
         vec2(12., 0.) // bottom
-    ),
-    // body
-    Cube(
+    );
+    cubes[1] = Cube(
         vec3(0., 0., -.5) * positionConstant,
         vec3(5., 3., 9.) * zoomFactor, 
         vec3(0.0, 0.0, 0.0),
@@ -79,9 +79,8 @@ Cube cubes[8] = Cube[](
         vec2(23., 17.), // back
         vec2(14., 17.), // right
         vec2(14., 8.) // bottom
-    ),
-    // tail
-    Cube(
+    );
+    cubes[2] = Cube(
         vec3(0., .25, -4.25) * positionConstant,
         vec3(3., 2., 6.) * zoomFactor, 
         vec3(0.0, 0.0, 0.0),
@@ -92,9 +91,8 @@ Cube cubes[8] = Cube[](
         vec2(18., 26.), // back
         vec2(12., 26.), // right
         vec2(12., 20.) // bottom
-    ),
-    // tail 2
-    Cube(
+    );
+    cubes[3] = Cube(
         vec3(0., .25, -7.25) * positionConstant,
         vec3(1., 1., 6.) * zoomFactor, 
         vec3(0.0, 0.0, 0.0),
@@ -105,9 +103,8 @@ Cube cubes[8] = Cube[](
         vec2(17., 35.), // back
         vec2(11., 35.), // right
         vec2(11., 29.) // bottom
-    ),
-    // Wing R1
-    Cube(
+    );
+    cubes[4] = Cube(
         vec3(2.75, .25, -.5) * positionConstant,
         vec3(6., 2., 9.) * zoomFactor, 
         vec3(0.0, 0.0, 0.0),
@@ -118,8 +115,8 @@ Cube cubes[8] = Cube[](
         vec2(47., 21.), // back
         vec2(24., 21.), // left
         vec2(38., 12.) // bottom
-    ),
-    Cube(
+    );
+    cubes[5] = Cube(
         vec3(7.5, .5, -.5) * positionConstant,
         vec3(13., 1., 9.) * zoomFactor, 
         vec3(0.0, 0.0, 0.0),
@@ -130,8 +127,8 @@ Cube cubes[8] = Cube[](
         vec2(51., 33.), // back
         vec2(24., 21.), // left
         vec2(38., 24.) // bottom
-    ), // Wing L1
-    Cube(
+    );
+    cubes[6] = Cube(
         vec3(-2.75, .25, -.5) * positionConstant,
         vec3(6., 2., 9.) * zoomFactor, 
         vec3(0.0, 0.0, 0.0),
@@ -142,8 +139,8 @@ Cube cubes[8] = Cube[](
         vec2(23., 45.), // back
         vec2(29., 45.), // left
         vec2(32., 36.) // bottom
-    ),
-    Cube(
+    );
+    cubes[7] = Cube(
         vec3(-7.5, .5, -.5) * positionConstant,
         vec3(13., 1., 9.) * zoomFactor, 
         vec3(0.0, 0.0, 0.0),
@@ -154,8 +151,8 @@ Cube cubes[8] = Cube[](
         vec2(51., 33.), // back
         vec2(25., 57.), // left
         vec2(25., 48.) // bottom
-    )
-);
+    );
+}
 
 mat2 Rot(float a) {
     float s = sin(a), c = cos(a);
@@ -260,6 +257,7 @@ vec3 GetRayDir(vec2 uv, vec3 p, vec3 l, float z) {
 }
 
 void main(void) {
+    initCubes();
 	vec2 pa = vec2(1.0 + PixelationAmountOut, 1.0 + PixelationAmountOut) / TextureSizeOut;
     vec2 uv = PixelationAmountOut > 0.0 ? TexCoord0 - mod(TexCoord0, pa) + pa * 0.5 : TexCoord0;
     uv = (vec2(uv.x, 1. - uv.y) - vec2(.5));
@@ -273,7 +271,7 @@ void main(void) {
     float d = RayMarch(ro, rd);
     if (d < MAX_DIST) {
         vec3 p = ro + rd * d;
-        for (int i = 0; i < cubes.length(); i++) {
+        for (int i = 0; i < MAX_CUBES; i++) {
             Cube cube = wingDistortion(p, cubes[i]);
             vec3 n = Rotate(GetNormal(p, cubes[i]), -cube.rotation);
             vec3 pos = Rotate(p - cube.position, -cube.rotation);

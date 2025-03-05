@@ -107,7 +107,7 @@ end, minecraftItemID)
 mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collider, low)
     local pickupData = saveManager.GetRerollPickupSave(entity)
     if (collider.Type == EntityType.ENTITY_PLAYER) then
-        if (entity.Wait <= 0) and (mod.inventoryHelper.searchForFreeSlot(
+        if (not trackingPlayer[GetPtrHash(entity)]) and (entity.Wait <= 0) and (mod.inventoryHelper.searchForFreeSlot(
             {mod.inventoryHelper.getInventory(InventoryTypes.HOTBAR), mod.inventoryHelper.getInventory(InventoryTypes.INVENTORY)}, pickupData)
         ) then
             pickupData.lerpTimer = 0
@@ -115,7 +115,6 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collid
         end
         return true
     end
-
     if (collider.Type == EntityType.ENTITY_PICKUP and collider.Variant == minecraftItemID) then
         if Isaac.GetTime() % 4000 >= 3000 then
             local colliderData = saveManager.GetRerollPickupSave(collider)

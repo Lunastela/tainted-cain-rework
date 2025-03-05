@@ -48,9 +48,12 @@ const float zoomFactor = 1. / 16.;
 const float sizeTexture = 64.;
 
 const float positionConstant = (sizeTexture * zoomFactor) / 16.;
-Cube cubes[6] = Cube[](
-    // head
-    Cube(
+
+#define CUBE_COUNT 6
+Cube cubes[CUBE_COUNT];
+// head
+void initCubes() {
+    cubes[0] = Cube(
         vec3(0., 5., 0.) * positionConstant,
         vec3(8.) * zoomFactor, 
         vec3(0.),
@@ -68,8 +71,8 @@ Cube cubes[6] = Cube[](
         ivec2(56, 8), // back
         ivec2(48, 8), // right
         ivec2(48, 0) // bottom
-    ),
-    Cube(
+    );
+    cubes[1] = Cube(
         vec3(0.) * positionConstant,
         vec3(8., 12., 4.) * zoomFactor, 
         vec3(0.),
@@ -87,8 +90,8 @@ Cube cubes[6] = Cube[](
         ivec2(32, 36), // back
         ivec2(28, 36), // right
         ivec2(28, 32) // bottom
-    ),
-    Cube(
+    );
+    cubes[2] = Cube(
         vec3(-1., -6., 0.) * positionConstant,
         vec3(4., 12., 4.) * zoomFactor, 
         vec3(0.),
@@ -106,8 +109,8 @@ Cube cubes[6] = Cube[](
         ivec2(12, 36), // back
         ivec2(8, 36), // right
         ivec2(8, 32) // bottom
-    ),
-    Cube(
+    );
+    cubes[3] = Cube(
         vec3(1., -6., 0.) * positionConstant,
         vec3(4., 12., 4.) * zoomFactor, 
         vec3(0.),
@@ -125,8 +128,8 @@ Cube cubes[6] = Cube[](
         ivec2(12, 52), // back
         ivec2(8, 52), // right
         ivec2(8, 48) // bottom
-    ),
-    Cube(
+    );
+    cubes[4] = Cube(
         vec3(-2.75, 0., 0.) * positionConstant,
         vec3(3., 12., 4.) * zoomFactor, 
         vec3(0.),
@@ -144,8 +147,8 @@ Cube cubes[6] = Cube[](
         ivec2(40, 36), // back
         ivec2(40, 36), // right
         ivec2(47, 32) // bottom
-    ),
-    Cube(
+    );
+    cubes[5] = Cube(
         vec3(2.75, 0., 0.) * positionConstant,
         vec3(3., 12., 4.) * zoomFactor, 
         vec3(0.),
@@ -163,8 +166,8 @@ Cube cubes[6] = Cube[](
         ivec2(57, 52), // back
         ivec2(50, 52), // right
         ivec2(57, 48) // bottom
-    )
-);
+    );
+}
 
 mat2 Rot(float a) {
     float s = sin(a), c = cos(a);
@@ -272,7 +275,7 @@ float RayMarch(vec3 ro, vec3 rd, out int selectedCube, bool alt) {
     for (int i = 0; i < MAX_STEPS; i++) {
         vec3 p = ro + rd * dO;
         float dS = MAX_DIST;
-        for (int i = 0; i < cubes.length(); i++) {
+        for (int i = 0; i < CUBE_COUNT; i++) {
             float minDist = GetDistMin(p, cubes[i], alt);
             float newAlpha = ColorAtCubePosition(ro + rd * minDist, i, alt, vec3(0.)).a;
             if (minDist < dS) {
@@ -298,6 +301,7 @@ vec3 GetRayDir(vec2 uv, vec3 p, vec3 l, float z) {
 }
 
 void main(void) {
+    initCubes();
     vec2 pa = vec2(1.0 + PixelationAmountOut, 1.0 + PixelationAmountOut) / TextureSizeOut;
     vec2 uv = PixelationAmountOut > 0.0 ? TexCoord0 - mod(TexCoord0, pa) + pa * 0.5 : TexCoord0;
     uv.xy = vec2(.5) - uv.xy;
