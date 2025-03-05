@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "A": "Act of Contrition",
+    "G": "Goat Head"
+  },
+  "pattern": [
+    "A",
+    "G"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Eucharist"
+  }
+}

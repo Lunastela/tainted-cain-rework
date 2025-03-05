@@ -197,7 +197,7 @@ float GetDistMin(vec3 p, Cube myCube) {
 
 float GetDist(vec3 p) {
     float minDist = MAX_DIST;
-    for (int i = 0; i < cubes.length(); i++)
+    for (int i = 0; i < MAX_CUBES; i++)
         minDist = min(minDist, GetDistMin(p, cubes[i]));
     return minDist;
 }

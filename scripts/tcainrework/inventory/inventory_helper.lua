@@ -283,13 +283,14 @@ function inventoryHelper.getCollectibleCrafted(setUnlocked)
     return runSave.collectibleCrafted
 end
 
+inventoryHelper.IsClassicCrafting = false
 --- Classic Crafting Wrapper
 function inventoryHelper.isClassicCrafting()
-    return classicCrafting.getClassicRecipeEnabled()
+    return (saveManager.GetRunSave().ClassicCrafting or false)
 end
 
 function inventoryHelper.getRecipeBookOpen()
-    if classicCrafting.getClassicRecipeEnabled() then
+    if inventoryHelper.isClassicCrafting() then
         return false
     end
     local settingsSave = saveManager.GetSettingsSave()
@@ -910,7 +911,7 @@ end
 function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, topLeft, bottomRight, shapeless)
     local anyReturn = nil
     -- Classic Crafting
-    if classicCrafting.getClassicRecipeEnabled() then
+    if inventoryHelper.isClassicCrafting() then
         -- compile a list of ingredients
         local itemList = {}
         for i, item in pairs(craftingInventory) do

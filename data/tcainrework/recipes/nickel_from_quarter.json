@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "A Quarter"
+  ],
+  "result": {
+    "id": "tcainrework:nickel",
+    "count": 5
+  }
+}

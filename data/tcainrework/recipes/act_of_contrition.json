@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:heart",
+    "B": "tcainrework:eternal_heart",
+    "P": "minecraft:paper"
+  },
+  "pattern": [
+    "#B#",
+    "BPB",
+    "#B#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Act of Contrition"
+  }
+}

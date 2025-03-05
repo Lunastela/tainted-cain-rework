@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "IV Bag",
+    "Experimental Treatment"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "PHD"
+  }
+}

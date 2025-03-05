@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "Lost Contact",
+    "s": "minecraft:stick",
+    "B": "#book"
+  },
+  "pattern": [
+    "#s#",
+    " B "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "20/20"
+  }
+}

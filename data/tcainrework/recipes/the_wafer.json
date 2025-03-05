@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Midnight Snack",
+    "Eucharist"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Wafer"
+  }
+}

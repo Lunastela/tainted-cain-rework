@@ -1501,7 +1501,17 @@ local function resetInventories(_)
     inventoriesGenerated = false
     resetRecipeBook()
 end
-mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, resetInventories)
+mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, function(_)
+    local runSave = saveManager.GetRunSave()
+    if not runSave.ClassicCrafting then
+        runSave.ClassicCrafting = (mod.getModSettings().classicCrafting == 2)
+    end
+    local toastStorage = require("scripts.tcainrework.stored.toast_storage")
+    for i in pairs(toastStorage) do
+        toastStorage[i] = nil
+    end
+    resetInventories()
+end)
 mod:AddCallback(ModCallbacks.MC_POST_GLOWING_HOURGLASS_LOAD, resetInventories)
 
 -- Pause Screen Handling (for inventory)

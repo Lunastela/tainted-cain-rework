@@ -1,9 +1,6 @@
 local ClassicRecipes = {}
---- Returns if classic recipes are enabled
-function ClassicRecipes.getClassicRecipeEnabled()
-    return (TCainRework.getModSettings().classicCrafting == 2)
-end
 
+--- Returns functionality to emulate classic recipes
 function ClassicRecipes.emulateRecipe(player, bagContents)
     -- just in case, but not really necessary
     local previousBagContent, previousBagOutput = player:GetBagOfCraftingContent(), player:GetBagOfCraftingOutput()

@@ -1,4 +1,5 @@
 High Priority: 
+- Use beggar pools to create pickups
 - Find a goddamn solution for the controller??? Please???
 - LB / RB switching recipes in the recipe book
 - Controller B Button not correct

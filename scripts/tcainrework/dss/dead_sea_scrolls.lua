@@ -961,7 +961,7 @@ local cainCraftingDirectory = {
                 }
             },
             {str = "", fsize = 2, nosel = true},
-            {str = "Experimental", fsize = 2, nosel = true},
+            {str = "Experiments", fsize = 2, nosel = true},
             {str = "", fsize = 2, nosel = true},
             {
                 str = "Insomnia",
@@ -990,8 +990,8 @@ local cainCraftingDirectory = {
                 tooltip = {
                     strset = {"uses classic", "tainted cain", "recipes for", "items instead", "", "not balanced"},
                     extraMinecraftDescription = {
-                        "Currently, recipes are fixed and use the Tainted Cain Rework style.",
-                        "Currently, recipes all require 8 items, are randomized, and will use the vanilla crafting system. §lNot §lbalanced."
+                        "Currently, recipes are fixed and use the Tainted Cain Rework style. Any changes will apply next run.",
+                        "Currently, recipes all require 8 items, are randomized, and will use the vanilla crafting system. Any changes will apply next run. §lNot §lbalanced."
                     }
                 }
             },

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "M": "Midnight Snack",
+    "P": "tcainrework:holy_card",
+    "#": "tcainrework:eternal_heart"
+  },
+  "pattern": [
+    "#M#",
+    "#P#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Wafer"
+  }
+}
