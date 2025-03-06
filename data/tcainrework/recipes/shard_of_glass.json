@@ -2,7 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients":[
+    "minecraft:cobblestone",
+    "minecraft:cobblestone",
+    "minecraft:cobblestone",
+    "minecraft:cobblestone",
     "The Jar",
+    "minecraft:cobblestone",
     "minecraft:cobblestone",
     "minecraft:cobblestone",
     "minecraft:cobblestone"

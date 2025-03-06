@@ -1569,7 +1569,7 @@ return {
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = "Redemption"
+                Collectible = "Revelation"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -2263,18 +2263,6 @@ return {
             DisplayRecipe = true,
             DischargeRecipe = false,
         },
-        {
-            RecipeName = "tcainrework:shard_of_glass",
-            Category = "collectible",
-            ConditionTable = {"The Jar", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Shard of Glass"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
     },
     ["shapeless_83d0a6c92856cdf4681bcc6ff9cbfd7839630cc5"] = {
         {
@@ -2321,6 +2309,18 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Rubber Cement"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:shard_of_glass",
+            Category = "collectible",
+            ConditionTable = {"minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", "The Jar", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Shard of Glass"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
