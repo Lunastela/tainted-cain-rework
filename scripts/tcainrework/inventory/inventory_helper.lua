@@ -36,12 +36,35 @@ function inventoryHelper.getNameFor(pickup)
     return "Bone"
 end
 
-function inventoryHelper.getMaxStackFor(pickupType)
-    if itemRegistry[pickupType]
-    and itemRegistry[pickupType].StackSize then
-        return itemRegistry[pickupType].StackSize
+-- this function doesn't need to exist anymore i have streamlined its functionality
+local function isActiveFromComponent(itemID)
+    return (utility.getCollectibleConfig(itemID).Type == ItemType.ITEM_ACTIVE)
+end
+
+function inventoryHelper.getMaxStackFor(pickup)
+    -- limited stack size for active items
+    if pickup.ComponentData
+    and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
+    and isActiveFromComponent(pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]) then
+        return 1
+    end
+    if itemRegistry[pickup.Type]
+    and itemRegistry[pickup.Type].StackSize then
+        return itemRegistry[pickup.Type].StackSize
     end
     return 16
+end
+
+function inventoryHelper.getNumericIDFor(pickup) 
+    if pickup.ComponentData
+    and pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
+        return (TCainRework.itemIterator + pickup.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
+    end
+    if itemRegistry[pickup.Type]
+    and itemRegistry[pickup.Type].NumericID then
+        return itemRegistry[pickup.Type].NumericID
+    end
+    return 0
 end
 
 local itemRarities = InventoryItemRarity
@@ -323,28 +346,31 @@ function inventoryHelper.setRecipeBookFilter(isEnabled)
 end
 
 local json = require("json")
+--- Creates an item object.
 function inventoryHelper.createItem(itemString, count)
-    local itemType, componentData = itemString, nil
-    if tonumber(itemString) then
-        itemString = utility.getLocalizedString("Items", utility.getCollectibleConfig(tonumber(itemString)).Name)
-    end
-    local splitPosition = itemString:find("{")
-    if splitPosition then
-        itemType = itemString:sub(1, splitPosition - 1)
-        componentData = json.decode(itemString:sub(splitPosition, -1))
-        -- Sanitize Data
-        if componentData then 
-            -- Card Checking
-            if componentData[InventoryItemComponentData.CARD_TYPE] then
-                local cardID = Isaac.GetCardIdByName(componentData[InventoryItemComponentData.CARD_TYPE])
-                if cardID ~= -1 then
-                    componentData[InventoryItemComponentData.CARD_TYPE] = cardID
+    local itemType, componentData, forcedCollectible = itemString, nil, nil
+    local isNumber = (type(itemString) == "number")
+    if isNumber or tonumber(itemString) then
+        forcedCollectible = ((isNumber and itemString) or tonumber(itemString))
+    else
+        local splitPosition = itemString:find("{")
+        if splitPosition then
+            itemType = itemString:sub(1, splitPosition - 1)
+            componentData = json.decode(itemString:sub(splitPosition, -1))
+            -- Sanitize Data
+            if componentData then 
+                -- Card Checking
+                if componentData[InventoryItemComponentData.CARD_TYPE] then
+                    local cardID = Isaac.GetCardIdByName(componentData[InventoryItemComponentData.CARD_TYPE])
+                    if cardID ~= -1 then
+                        componentData[InventoryItemComponentData.CARD_TYPE] = cardID
+                    end
                 end
             end
         end
     end
-    if collectibleStorage.fastItemIDByName(itemString) ~= -1 then
-        componentData = utility.generateCollectibleData(collectibleStorage.fastItemIDByName(itemString))
+    if forcedCollectible or (collectibleStorage.fastItemIDByName(itemString) ~= -1) then
+        componentData = utility.generateCollectibleData(forcedCollectible or collectibleStorage.fastItemIDByName(itemString))
         itemType = "tcainrework:collectible"
     end
     return {
@@ -354,90 +380,160 @@ function inventoryHelper.createItem(itemString, count)
     }
 end
 
-function inventoryHelper.conditionalItemLookupType(item)
-    local itemName = item.Type
+--- Creates a unique hash for an item based on its components.
+--- Should replace conditional item lookups in new system.
+function inventoryHelper.createHashedItem(item)
+    local itemHash = ""
+    itemHash = itemHash .. item.Type
     if item.ComponentData then
-        itemName = itemName .. (item.ComponentData[InventoryItemComponentData.CARD_TYPE] or "")
-        itemName = itemName .. (item.ComponentData[InventoryItemComponentData.PILL_EFFECT] or "")
-        -- fucking hell just replace it entirely I guess
-        if item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
-        and collectibleStorage.IDToNameLookup[item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]] then
-            itemName = collectibleStorage.IDToNameLookup[item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]]
+        for i, component in pairs(item.ComponentData) do
+            itemHash = itemHash .. "_" .. i .. tostring(component)
         end
+    end
+    return itemHash -- utility.sha1(itemHash)
+end
+
+--[[
+    Side tangent, to document my development:
+
+    This system, prior to the time of writing, used something
+    known as a conditional lookup type. What that was,
+    was an easy way for me to poll if an item was different
+    from another based on a set of few key components.
+    Sadly, this system was hacky, and didn't allow
+    for other components to be added to items, or for
+    checking of multiple components. I was originally not
+    going to tidy this up, and live with it, but I have some
+    plans and would like the inventory system to be fully feature
+    complete so I can start working on them :)
+
+    The dangers of premature optimization. It disallowed me from
+    being able to broadly check for lots of things in all honesty. 
+--]]
+
+--- Used to distinguish generics for recipe unlock performance reasons 
+function inventoryHelper.getInternalStorageName(item)
+    local itemName = item.Type
+    if item.ComponentData and item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
+    and collectibleStorage.IDToNameLookup[item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]] then
+        itemName = collectibleStorage.IDToNameLookup[item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]]
     end
     return itemName
 end
 
-function inventoryHelper.getInventoryItemList(inventorySet, inventoryBlacklist)
-    local storedItemCounts = {}
-    for i, inventory in ipairs(inventorySet) do
-        if inventoryHelper.isValidInventory(inventory)
-        and not (inventoryBlacklist and utility.tableContains(inventoryBlacklist, inventory)) then
-            for j, item in pairs(inventory) do
-                local itemName = inventoryHelper.conditionalItemLookupType(item)
-                storedItemCounts[itemName] = (storedItemCounts[itemName] or 0) + (item.Count or 0)
-            end
-        end
-    end
-    return storedItemCounts
-end
-
+--- Sorts a table by 
 function inventoryHelper.sortTableByTags(a, b)
     return ((not itemTagLookup[a] and itemTagLookup[b]) 
     or ((itemTagLookup[a] and itemTagLookup[b]) and #itemTagLookup[a] < #itemTagLookup[b])
     or false)
 end
 
+--[[
+    =======================    
+    Recipe Helper Functions
+    =======================
+--]]
+
+local function conditionalItemFromRecipe(recipe, itemIndex)
+    if recipe.ConditionTable and recipe.ConditionTable[itemIndex] then
+        return inventoryHelper.createItem(recipe.ConditionTable[itemIndex])
+    end
+    return {Type = "minecraft:stick", Count = 1}
+end
+
+local function conditionalItemFromShapedRecipe(recipe, inventory, itemIndex)
+    local x, y = (((itemIndex - 1) % inventoryHelper.getInventoryWidth(inventory)) + 1), 
+        (math.floor((itemIndex - 1) / inventoryHelper.getInventoryHeight(inventory)) + 1)
+    x = x + math.floor((recipe.RecipeSize.X - inventoryHelper.getInventoryWidth(inventory)) / 2)
+    y = y + (recipe.RecipeSize.Y - inventoryHelper.getInventoryHeight(inventory))
+
+    if (x > 0 and x <= recipe.RecipeSize.X)
+    and (y > 0 and y <= recipe.RecipeSize.Y) then
+        local offsetIndex = x + ((y - 1) * recipe.RecipeSize.X)
+        if recipe.ConditionTable[offsetIndex] then
+            return conditionalItemFromRecipe(recipe, offsetIndex)
+        end
+    end
+end
+
+inventoryHelper.lastStartTime = 0
+--- Returns a compiled item or list of items at the index required in a recipe
+function inventoryHelper.getRecipeConditionalItem(recipe, inventory, index, noTag)
+    local recipeIngredientDisplay = nil
+    if recipe.RecipeSize then
+        recipeIngredientDisplay = conditionalItemFromShapedRecipe(recipe, inventory, index)
+    elseif recipe.ConditionTable[index] then
+        recipeIngredientDisplay = conditionalItemFromRecipe(recipe, index)
+    end
+    if not noTag and recipeIngredientDisplay and itemTagLookup[recipeIngredientDisplay.Type] then
+        local itemTagTable = itemTagLookup[recipeIngredientDisplay.Type]
+        return itemTagTable[math.floor(((Isaac.GetTime() - inventoryHelper.lastStartTime) / 1000) % (#itemTagTable)) + 1]
+    end
+    return recipeIngredientDisplay
+end
+
+--- Returns a list of a recipe's necessary ingredients
+function inventoryHelper.getRecipeItemList(recipe)
+    local itemsNeeded = {}
+    local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
+    local inventoryWidth = inventoryHelper.getInventoryWidth(craftingInventory) - 1
+    local inventoryHeight = inventoryHelper.getInventoryHeight(craftingInventory) - 1
+    for j = 0, inventoryHeight do
+        for i = 0, inventoryWidth do
+            local currentItemIndex = ((i * (inventoryWidth + 1)) + j) + 1
+            local getItem = inventoryHelper.getRecipeConditionalItem(recipe, craftingInventory, currentItemIndex, true)
+            itemsNeeded[currentItemIndex] = getItem
+        end
+    end
+    return itemsNeeded
+end
+
 local cachedRecipeOutputs = {}
 inventoryHelper.recipeCraftableDirty = true
-function inventoryHelper.checkRecipeCraftable(recipeName, recipe, storedItemCounts)
-    if (not inventoryHelper.recipeCraftableDirty) and cachedRecipeOutputs[recipeName] ~= nil then
-        return cachedRecipeOutputs[recipeName]
+--- Returns if a recipe is craftable and caches it until recipes are flagged as dirty
+function inventoryHelper.checkRecipeCraftable(recipeName, recipeFromName, inventorySet)
+    if (not inventoryHelper.recipeCraftableDirty) and (cachedRecipeOutputs[recipeName]) then
+        return table.unpack(cachedRecipeOutputs[recipeName])
     end
-    local typedIndex, matchedTypes = {}, {}
-    for i, itemID in pairs(recipe.ConditionTable) do
-        local fakeItem = inventoryHelper.createItem(itemID)
-        local myItemID = inventoryHelper.conditionalItemLookupType(fakeItem)
-        matchedTypes[myItemID] = (matchedTypes[myItemID] or 0) + 1
-        table.insert(typedIndex, myItemID)
+    -- get necessary items
+    local itemsNeeded, sortedItemStack = inventoryHelper.getRecipeItemList(recipeFromName), {}
+    for i in pairs(itemsNeeded) do
+        table.insert(sortedItemStack, i)
     end
-    table.sort(typedIndex, inventoryHelper.sortTableByTags)
-
-    -- Sift through matching types
-    for index, type in ipairs(typedIndex) do
-        local itemTags = {type}
-        if itemTagLookup[type] then
-            itemTags = {}
-            -- add different component items to the tags
-            for i, itemInTag in ipairs(itemTagLookup[type]) do
-                table.insert(itemTags, itemInTag)
-                for storedItem, j  in pairs(storedItemCounts) do
-                    if storedItem ~= itemInTag 
-                    and string.find(storedItem, itemInTag) then
-                        table.insert(itemTags, storedItem)
-                        -- print(storedItem)
+    -- Sort item stacks by least accessible to most accessible 
+    -- this helps break out easier & helps prioritize materials that need to be specific ones
+    table.sort(sortedItemStack, function(a, b)
+        return inventoryHelper.sortTableByTags(itemsNeeded[a].Type, itemsNeeded[b].Type)
+    end)
+    -- break out of items that aren't craftable
+    -- good philosophy because the items that ARE craftable will always be limited
+    local usedItems = {}
+    for index, itemIndex in ipairs(sortedItemStack) do
+        local itemOrTag = itemsNeeded[itemIndex]
+        if itemOrTag then
+            for i, inventory in ipairs(inventorySet) do
+                if (inventoryHelper.isValidInventory(inventory)) then
+                    for j in pairs(inventory) do
+                        if not usedItems[inventory] then
+                            usedItems[inventory] = {}
+                        end
+                        if ((inventory[j] and inventory[j].Type) 
+                        and ((usedItems[inventory][j] or 0) < inventory[j].Count)
+                        and inventoryHelper.itemCanStackWithTag(inventory[j], itemOrTag)) then
+                            usedItems[inventory][j] = (usedItems[inventory][j] or 0) + 1
+                            goto nextItemInStack
+                        end
                     end
                 end
             end
+            cachedRecipeOutputs[recipeName] = {false, false, false}
+            return table.unpack(cachedRecipeOutputs[recipeName])
         end
-        for i, itemInTag in ipairs(itemTags) do
-            local itemAmount = matchedTypes[typedIndex[index]]
-            if storedItemCounts[itemInTag] and itemAmount then
-                local subtractableAmount = math.min(storedItemCounts[itemInTag], itemAmount)
-                storedItemCounts[itemInTag] = storedItemCounts[itemInTag] - subtractableAmount
-                matchedTypes[typedIndex[index]] = itemAmount - subtractableAmount
-                if matchedTypes[typedIndex[index]] <= 0 then
-                    matchedTypes[typedIndex[index]] = nil
-                    goto nextItem
-                end
-            end
-        end
-        ::nextItem::
+        ::nextItemInStack::
     end
-    for type in pairs(matchedTypes) do
-        return false
-    end
-    return true
+    -- return the sorted stack to reuse it if we're autocrafting the item :)
+    cachedRecipeOutputs[recipeName] = {true, itemsNeeded, sortedItemStack}
+    return table.unpack(cachedRecipeOutputs[recipeName])
 end
 
 local cachedRecipeTables = {}
@@ -480,15 +576,12 @@ function inventoryHelper.getRecipeBookRecipes(recipeBookTab, searchBarText, inve
                         end
                     end
                     if displayRecipe then
-                        local recipeCraftable = inventoryHelper.checkRecipeCraftable(
-                            recipeSave[i], recipeFromName, inventoryHelper.getInventoryItemList(inventorySet)
-                        )
-                        cachedRecipeOutputs[recipeSave[i]] = recipeCraftable
+                        local recipeCraftable, _, _ = inventoryHelper.checkRecipeCraftable(recipeSave[i], recipeFromName, inventorySet)
                         local fakeItem = inventoryHelper.resultItemFromRecipe(recipeFromName)
                         if fakeItem then
                             local itemName = string.lower(inventoryHelper.getNameFor(fakeItem))
                             if (string.find(itemName, string.lower(searchBarText))) then
-                                local itemCondition = inventoryHelper.conditionalItemLookupType(fakeItem)
+                                local itemCondition = inventoryHelper.createHashedItem(fakeItem)
                                 if not utility.tableContains(recipeList, itemCondition) then
                                     table.insert(recipeList, itemCondition)
                                 end
@@ -559,10 +652,6 @@ function inventoryHelper.getRenderFunction(inventory)
     return function(_) end
 end
 
--- this function doesn't need to exist anymore i have streamlined its functionality
-local function isActiveFromComponent(itemID)
-    return (utility.getCollectibleConfig(itemID).Type == ItemType.ITEM_ACTIVE)
-end
 local function canStackComponentData(item1, item2, soft)
     -- if neither item has component data, they can stack
     if (not (item1.ComponentData or item2.ComponentData)) then
@@ -578,15 +667,6 @@ local function canStackComponentData(item1, item2, soft)
             end
             if not equalData then
                 return false
-            elseif inventoryAttribute == InventoryItemComponentData.COLLECTIBLE_ITEM and not soft then
-                -- Force Active Items to not stack
-                if ((item1.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] 
-                and isActiveFromComponent(item1.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]))
-                or (item2.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
-                and isActiveFromComponent(item2.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]))) then
-                    return false -- ((item1.Count or 0) + (item2.Count or 0)) <= 1
-                    -- I sincerely hope that wasn't important
-                end
             end
         end
         return true
@@ -594,21 +674,30 @@ local function canStackComponentData(item1, item2, soft)
     return (soft and (item1.ComponentData == nil or item2.ComponentData == nil))
 end
 
-function inventoryHelper.itemCanStackWith(item1, item2)
-    return (((item1.Type == item2.Type) 
-        and canStackComponentData(item1, item2)))
+function inventoryHelper.itemCanStackWith(item1, item2, soft)
+    return ((item1.Type == item2.Type) 
+        and canStackComponentData(item1, item2, soft))
 end
 
--- Generic "of item type" esque function
+--- Long overdue. checks if an item is in an item tag.
+function inventoryHelper.isInItemTag(itemTagName, item)
+    local itemTag = itemTagLookup[itemTagName]
+    if itemTag then
+        for i, tagItem in ipairs(itemTag) do
+            if inventoryHelper.itemCanStackWith(item, tagItem, true) then
+                return true, i
+            end
+        end
+    end
+    return false
+end
+
+--- Generic "of item type" esque function
 function inventoryHelper.itemCanStackWithTag(item1, itemOrList)
     if itemTagLookup[itemOrList.Type] then
-        return utility.tableContains(itemTagLookup[itemOrList.Type], item1.Type)
-            or utility.tableContains(itemTagLookup[itemOrList.Type], inventoryHelper.conditionalItemLookupType(item1))
-    elseif (itemOrList.Type and item1.Type == itemOrList.Type
-        and canStackComponentData(item1, itemOrList, true)) then
-        return true
-    end 
-    return false
+        return inventoryHelper.isInItemTag(itemOrList.Type, item1)
+    end
+    return (itemOrList.Type and inventoryHelper.itemCanStackWith(item1, itemOrList, true))
 end
 
 -- Item Names
@@ -813,7 +902,7 @@ end
 
 -- Inventory Helper Functions
 function inventoryHelper.reconveneFromInventory(currentStack, inventoryList)
-    if currentStack and currentStack.Count < inventoryHelper.getMaxStackFor(currentStack.Type) then
+    if currentStack and currentStack.Count < inventoryHelper.getMaxStackFor(currentStack) then
         local fakeInventory = {}
         local inventoryDisplacement = 0
         for i, subInventory in ipairs(inventoryList) do
@@ -838,7 +927,7 @@ function inventoryHelper.reconveneFromInventory(currentStack, inventoryList)
         for i, inventoryPointer in pairs(fakeInventory) do
             local inventoryItem = inventoryPointer.Inventory[inventoryPointer.Slot]
             if inventoryHelper.itemCanStackWith(inventoryItem, currentStack) then
-                local remainderAmount = inventoryHelper.getMaxStackFor(currentStack.Type) - currentStack.Count
+                local remainderAmount = inventoryHelper.getMaxStackFor(currentStack) - currentStack.Count
                 local reduceBy = inventoryHelper.removePossibleAmount(inventoryPointer.Inventory, inventoryPointer.Slot, remainderAmount)
                 currentStack.Count = currentStack.Count + reduceBy 
             end
@@ -857,7 +946,7 @@ function inventoryHelper.searchForFreeSlot(inventoryList, pickup)
     for i, inventory in ipairs(inventoryList) do
         for inventorySlot, inventoryItem in pairs(inventory) do
             if (inventoryItem ~= nil and inventoryHelper.itemCanStackWith(inventoryItem, pickup)
-            and inventoryItem.Count < inventoryHelper.getMaxStackFor(pickup.Type)) then
+            and inventoryItem.Count < inventoryHelper.getMaxStackFor(pickup)) then
                 return {
                     Slot = inventorySlot,
                     Inventory = inventory
@@ -934,9 +1023,10 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
             for i, item in pairs(craftingInventory) do
                 table.insert(craftingTable, item)
             end
+            -- these tables just need to be sorted by something consistent. hashed items should do
             table.sort(craftingTable, function(a, b)
-                return inventoryHelper.conditionalItemLookupType(a)
-                    < inventoryHelper.conditionalItemLookupType(b)
+                return inventoryHelper.createHashedItem(a)
+                    < inventoryHelper.createHashedItem(b)
             end)
         end
         for i, recipe in ipairs(recipeList) do
@@ -953,8 +1043,7 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
                 for i, item in pairs(craftingInventory) do
                     if item and item.Type then
                         for j, type in ipairs(myConditionTable) do
-                            if utility.tableContains(itemTagLookup[type.Type], item.Type)
-                            or utility.tableContains(itemTagLookup[type.Type], inventoryHelper.conditionalItemLookupType(item)) then
+                            if inventoryHelper.isInItemTag(type.Type, item) then
                                 myConditionTable[j] = item
                                 goto nextItemTag
                             end
@@ -963,8 +1052,8 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
                     end
                 end
                 table.sort(myConditionTable, function(a, b)
-                    return inventoryHelper.conditionalItemLookupType(a)
-                        < inventoryHelper.conditionalItemLookupType(b)
+                    return inventoryHelper.createHashedItem(a)
+                        < inventoryHelper.createHashedItem(b)
                 end)
             end
 
@@ -991,28 +1080,6 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
         end
     end
     return false
-end
-
-function inventoryHelper.conditionalItemFromRecipe(recipe, itemIndex)
-    if recipe.ConditionTable and recipe.ConditionTable[itemIndex] then
-        return inventoryHelper.createItem(recipe.ConditionTable[itemIndex])
-    end
-    return {Type = "minecraft:stick", Count = 1}
-end
-
-function inventoryHelper.conditionalItemFromShapedRecipe(recipe, inventory, itemIndex)
-    local x, y = (((itemIndex - 1) % inventoryHelper.getInventoryWidth(inventory)) + 1), 
-        (math.floor((itemIndex - 1) / inventoryHelper.getInventoryHeight(inventory)) + 1)
-    x = x + math.floor((recipe.RecipeSize.X - inventoryHelper.getInventoryWidth(inventory)) / 2)
-    y = y + (recipe.RecipeSize.Y - inventoryHelper.getInventoryHeight(inventory))
-
-    if (x > 0 and x <= recipe.RecipeSize.X)
-    and (y > 0 and y <= recipe.RecipeSize.Y) then
-        local offsetIndex = x + ((y - 1) * recipe.RecipeSize.X)
-        if recipe.ConditionTable[offsetIndex] then
-            return inventoryHelper.conditionalItemFromRecipe(recipe, offsetIndex)
-        end
-    end
 end
 
 local toastStorage = require("scripts.tcainrework.stored.toast_storage")
@@ -1050,26 +1117,32 @@ function inventoryHelper.runUnlockItem(item, forceUnlockAll)
     if not runSave.obtainedItems then
         runSave.obtainedItems = {}
     end
-    local combinedNameType = inventoryHelper.conditionalItemLookupType(item)
-    runSave.obtainedItems[combinedNameType] = true
-    if recipeStorage.recipeFromIngredient[combinedNameType] then
-        -- obtain recipe associations
-        for i, recipeName in ipairs(recipeStorage.recipeFromIngredient[combinedNameType]) do
-            -- obtain recipe from lookup table
+    local unlockAll = (forceUnlockAll or (itemRegistry[item.Type] and itemRegistry[item.Type].UnlockAll))
+    local itemTypeFiltered = inventoryHelper.getInternalStorageName(item)
+    if recipeStorage.recipeFromIngredient[itemTypeFiltered] then
+        for i, recipeName in ipairs(recipeStorage.recipeFromIngredient[itemTypeFiltered]) do
             local recipe = recipeStorage.nameToRecipe[recipeName]
             if recipe and recipe.ConditionTable and recipe.DisplayRecipe then
-                if not (itemRegistry[item.Type] and (itemRegistry[item.Type].UnlockAll or forceUnlockAll)) then
-                    for i, curType in pairs(recipe.ConditionTable) do
-                        local fakeItem = inventoryHelper.conditionalItemLookupType(inventoryHelper.createItem(curType))
-                        if not (runSave.obtainedItems[curType]
-                        or runSave.obtainedItems[fakeItem]) then
-                            goto skipUnlocking
+                local lockedItems = 0
+                for i, curType in pairs(recipe.ConditionTable) do
+                    local currentItem = inventoryHelper.createItem(curType)
+                    local curHash = inventoryHelper.createHashedItem(currentItem)
+                    if ((itemTagLookup[item.Type] and inventoryHelper.itemCanStackWith(currentItem, item))
+                    or inventoryHelper.itemCanStackWithTag(item, currentItem)) then
+                        runSave.obtainedItems[curHash] = true
+                        if unlockAll and inventoryHelper.itemCanStackWith(currentItem, item) then
+                            lockedItems = 0
+                            goto unlockItem
                         end
+                    elseif not (runSave.obtainedItems[curHash]) then
+                        lockedItems = lockedItems + 1
                     end
                 end
-                TCainRework:UnlockItemRecipe(recipeName)
+                ::unlockItem::
+                if (lockedItems <= 0) then
+                    TCainRework:UnlockItemRecipe(recipeName)
+                end
             end
-            ::skipUnlocking::
         end
     end
 end
@@ -1078,24 +1151,16 @@ TCainRework:AddCallback(ModCallbacks.MC_USE_PILL, function(_, pillEffect, entity
     if (inventoryHelper.getUnlockedInventory()
     and entityPlayer:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)) then
         inventoryHelper.runUnlockItem(
-            inventoryHelper.createItem("tcainrework:pill{\"pill_effect\":" .. tostring(pillEffect) .. "}"), true
+            inventoryHelper.createItem("tcainrework:pill{\"pill_effect\":" .. tostring(pillEffect) .. "}")
         )
     end
 end)
 
 function inventoryHelper.unlockItemBatch(item)
-    if item.Type and itemRegistry[item.Type]
-    and itemRegistry[item.Type].ItemTags then
+    if item.Type and itemRegistry[item.Type] and itemRegistry[item.Type].ItemTags then
         for i, itemTag in ipairs(itemRegistry[item.Type].ItemTags) do
-            inventoryHelper.runUnlockItem(inventoryHelper.createItem(itemTag), 
-                itemRegistry[item.Type] and itemRegistry[item.Type].UnlockTags
-            )
-        end
-    end
-    local itemType = inventoryHelper.conditionalItemLookupType(item)
-    if itemType and itemRegistry[itemType] and itemRegistry[itemType].ItemTags then
-        for i, itemTag in ipairs(itemRegistry[itemType].ItemTags) do
-            inventoryHelper.runUnlockItem(inventoryHelper.createItem(itemTag), 
+            inventoryHelper.runUnlockItem(  
+                inventoryHelper.createItem(itemTag), 
                 itemRegistry[item.Type] and itemRegistry[item.Type].UnlockTags
             )
         end
@@ -1152,6 +1217,9 @@ local yellowBarColor = Color(
     255 / 255, 219 / 255, 16 / 255
 )
 function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, elapsedTime)
+    if not itemToDisplay then
+        return
+    end
     local collectibleItem = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
     local originalRenderPosition = Vector(renderPosition.X, renderPosition.Y)
     local renderType = inventoryHelper.getItemRenderType(itemToDisplay.Type)

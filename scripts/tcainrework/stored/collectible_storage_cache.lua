@@ -51,10 +51,12 @@ local itemTagCounterparts = {
     [ItemConfig.TAG_DEVIL] = "#leviathan"
 }
 
+collectibleStorage.itemIterator = 1
 local function addToTag(tagName, itemName)
     local myTag = getItemTag(tagName)
-    if not utility.tableContains(myTag, itemName) then
-        table.insert(myTag, itemName)
+    local item = mod.inventoryHelper.createItem(collectibleStorage.itemIterator)
+    if not mod.inventoryHelper.isInItemTag(myTag, item) then
+        table.insert(myTag, item)
         if not itemDescriptions[itemName].ItemTags then
             itemDescriptions[itemName].ItemTags = {}
         end
@@ -64,8 +66,6 @@ local function addToTag(tagName, itemName)
     end
 end
 
-collectibleStorage.itemIterator = 1
-collectibleStorage.itemOffset = 0
 collectibleStorage.constructed = false
 function collectibleStorage:loadCollectibleCache()
     if not collectibleStorage.constructed then
@@ -77,11 +77,8 @@ function collectibleStorage:loadCollectibleCache()
                 local itemName = utility.getLocalizedString("Items", curCollectible.Name)
                 collectibleStorage.nameToIDLookup[itemName] = collectibleStorage.itemIterator
                 collectibleStorage.IDToNameLookup[collectibleStorage.itemIterator] = itemName
+                itemDescriptions[itemName] = {}
 
-                itemDescriptions[itemName] = {
-                    Rarity = curCollectible.Quality,
-                    NumericID = collectibleStorage.itemIterator
-                }
                 -- Check Familiar Types (for item tags with familiars in them)
                 if curCollectible.Type == ItemType.ITEM_FAMILIAR then
                     addToTag("#familiar", itemName)
@@ -108,16 +105,14 @@ function collectibleStorage:loadCollectibleCache()
             end
             collectibleStorage.itemIterator = collectibleStorage.itemIterator + 1
         end
-        collectibleStorage.itemOffset = collectibleStorage.itemIterator
         collectibleStorage.constructed = true
         print("loaded item cache in:", Isaac.GetTime() - currentTime, "ms")
-        mod:sortItemTags()
     end
 end
 
 function collectibleStorage.fastItemIDByName(name)
     if not collectibleStorage.constructed then
-        TCainRework:loadCollectibleCache()
+        collectibleStorage:loadCollectibleCache()
     end
     if (not (collectibleStorage.constructed and collectibleStorage.nameToIDLookup[name])
     and not (string.find(name, "tcainrework") or string.find(name, "minecraft"))) then

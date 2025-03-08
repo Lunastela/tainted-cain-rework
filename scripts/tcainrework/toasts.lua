@@ -43,14 +43,25 @@ local additionConstant = 0.025
 local toastStorage = require("scripts.tcainrework.stored.toast_storage")
 local activeRecipeToast = nil
 mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY, function(_)
-    if (not mod.inventoryHelper.isClassicCrafting())
-    and (#toastStorage > 0 and (not activeRecipeToast)) then
-        activeRecipeToast = TCainRework:CreateToast(
-            InventoryToastTypes.STANDARD,
-            toastStorage, nil,
-            nil, nil,
-            180
-        )
+    if (not mod.inventoryHelper.isClassicCrafting() and (#toastStorage > 0)) then
+        -- if (not (activeRecipeToast and (not activeRecipeToast.Reverse))
+        local toastRecipeList = {}
+        local dontReplaceToast = (activeRecipeToast and ((activeRecipeToast.HoldTime + 5) <= activeRecipeToast.ToastTime))
+        if activeRecipeToast and dontReplaceToast then
+            toastRecipeList = activeRecipeToast.RenderItems
+        end
+        for k in ipairs(toastStorage) do
+            table.insert(toastRecipeList, toastStorage[k])
+            toastStorage[k] = nil
+        end
+        if not dontReplaceToast then
+            activeRecipeToast = TCainRework:CreateToast(
+                InventoryToastTypes.STANDARD,
+                toastRecipeList, nil,
+                nil, nil,
+                180
+            )
+        end
     end
     local flaggedForDeletion = {}
     for i, toast in pairs(toastList) do
@@ -119,12 +130,6 @@ mod:AddPriorityCallback(ModCallbacks.MC_POST_HUD_RENDER, CallbackPriority.EARLY,
     end
     if #flaggedForDeletion > 0 then
         for i, j in ipairs(flaggedForDeletion) do
-            if activeRecipeToast == toastList[j] then
-                for k in ipairs(toastStorage) do
-                    toastStorage[k] = nil
-                end
-                activeRecipeToast = nil
-            end
             toastList[j] = nil
         end
     end

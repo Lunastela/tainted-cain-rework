@@ -120,7 +120,7 @@ mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, function(_, entity, collid
             local colliderData = saveManager.GetRerollPickupSave(collider)
             if ((pickupData and pickupData.Count) and (colliderData and colliderData.Count)) 
             and ((pickupData.Count >= colliderData.Count) and (mod.inventoryHelper.itemCanStackWith(pickupData, colliderData))) then
-                local removableAmount = math.min(colliderData.Count, mod.inventoryHelper.getMaxStackFor(pickupData.Type) - pickupData.Count)
+                local removableAmount = math.min(colliderData.Count, mod.inventoryHelper.getMaxStackFor(pickupData) - pickupData.Count)
                 if removableAmount > 0 then
                     pickupData.Count = pickupData.Count + removableAmount
                     colliderData.Count = colliderData.Count - removableAmount
@@ -191,7 +191,7 @@ function mod:testChestOpening(chest)
                     local itemPickup = Isaac.Spawn(EntityType.ENTITY_PICKUP, minecraftItemID, 0, chest.Position, chest.GetRandomPickupVelocity(chest.Position), chest)
                     local pickupData = saveManager.GetRerollPickupSave(itemPickup)
                     local dropOutcomes = chestDropRates[chest.Variant] or defaultDrop
-                    pickupData.Type = numberToItems[dropOutcomes:PickOutcome(chest:GetDropRNG()) - collectibleStorage.itemOffset]
+                    pickupData.Type = numberToItems[dropOutcomes:PickOutcome(chest:GetDropRNG())]
                     pickupData.Count = 1
                 end
             end

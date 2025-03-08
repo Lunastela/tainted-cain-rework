@@ -10,6 +10,7 @@ utility.getCustomLocalizedString("", "")
 
 include("scripts.tcainrework.inventory.inventory_enums")
 mod.inventoryHelper = include("scripts.tcainrework.inventory.inventory_helper")
+local inventoryHelper = mod.inventoryHelper
 
 include("scripts.tcainrework.dss.dead_sea_scrolls")
 
@@ -67,36 +68,37 @@ end
         -- Sort Item Tags
         for tagName in pairs(itemTagLookup) do
             table.sort(itemTagLookup[tagName], function(a, b)
-                return ((itemDescriptions[a].Rarity == itemDescriptions[b].Rarity)
-                        and (itemDescriptions[a].NumericID < itemDescriptions[b].NumericID))
-                    or (itemDescriptions[a].Rarity) < (itemDescriptions[b].Rarity)
+                if inventoryHelper.getItemRarity(a) == inventoryHelper.getItemRarity(b) then
+                    return inventoryHelper.getNumericIDFor(a) < inventoryHelper.getNumericIDFor(b)
+                end
+                return inventoryHelper.getItemRarity(a) < inventoryHelper.getItemRarity(b) 
             end)
         end
 
         -- Create Pill Item Tag
         for i = 1, 13 do
-            local pillName = "tcainrework:pill{\"pill_color\":" .. i .. "}"
+            local pillName = inventoryHelper.createItem("tcainrework:pill{\"pill_color\":" .. i .. "}")
             table.insert(itemTagLookup["#tcainrework:pill"], pillName)
         end
-        table.insert(itemTagLookup["#tcainrework:pill"], "tcainrework:golden_pill")
-        table.insert(itemTagLookup["#tcainrework:pill"], "tcainrework:pill")
+        table.insert(itemTagLookup["#tcainrework:pill"], inventoryHelper.createItem("tcainrework:golden_pill"))
+        -- table.insert(itemTagLookup["#tcainrework:pill"], "tcainrework:pill")
 
         -- Runes
         for i = 32, 41 do
             table.insert(
                 itemTagLookup["#tcainrework:rune"], 
-                "tcainrework:rune{\"card_type\":" .. i .. "}"
+                inventoryHelper.createItem("tcainrework:rune{\"card_type\":" .. i .. "}")
             )
         end
         -- Soul Stones (base game)
         for i = 81, 97 do
             table.insert(
                 itemTagLookup["#tcainrework:rune"], 
-                "tcainrework:soul_stone{\"card_type\":" .. i .. "}"
+                inventoryHelper.createItem("tcainrework:soul_stone{\"card_type\":" .. i .. "}")
             )
         end
-        table.insert(itemTagLookup["#tcainrework:rune"], "tcainrework:rune")
-        table.insert(itemTagLookup["#tcainrework:rune"], "tcainrework:soul_stone")
+        -- table.insert(itemTagLookup["#tcainrework:rune"], "tcainrework:rune")
+        -- table.insert(itemTagLookup["#tcainrework:rune"], "tcainrework:soul_stone")
     end
 
     -- Define and Load the collectible storage cache.
@@ -107,14 +109,14 @@ end
 
     -- Define Load Order list
     mod.LoadOrder = {}
+    mod.itemIterator = 1
     function mod:loadRegistry(curLoad)
         -- Items
         registerFromLoadOrder(curLoad.Namespace, curLoad.Items, "items",
             function(registryName, foundData)
                 if foundData and foundData.Properties then
-                    collectibleStorage.itemIterator = collectibleStorage.itemIterator + 1
-                    numberToItems[(collectibleStorage.itemIterator - collectibleStorage.itemOffset)] = registryName
-                    foundData.Properties.NumericID = collectibleStorage.itemIterator
+                    foundData.Properties.NumericID = mod.itemIterator
+                    numberToItems[foundData.Properties.NumericID] = registryName
                     itemDescriptions[registryName] = foundData.Properties
                     if foundData.ObtainedFrom then -- Register Entities that turn into this item
                         for _, entity in ipairs(foundData.ObtainedFrom) do
@@ -149,11 +151,13 @@ end
                             if not itemTagLookup[itemTag] then
                                 itemTagLookup[itemTag] = {}
                             end
-                            if not utility.tableContains(itemTagLookup[itemTag], registryName) then
-                                table.insert(itemTagLookup[itemTag], registryName)
+                            local item = inventoryHelper.createItem(registryName)
+                            if not inventoryHelper.isInItemTag(itemTag, item) then
+                                table.insert(itemTagLookup[itemTag], item)
                             end
                         end
                     end
+                    mod.itemIterator = mod.itemIterator + 1
                 else
                     print('registry unavailable:', registryName)
                 end
@@ -174,12 +178,13 @@ end
                         recipeStorage.nameToRecipe[recipeData.RecipeName] = recipeData
                         if recipeData.ConditionTable then
                             for i, itemType in pairs(recipeData.ConditionTable) do
-                                local nameType = mod.inventoryHelper.conditionalItemLookupType(mod.inventoryHelper.createItem(itemType))
-                                if not recipeStorage.recipeFromIngredient[nameType] then
-                                    recipeStorage.recipeFromIngredient[nameType] = {}
+                                local myItem = inventoryHelper.createItem(itemType)
+                                local itemTypeFiltered = inventoryHelper.getInternalStorageName(myItem)
+                                if not recipeStorage.recipeFromIngredient[itemTypeFiltered] then
+                                    recipeStorage.recipeFromIngredient[itemTypeFiltered] = {}
                                 end
-                                if (not utility.tableContains(recipeStorage.recipeFromIngredient[nameType], recipeData.RecipeName)) then
-                                    table.insert(recipeStorage.recipeFromIngredient[nameType], recipeData.RecipeName)
+                                if (not utility.tableContains(recipeStorage.recipeFromIngredient[itemTypeFiltered], recipeData.RecipeName)) then
+                                    table.insert(recipeStorage.recipeFromIngredient[itemTypeFiltered], recipeData.RecipeName)
                                 end
                             end
                         end

@@ -317,8 +317,8 @@ local function renderBagOfCrafting(player, offset)
                                 or (not pickup)) and not bagExclusions[entity.Type]) 
                                 and (((entity:ForceCollide(player, false) ~= true) 
                                 or isCrawlspace) or (pickup and pickup:IsShopItem())) then
-                                local tcainPickup = (pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
-                                    and (player:GetPlayerType() == PlayerType.PLAYER_CAIN_B)
+                                local tcainPickup = ((pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
+                                    and (player:GetPlayerType() == PlayerType.PLAYER_CAIN_B))
                                 local itemTable, itemCondition = getEntityFromTable(entity, false, player)
                                 if tcainPickup then
                                     itemTable, itemCondition = nil, nil

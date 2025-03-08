@@ -1097,7 +1097,7 @@ return {
             RecipeName = "tcainrework:little_baggy",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {"minecraft:paper", "minecraft:paper", "minecraft:paper", "tcainrework:pill", "tcainrework:pill", "tcainrework:pill", "minecraft:paper", "minecraft:paper", "minecraft:paper", },
+            ConditionTable = {"minecraft:paper", "minecraft:paper", "minecraft:paper", "#tcainrework:pill", "#tcainrework:pill", "#tcainrework:pill", "minecraft:paper", "minecraft:paper", "minecraft:paper", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,

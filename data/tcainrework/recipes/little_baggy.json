@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "tcainrework:pill",
+    "#": "#tcainrework:pill",
     "-": "minecraft:paper"
   },
   "pattern": [

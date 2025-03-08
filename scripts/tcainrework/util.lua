@@ -61,10 +61,10 @@ end
 
 function Utility.generateCollectibleData(collectibleType, optionalCharge)
     -- try to obtain sprite if it exists
-    local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
-    local collectibleID = collectibleStorage.fastItemIDByName(collectibleType)
-    if collectibleID == -1 then
-        collectibleID = collectibleType 
+    local collectibleID = collectibleType
+    if type(collectibleID) == "string" then
+        local collectibleStorage = require("scripts.tcainrework.stored.collectible_storage_cache")
+        collectibleID = collectibleStorage.fastItemIDByName(collectibleType)
     end
     local itemConfig = Utility.getCollectibleConfig(collectibleID)
     if itemConfig then
