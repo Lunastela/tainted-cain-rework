@@ -11,16 +11,25 @@ local minecraftFont = {}
 minecraftFont.FontType = {
     DEFAULT = 1,
     ITALIC = 2,
-    BOLD = 3
+    BOLD = 3,
+    GALACTIC = 4
 }
 
 local fontType = minecraftFont.FontType
-minecraftFont.FontList = {
-    [fontType.DEFAULT] = Font(modPath .. "resources/font/minecraftseven.fnt"),
-    [fontType.ITALIC] = Font(modPath .. "resources/font/minecraftsevenitalic.fnt"),
-    [fontType.BOLD] = Font(modPath .. "resources/font/minecraftsevenbold.fnt")
+-- Create fonts (compatibility with non-repentogon)
+local defaultFont, italicFont, boldFont, galacticFont = Font(), Font(), Font(), Font()
+defaultFont:Load(modPath .. "resources/font/minecraftseven.fnt")
+italicFont:Load(modPath .. "resources/font/minecraftsevenitalic.fnt")
+boldFont:Load(modPath .. "resources/font/minecraftsevenbold.fnt")
+galacticFont:Load(modPath .. "resources/font/standardgalactic.fnt")
+
+local fontList = {
+    [fontType.DEFAULT] = defaultFont,
+    [fontType.ITALIC] = italicFont,
+    [fontType.BOLD] = boldFont,
+    [fontType.GALACTIC] = galacticFont
 }
-local defaultFont = minecraftFont.FontList[fontType.DEFAULT]
+local defaultFont = fontList[fontType.DEFAULT]
 
 minecraftFont.fontScale = 3
 function minecraftFont.GetStringWidth(minecraftFont, myString)
@@ -37,7 +46,8 @@ local fontSwitchCodes = {
     [""] = fontType.DEFAULT,
     ["l"] = fontType.BOLD, 
     ["o"] = fontType.ITALIC,
-    ["r"] = fontType.DEFAULT
+    ["r"] = fontType.DEFAULT,
+    ["g"] = fontType.GALACTIC
 }
 
 local function drawTextWrapper(font, myString, posX, posY, scaleX, scaleY, color, boxWidth, center) 
@@ -82,7 +92,7 @@ function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, R
                 substring.String = obfuscatedString
             end
             drawTextWrapper(
-                minecraftFont.FontList[textType],
+                fontList[textType],
                 substring.String, PositionX + xDisplacement, PositionY, 
                 1 / minecraftFont.fontScale, 1 / minecraftFont.fontScale, RenderColor, BoxWidth, Center
             )
@@ -90,7 +100,7 @@ function minecraftFont.DrawString(minecraftFont, String, PositionX, PositionY, R
         end
     else
         drawTextWrapper(
-            minecraftFont.FontList[textType],
+            fontList[textType],
             String, PositionX, PositionY, 
             1 / minecraftFont.fontScale, 1 / minecraftFont.fontScale, 
             RenderColor, BoxWidth, Center

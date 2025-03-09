@@ -1,12 +1,13 @@
 <AnimatedActor>
-	<Info CreatedBy="Unknown" CreatedOn="2/11/2025 3:47:50 PM" Version="9" Fps="30"/>
+	<Info CreatedBy="Unknown" CreatedOn="3/8/2025 2:21:02 AM" Version="10" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="craftinginterface.png" Id="0"/>
+			<Spritesheet Path="crafting_interface.png" Id="0"/>
 			<Spritesheet Path="recipe_book_ui.png" Id="1"/>
 			<Spritesheet Path="recipe_book_button.png" Id="2"/>
 			<Spritesheet Path="filter_elements.png" Id="3"/>
 			<Spritesheet Path="search_bar_highlight.png" Id="4"/>
+			<Spritesheet Path="enchanting_interface.png" Id="5"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="crafting" Id="0" SpritesheetId="0"/>
@@ -14,12 +15,13 @@
 			<Layer Name="recipe_book_button" Id="2" SpritesheetId="2"/>
 			<Layer Name="filter_elements" Id="3" SpritesheetId="3"/>
 			<Layer Name="search_bar_highlight" Id="4" SpritesheetId="4"/>
+			<Layer Name="enchanting" Id="5" SpritesheetId="5"/>
 		</Layers>
 		<Nulls/>
 		<Events/>
 	</Content>
-	<Animations DefaultAnimation="Idle">
-		<Animation Name="Idle" FrameNum="2" Loop="false">
+	<Animations DefaultAnimation="Crafting">
+		<Animation Name="Crafting" FrameNum="2" Loop="false">
 			<RootAnimation>
 				<Frame XPosition="0" YPosition="0" XScale="100" YScale="100" Delay="1" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
 			</RootAnimation>
@@ -34,6 +36,7 @@
 				</LayerAnimation>
 				<LayerAnimation LayerId="3" Visible="true"/>
 				<LayerAnimation LayerId="4" Visible="true"/>
+				<LayerAnimation LayerId="5" Visible="true"/>
 			</LayerAnimations>
 			<NullAnimations/>
 			<Triggers/>
@@ -56,6 +59,24 @@
 				</LayerAnimation>
 				<LayerAnimation LayerId="4" Visible="true">
 					<Frame XPosition="-34" YPosition="-70" XPivot="0" YPivot="0" XCrop="0" YCrop="0" Width="104" Height="16" XScale="100" YScale="100" Delay="1" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
+				</LayerAnimation>
+				<LayerAnimation LayerId="5" Visible="true"/>
+			</LayerAnimations>
+			<NullAnimations/>
+			<Triggers/>
+		</Animation>
+		<Animation Name="Enchanting" FrameNum="1" Loop="false">
+			<RootAnimation>
+				<Frame XPosition="0" YPosition="0" XScale="100" YScale="100" Delay="1" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
+			</RootAnimation>
+			<LayerAnimations>
+				<LayerAnimation LayerId="0" Visible="true"/>
+				<LayerAnimation LayerId="1" Visible="true"/>
+				<LayerAnimation LayerId="2" Visible="true"/>
+				<LayerAnimation LayerId="3" Visible="true"/>
+				<LayerAnimation LayerId="4" Visible="true"/>
+				<LayerAnimation LayerId="5" Visible="true">
+					<Frame XPosition="0" YPosition="0" XPivot="88" YPivot="83" XCrop="0" YCrop="0" Width="176" Height="166" XScale="100" YScale="100" Delay="1" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
 				</LayerAnimation>
 			</LayerAnimations>
 			<NullAnimations/>

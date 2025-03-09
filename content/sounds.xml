@@ -23,6 +23,17 @@
 	<sound name="Minecraft_Click">
 		<sample weight="1" path="ui/Click.wav" />
 	</sound>
+
+	<!-- Player -->
+	<sound name="Minecraft_Eat">
+		<sample weight="1" path="player/Eat1.wav" />
+		<sample weight="1" path="player/Eat2.wav" />
+		<sample weight="1" path="player/Eat3.wav" />
+	</sound>
+	<sound name="Minecraft_Burp">
+		<sample weight="1" path="player/Burp.wav" />
+	</sound>
+
 	<!-- Phantom Sounds -->
 	<sound name="Phantom_Idle">
 		<sample weight="1" path="phantom/idle1.wav" />

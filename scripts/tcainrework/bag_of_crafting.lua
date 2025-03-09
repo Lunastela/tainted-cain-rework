@@ -320,7 +320,7 @@ local function renderBagOfCrafting(player, offset)
                                 local tcainPickup = ((pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE)
                                     and (player:GetPlayerType() == PlayerType.PLAYER_CAIN_B))
                                 local itemTable, itemCondition = getEntityFromTable(entity, false, player)
-                                if tcainPickup then
+                                if tcainPickup or not canSalvageItem(entity.SubType) then
                                     itemTable, itemCondition = nil, nil
                                 end
                                 local ableToAddItem = itemTable and mod:AddItemToInventory(

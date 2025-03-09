@@ -81,10 +81,6 @@ function inventoryHelper.getItemRarity(pickup)
 end
 
 function inventoryHelper.getDefaultEnchanted(pickup)
-    if pickup.ComponentData
-    and pickup.ComponentData[InventoryItemComponentData.ENCHANTMENT_OVERRIDE] then
-        return pickup.ComponentData[InventoryItemComponentData.ENCHANTMENT_OVERRIDE]
-    end
     if itemRegistry[pickup.Type]
     and itemRegistry[pickup.Type].Enchanted then
         return itemRegistry[pickup.Type].Enchanted
@@ -274,20 +270,23 @@ end
 function inventoryHelper.getUnlockedInventory(setUnlocked)
     local runSave = unlockWrapper()
     if not runSave.inventoryUnlocked and setUnlocked then
-        local hasPressedKey = false
-        TCainRework:CreateToast(
-            InventoryToastTypes.TUTORIAL, 
-            nil, "gfx/ui/recipe_book.png", 
-            "Open your inventory", "Press §lI",
-            240,
-            function()
-                if Input.IsButtonTriggered(Keyboard.KEY_I, 0) then
-                    hasPressedKey = true 
+        local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+        if player then
+            local wasOpen = false
+            TCainRework:CreateToast(
+                InventoryToastTypes.TUTORIAL, 
+                nil, "gfx/ui/recipe_book.png", 
+                "Open your inventory", "Press §l" .. (((player.ControllerIndex > 0) and "RIGHT STICK") or "I"),
+                240,
+                function()
+                    if (TCainRework.getInventoryState() == InventoryStates.CRAFTING) then
+                        wasOpen = true
+                    end
+                    return wasOpen
                 end
-                return hasPressedKey
-            end
-        )
-        runSave.inventoryUnlocked = setUnlocked
+            )
+            runSave.inventoryUnlocked = setUnlocked
+        end
     end
     return runSave.inventoryUnlocked
 end
@@ -298,7 +297,7 @@ function inventoryHelper.getCollectibleCrafted(setUnlocked)
         TCainRework:CreateToast(
             InventoryToastTypes.TUTORIAL, 
             nil, "gfx/ui/right_click.png", 
-            "Consume a collectible", "Press §lRMB",
+            "Consume a collectible", "Hold §lRMB",
             240
         )
         runSave.collectibleCrafted = setUnlocked

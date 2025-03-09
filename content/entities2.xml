@@ -25,4 +25,20 @@
         numGridCollisionPoints="24">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
     </entity>
+    <!-- Enchanting Table -->
+    <entity anm2path="enchantment_table.anm2" 
+        baseHP="0" 
+        boss="0" 
+        champion="0" 
+        collisionDamage="0" 
+        collisionMass="3" 
+        collisionRadius="12" 
+        friction="1" 
+        id="6" 
+        name="Enchanting Table" 
+        numGridCollisionPoints="24" 
+        shadowSize="24" 
+        stageHP="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
 </entities>

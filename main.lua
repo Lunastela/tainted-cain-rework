@@ -223,6 +223,7 @@ end
     include("scripts.tcainrework.bag_of_crafting")
     include("scripts.tcainrework.item_entity")
     include("scripts.tcainrework.inventory")
+    include("scripts.tcainrework.birthright")
     include("scripts.tcainrework.toasts")
     include("scripts.tcainrework.commands")
     include("scripts.tcainrework.phantom")

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "B": "#tcainrework:bomb",
+    "C": "tcainrework:tarot_card{\"card_type\":12}",
+    "K": "#tcainrework:key",
+    "#": "minecraft:cobblestone"
+  },
+  "pattern": [
+    "#C#",
+    "K#K",
+    "#B#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Samson's Chains"
+  }
+}

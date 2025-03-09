@@ -2,13 +2,15 @@ InventoryTypes = {
     INVENTORY = "Inventory",
     HOTBAR = " ",
     CRAFTING = "Crafting",
-    OUTPUT = ""
+    OUTPUT = "",
+    ENCHANTING = "Enchant",
+    ENCHANTING_LAPIS = "  "
 }
 
 InventoryStates = {
-    CLOSED = 0,
-    PLAYER = 1,
-    CRAFTING = 2
+    CLOSED = "N/A",
+    CRAFTING = "Crafting",
+    ENCHANTING = "Enchanting",
 }
 
 InventoryItemRarity = {
@@ -22,7 +24,9 @@ InventoryItemRarity = {
     EFFECT_NEGATIVE = 7,
     DEBUG_TEXT = 8,
     TUTORIAL_PURPLE = 9,
-    INVERT_TEXT = 10
+    INVERT_TEXT = 10,
+    EXPERIENCE = 11,
+    EXPERIENCE_DISABLED = 12
 }
 
 InventoryItemRenderType = {
@@ -80,6 +84,16 @@ InventoryItemRarityColors = {
         Color = KColor(0, 0, 0, 1),
         Shadow = KColor(1, 1, 1, 1)
     },
+
+    -- Experience Costs
+    [InventoryItemRarity.EXPERIENCE] = {
+        Color = KColor(126 / 255, 252 / 255, 32 / 255, 1),
+        Shadow = KColor(32 / 255, 62 / 255, 8 / 255, 1)
+    },
+    [InventoryItemRarity.EXPERIENCE_DISABLED] = {
+        Color = KColor(63 / 255, 125 / 255, 16 / 255, 1),
+        Shadow = KColor(16 / 255, 31 / 255, 4 / 255, 1)
+    },
 }
 
 InventoryItemComponentData = {
@@ -89,10 +103,10 @@ InventoryItemComponentData = {
     CUSTOM_DESC = "custom_desc",
     CARD_TYPE = "card_type",
     CUSTOM_NAME = "custom_name",
+    ENCHANTMENTS = "enchantments",
     COLLECTIBLE_ITEM = "collectible_item",
     COLLECTIBLE_CHARGES = "collectible_charges",
     COLLECTIBLE_USED_BEFORE = "collectible_used_before",
-    ENCHANTMENT_OVERRIDE = "enchanted",
 }
 
 InventoryToastTypes = {

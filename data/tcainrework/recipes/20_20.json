@@ -3,7 +3,7 @@
   "category": "collectible",
   "key": {
     "#": "Lost Contact",
-    "s": "minecraft:stick",
+    "s": "minecraft:paper",
     "B": "#book"
   },
   "pattern": [

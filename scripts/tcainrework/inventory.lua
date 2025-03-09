@@ -6,6 +6,7 @@ local inventoryHelper = mod.inventoryHelper
 local minecraftFont = include("scripts.tcainrework.font")
 local saveManager = require("scripts.save_manager")
 local utility = require("scripts.tcainrework.util")
+local enchantingUI = include("scripts.tcainrework.enchanting.enchanting_ui")
 
 -- Hide Bag of Crafting Inventory
 mod:AddCallback(ModCallbacks.MC_HUD_RENDER, function(_)
@@ -19,10 +20,15 @@ mod:AddCallback(ModCallbacks.MC_HUD_RENDER, function(_)
 end)
 
 -- Inventory Rendering
-local craftingInterface = Sprite()
-craftingInterface:Load("gfx/ui/craftinginterface.anm2", true)
-craftingInterface:Play("Idle", true)
-craftingInterface.PlaybackSpeed = 0
+local userInterface = Sprite()
+userInterface:Load("gfx/ui/ui_elements.anm2", true)
+userInterface:Play("Crafting", true)
+userInterface.PlaybackSpeed = 0
+
+local enchantmentElements = Sprite()
+enchantmentElements:Load("gfx/ui/enchanting_ui_elements.anm2")
+enchantmentElements:Play("Tab")
+enchantmentElements.PlaybackSpeed = 0
 
 local recipeBookUI = Sprite()
 recipeBookUI:Load("gfx/ui/recipe_book_ui.anm2", true)
@@ -80,6 +86,17 @@ end
 
 local activeInventories
 local inventoryState = InventoryStates.CLOSED
+
+function mod.setInventoryState(newState)
+    inventoryState = newState
+end
+
+function mod.getInventoryState()
+    return inventoryState
+end
+
+local eatTimer, breakTimer, eatParticles = -1, 0, {}
+
 local curDisplayingRecipe = nil
 local CELL_SIZE = 18
 
@@ -194,12 +211,12 @@ local function inventoryShiftClick(inventorySet, itemInventory, itemIndex)
     local slotsAvailable = true
     local currentItem = itemInventory[itemIndex]
     while (slotsAvailable and currentItem.Count > 0) do
-        -- prioritize shift clicking into the crafting table because fuck you
+        -- prioritize shift clicking into the topmost inventory
         local firstFreeSlot, foundInventory
-        local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
+        local topmostInventory = inventorySet[1]
         if inventoryHelper.isValidInventory(itemInventory) 
-        and craftingInventory and itemInventory ~= craftingInventory then
-            local invFreeSlot = inventoryHelper.searchForFreeSlot({craftingInventory}, currentItem)
+        and topmostInventory and itemInventory ~= topmostInventory then
+            local invFreeSlot = inventoryHelper.searchForFreeSlot({topmostInventory}, currentItem)
             if invFreeSlot and invFreeSlot.Slot then
                 firstFreeSlot, foundInventory = invFreeSlot.Slot, invFreeSlot.Inventory
                 cancelRecipeOverlay = true
@@ -440,7 +457,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
             end
             if inventory[itemIndex] then
                 local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
-                if player and (inputHelper.buttonHeldSticky(((player.ControllerIndex > 0) and Controller.CIRCLE) or Keyboard.KEY_Q, player.ControllerIndex)) then
+                if player and (inputHelper.buttonHeldSticky(Keyboard.KEY_Q, player.ControllerIndex)) then
                     local itemType, componentData = inventory[itemIndex].Type, inventory[itemIndex].ComponentData
                     local amountRemoved = inventoryHelper.removePossibleAmount(inventory, itemIndex, 
                         (inputHelper.isControlHeld() and 64) or 1
@@ -550,6 +567,19 @@ local function getInventories()
                 finalizeOutputs()
             end,
         true)
+
+        inventoryHelper.createInventory(1, 1, InventoryTypes.ENCHANTING, 
+            function(i, j, inventory, gridAlignedTextX, gridAlignedTextY, lmbTrigger, rmbTrigger, lmbRelease, rmbRelease)
+                local inventoryPosition = Vector(gridAlignedTextX - (CELL_SIZE * 4) + 8, gridAlignedTextY - (CELL_SIZE + 6))
+                RenderInventorySlot(inventoryPosition, inventory, 1, lmbTrigger, rmbTrigger, lmbRelease, rmbRelease, nil)
+            end
+        )
+        inventoryHelper.createInventory(1, 1, InventoryTypes.ENCHANTING_LAPIS, 
+            function(i, j, inventory, gridAlignedTextX, gridAlignedTextY, lmbTrigger, rmbTrigger, lmbRelease, rmbRelease)
+                local inventoryPosition = Vector(gridAlignedTextX - (CELL_SIZE * 3) + 10, gridAlignedTextY - (CELL_SIZE + 6))
+                RenderInventorySlot(inventoryPosition, inventory, 1, lmbTrigger, rmbTrigger, lmbRelease, rmbRelease, nil)
+            end,
+        true)
         inventoriesGenerated = true
     end
 
@@ -557,6 +587,12 @@ local function getInventories()
         [InventoryStates.CRAFTING] = {
             inventoryHelper.getInventory(InventoryTypes.CRAFTING), 
             inventoryHelper.getInventory(InventoryTypes.OUTPUT), 
+            inventoryHelper.getInventory(InventoryTypes.INVENTORY), 
+            inventoryHelper.getInventory(InventoryTypes.HOTBAR)
+        },
+        [InventoryStates.ENCHANTING] = {
+            inventoryHelper.getInventory(InventoryTypes.ENCHANTING),
+            inventoryHelper.getInventory(InventoryTypes.ENCHANTING_LAPIS),
             inventoryHelper.getInventory(InventoryTypes.INVENTORY), 
             inventoryHelper.getInventory(InventoryTypes.HOTBAR)
         }
@@ -785,6 +821,47 @@ local cellAnimationScales = {
     defaultScale
 }
 
+local function playerAddCollectible(player, collectibleType, configItem, hotbarInventory)
+    local lastActiveItem, lastActiveCharges = player:GetActiveItem(ActiveSlot.SLOT_PRIMARY), 
+        (player:GetActiveCharge(ActiveSlot.SLOT_PRIMARY) + player:GetBatteryCharge(ActiveSlot.SLOT_PRIMARY))
+    if lastActiveItem ~= 0 and (configItem.Type == ItemType.ITEM_ACTIVE) then
+        player:RemoveCollectible(lastActiveItem, true, ActiveSlot.SLOT_PRIMARY, true)
+    end
+    player:AddCollectible(
+        collectibleType, 
+        hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES], 
+        not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE]),
+        ActiveSlot.SLOT_PRIMARY
+    )
+    SFXManager():Play(SoundEffect.SOUND_POWERUP_SPEWER)
+    Isaac.CreateTimer(function(_) 
+        -- show custom birthright text (not working otherwise for now)
+        if collectibleType == CollectibleType.COLLECTIBLE_BIRTHRIGHT 
+        and player:GetPlayerType() == PlayerType.PLAYER_CAIN_B then
+            Game():GetHUD():ShowItemText(
+                utility.getLocalizedString("Items", configItem.Name, true), 
+                utility.getCustomLocalizedString("items.isaac.birthright.desc", "The Power of Books"),
+                false, false
+            )
+        else
+            Game():GetHUD():ShowItemText(player, configItem, false)
+        end
+    end, 1, 1, true)
+    inventoryHelper.removePossibleAmount(hotbarInventory, hotbarSlotSelected, 1)
+    if lastActiveItem ~= 0 and (configItem.Type == ItemType.ITEM_ACTIVE) then
+        hotbarInventory[hotbarSlotSelected] = {
+            Type = "tcainrework:collectible",
+            Count = 1,
+            ComponentData = {
+                [InventoryItemComponentData.COLLECTIBLE_ITEM] = lastActiveItem,
+                [InventoryItemComponentData.COLLECTIBLE_CHARGES] = lastActiveCharges,
+                [InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] = true
+            }
+        }
+    end
+    inventoryHelper.recipeCraftableDirty = true
+end
+
 local lastItemName, slotTimer = "", 0
 function mod:RenderInventory()
     if EID then
@@ -815,6 +892,7 @@ function mod:RenderInventory()
         -- Update Hotbar Selection
         local inventoryClosed = (not (Game():IsPaused() or DeadSeaScrollsMenu:IsOpen())) and (inventoryState == InventoryStates.CLOSED)
         if inventoryClosed then
+            local lastHotbarSlot = hotbarSlotSelected
             for i = 1, 10 do 
                 local hotbarPosition = screenCenter + Vector(CELL_SIZE - 6, (Isaac.GetScreenHeight() / 2)) 
                     - Vector((hotbarCellSize * 5) - ((i - 1) * hotbarCellSize), hotbarCellSize - 1)
@@ -827,11 +905,25 @@ function mod:RenderInventory()
                 end
             end
             -- Mouse Wheel Scrolling
-            hotbarSlotSelected = hotbarSlotSelected - Input:GetMouseWheel().Y
+            if player and player.ControllerIndex > 0 then
+                local leftBumperSticky, rightBumperSticky = inputHelper.buttonHeldSticky(Controller.LEFT_BUMPER, player.ControllerIndex),
+                    inputHelper.buttonHeldSticky(Controller.RIGHT_BUMPER, player.ControllerIndex)
+                if Input.IsActionPressed(ButtonAction.ACTION_DROP, player.ControllerIndex) then
+                    hotbarSlotSelected = hotbarSlotSelected - (((leftBumperSticky and 1) or 0)
+                        - ((rightBumperSticky and 1) or 0))
+                end
+            else
+                hotbarSlotSelected = hotbarSlotSelected - Input:GetMouseWheel().Y
+            end
+
             if hotbarSlotSelected <= 0 then
                 hotbarSlotSelected = 9
             elseif hotbarSlotSelected > 9 then
                 hotbarSlotSelected = 1
+            end
+
+            if lastHotbarSlot ~= hotbarSlotSelected then
+                eatTimer = -1
             end
         end
         ::continueHotbar::
@@ -898,9 +990,12 @@ function mod:RenderInventory()
 
         -- local currentTime = Isaac.GetTime()
         if (not Game():IsPaused()) and player then
-            if (not searchBarSelected) and (Input.IsButtonTriggered(Keyboard.KEY_I, 0) or Input.IsButtonTriggered(Controller.RSTICK_PRESS, player.ControllerIndex))
+            if (not searchBarSelected) 
+            and (Input.IsButtonTriggered(Keyboard.KEY_I, 0) 
+            or (player.ControllerIndex > 0 and (Input.IsButtonTriggered(Controller.RSTICK_PRESS, player.ControllerIndex)
+            or (inventoryState ~= InventoryStates.CLOSED and Input.IsButtonTriggered(Controller.CIRCLE, player.ControllerIndex)))))
             and (not (DeadSeaScrollsMenu and DeadSeaScrollsMenu:IsOpen()))  then
-                inventoryState = ((inventoryState == InventoryStates.CRAFTING) and InventoryStates.CLOSED) or InventoryStates.CRAFTING
+                inventoryState = ((inventoryState ~= InventoryStates.CLOSED) and InventoryStates.CLOSED) or InventoryStates.CRAFTING
             end
 
             if cursorGatherAll > 0 then
@@ -919,17 +1014,17 @@ function mod:RenderInventory()
                 blackBG:Render(Vector.Zero)
 
                 local inventorySet = activeInventories[inventoryState]
-                local recipeBookOpen = inventoryHelper.getRecipeBookOpen() 
                 -- recipe book icon
-                craftingInterface:SetFrame("Idle", 0)
-                local buttonLayer = craftingInterface:GetLayerFrameData(2)
+                userInterface:SetFrame(inventoryState, 0)
+                local buttonLayer = userInterface:GetLayerFrameData(2)
+                local regularCrafting = (not inventoryHelper.isClassicCrafting()) and (inventoryState == InventoryStates.CRAFTING)
+                local recipeBookOpen = regularCrafting and inventoryHelper.getRecipeBookOpen() 
                 if buttonLayer then
-                    local regularCrafting = not inventoryHelper.isClassicCrafting()
-                    craftingInterface:GetLayer(2):SetVisible(regularCrafting)
+                    userInterface:GetLayer(2):SetVisible(regularCrafting)
                     if regularCrafting then
                         local buttonPosition = screenCenter + (Vector((recipeBookOpen and (inventorySize.X / 2)) or 0, 0) + (buttonLayer:GetPos()))
                         if inputHelper.hoveringOver(buttonPosition, 20, 20) then
-                            craftingInterface:SetFrame("Idle", 1)
+                            userInterface:SetFrame(inventoryState, 1)
                             if lmbTrigger then
                                 recipeBookOpen = inventoryHelper.setRecipeBookOpen(not recipeBookOpen)
                                 SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
@@ -939,7 +1034,7 @@ function mod:RenderInventory()
                 end
                 screenCenter.X = screenCenter.X + ((recipeBookOpen and (inventorySize.X / 2)) or 0)
 
-                craftingInterface:Render(screenCenter)
+                userInterface:Render(screenCenter)
 
                 -- Inventory Text Rendering
                 local gridAlignedTextX = screenCenter.X - (CELL_SIZE / 2)
@@ -953,8 +1048,12 @@ function mod:RenderInventory()
                 -- Secondary Inventories Rendering
                 for i, inventory in ipairs(inventorySet) do
                     if inventory ~= inventoryHelper.getInventory(InventoryTypes.INVENTORY) then
-                        minecraftFont:DrawString(inventoryHelper.getInventoryName(inventory), gridAlignedTextX - (CELL_SIZE * 3) + 4, 
-                            gridAlignedTextY - (CELL_SIZE * 4) + 6, craftingFontColor, 0, false)
+                        local textOffset = Vector.Zero
+                        if inventory == inventoryHelper.getInventory(InventoryTypes.ENCHANTING) then
+                            textOffset.X = textOffset.X - 21
+                        end
+                        minecraftFont:DrawString(inventoryHelper.getInventoryName(inventory), gridAlignedTextX - (CELL_SIZE * 3) + 4 + textOffset.X, 
+                            gridAlignedTextY - (CELL_SIZE * 4) + 6 + textOffset.Y, craftingFontColor, 0, false)
                     end
                 end
 
@@ -976,9 +1075,9 @@ function mod:RenderInventory()
                     local recipeBookPosition = screenCenter - Vector(inventorySize.X, 0)
                     local hoveringOver = false
                     local recipeBookFilter = inventoryHelper.getRecipeBookFilter()
-                    craftingInterface:SetFrame("Recipe", 0)
+                    userInterface:SetFrame("Recipe", 0)
                     -- Filter Recipes by whether or not they can be crafted
-                    local filterLayer = craftingInterface:GetLayerFrameData(3)
+                    local filterLayer = userInterface:GetLayerFrameData(3)
                     if filterLayer then
                         local filterPosition = recipeBookPosition + (filterLayer:GetPos())
                         hoveringOver = inputHelper.hoveringOver(filterPosition, 26, 16)
@@ -989,14 +1088,14 @@ function mod:RenderInventory()
                             inventoryHelper.recipeCraftableDirty = true
                         end
                     end
-                    local searchLayer = craftingInterface:GetLayer("search_bar_highlight")
+                    local searchLayer = userInterface:GetLayer("search_bar_highlight")
                     if searchLayer then
                         searchLayer:SetVisible(searchBarSelected)
                     end
                     
                     local recipeBookFrame = ((recipeBookFilter and 1 or 0) * 2) + (hoveringOver and 1 or 0)
-                    craftingInterface:SetFrame("Recipe", recipeBookFrame)
-                    craftingInterface:Render(recipeBookPosition)
+                    userInterface:SetFrame("Recipe", recipeBookFrame)
+                    userInterface:Render(recipeBookPosition)
 
                     -- Search bar for recipes
                     local searchPosition = recipeBookPosition + Vector(-34, -70)
@@ -1273,6 +1372,67 @@ function mod:RenderInventory()
                     resetRecipeBook()
                 end
 
+                -- enchanting UI
+                if (inventoryState == InventoryStates.ENCHANTING) then
+                    local enchantmentTooltip = {}
+                    local maxEnchantTabs, enchantWordDisplacement = 3, 1
+                    local elementHeight = 19
+                    local displayEnchantments = enchantingUI.canEnchant(inventoryHelper.getInventory(InventoryTypes.ENCHANTING)[1])
+                    for i = 1, maxEnchantTabs do
+                        local canChooseEnchantment = i < maxEnchantTabs
+                        local enchantAnimationDisplace = ((displayEnchantments and canChooseEnchantment) and 1) or 0
+                        local positionElement = Vector(28, 69 - ((i - 1) * elementHeight))
+                        local selectedColor = enchantingUI.MainColor
+                        enchantmentElements:SetFrame("Tab", enchantAnimationDisplace)
+                        local isHoveringEnchantment = displayEnchantments and inputHelper.hoveringOver(screenCenter - positionElement, 108, elementHeight)
+                        if isHoveringEnchantment then
+                            if canChooseEnchantment then
+                                enchantmentElements:SetFrame("Tab", 2)
+                                selectedColor = enchantingUI.SelectedColor
+                            end
+                        end
+                        enchantmentElements:Render(screenCenter - positionElement)
+                        if displayEnchantments then
+                            enchantmentElements:SetFrame("Cost", ((maxEnchantTabs + i) - 1) - (maxEnchantTabs * enchantAnimationDisplace))
+                            positionElement.X = positionElement.X + 1
+                            enchantmentElements:Render(screenCenter - positionElement)
+                            
+                            -- Render standard galactic text
+                            local textPosition = (screenCenter - positionElement) + (Vector.One * 2)
+                            local enchantWords, wordDisplacement = enchantingUI.getEnchantWords(i + enchantWordDisplacement)
+                            enchantWordDisplacement = enchantWordDisplacement + wordDisplacement
+                            minecraftFont:DrawString(
+                                "§g" .. enchantWords, 
+                                textPosition.X + ((1 / minecraftFont.fontScale) + 19), textPosition.Y, 
+                                (canChooseEnchantment and selectedColor) or enchantingUI.SubColor, 0, false, true
+                            )
+                            local enchantmentCost, enchantmentName = enchantingUI.getEnchantment(i)
+                            local enchantCostString = tostring(enchantmentCost)
+                            inventoryHelper.renderMinecraftText(
+                                enchantCostString, 
+                                textPosition + Vector(
+                                    105 - minecraftFont:GetStringWidth(enchantCostString), 
+                                    elementHeight - (minecraftFont:GetLineHeight() + 4)
+                                ), 
+                                (canChooseEnchantment and InventoryItemRarity.EXPERIENCE) 
+                                or InventoryItemRarity.EXPERIENCE_DISABLED, true, false
+                            )
+                            if isHoveringEnchantment then
+                                table.insert(enchantmentTooltip, {
+                                    String = enchantmentName .. " . . . ?",
+                                    Rarity = (canChooseEnchantment and InventoryItemRarity.COMMON) 
+                                        or InventoryItemRarity.SUBTEXT
+                                })
+                                table.insert(enchantmentTooltip, {String = "", Rarity = InventoryItemRarity.COMMON})
+                                table.insert(enchantmentTooltip, {String = "Level Requirement: " .. enchantCostString, Rarity = InventoryItemRarity.EFFECT_NEGATIVE})
+                            end
+                        end
+                    end
+                    if #enchantmentTooltip > 0 then
+                        inventoryHelper.renderTooltip(mousePosition, enchantmentTooltip)
+                    end
+                end
+
                 if cursorHeldItem then
                     RenderInventorySlot(mousePosition - Vector.One * 8, nil, 1, lmbTrigger, rmbTrigger, lmbRelease, rmbRelease, cursorHeldItem)
                     -- Handle Snaking for next frame
@@ -1387,42 +1547,70 @@ function mod:RenderInventory()
                     and inventoryHelper.getItemUnlocked(hotbarInventory[hotbarSlotSelected]) then
                         local collectibleType = hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
                         -- Well aware this doesn't work with multiplayer. won't fix yet
-                        if rmbTrigger and player and player:IsItemQueueEmpty() then
-                            player:AnimateCollectible(collectibleType)
-                            local lastActiveItem, lastActiveCharges = player:GetActiveItem(ActiveSlot.SLOT_PRIMARY), 
-                                (player:GetActiveCharge(ActiveSlot.SLOT_PRIMARY) + player:GetBatteryCharge(ActiveSlot.SLOT_PRIMARY))
+                        if inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_2) and player and player:IsItemQueueEmpty() then
                             local configItem = Isaac.GetItemConfig():GetCollectible(collectibleType)
-                            if lastActiveItem ~= 0 and (configItem.Type == ItemType.ITEM_ACTIVE) then
-                                player:RemoveCollectible(lastActiveItem, true, ActiveSlot.SLOT_PRIMARY, true)
+                            local isActiveItem = (configItem.Type == ItemType.ITEM_ACTIVE)
+                            if isActiveItem then
+                                if rmbTrigger then
+                                    player:AnimateCollectible(collectibleType)
+                                    playerAddCollectible(player, collectibleType, configItem, hotbarInventory)
+                                end
+                            elseif breakTimer <= 0 then
+                                if eatTimer <= -1 then
+                                    eatTimer = 80
+                                end
+                                eatTimer = eatTimer - 1
+                                if eatTimer % 12 == 0 then
+                                    SFXManager():Play(
+                                        Isaac.GetSoundIdByName("Minecraft_Eat"), 
+                                        (math.random(1, 3) / 2), 2, false, 
+                                        (math.random(8, 12) / 10), 0
+                                    )
+
+                                    if not eatParticles[GetPtrHash(player)] then
+                                        eatParticles[GetPtrHash(player)] = {}
+                                    end
+                                    for i = 1, math.random(3, 5) do
+                                        local particleSprite = Sprite()
+                                        particleSprite:Load("gfx/itemanimation.anm2")
+                                        particleSprite:ReplaceSpritesheet(0, configItem.GfxFileName)
+                                        particleSprite:LoadGraphics()
+                                        particleSprite:Play("Idle")
+
+                                        local bitSize = math.random(5, 10)
+                                        local clipPosition = Vector(
+                                            math.random(0, 32 - bitSize), 
+                                            math.random(0, 32 - bitSize)
+                                        )
+                                        local particleEffect = {
+                                            Position = player.Position + (RandomVector() * math.random(1, 4)) / 8,
+                                            Sprite = particleSprite,
+                                            ClipPosition = clipPosition,
+                                            ClipSize = bitSize,
+                                            Velocity = Vector(math.random(-10, 10) / 10, (math.random(-9, -3) / 2)),
+                                            Life = math.random(15, 35)
+                                        }
+                                        table.insert(eatParticles[GetPtrHash(player)], particleEffect)
+                                    end
+                                end
+                                if eatTimer <= 0 then
+                                    playerAddCollectible(player, collectibleType, configItem, hotbarInventory)
+                                    SFXManager():Play(
+                                        Isaac.GetSoundIdByName("Minecraft_Burp"), 
+                                        0.5, 2, false, 
+                                        (math.random(90, 100) / 100), 0
+                                    )
+                                    eatTimer = -1
+                                    breakTimer = 32
+                                end
                             end
-                            player:AddCollectible(
-                                collectibleType, 
-                                hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES], 
-                                not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE]),
-                                ActiveSlot.SLOT_PRIMARY
-                            )
-                            -- print('first time taking active?:', not (hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] ~= nil))
-                            SFXManager():Play(SoundEffect.SOUND_POWERUP_SPEWER)
-                            Isaac.CreateTimer(function(_) 
-                                Game():GetHUD():ShowItemText(player, configItem)
-                            end, 1, 1, true)
-                            inventoryHelper.removePossibleAmount(hotbarInventory, hotbarSlotSelected, 1)
-                            if lastActiveItem ~= 0 and (configItem.Type == ItemType.ITEM_ACTIVE) then
-                                hotbarInventory[hotbarSlotSelected] = {
-                                    Type = "tcainrework:collectible",
-                                    Count = 1,
-                                    ComponentData = {
-                                        [InventoryItemComponentData.COLLECTIBLE_ITEM] = lastActiveItem,
-                                        [InventoryItemComponentData.COLLECTIBLE_CHARGES] = lastActiveCharges,
-                                        [InventoryItemComponentData.COLLECTIBLE_USED_BEFORE] = true
-                                    }
-                                }
-                            end
-                            inventoryHelper.recipeCraftableDirty = true
+                        elseif not inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_2) then
+                            eatTimer = -1
                         end
                     end
                 end
             end
+            breakTimer = math.max(breakTimer - 1, 0)
 
             inputHelper.Update(
                 ((not (Game():IsPaused() or DeadSeaScrollsMenu:IsOpen()) 
@@ -1432,6 +1620,29 @@ function mod:RenderInventory()
         end
     end
 end
+
+mod:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, function(_, player, offset)
+    if eatParticles[GetPtrHash(player)] then
+        local toRemove = {}
+        local reflection = Game():GetRoom():GetRenderMode() == RenderMode.RENDER_WATER_REFLECT
+        for i, particle in pairs(eatParticles[GetPtrHash(player)]) do
+            local particleSprite = particle.Sprite
+            particleSprite:Render(
+                Isaac.WorldToScreen(particle.Position) + offset, 
+                particle.ClipPosition, 
+                (Vector.One * 32) - (particle.ClipPosition + Vector(particle.ClipSize, particle.ClipSize))
+            )
+            if not reflection then
+                particle.Position = particle.Position + particle.Velocity
+                particle.Velocity.Y = particle.Velocity.Y + 0.25
+                particle.Life = particle.Life - 1
+                if particle.Life <= 0 then
+                    eatParticles[GetPtrHash(player)][i] = nil
+                end
+            end
+        end
+    end
+end)
 
 if StageAPI and StageAPI.Loaded then
     StageAPI.UnregisterCallbacks("CainCraftingTable")
@@ -1508,12 +1719,25 @@ local excludeDisable = {
     [ButtonAction.ACTION_MENUBACK] = true
 }
 
+local rubberBandFrame = false
 mod:AddCallback(ModCallbacks.MC_INPUT_ACTION, function(_, entity, inputHook, buttonAction)
-    if inventoryState ~= InventoryStates.CLOSED
-    and inputHook ~= InputHook.GET_ACTION_VALUE then
-        if (buttonAction < ButtonAction.ACTION_PAUSE)
-        or searchBarSelected and not excludeDisable[buttonAction] then
-            return false
+    if inputHook ~= InputHook.GET_ACTION_VALUE then
+        local player = entity and entity:ToPlayer()
+        if inventoryState ~= InventoryStates.CLOSED then
+            if (buttonAction < ButtonAction.ACTION_PAUSE)
+            or searchBarSelected and not excludeDisable[buttonAction] then
+                return false
+            end
+        elseif player and player.ControllerIndex > 0 then
+            if Input.IsActionPressed(ButtonAction.ACTION_DROP, player.ControllerIndex)
+            and ((buttonAction == ButtonAction.ACTION_BOMB) or (buttonAction == ButtonAction.ACTION_PILLCARD)) then
+                rubberBandFrame = false
+                return false
+            elseif (buttonAction == ButtonAction.ACTION_DROP) 
+            and (Input.IsActionPressed(ButtonAction.ACTION_BOMB, player.ControllerIndex)
+            or Input.IsActionPressed(ButtonAction.ACTION_PILLCARD, player.ControllerIndex)) then
+                return false
+            end
         end
     end
 end)

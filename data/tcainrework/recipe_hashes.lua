@@ -110,7 +110,7 @@ return {
             RecipeName = "tcainrework:20_20",
             Category = "collectible",
             RecipeSize = Vector(3, 2),
-            ConditionTable = {"Lost Contact", "minecraft:stick", "Lost Contact", nil, "#book", nil, },
+            ConditionTable = {"Lost Contact", "minecraft:paper", "Lost Contact", nil, "#book", nil, },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
@@ -1218,6 +1218,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Rock Bottom"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:samsons_chains",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:cobblestone", "tcainrework:tarot_card{\"card_type\":12}", "minecraft:cobblestone", "#tcainrework:key", "minecraft:cobblestone", "#tcainrework:key", "minecraft:cobblestone", "#tcainrework:bomb", "minecraft:cobblestone", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Samson's Chains"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
