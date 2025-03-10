@@ -2,6 +2,10 @@
 local mod = RegisterMod("CainCraftingTable", 1)
 TCainRework = mod
 
+function mod.hasREPENTOGON()
+    return REPENTOGON
+end
+
 local saveManager = require("scripts.save_manager")
 saveManager.Init(mod)
 
@@ -13,10 +17,6 @@ mod.inventoryHelper = include("scripts.tcainrework.inventory.inventory_helper")
 local inventoryHelper = mod.inventoryHelper
 
 include("scripts.tcainrework.dss.dead_sea_scrolls")
-
-function mod.hasREPENTOGON()
-    return REPENTOGON
-end
 
 function mod:displayWarning()
     for i = 1, Game():GetNumPlayers() do
@@ -31,7 +31,7 @@ if not mod.hasREPENTOGON() then
     mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, mod.displayWarning)
 end
 
--- if mod.hasREPENTOGON() then
+if mod.hasREPENTOGON() then
     -- Render Scale Options
     if Options.MaxRenderScale <= 3 then
         Options.MaxRenderScale = 3
@@ -229,4 +229,4 @@ end
     include("scripts.tcainrework.phantom")
     include("scripts.tcainrework.tweaks")
     -- include("scripts.tcainrework.dss.player")
--- end
+end

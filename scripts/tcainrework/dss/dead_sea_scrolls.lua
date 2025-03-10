@@ -110,7 +110,9 @@ backgroundSprite.Scale = Vector.One / 2
 local blackBG = Sprite()
 blackBG:Load("gfx/ui/blackbg.anm2", true)
 blackBG:Play("Idle", true)
-blackBG:GetLayer(0):GetBlendMode():SetMode(BlendType.MULTIPLICATIVE)
+if REPENTOGON then
+    blackBG:GetLayer(0):GetBlendMode():SetMode(BlendType.MULTIPLICATIVE)
+end
 
 local sliderSprite = Sprite()
 sliderSprite:Load("gfx/ui/blackbg.anm2", true)
@@ -193,6 +195,18 @@ local stringTable = {
     ["Fabulous"] = "§oFabulous!",
     ["do not drop pickups"] = "Keep inventory after death"
 }
+
+if not REPENTOGON then
+    -- don't feel too good about redefining this but apparently
+    -- it just breaks otherwise so
+    MouseButton = {
+        LEFT = 0,
+        RIGHT = 1,
+        SCROLLWHEEL = 2,
+        BACK = 3,
+        FORWARD = 4,
+    }
+end
 
 local selectedOption = nil
 local inputHelper = include("scripts.tcainrework.input_helper")
@@ -285,7 +299,7 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
 
         -- Render top and bottom gradients
         blackGradient:Render(topPosition)
-        blackGradient.Scale.Y = -blackGradient.Scale.Y
+        blackGradient.Scale = Vector(blackGradient.Scale.X, -blackGradient.Scale.Y)
         blackGradient:Render(bottomPosition)
 
         -- Render top and bottom strips
@@ -325,8 +339,10 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                 if scrollSelected and lastMousePosition then
                     scrollAmount = scrollAmount + (mousePosition - lastMousePosition).Y / endScreenDistance
                 end
-                -- honestly menu scrolling in minecraft is pretty shitty with the mouse wheel so who cares?
-                scrollAmount = scrollAmount - ((Input.GetMouseWheel().Y * 8) / endScreenDistance)
+                if REPENTOGON then
+                    -- honestly menu scrolling in minecraft is pretty shitty with the mouse wheel so who cares?
+                    scrollAmount = scrollAmount - ((Input.GetMouseWheel().Y * 8) / endScreenDistance)
+                end
             end
             scrollAmount = math.min(math.max(scrollAmount, 0), 1)
         end
@@ -424,159 +440,16 @@ IMPORTANT NOTICE:
 Tainted Cain Rework requires 
 REPENTOGON.
 
-REPENTOGON makes a lot of 
-really cool things possible, 
-like shaders for enchantment 
-glints and 3d block models.
+Without REPENTOGON, it is impossible 
+to do many of the things 
+Tainted Cain Rework achieves.
 
-If you would like to experience 
-this mod to it's fullest potential, 
-then please use REPENTOGON!
-I promise you, it will not disappoint!
+Please consider installing it at 
+https://repentogon.com/
 
-Otherwise, stability cannot be 
-promised, as a lot of things 
-are impossible without it.
-]==],
-[==[
-IMPORTANT NOTICE:
-
-Tainted Cain Rework requires 
-REPENTOGON.
-
-bla bla bla bla bla repentogon
-repentogon bla bla bla bla bla 
-bla bla bla shaders bla bla 
-bla bla bla 3d blocks
-
-something something blah bla
-blah bla blah bla blah bla
-
-blah bla blah bla blah bla
-what are you still doing here
-please install repentogon or 
-i will be really sad
-]==],
-[==[
-IMPORTANT NOTICE:
-
-Tainted Cain Rework requires 
-REPENTOGON.
-
-please?
-]==],
-[==[
-Listen, I know this is really annoying. 
-You can make it go away if you just 
-install REPENTOGON. 
-
-Please?
-
-
-...
-
-
-...
-
-
-...
-
-
-Please???
-]==],
-[==[
-IMPORTANT NOTICE:
-
-How are you still playing this mod
-and enjoying it without REPENTOGON?
-shouldn't it be completely broken?
-]==],
-[==[
-IMPORTANT NOTICE:
-
-okay, if you're still playing
-without repentogon, I think you're
-just trying to get a kick out of me
-that's pretty mean :(
-]==],
-[==[
-IMPORTANT NOTICE:
-
-Spongebob, if I were trapped at the 
-bottom of a well for three years, 
-with nothing to eat but REPENTOGON, 
-I'd eat my own legs first! 
-]==],
-[==[
-IMPORTANT NOTICE:
-
-listen i appreciate your dedication
-but your win streak probably doesn't
-]==],
-[==[
-IMPORTANT NOTICE:
-
-would it help if I gave you an item
-to start with or something? 
-as incentive?
-]==],
-[==[
-IMPORTANT NOTICE:
-
-would it help if I gave you an item
-to start with or something? 
-as incentive?
-]==],
-[==[
-IMPORTANT NOTICE:
-
-please repentogon
-]==],
-[==[
-IMPORTANT NOTICE:
-
-please repentogon please repentogon
-please repentogonplease repentogon
-]==],
-[==[
-IMPORTANT NOTICE:
-
-please please please please please please please
-]==],
-[==[
-IMPORTANT NOTICE:
-pleaserepentogon please repentogon please repentogon pleaserepentogon
-pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
-please repentogon please repentogon pleaserepentogonpleaserepentogon
-pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
-pleaserepentogon please repentogon pleaser epentogonpleaserepentogon
-pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
-pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
-pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
-pleaserepentogon please repentogon pleaserepentogonple aserepentogon
-pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
-pleaserepentogon please repentogon pleaserepentogonpleaserepentogon
-pleaserepentogon please repentogon plea serepentogonpleaserepentogon
-plea serepentogon please repentogon pleaserepentogonpleaserepentogon
-pleaserepentogon please repentogon pleaserepentogonpleaser epentogon
-pleaserepentogon please repentogon pleaserepe ntogonpleaserepentogon
-pleas erepentogon please repentogon pleaserepentogonpleas erepentogon
-pleaserepentogon please r epentogon pleaserepentogonpleaserepentogon
-pleaserepentogon please repentogon pleaserepe ntogonpleaserepentogon
-]==],
-[==[
-IMPORTANT NOTICE:
-
-
-]==],
-[==[
-]==],
-[==[
-youre still here?
-]==],
-[==[
-please download repentogon :(
-]==],
+Tainted Cain Rework will be disabled.
+Thank you.
+]==]
 }
 function rgonNoticeMenu(panel, pos, item, tbl)
     local uiSize = Vector(200, 0)
@@ -620,12 +493,12 @@ function rgonNoticeMenu(panel, pos, item, tbl)
             menuButton:SetFrame("Idle", 1)
             if isLMBPressed then
                 SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
-                DeadSeaScrollsMenu.CloseMenu(false, false)
+                DeadSeaScrollsMenu.CloseMenu(true, true)
                 SFXManager():Stop(Isaac.GetSoundIdByName("deadseascrolls_pop"))
             end
         end
         renderButtonSize(buttonPosition, uiSize.X - 8)
-        local fineText = "Just let me play the mod"
+        local fineText = "Just let me play the game"
         mod.inventoryHelper.renderMinecraftText(fineText, 
             buttonPosition - Vector(minecraftFont:GetStringWidth(fineText) / 2, (minecraftFont:GetLineHeight() / 2)), 
             InventoryItemRarity.COMMON, true, true
@@ -665,7 +538,7 @@ local function mainMenuRenderer(panel, pos, item, tbl)
             splashText = splashTable[math.random(1, #splashTable)]
         end
         local splashTextPosition = Vector(positionLogo.X + 120, positionLogo.Y - 8)
-        textSize = (1.5 - (math.abs(math.sin(mod.elapsedTime * math.pi * 2.5)) / 10)) * 0.75
+        textSize = (1.5 - (math.abs(math.sin((mod.elapsedTime or 0) * math.pi * 2.5)) / 10)) * 0.75
         splashTextPosition = splashTextPosition - ((minecraftFont:GetStringWidth(splashText) / 2) * textSize * rotationAngle)
         for i = 1, string.len(splashText) do
             local currentCharacter = string.sub(splashText, i, i)
@@ -1070,19 +943,17 @@ local cainCraftingDirectory = {
 		fsize = 1,
 		buttons = {
             {str = "", nosel = true, fsize = 1},
-            {str = "tainted cain rework needs", nosel = true, fsize = 1},
-            {str = "repentogon to function!", nosel = true, fsize = 1},
+            {str = "tainted cain rework requires", nosel = true, fsize = 1},
+            {str = "repentogon.", nosel = true, fsize = 1},
             {str = "", nosel = true, fsize = 1},
-            {str = "by running the mod without", nosel = true, fsize = 1},
-            {str = "repentogon, you are running", nosel = true, fsize = 1},
-            {str = "the mod at your own risk", nosel = true, fsize = 1},
+            {str = "without repentogon it is impossible", nosel = true, fsize = 1},
+            {str = "to do many of the things", nosel = true, fsize = 1},
+            {str = "tainted cain rework achieves", nosel = true, fsize = 1},
             {str = "", nosel = true, fsize = 1},
-            {str = "many errors can occur, and", nosel = true, fsize = 1},
-            {str = "general lag and instability.", nosel = true, fsize = 1},
+            {str = "please consider installing it at", nosel = true, fsize = 1},
+            {str = "https://repentogon.com/", nosel = true, fsize = 1},
             {str = "", nosel = true, fsize = 1},
-            {str = "", nosel = true, fsize = 1},
-            {str = "you can find repentogon at", nosel = true, fsize = 1},
-            {str = "repentogon.com", nosel = true, fsize = 1},
+            {str = "tainted cain rework will be disabled.", nosel = true, fsize = 1},
             {str = "", nosel = true, fsize = 1},
 			{
 				str = "i understand",
@@ -1116,6 +987,10 @@ local cainCraftingDirectoryKey = {
     SettingsChanged = false,
     Path = {},
 }
+
+if REPENTOGON then
+    cainCraftingDirectoryKey.Main = 'rgonpopup'
+end
 
 DeadSeaScrollsMenu.AddMenu(displayName, {
     Run = deadSeaScrollsMod.runMenu,

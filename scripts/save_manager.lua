@@ -937,7 +937,7 @@ local function checkForAscentValidRooms()
 		local roomDesc = rooms:Get(listIndex)
 		if (roomDesc.Data.Type ==RoomType.ROOM_TREASURE
 			or roomDesc.Data.Type == RoomType.ROOM_BOSS)
-			and roomDesc:GetDimension() == 0
+			and (REPENTOGON and roomDesc:GetDimension() == 0)
 		then
 			allowedAscentRooms[tostring(listIndex)] = true
 		end

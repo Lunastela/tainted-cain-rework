@@ -22,7 +22,7 @@ local mouseMap = {
 }
 function InputHelper.isMouseButtonTriggered(mouseButton)
     local mouseButtonPress = (mouseMap[mouseButton] and Input.IsMouseBtnPressed(mouseButton))
-    local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+    local player = PlayerManager and PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     if player and (player.ControllerIndex > 0) then
         mouseButtonPress = Input.IsButtonTriggered(mouseMap[mouseButton] or mouseButton, player.ControllerIndex)
     end
@@ -42,7 +42,7 @@ local controllerMouseVector = nil
 local outerPadding = 32
 local mouseUpdated = false
 function InputHelper.getMousePosition(dontUpdate)
-    local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+    local player = PlayerManager and PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     if player and (player.ControllerIndex > 0) then
         local mouseDirection = (Vector(
             Input.GetActionValue(ButtonAction.ACTION_RIGHT, player.ControllerIndex) - Input.GetActionValue(ButtonAction.ACTION_LEFT, player.ControllerIndex),

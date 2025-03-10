@@ -97,8 +97,8 @@ function inventoryHelper.getItemRenderType(pickupType)
     return renderTypes.Default
 end
 
-local persistentGameData = Isaac.GetPersistentGameData()
 function inventoryHelper.getItemUnlocked(item)
+    local persistentGameData = Isaac.GetPersistentGameData()
     if item.ComponentData and item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
         local collectibleConfig = utility.getCollectibleConfig(item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM])
         if collectibleConfig and collectibleConfig.AchievementID then
@@ -1186,125 +1186,127 @@ function inventoryHelper.unlockItemBatch(item)
     inventoryHelper.runUnlockItem(item)
 end
 
--- Item Renderer
-local itemSprite = Sprite()
-itemSprite:Load("gfx/items/inventoryitem.anm2", false)
-itemSprite:SetCustomShader("shaders/coloroffset_enchantment_glint")
+if REPENTOGON then
+    -- Item Renderer
+    local itemSprite = Sprite()
+    itemSprite:Load("gfx/items/inventoryitem.anm2", false)
+    itemSprite:SetCustomShader("shaders/coloroffset_enchantment_glint")
 
-local defaultCollectibleSprite = Sprite()
-defaultCollectibleSprite:Load("gfx/itemanimation.anm2", true)
-defaultCollectibleSprite:Play("Idle", true)
+    local defaultCollectibleSprite = Sprite()
+    defaultCollectibleSprite:Load("gfx/itemanimation.anm2", true)
+    defaultCollectibleSprite:Play("Idle", true)
 
--- Simple Block Renderer
-local blockSprite = Sprite()
-blockSprite:Load("gfx/blocks/inventoryblock.anm2", false)
-blockSprite:ReplaceSpritesheet(0, "gfx/items/blocks/cobblestone.png")
-blockSprite:LoadGraphics()
-blockSprite:Play("Idle", true)
-blockSprite:SetCustomShader("shaders/block_renderer")
+    -- Simple Block Renderer
+    local blockSprite = Sprite()
+    blockSprite:Load("gfx/blocks/inventoryblock.anm2", false)
+    blockSprite:ReplaceSpritesheet(0, "gfx/items/blocks/cobblestone.png")
+    blockSprite:LoadGraphics()
+    blockSprite:Play("Idle", true)
+    blockSprite:SetCustomShader("shaders/block_renderer")
 
--- Crafting Table Renderer
-local craftingTableSprite = Sprite()
-craftingTableSprite:Load("gfx/blocks/craftingtable.anm2", false)
-craftingTableSprite:ReplaceSpritesheet(0, "gfx/items/blocks/crafting_table.png")
-craftingTableSprite:LoadGraphics()
-craftingTableSprite:Play("Idle", true)
-craftingTableSprite:SetCustomShader("shaders/crafting_renderer")
+    -- Crafting Table Renderer
+    local craftingTableSprite = Sprite()
+    craftingTableSprite:Load("gfx/blocks/craftingtable.anm2", false)
+    craftingTableSprite:ReplaceSpritesheet(0, "gfx/items/blocks/crafting_table.png")
+    craftingTableSprite:LoadGraphics()
+    craftingTableSprite:Play("Idle", true)
+    craftingTableSprite:SetCustomShader("shaders/crafting_renderer")
 
--- 3D Item Renderer
-local itemSprite3d = Sprite()
-itemSprite3d:Load("gfx/items/inventoryitem.anm2", false)
-itemSprite3d:Play("Idle", true)
-itemSprite3d:SetCustomShader("shaders/item_renderer")
+    -- 3D Item Renderer
+    local itemSprite3d = Sprite()
+    itemSprite3d:Load("gfx/items/inventoryitem.anm2", false)
+    itemSprite3d:Play("Idle", true)
+    itemSprite3d:SetCustomShader("shaders/item_renderer")
 
--- 3D Collectible Renderer
-local collectibleSprite3d = Sprite()
-collectibleSprite3d:Load("gfx/itemanimation.anm2", true)
-collectibleSprite3d:Play("Idle", true)
-collectibleSprite3d:SetCustomShader("shaders/item_renderer")
+    -- 3D Collectible Renderer
+    local collectibleSprite3d = Sprite()
+    collectibleSprite3d:Load("gfx/itemanimation.anm2", true)
+    collectibleSprite3d:Play("Idle", true)
+    collectibleSprite3d:SetCustomShader("shaders/item_renderer")
 
-local chestSprite = Sprite()
-chestSprite:Load("gfx/blocks/craftingtable.anm2", false)
-chestSprite:ReplaceSpritesheet(0, "gfx/items/blocks/chest.png")
-chestSprite:LoadGraphics()
-chestSprite:Play("Idle", true)
-chestSprite:SetCustomShader("shaders/chest_renderer")
+    local chestSprite = Sprite()
+    chestSprite:Load("gfx/blocks/craftingtable.anm2", false)
+    chestSprite:ReplaceSpritesheet(0, "gfx/items/blocks/chest.png")
+    chestSprite:LoadGraphics()
+    chestSprite:Play("Idle", true)
+    chestSprite:SetCustomShader("shaders/chest_renderer")
 
-local durabilityBar = Sprite()
-durabilityBar:Load("gfx/items/inventoryitem.anm2", false)
-durabilityBar:ReplaceSpritesheet(0, "gfx/ui/durability.png")
-durabilityBar:LoadGraphics()
-durabilityBar:Play("Idle", true)
+    local durabilityBar = Sprite()
+    durabilityBar:Load("gfx/items/inventoryitem.anm2", false)
+    durabilityBar:ReplaceSpritesheet(0, "gfx/ui/durability.png")
+    durabilityBar:LoadGraphics()
+    durabilityBar:Play("Idle", true)
 
-local blackColor = Color(1, 1, 1, 1)
-local yellowBarColor = Color(
-    0, 0, 0, 1, 
-    255 / 255, 219 / 255, 16 / 255
-)
-function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, elapsedTime)
-    if not itemToDisplay then
-        return
-    end
-    local collectibleItem = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
-    local originalRenderPosition = Vector(renderPosition.X, renderPosition.Y)
-    local renderType = inventoryHelper.getItemRenderType(itemToDisplay.Type)
-    local renderFallback = ((collectibleItem ~= nil) and (getCustomCollectibleSprite(collectibleItem) == -1))
-    local renderSprite = (((renderType == renderTypes.Default) and (elapsedTime and itemSprite3d))
-        or ((renderType == renderTypes.SimpleBlock) and blockSprite)
-        or ((renderType == renderTypes.CraftingTable) and craftingTableSprite)
-        or ((renderType == renderTypes.Chest) and chestSprite) or itemSprite)
-    if renderFallback then
-        renderType = renderTypes.Collectible
-        renderSprite = (elapsedTime and collectibleSprite3d) or defaultCollectibleSprite
-    end
-    renderSprite:ReplaceSpritesheet(0, inventoryHelper.getItemGraphic(itemToDisplay))
-    renderSprite:LoadGraphics()
-    local isEnchanted = inventoryHelper.getDefaultEnchanted(itemToDisplay)
-    local spriteSize = ((renderType == renderTypes.Collectible) and 32) or 16
-    renderSprite.Color = Color(
-        1, 1, 1, 1, 
-        0, 0, 0, 
-        (((elapsedTime ~= nil) and elapsedTime) or ((renderType == renderTypes.Default) and TCainRework.elapsedTime)) or 0, 
-        spriteSize, spriteSize, isEnchanted and TCainRework.elapsedTime or 0
+    local blackColor = Color(1, 1, 1, 1)
+    local yellowBarColor = Color(
+        0, 0, 0, 1, 
+        255 / 255, 219 / 255, 16 / 255
     )
-    renderSprite.Scale = renderScale or Vector.One
-    if renderFallback then
-        renderSprite.Scale = renderSprite.Scale / 2
-        renderPosition = renderPosition + Vector(8, 13) * (renderScale or Vector.One)
-    end
-    renderSprite:Play("Idle", true)
-    renderSprite:Render(renderPosition)
-    local currentCharges = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES]
-    if (not elapsedTime) and (currentCharges and utility.getCollectibleConfig(collectibleItem).MaxCharges > 0) then
-        local chargeRatio = itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / utility.getCollectibleConfig(collectibleItem).MaxCharges
-        if chargeRatio ~= 1 then
-            local firstBarCharge = math.min(chargeRatio, 1)
-            durabilityBar.Color = blackColor
-            durabilityBar.Scale = renderScale or Vector.One
-            durabilityBar:Render(originalRenderPosition + Vector(2, 13))
-            durabilityBar.Scale.Y = (durabilityBar.Scale.Y / 2)
-            durabilityBar.Scale.X = firstBarCharge
-
-            local red, green = 1, 1
-            if firstBarCharge >= 0.5 then
-                green = 1
-                red = (1 - firstBarCharge) * 2
-            else
-                green = firstBarCharge * 2
-                red = 1
-            end
-            durabilityBar.Color = Color(
-                0, 0, 0, 1, 
-                red, green, 0
-            )
-            durabilityBar:Render(originalRenderPosition + Vector(2, 13))
-            
-            local secondBarCharge = math.max(chargeRatio, 1)
-            if secondBarCharge > 1 then
-                -- Second Charge Bar
-                durabilityBar.Color = yellowBarColor
-                durabilityBar.Scale.X = (secondBarCharge - 1)
+    function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, elapsedTime)
+        if not itemToDisplay then
+            return
+        end
+        local collectibleItem = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
+        local originalRenderPosition = Vector(renderPosition.X, renderPosition.Y)
+        local renderType = inventoryHelper.getItemRenderType(itemToDisplay.Type)
+        local renderFallback = ((collectibleItem ~= nil) and (getCustomCollectibleSprite(collectibleItem) == -1))
+        local renderSprite = (((renderType == renderTypes.Default) and (elapsedTime and itemSprite3d))
+            or ((renderType == renderTypes.SimpleBlock) and blockSprite)
+            or ((renderType == renderTypes.CraftingTable) and craftingTableSprite)
+            or ((renderType == renderTypes.Chest) and chestSprite) or itemSprite)
+        if renderFallback then
+            renderType = renderTypes.Collectible
+            renderSprite = (elapsedTime and collectibleSprite3d) or defaultCollectibleSprite
+        end
+        renderSprite:ReplaceSpritesheet(0, inventoryHelper.getItemGraphic(itemToDisplay))
+        renderSprite:LoadGraphics()
+        local isEnchanted = inventoryHelper.getDefaultEnchanted(itemToDisplay)
+        local spriteSize = ((renderType == renderTypes.Collectible) and 32) or 16
+        renderSprite.Color = Color(
+            1, 1, 1, 1, 
+            0, 0, 0, 
+            (((elapsedTime ~= nil) and elapsedTime) or ((renderType == renderTypes.Default) and TCainRework.elapsedTime)) or 0, 
+            spriteSize, spriteSize, isEnchanted and TCainRework.elapsedTime or 0
+        )
+        renderSprite.Scale = renderScale or Vector.One
+        if renderFallback then
+            renderSprite.Scale = renderSprite.Scale / 2
+            renderPosition = renderPosition + Vector(8, 13) * (renderScale or Vector.One)
+        end
+        renderSprite:Play("Idle", true)
+        renderSprite:Render(renderPosition)
+        local currentCharges = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES]
+        if (not elapsedTime) and (currentCharges and utility.getCollectibleConfig(collectibleItem).MaxCharges > 0) then
+            local chargeRatio = itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / utility.getCollectibleConfig(collectibleItem).MaxCharges
+            if chargeRatio ~= 1 then
+                local firstBarCharge = math.min(chargeRatio, 1)
+                durabilityBar.Color = blackColor
+                durabilityBar.Scale = renderScale or Vector.One
                 durabilityBar:Render(originalRenderPosition + Vector(2, 13))
+                durabilityBar.Scale.Y = (durabilityBar.Scale.Y / 2)
+                durabilityBar.Scale.X = firstBarCharge
+
+                local red, green = 1, 1
+                if firstBarCharge >= 0.5 then
+                    green = 1
+                    red = (1 - firstBarCharge) * 2
+                else
+                    green = firstBarCharge * 2
+                    red = 1
+                end
+                durabilityBar.Color = Color(
+                    0, 0, 0, 1, 
+                    red, green, 0
+                )
+                durabilityBar:Render(originalRenderPosition + Vector(2, 13))
+                
+                local secondBarCharge = math.max(chargeRatio, 1)
+                if secondBarCharge > 1 then
+                    -- Second Charge Bar
+                    durabilityBar.Color = yellowBarColor
+                    durabilityBar.Scale.X = (secondBarCharge - 1)
+                    durabilityBar:Render(originalRenderPosition + Vector(2, 13))
+                end
             end
         end
     end
