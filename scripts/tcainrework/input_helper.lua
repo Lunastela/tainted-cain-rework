@@ -126,7 +126,9 @@ mouseSprite:Load("gfx/ui/legacy_console_cursor.anm2", true)
 mouseSprite:Play("Idle")
 mouseSprite.Scale = Vector.One / 2
 
-function InputHelper.Update(renderMouse)
+local mouseTimer, mouseAlpha = 180, 1
+local lastMousePosition = Vector.Zero
+function InputHelper.Update(renderMouse, forceMouse)
     -- Clear held mouse inputs and register released ones
     for mouseButton, isHeld in pairs(mouseHeld) do
         if isHeld then
@@ -141,7 +143,18 @@ function InputHelper.Update(renderMouse)
     mouseUpdated = false
     if renderMouse or ((not renderMouse) and (Options.Fullscreen and not Options.MouseControl)) then
         local mousePosition, _ = InputHelper.getMousePosition(true)
+        if (not forceMouse) and ((lastMousePosition - mousePosition):Length() <= 0) then
+            mouseTimer = math.max(mouseTimer - 1, 0)
+            if mouseTimer <= 0 then
+                mouseAlpha = math.max(mouseAlpha - 0.05, 0)
+            end
+        else
+            mouseTimer = 180
+            mouseAlpha = math.min(mouseAlpha + 0.05, 1)
+        end
+        mouseSprite.Color = Color(1, 1, 1, mouseAlpha)
         mouseSprite:Render(mousePosition)
+        lastMousePosition = Vector(mousePosition.X, mousePosition.Y)
     end
 end
 

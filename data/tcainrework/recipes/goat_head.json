@@ -2,17 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "tcainrework:bone_heart",
-    "H": "#tcainrework:heart",
-    "K": "#tcainrework:key"
+    "J": "tcainrework:card{\"card_type\":31}",
+    "L": "minecraft:leather"
   },
   "pattern": [
-    "H",
-    "K",
-    "#"
+    "LJL",
+    " L "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Pointy Rib"
+    "collectible": "Goat Head"
   }
 }

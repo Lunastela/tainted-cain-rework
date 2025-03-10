@@ -3,8 +3,7 @@ local mod = TCainRework
 local utility = require("scripts.tcainrework.util")
 local saveManager = require("scripts.save_manager")
 
-local elapsedTimeTable, trackingPlayer = {}, {}
-local collectedItems = {}
+local elapsedTimeTable, trackingPlayer, collectedItems = {}, {}, {}
 mod.minecraftItemID = 25565
 local minecraftItemID = mod.minecraftItemID
 
@@ -16,7 +15,7 @@ local collectibleStorage = require("scripts.tcainrework.stored.collectible_stora
 local simpleItemDisplacement = {0, 1, 3, -2, 1}
 
 mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function(_)
-    elapsedTimeTable, trackingPlayer = {}, {}
+    elapsedTimeTable, trackingPlayer, collectedItems = {}, {}, {}
 end)
 
 mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_RENDER, function(_, entity, offset)
@@ -138,28 +137,31 @@ end, minecraftItemID)
 -- keepInventory
 mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, function(_, entity)
     -- only if the player has the bag of crafting
+    local inventoryHelper = mod.inventoryHelper
     local player = entity:ToPlayer()
     if (player and player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
-    and ((TCainRework.getModSettings().keepInventory or 1) == 1)) then
-        local inventoryHelper = mod.inventoryHelper
+    and ((inventoryHelper.getUnlockedInventory()) and ((TCainRework.getModSettings().keepInventory or 1) == 1))) then
+        
         -- in the future, check individual player inventories
         local inventoryList = saveManager.GetRunSave().Inventories
-        for i, inventory in pairs(inventoryList) do
-            if inventoryHelper.isValidInventory(inventory) then
-                for j, inventoryItem in pairs(inventory) do
-                    local itemPickup = Isaac.Spawn(
-                        EntityType.ENTITY_PICKUP, minecraftItemID, 0, player.Position, 
-                        EntityPickup.GetRandomPickupVelocity(player.Position), player
-                    )
-                    local pickupData = saveManager.GetRerollPickupSave(itemPickup)
-                    -- shallow copy
-                    for k, v in pairs(inventory[j]) do
-                        pickupData[k] = v
+        if inventoryList then
+            for i, inventory in pairs(inventoryList) do
+                if inventoryHelper.isValidInventory(inventory) then
+                    for j, inventoryItem in pairs(inventory) do
+                        local itemPickup = Isaac.Spawn(
+                            EntityType.ENTITY_PICKUP, minecraftItemID, 0, player.Position, 
+                            EntityPickup.GetRandomPickupVelocity(player.Position), player
+                        )
+                        local pickupData = saveManager.GetRerollPickupSave(itemPickup)
+                        -- shallow copy
+                        for k, v in pairs(inventory[j]) do
+                            pickupData[k] = v
+                        end
+                        inventory[j] = nil
                     end
-                    inventory[j] = nil
                 end
             end
-        end
+    end
     end
 end, EntityType.ENTITY_PLAYER)
 
@@ -248,5 +250,16 @@ mod:AddCallback(ModCallbacks.MC_POST_GRID_ROCK_DESTROY, function(_, rock, type)
         local pickupData = saveManager.GetRerollPickupSave(itemPickup)
         pickupData.Type = (((math.random(10) <= 5) and "minecraft:red_mushroom") or "minecraft:brown_mushroom")
         pickupData.Count = 1
+    end
+end)
+
+-- Jera Pickups, Temporary Fix
+mod:AddCallback(saveManager.SaveCallbacks.DUPE_PICKUP_DATA_LOAD, function(_, entity, saveData)
+    if entity and (entity.Type == EntityType.ENTITY_PICKUP) and (entity.Variant == minecraftItemID) then
+        local pickupData = saveManager.GetRerollPickupSave(entity)
+        if pickupData.ComponentData and pickupData.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM] then
+            entity:Remove()
+            return false
+        end
     end
 end)

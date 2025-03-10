@@ -38,6 +38,32 @@ return {
             DischargeRecipe = false,
         },
     },
+    ["69c2162ab075f3bbf3f3989d6023c82e5f36d895"] = {
+        {
+            RecipeName = "minecraft:chest",
+            Category = "misc",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:oak_planks", "minecraft:oak_planks", "minecraft:oak_planks", "minecraft:oak_planks", nil, "minecraft:oak_planks", "minecraft:oak_planks", "minecraft:oak_planks", "minecraft:oak_planks", },
+            Results = {
+                Type = "minecraft:chest",
+                Count = 1
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "minecraft:furnace",
+            Category = "misc",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", nil, "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", },
+            Results = {
+                Type = "minecraft:furnace",
+                Count = 1
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
+    },
     ["17b43ca59cc2279bbd8fb58974a49350d8c35ad3"] = {
         {
             RecipeName = "minecraft:crafting_table",
@@ -46,20 +72,6 @@ return {
             ConditionTable = {"minecraft:oak_planks", "minecraft:oak_planks", "minecraft:oak_planks", "minecraft:oak_planks", },
             Results = {
                 Type = "minecraft:crafting_table",
-                Count = 1
-            },
-            DisplayRecipe = false,
-            DischargeRecipe = false,
-        },
-    },
-    ["69c2162ab075f3bbf3f3989d6023c82e5f36d895"] = {
-        {
-            RecipeName = "minecraft:furnace",
-            Category = "misc",
-            RecipeSize = Vector(3, 3),
-            ConditionTable = {"minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", nil, "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", "minecraft:cobblestone", },
-            Results = {
-                Type = "minecraft:furnace",
                 Count = 1
             },
             DisplayRecipe = false,

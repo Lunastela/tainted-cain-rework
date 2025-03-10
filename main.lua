@@ -227,5 +227,6 @@ end
     include("scripts.tcainrework.toasts")
     include("scripts.tcainrework.commands")
     include("scripts.tcainrework.phantom")
+    include("scripts.tcainrework.tweaks")
     -- include("scripts.tcainrework.dss.player")
 -- end

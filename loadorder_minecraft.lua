@@ -6,6 +6,7 @@ return {
         oak_boat
         oak_door
         oak_sign
+        chest
         bowl
         stick
         fire

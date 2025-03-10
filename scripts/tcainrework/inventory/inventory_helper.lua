@@ -1223,6 +1223,13 @@ collectibleSprite3d:Load("gfx/itemanimation.anm2", true)
 collectibleSprite3d:Play("Idle", true)
 collectibleSprite3d:SetCustomShader("shaders/item_renderer")
 
+local chestSprite = Sprite()
+chestSprite:Load("gfx/blocks/craftingtable.anm2", false)
+chestSprite:ReplaceSpritesheet(0, "gfx/items/blocks/chest.png")
+chestSprite:LoadGraphics()
+chestSprite:Play("Idle", true)
+chestSprite:SetCustomShader("shaders/chest_renderer")
+
 local durabilityBar = Sprite()
 durabilityBar:Load("gfx/items/inventoryitem.anm2", false)
 durabilityBar:ReplaceSpritesheet(0, "gfx/ui/durability.png")
@@ -1244,7 +1251,8 @@ function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, 
     local renderFallback = ((collectibleItem ~= nil) and (getCustomCollectibleSprite(collectibleItem) == -1))
     local renderSprite = (((renderType == renderTypes.Default) and (elapsedTime and itemSprite3d))
         or ((renderType == renderTypes.SimpleBlock) and blockSprite)
-        or ((renderType == renderTypes.CraftingTable) and craftingTableSprite) or itemSprite)
+        or ((renderType == renderTypes.CraftingTable) and craftingTableSprite)
+        or ((renderType == renderTypes.Chest) and chestSprite) or itemSprite)
     if renderFallback then
         renderType = renderTypes.Collectible
         renderSprite = (elapsedTime and collectibleSprite3d) or defaultCollectibleSprite

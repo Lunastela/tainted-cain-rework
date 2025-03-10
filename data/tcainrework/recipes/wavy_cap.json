@@ -3,7 +3,7 @@
   "category": "collectible",
   "key": {
     "M": "minecraft:brown_mushroom",
-    "H": "tcainrework:pill",
+    "H": "#tcainrework:pill",
     "#": "tcainrework:bone_heart"
   },
   "pattern": [

@@ -2,17 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "tcainrework:bone_heart",
-    "H": "#tcainrework:heart",
-    "K": "#tcainrework:key"
+    "P": "The Parasite",
+    "S": "tcainrework:soul_heart",
+    "L": "minecraft:leather"
   },
   "pattern": [
-    "H",
-    "K",
-    "#"
+    "LSL",
+    " P ",
+    "LSL"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Pointy Rib"
+    "collectible": "Cricket's Body"
   }
 }

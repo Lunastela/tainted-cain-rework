@@ -1,8 +1,8 @@
 return {
     Properties = {
-        DisplayName = "Bowl",
-        GFX = "gfx/minecraft/items/bowl.png",
-        RenderModel = InventoryItemRenderType.Default,
+        DisplayName = "Chest",
+        GFX = "gfx/minecraft/blocks/chest.png",
+        RenderModel = InventoryItemRenderType.Chest,
         StackSize = 64,
         UnlockAll = true,
         Rarity = InventoryItemRarity.COMMON,

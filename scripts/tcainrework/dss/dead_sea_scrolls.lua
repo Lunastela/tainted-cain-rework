@@ -995,22 +995,22 @@ local cainCraftingDirectory = {
                     }
                 }
             },
-            {
-                str = "Chaos Mode [NOT DONE]",
-                choices = {"false", "true"},
-                setting = 1,
-                variable = "chaosMode",
-                load = function ()
-                    return getSaveWrapper().chaosMode or 1
-                end,
-                store = function (var)
-                    getSaveWrapper().chaosMode = var
-                end,
-                tooltip = {
-                    strset = {"Shuffles all", "recipes", "similarly to", "the Chaos", "item."},
-                    extraMinecraftDescription = "Shuffles all recipes, similarly to the Chaos item's effect."
-                }
-            }
+            -- {
+            --     str = "Chaos Mode [NOT DONE]",
+            --     choices = {"false", "true"},
+            --     setting = 1,
+            --     variable = "chaosMode",
+            --     load = function ()
+            --         return getSaveWrapper().chaosMode or 1
+            --     end,
+            --     store = function (var)
+            --         getSaveWrapper().chaosMode = var
+            --     end,
+            --     tooltip = {
+            --         strset = {"Shuffles all", "recipes", "similarly to", "the Chaos", "item."},
+            --         extraMinecraftDescription = "Shuffles all recipes, similarly to the Chaos item's effect."
+            --     }
+            -- }
         },
         format = {
             Panels = {

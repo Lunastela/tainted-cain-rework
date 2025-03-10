@@ -33,7 +33,8 @@ InventoryItemRenderType = {
     Collectible = -1,
     Default = 0,
     SimpleBlock = 1,
-    CraftingTable = 2
+    CraftingTable = 2,
+    Chest = 3
 }
 
 InventoryItemRarityColors = {

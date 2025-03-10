@@ -4,7 +4,7 @@
   "key": {
     "M": "The Mark",
     "#": "tcainrework:black_heart",
-    "B": "tcainrework:battery"
+    "B": "#tcainrework:battery"
   },
   "pattern": [
     "B",

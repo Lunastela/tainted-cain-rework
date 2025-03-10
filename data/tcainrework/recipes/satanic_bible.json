@@ -2,17 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "tcainrework:bone_heart",
-    "H": "#tcainrework:heart",
-    "K": "#tcainrework:key"
+    "#": "The Bible",
+    "C": "Pentagram"
   },
   "pattern": [
-    "H",
-    "K",
+    "C",
     "#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Pointy Rib"
+    "collectible": "Satanic Bible"
   }
 }

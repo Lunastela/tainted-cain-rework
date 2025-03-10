@@ -78,4 +78,5 @@ They should build this
 check out my mod it adds half black hearts
 check out my mod it adds diamond ingots
 better than better than wolves
+the pink square
 ]==]

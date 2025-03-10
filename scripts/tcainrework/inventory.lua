@@ -1560,6 +1560,7 @@ function mod:RenderInventory()
                                 if eatTimer <= -1 then
                                     eatTimer = 80
                                 end
+                                player.Velocity = player.Velocity:Resized(math.min(player.Velocity:Length(), 1.5))
                                 eatTimer = eatTimer - 1
                                 if eatTimer % 12 == 0 then
                                     SFXManager():Play(
@@ -1615,7 +1616,8 @@ function mod:RenderInventory()
 
             inputHelper.Update(
                 ((not (Game():IsPaused() or DeadSeaScrollsMenu:IsOpen()) 
-                and (inventoryState ~= InventoryStates.CLOSED)) and player.ControllerIndex > 0)
+                and (inventoryState ~= InventoryStates.CLOSED)) and player.ControllerIndex > 0),
+                (inventoryState ~= InventoryStates.CLOSED)
             )
             -- print(Isaac.GetTime() - currentTime)
         end
@@ -1629,7 +1631,7 @@ mod:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, function(_, player, offset)
         for i, particle in pairs(eatParticles[GetPtrHash(player)]) do
             local particleSprite = particle.Sprite
             particleSprite:Render(
-                Isaac.WorldToScreen(particle.Position) + offset, 
+                Isaac.WorldToRenderPosition(particle.Position) + offset, 
                 particle.ClipPosition, 
                 (Vector.One * 32) - (particle.ClipPosition + Vector(particle.ClipSize, particle.ClipSize))
             )

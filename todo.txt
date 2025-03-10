@@ -1,24 +1,14 @@
-- Replace current recipe systems
-- Replaced recipe unlock formatting
-- Rewrite recipe "craftable" check with simulations of the recipes internally.
-This would fix every issue with the recipe book's weird nature of sometimes not understanding recipes.
-- Fix ``inventoryadd`` command
-- Test everything works
-- Autocrafting []
-- Unlocking collectible recipes []
-- Unlocking pill recipes [X]
-- Unlocking card recipes []
+- Nerf Jera
 
 High Priority: 
 - Use beggar pools to create pickups
-- Find a goddamn solution for the controller??? Please???
+- Add proper way to do controller pickup consumption & tutorial
 - LB / RB switching recipes in the recipe book
 - Controller B Button not correct
 
 Mid Priority:
 - Controller Helper inputs in the Inventory
 - Controller Issue with Mod Config Menu (ew)
-- "Classic" Mode
 
 Low Priority:
 - Rewrite / Un-Hardcode generics with a custom graphics selection field in the properties table
