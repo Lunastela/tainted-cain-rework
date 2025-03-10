@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "P": "Pentagram",
+    "H": "tcainrework:tarot_card{\"card_type\":6}",
+    "S": "tcainrework:soul_heart",
+    "E": "tcainrework:eternal_heart"
+  },
+  "pattern": [
+    " H ",
+    "EPE",
+    " S "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Redemption"
+  }
+}

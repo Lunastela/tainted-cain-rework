@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "G": "Midas' Touch",
+    "S": "tcainrework:soul_heart",
+    "E": "tcainrework:eternal_heart"
+  },
+  "pattern": [
+    " G ",
+    " G ",
+    "ESE"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Spirit Sword"
+  }
+}

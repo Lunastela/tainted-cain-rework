@@ -68,6 +68,18 @@ return {
     },
     ["8c236058fa618e10ba50f50df586c5fa3f1c07c8"] = {
         {
+            RecipeName = "minecraft:golden_axe",
+            Category = "equipment",
+            RecipeSize = Vector(2, 3),
+            ConditionTable = {"Midas' Touch", "Midas' Touch", "Midas' Touch", "minecraft:stick", nil, "minecraft:stick", },
+            Results = {
+                Type = "minecraft:golden_axe",
+                Count = 1
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "minecraft:iron_axe",
             Category = "equipment",
             RecipeSize = Vector(2, 3),
@@ -80,7 +92,71 @@ return {
             DischargeRecipe = false,
         },
     },
+    ["e6e0b0ea99c001b3afe59ffbdd97bb9502f47d28"] = {
+        {
+            RecipeName = "minecraft:golden_hoe",
+            Category = "equipment",
+            RecipeSize = Vector(2, 3),
+            ConditionTable = {"Midas' Touch", "Midas' Touch", nil, "minecraft:stick", nil, "minecraft:stick", },
+            Results = {
+                Type = "minecraft:golden_hoe",
+                Count = 1
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "minecraft:iron_hoe",
+            Category = "equipment",
+            RecipeSize = Vector(2, 3),
+            ConditionTable = {"Iron Bar", "Iron Bar", nil, "minecraft:stick", nil, "minecraft:stick", },
+            Results = {
+                Type = "minecraft:iron_hoe",
+                Count = 1
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
+    },
+    ["bf0ce597399da0189aa7cbfbd8e1dd99f4a7e7d3"] = {
+        {
+            RecipeName = "minecraft:golden_pickaxe",
+            Category = "equipment",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"Midas' Touch", "Midas' Touch", "Midas' Touch", nil, "minecraft:stick", nil, nil, "minecraft:stick", nil, },
+            Results = {
+                Type = "minecraft:golden_pickaxe",
+                Count = 1
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
+    },
     ["85f1ae3dcaf3a6c5984fbf8db91065c0489ade1a"] = {
+        {
+            RecipeName = "minecraft:golden_shovel",
+            Category = "equipment",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"Midas' Touch", "minecraft:stick", "minecraft:stick", },
+            Results = {
+                Type = "minecraft:golden_shovel",
+                Count = 1
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "minecraft:golden_sword",
+            Category = "equipment",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"Midas' Touch", "Midas' Touch", "minecraft:stick", },
+            Results = {
+                Type = "minecraft:golden_sword",
+                Count = 1
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
         {
             RecipeName = "minecraft:iron_shovel",
             Category = "equipment",
@@ -88,6 +164,18 @@ return {
             ConditionTable = {"Iron Bar", "minecraft:stick", "minecraft:stick", },
             Results = {
                 Type = "minecraft:iron_shovel",
+                Count = 1
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "minecraft:iron_sword",
+            Category = "equipment",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"Iron Bar", "Iron Bar", "minecraft:stick", },
+            Results = {
+                Type = "minecraft:iron_sword",
                 Count = 1
             },
             DisplayRecipe = false,

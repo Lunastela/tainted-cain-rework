@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "M": "tcainrework:mega_battery",
+    "#": "tcainrework:dice_shard",
+    "R": "tcainrework:soul_stone{\"card_type\":81}"
+  },
+  "pattern": [
+    "M",
+    "R",
+    "#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The D6"
+  }
+}

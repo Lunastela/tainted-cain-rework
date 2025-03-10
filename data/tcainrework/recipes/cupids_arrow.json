@@ -2,16 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "Shard of Glass",
-    "D": "The Wiz",
+    "S": "tcainrework:card{\"card_type\":25}",
+    "I": "Iron Bar",
     "C": "tcainrework:tarot_card{\"card_type\":2}"
   },
   "pattern": [
-    " D ",
-    "#C#"
+    "S",
+    "I",
+    "C"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "20/20"
+    "collectible": "Cupid's Arrow"
   }
 }

@@ -2,17 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "Yum Heart",
-    "B": "tcainrework:bone_heart",
-    "#": "tcainrework:heart"
+    "K": "tcainrework:charged_key",
+    "E": "#eye",
+    "B": "tcainrework:blended_heart"
   },
   "pattern": [
-    "# #",
-    "BHB",
-    " # "
+    "K",
+    "E",
+    "B"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "<3"
+    "collectible": "Dead Eye"
   }
 }

@@ -186,18 +186,19 @@ local function checkRecipes()
     end
 end
 
+-- Output Finalization Behavior
 local function finalizeOutputs()
     local craftingInventory = inventoryHelper.getInventory(InventoryTypes.CRAFTING)
     local outputInventory = inventoryHelper.getInventory(InventoryTypes.OUTPUT)
     if outputSlotOccupied and outputInventory[1] == nil then
         if lastOutputItem then
             inventoryHelper.unlockItemBatch(lastOutputItem)
+            for i in pairs(craftingInventory) do
+                craftingInventory[i] = inventoryHelper.consumeRecipeIngredient(lastOutputItem.Recipe, craftingInventory, i)
+            end
             lastOutputItem = nil
         else
             print('apparently no last output item? something is DEEPLY wrong')
-        end
-        for i in pairs(craftingInventory) do
-            inventoryHelper.removePossibleAmount(craftingInventory, i, 1)
         end
         outputSlotOccupied = false
         lastCombinedString = ""

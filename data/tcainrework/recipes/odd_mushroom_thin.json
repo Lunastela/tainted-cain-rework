@@ -2,17 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "Yum Heart",
-    "B": "tcainrework:bone_heart",
-    "#": "tcainrework:heart"
+    "M": "minecraft:brown_mushroom",
+    "#": "tcainrework:bone_heart"
   },
   "pattern": [
-    "# #",
-    "BHB",
-    " # "
+    "MM",
+    "M ",
+    "# "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "<3"
+    "collectible": 120
   }
 }

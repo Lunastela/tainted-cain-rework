@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "D": "tcainrework:tarot_card{\"card_type\":14}",
+    "C": "Cupid's Arrow",
+    "#": "tcainrework:black_heart"
+  },
+  "pattern": [
+    "###",
+    "  C",
+    "  D"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Death's Touch"
+  }
+}

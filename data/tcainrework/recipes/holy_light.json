@@ -2,17 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "Yum Heart",
-    "B": "tcainrework:bone_heart",
-    "#": "tcainrework:heart"
+    "S": "tcainrework:tarot_card{\"card_type\":20}",
+    "E": "Eye Drops",
+    "#": "tcainrework:eternal_heart"
   },
   "pattern": [
-    "# #",
-    "BHB",
+    " S ",
+    "#E#",
     " # "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "<3"
+    "collectible": "Holy Light"
   }
 }

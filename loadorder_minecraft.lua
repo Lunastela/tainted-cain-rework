@@ -13,8 +13,15 @@ return {
         torch
         lever
         ladder
+        iron_sword
         iron_shovel
         iron_axe
+        iron_hoe
+        golden_sword
+        golden_pickaxe
+        golden_shovel
+        golden_axe
+        golden_hoe
         paper
         book
         sand

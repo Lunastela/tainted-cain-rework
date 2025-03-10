@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Strawman",
+    "Scissors"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Keeper's Sack"
+  }
+}

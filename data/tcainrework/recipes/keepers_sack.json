@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:bone_heart",
+    "K": "#tcainrework:key",
+    "L": "minecraft:leather",
+    "C": "#tcainrework:coin"
+  },
+  "pattern": [
+    " K ",
+    "CLC",
+    "#L#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Keeper's Sack"
+  }
+}

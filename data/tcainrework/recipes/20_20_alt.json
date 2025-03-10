@@ -2,17 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "Yum Heart",
-    "B": "tcainrework:bone_heart",
-    "#": "tcainrework:heart"
+    "#": "Lost Contact",
+    "p": "minecraft:paper",
+    "B": "#book"
   },
   "pattern": [
-    "# #",
-    "BHB",
-    " # "
+    "#p#",
+    " B "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "<3"
+    "collectible": "20/20"
   }
 }

@@ -2,17 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "Yum Heart",
-    "B": "tcainrework:bone_heart",
-    "#": "tcainrework:heart"
+    "#": "tcainrework:dice_shard",
+    "E": "tcainrework:eternal_heart",
+    "B": "tcainrework:bone_heart"
   },
   "pattern": [
-    "# #",
-    "BHB",
-    " # "
+    "E#B"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "<3"
+    "collectible": "Eternal D6"
   }
 }

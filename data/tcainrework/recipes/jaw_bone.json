@@ -2,17 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "Yum Heart",
-    "B": "tcainrework:bone_heart",
-    "#": "tcainrework:heart"
+    "#": "tcainrework:bone_heart",
+    "C": "tcainrework:tarot_card{\"card_type\":2}"
   },
   "pattern": [
-    "# #",
-    "BHB",
-    " # "
+    "#",
+    "C",
+    "#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "<3"
+    "collectible": "Jaw Bone"
   }
 }

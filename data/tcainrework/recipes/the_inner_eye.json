@@ -2,16 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "Shard of Glass",
-    "D": "The Wiz",
+    "K": "tcainrework:golden_key",
+    "E": "Eye Sore",
     "C": "tcainrework:tarot_card{\"card_type\":2}"
   },
   "pattern": [
-    " D ",
-    "#C#"
+    "K",
+    "E",
+    "C"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "20/20"
+    "collectible": "The Inner Eye"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:pill",
+    "P": "tcainrework:pill{\"pill_effect\":49}",
+    "B": "minecraft:bucket"
+  },
+  "pattern": [
+    "#P#",
+    " B "
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Mysterious Liquid"
+  }
+}

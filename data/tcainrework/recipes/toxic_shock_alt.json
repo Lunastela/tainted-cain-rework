@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "Experimental Treatment",
+    "Mysterious Liquid"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Toxic Shock"
+  }
+}

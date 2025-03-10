@@ -105,9 +105,63 @@ return {
             DischargeRecipe = false,
         },
     },
-    ["1750d7f41f6d582bb32ad15a3c76c121fd1eee86"] = {
+    ["46890bfeb2d40eaa5a302f3804bc265e538c901c"] = {
         {
             RecipeName = "tcainrework:20_20",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {nil, "The Wiz", nil, "Shard of Glass", "tcainrework:tarot_card{\"card_type\":2}", "Shard of Glass", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "20/20"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:hallowed_ground",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {nil, "tcainrework:eternal_heart", nil, "#tcainrework:soul_heart", "The Poop", "#tcainrework:soul_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Hallowed Ground"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:prayer_card",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {nil, "tcainrework:mega_battery", nil, "tcainrework:eternal_heart", "#tcainrework:card", "tcainrework:eternal_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Prayer Card"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:technology",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {nil, "Sharp Plug", nil, "#tcainrework:key", "#eye", "#tcainrework:key", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Technology"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
+    ["1750d7f41f6d582bb32ad15a3c76c121fd1eee86"] = {
+        {
+            RecipeName = "tcainrework:20_20_alt",
             Category = "collectible",
             RecipeSize = Vector(3, 2),
             ConditionTable = {"Lost Contact", "minecraft:paper", "Lost Contact", nil, "#book", nil, },
@@ -154,6 +208,32 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Godhead"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:mysterious_liquid",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {"tcainrework:pill", "tcainrework:pill{\"pill_effect\":49}", "tcainrework:pill", nil, "minecraft:bucket", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Mysterious Liquid"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:slipped_rib",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {"tcainrework:bone_heart", "Tiny Planet", "tcainrework:bone_heart", nil, "#tcainrework:key", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Slipped Rib"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -585,6 +665,30 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:keepers_sack_alt",
+            Category = "collectible",
+            ConditionTable = {"Strawman", "Scissors", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Keeper's Sack"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:keepers_sack_alt_2",
+            Category = "collectible",
+            ConditionTable = {"Strawman", "The Pinking Shears", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Keeper's Sack"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:lemon_mishap",
             Category = "collectible",
             ConditionTable = {"Compost", "#tcainrework:battery", },
@@ -676,6 +780,30 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Mr. Mega"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:mutant_spider",
+            Category = "collectible",
+            ConditionTable = {"The Parasite", "tcainrework:pill{\"pill_effect\":34}", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Mutant Spider"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:mutant_spider_alt",
+            Category = "collectible",
+            ConditionTable = {"The Parasite", "tcainrework:pill{\"pill_effect\":35}", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Mutant Spider"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -843,6 +971,30 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "The Wafer"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:toxic_shock",
+            Category = "collectible",
+            ConditionTable = {"The Virus", "Mysterious Liquid", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Toxic Shock"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:toxic_shock_alt",
+            Category = "collectible",
+            ConditionTable = {"Experimental Treatment", "Mysterious Liquid", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Toxic Shock"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -1133,6 +1285,19 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:magic_mushroom",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:red_mushroom", "minecraft:red_mushroom", "minecraft:red_mushroom", "minecraft:red_mushroom", "minecraft:red_mushroom", "minecraft:red_mushroom", "tcainrework:bone_heart", "tcainrework:tarot_card{\"card_type\":12}", "tcainrework:bone_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Magic Mushroom"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:magic_skin_alt",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
@@ -1154,6 +1319,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Mama Mega!"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:mega_mush",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:bone_heart", "Midas' Touch", "tcainrework:bone_heart", "tcainrework:mega_battery", "Magic Mushroom", "tcainrework:mega_battery", "tcainrework:bone_heart", "tcainrework:mtg_card{\"card_type\":12}", "tcainrework:bone_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Mega Mush"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -1257,6 +1435,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Stigmata"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:strawman",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:penny", "minecraft:leather", "tcainrework:penny", "tcainrework:bone_heart", "tcainrework:wooden_doll", "tcainrework:bone_heart", "minecraft:leather", "tcainrework:bone_heart", "minecraft:leather", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Strawman"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -1471,6 +1662,32 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:cupids_arrow",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"tcainrework:card{\"card_type\":25}", "Iron Bar", "tcainrework:tarot_card{\"card_type\":2}", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Cupid's Arrow"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:dead_eye",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"tcainrework:charged_key", "#eye", "tcainrework:blended_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Dead Eye"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:experimental_treatment",
             Category = "collectible",
             RecipeSize = Vector(1, 3),
@@ -1492,6 +1709,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Jacob's Ladder"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:jaw_bone",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"tcainrework:bone_heart", "tcainrework:tarot_card{\"card_type\":2}", "tcainrework:bone_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Jaw Bone"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -1679,6 +1909,45 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:the_d6",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"tcainrework:mega_battery", "tcainrework:rune{\"card_type\":37}", "tcainrework:dice_shard", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "The D6"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:the_d6_alt",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"tcainrework:mega_battery", "tcainrework:soul_stone{\"card_type\":81}", "tcainrework:dice_shard", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "The D6"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:the_inner_eye",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"tcainrework:golden_key", "Eye Sore", "tcainrework:tarot_card{\"card_type\":2}", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "The Inner Eye"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:the_necronomicon",
             Category = "collectible",
             RecipeSize = Vector(1, 3),
@@ -1687,6 +1956,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "The Necronomicon"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:the_virus",
+            Category = "collectible",
+            RecipeSize = Vector(1, 3),
+            ConditionTable = {"Shard of Glass", "tcainrework:pill{\"pill_effect\":9}", "#tcainrework:key", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "The Virus"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -2046,6 +2328,19 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:holy_light",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "tcainrework:tarot_card{\"card_type\":20}", nil, "tcainrework:eternal_heart", "Eye Drops", "tcainrework:eternal_heart", nil, "tcainrework:eternal_heart", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Holy Light"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:holy_mantle",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
@@ -2054,6 +2349,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Holy Mantle"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:immaculate_heart",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "Tiny Planet", nil, "tcainrework:eternal_heart", "<3", "tcainrework:eternal_heart", nil, "tcainrework:eternal_heart", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Immaculate Heart"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -2145,6 +2453,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Playdough Cookie"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:redemption",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "tcainrework:tarot_card{\"card_type\":6}", nil, "tcainrework:eternal_heart", "Pentagram", "tcainrework:eternal_heart", nil, "tcainrework:soul_heart", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Redemption"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -2760,6 +3081,19 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:keepers_sack",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "#tcainrework:key", nil, "#tcainrework:coin", "minecraft:leather", "#tcainrework:coin", "tcainrework:bone_heart", "minecraft:leather", "tcainrework:bone_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Keeper's Sack"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:plum_flute",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
@@ -2909,6 +3243,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Bloodshot Eye"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:odd_mushroom_large",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:brown_mushroom", "minecraft:brown_mushroom", "minecraft:brown_mushroom", "tcainrework:bone_heart", "#tcainrework:heart", "tcainrework:bone_heart", nil, "#tcainrework:heart", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = 121
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -3072,6 +3419,47 @@ return {
             DischargeRecipe = false,
         },
     },
+    ["b079a02f3f473b59250af2a598d0157077f20692"] = {
+        {
+            RecipeName = "tcainrework:blue_cap",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "minecraft:brown_mushroom", nil, nil, "minecraft:brown_mushroom", nil, "tcainrework:bone_heart", "tcainrework:soul_heart", "tcainrework:bone_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Blue Cap"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:spirit_sword",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "Midas' Touch", nil, nil, "Midas' Touch", nil, "tcainrework:eternal_heart", "tcainrework:soul_heart", "tcainrework:eternal_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Spirit Sword"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:spoon_bender",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "Iron Bar", nil, nil, "Wooden Spoon", nil, "Iron Bar", "Telepathy For Dummies", "Iron Bar", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Spoon Bender"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
     ["0a42703fae8ea9b606d01c399e991711ce44d71b"] = {
         {
             RecipeName = "tcainrework:bobs_rotten_head",
@@ -3095,6 +3483,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Brother Bobby"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:pointy_rib",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "#tcainrework:heart", nil, nil, "#tcainrework:key", nil, "tcainrework:bone_heart", nil, "tcainrework:bone_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Pointy Rib"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -3342,6 +3743,62 @@ return {
             DischargeRecipe = false,
         },
     },
+    ["ec493b0c11ec3fb178fb33f1b8e5b531918bc45d"] = {
+        {
+            RecipeName = "tcainrework:deaths_touch",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:black_heart", "tcainrework:black_heart", "tcainrework:black_heart", nil, nil, "Cupid's Arrow", nil, nil, "tcainrework:tarot_card{\"card_type\":14}", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Death's Touch"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
+    ["5c5b8251bdb4b62eff8c746f4021483bfae24eb7"] = {
+        {
+            RecipeName = "tcainrework:eternal_d6",
+            Category = "collectible",
+            RecipeSize = Vector(3, 1),
+            ConditionTable = {"tcainrework:eternal_heart", "tcainrework:dice_shard", "tcainrework:bone_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Eternal D6"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:razor_blade",
+            Category = "collectible",
+            RecipeSize = Vector(3, 1),
+            ConditionTable = {"tcainrework:half_heart", "Iron Bar", "tcainrework:half_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Razor Blade"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:the_belt",
+            Category = "collectible",
+            RecipeSize = Vector(3, 1),
+            ConditionTable = {"minecraft:leather", "minecraft:leather", "minecraft:leather", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "The Belt"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
     ["d47a3e6d2c3eb56f2088d78cbc85421c6dfcfaef"] = {
         {
             RecipeName = "tcainrework:glass_cannon",
@@ -3352,47 +3809,6 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Glass Cannon"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-    },
-    ["46890bfeb2d40eaa5a302f3804bc265e538c901c"] = {
-        {
-            RecipeName = "tcainrework:hallowed_ground",
-            Category = "collectible",
-            RecipeSize = Vector(3, 2),
-            ConditionTable = {nil, "tcainrework:eternal_heart", nil, "#tcainrework:soul_heart", "The Poop", "#tcainrework:soul_heart", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Hallowed Ground"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:prayer_card",
-            Category = "collectible",
-            RecipeSize = Vector(3, 2),
-            ConditionTable = {nil, "tcainrework:mega_battery", nil, "tcainrework:eternal_heart", "#tcainrework:card", "tcainrework:eternal_heart", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Prayer Card"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:technology",
-            Category = "collectible",
-            RecipeSize = Vector(3, 2),
-            ConditionTable = {nil, "Sharp Plug", nil, "#tcainrework:key", "#eye", "#tcainrework:key", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Technology"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -3426,12 +3842,12 @@ return {
             DischargeRecipe = false,
         },
     },
-    ["bf0ce597399da0189aa7cbfbd8e1dd99f4a7e7d3"] = {
+    ["0fc11021996266a0e931f09c2d2b97bb56bd98f6"] = {
         {
             RecipeName = "tcainrework:less_than_three_alt",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {"tcainrework:heart", "tcainrework:bone_heart", "tcainrework:heart", nil, "Yum Heart", nil, nil, "tcainrework:heart", nil, },
+            ConditionTable = {"tcainrework:heart", nil, "tcainrework:heart", "tcainrework:bone_heart", "Yum Heart", "tcainrework:bone_heart", nil, "tcainrework:heart", nil, },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
@@ -3441,53 +3857,27 @@ return {
             DischargeRecipe = false,
         },
         {
-            RecipeName = "tcainrework:notched_axe",
+            RecipeName = "tcainrework:pentagram",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {"Iron Bar", "Iron Bar", "Iron Bar", nil, "minecraft:stick", nil, nil, "minecraft:stick", nil, },
+            ConditionTable = {"tcainrework:black_heart", nil, "tcainrework:black_heart", "tcainrework:black_heart", "tcainrework:black_heart", "tcainrework:black_heart", nil, "tcainrework:black_heart", nil, },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = "Notched Axe"
+                Collectible = "Pentagram"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
         },
         {
-            RecipeName = "tcainrework:screw",
+            RecipeName = "tcainrework:the_parasite",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
-            ConditionTable = {"#tcainrework:pickup", "#tcainrework:key", "#tcainrework:pickup", nil, "#tcainrework:key", nil, nil, "#tcainrework:key", nil, },
+            ConditionTable = {"tcainrework:rotten_heart", nil, "tcainrework:rotten_heart", "tcainrework:rotten_heart", "tcainrework:pill{\"pill_effect\":38}", "tcainrework:rotten_heart", nil, "tcainrework:rune{\"card_type\":33}", nil, },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = "Screw"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:telekinesis",
-            Category = "collectible",
-            RecipeSize = Vector(3, 3),
-            ConditionTable = {"tcainrework:soul_heart", "tcainrework:battery", "tcainrework:soul_heart", nil, "tcainrework:tarot_card{\"card_type\":2}", nil, nil, "tcainrework:soul_heart", nil, },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Telekinesis"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:we_need_to_go_deeper",
-            Category = "collectible",
-            RecipeSize = Vector(3, 3),
-            ConditionTable = {"minecraft:stick", "tcainrework:rune{\"card_type\":34,\"custom_gfx\":\"gfx/items/cards/left_rune.png\"}", "minecraft:stick", nil, "minecraft:stick", nil, nil, "Iron Bar", nil, },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "We Need To Go Deeper!"
+                Collectible = "The Parasite"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -3553,6 +3943,88 @@ return {
             DischargeRecipe = false,
         },
     },
+    ["bf0ce597399da0189aa7cbfbd8e1dd99f4a7e7d3"] = {
+        {
+            RecipeName = "tcainrework:notched_axe",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"Iron Bar", "Iron Bar", "Iron Bar", nil, "minecraft:stick", nil, nil, "minecraft:stick", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Notched Axe"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:screw",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"#tcainrework:pickup", "#tcainrework:key", "#tcainrework:pickup", nil, "#tcainrework:key", nil, nil, "#tcainrework:key", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Screw"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:telekinesis",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:soul_heart", "tcainrework:battery", "tcainrework:soul_heart", nil, "tcainrework:tarot_card{\"card_type\":2}", nil, nil, "tcainrework:soul_heart", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Telekinesis"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:we_need_to_go_deeper",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:stick", "tcainrework:rune{\"card_type\":34,\"custom_gfx\":\"gfx/items/cards/left_rune.png\"}", "minecraft:stick", nil, "minecraft:stick", nil, nil, "Iron Bar", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "We Need To Go Deeper!"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
+    ["e41924df1bd127fbd91a5491f7b23b2923783b2a"] = {
+        {
+            RecipeName = "tcainrework:odd_mushroom_thin",
+            Category = "collectible",
+            RecipeSize = Vector(2, 3),
+            ConditionTable = {"minecraft:brown_mushroom", "minecraft:brown_mushroom", "minecraft:brown_mushroom", nil, "tcainrework:bone_heart", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = 120
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:sharp_straw",
+            Category = "collectible",
+            RecipeSize = Vector(2, 3),
+            ConditionTable = {"tcainrework:half_heart", "#tcainrework:key", "tcainrework:half_soul_heart", nil, "tcainrework:half_heart", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Sharp Straw"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
     ["b546ea0eddeb6b68714618e47120bea87293ba99"] = {
         {
             RecipeName = "tcainrework:orphan_socks",
@@ -3563,49 +4035,6 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Orphan Socks"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-    },
-    ["0fc11021996266a0e931f09c2d2b97bb56bd98f6"] = {
-        {
-            RecipeName = "tcainrework:pentagram",
-            Category = "collectible",
-            RecipeSize = Vector(3, 3),
-            ConditionTable = {"tcainrework:black_heart", nil, "tcainrework:black_heart", "tcainrework:black_heart", "tcainrework:black_heart", "tcainrework:black_heart", nil, "tcainrework:black_heart", nil, },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Pentagram"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-    },
-    ["5c5b8251bdb4b62eff8c746f4021483bfae24eb7"] = {
-        {
-            RecipeName = "tcainrework:razor_blade",
-            Category = "collectible",
-            RecipeSize = Vector(3, 1),
-            ConditionTable = {"tcainrework:half_heart", "Iron Bar", "tcainrework:half_heart", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Razor Blade"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:the_belt",
-            Category = "collectible",
-            RecipeSize = Vector(3, 1),
-            ConditionTable = {"minecraft:leather", "minecraft:leather", "minecraft:leather", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "The Belt"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -3652,17 +4081,15 @@ return {
             DisplayRecipe = true,
             DischargeRecipe = false,
         },
-    },
-    ["e41924df1bd127fbd91a5491f7b23b2923783b2a"] = {
         {
-            RecipeName = "tcainrework:sharp_straw",
+            RecipeName = "tcainrework:wavy_cap",
             Category = "collectible",
-            RecipeSize = Vector(2, 3),
-            ConditionTable = {"tcainrework:half_heart", "#tcainrework:key", "tcainrework:half_soul_heart", nil, "tcainrework:half_heart", nil, },
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"minecraft:brown_mushroom", "minecraft:brown_mushroom", "minecraft:brown_mushroom", nil, "tcainrework:pill", nil, "tcainrework:bone_heart", "tcainrework:pill", "tcainrework:bone_heart", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
-                Collectible = "Sharp Straw"
+                Collectible = "Wavy Cap"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -3678,21 +4105,6 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Sister Maggy"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-    },
-    ["b079a02f3f473b59250af2a598d0157077f20692"] = {
-        {
-            RecipeName = "tcainrework:spoon_bender",
-            Category = "collectible",
-            RecipeSize = Vector(3, 3),
-            ConditionTable = {nil, "Iron Bar", nil, nil, "Wooden Spoon", nil, "Iron Bar", "Telepathy For Dummies", "Iron Bar", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Spoon Bender"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,

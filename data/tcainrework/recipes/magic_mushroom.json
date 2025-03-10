@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "M": "minecraft:red_mushroom",
+    "C": "tcainrework:tarot_card{\"card_type\":12}",
+    "#": "tcainrework:bone_heart"
+  },
+  "pattern": [
+    "MMM",
+    "MMM",
+    "#C#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Magic Mushroom"
+  }
+}

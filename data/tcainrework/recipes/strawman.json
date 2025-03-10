@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "#": "tcainrework:bone_heart",
+    "D": "tcainrework:wooden_doll",
+    "L": "minecraft:leather",
+    "P": "tcainrework:penny"
+  },
+  "pattern": [
+    "PLP",
+    "#D#",
+    "L#L"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Strawman"
+  }
+}

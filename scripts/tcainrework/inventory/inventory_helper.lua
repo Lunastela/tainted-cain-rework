@@ -1081,6 +1081,25 @@ function inventoryHelper.checkRecipeConditional(craftingInventory, recipeList, t
     return false
 end
 
+local collectibleTypeReturns = {
+    [CollectibleType.COLLECTIBLE_ISAACS_TEARS] = "minecraft:bucket"
+}
+
+--- Behavior for consuming recipe ingredients during crafting
+function inventoryHelper.consumeRecipeIngredient(recipe, inventory, index)
+    local myIngredient = inventory[index]
+    if myIngredient.ComponentData then
+        -- Items that return custom items
+        if myIngredient.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
+        and collectibleTypeReturns[myIngredient.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]] then
+            return inventoryHelper.createItem(collectibleTypeReturns[myIngredient.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]])
+        end
+    end
+    -- Default remove 1 item behavior
+    inventoryHelper.removePossibleAmount(inventory, index, 1)
+    return inventory[index]
+end
+
 local toastStorage = require("scripts.tcainrework.stored.toast_storage")
 function TCainRework:UnlockItemRecipe(recipeName)
     if recipeName then

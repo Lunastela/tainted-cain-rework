@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "M": "Magic Mushroom",
+    "C": "tcainrework:mtg_card{\"card_type\":12}",
+    "B": "tcainrework:mega_battery",
+    "G": "Midas' Touch",
+    "#": "tcainrework:bone_heart"
+  },
+  "pattern": [
+    "#G#",
+    "BMB",
+    "#C#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Mega Mush"
+  }
+}

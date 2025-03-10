@@ -2,17 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "Yum Heart",
-    "B": "tcainrework:bone_heart",
-    "#": "tcainrework:heart"
+    "P": "Tiny Planet",
+    "V": "<3",
+    "E": "tcainrework:eternal_heart"
   },
   "pattern": [
-    "# #",
-    "BHB",
-    " # "
+    " P ",
+    "EVE",
+    " E "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "<3"
+    "collectible": "Immaculate Heart"
   }
 }
