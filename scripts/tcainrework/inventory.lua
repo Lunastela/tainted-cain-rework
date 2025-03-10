@@ -1548,11 +1548,15 @@ function mod:RenderInventory()
                     and inventoryHelper.getItemUnlocked(hotbarInventory[hotbarSlotSelected]) then
                         local collectibleType = hotbarInventory[hotbarSlotSelected].ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]
                         -- Well aware this doesn't work with multiplayer. won't fix yet
-                        if inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_2) and player and player:IsItemQueueEmpty() then
+                        if (player and player:IsItemQueueEmpty())
+                        and (((player.ControllerIndex <= 0) and inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_2))
+                        or (Input.IsActionPressed(ButtonAction.ACTION_DROP, player.ControllerIndex) 
+                        and Input.IsActionPressed(ButtonAction.ACTION_ITEM, player.ControllerIndex))) then
                             local configItem = Isaac.GetItemConfig():GetCollectible(collectibleType)
                             local isActiveItem = (configItem.Type == ItemType.ITEM_ACTIVE)
                             if isActiveItem then
-                                if rmbTrigger then
+                                if (((player.ControllerIndex <= 0) and rmbTrigger)
+                                or (Input.IsActionTriggered(ButtonAction.ACTION_ITEM, player.ControllerIndex))) then
                                     player:AnimateCollectible(collectibleType)
                                     playerAddCollectible(player, collectibleType, configItem, hotbarInventory)
                                 end

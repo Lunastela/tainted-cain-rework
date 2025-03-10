@@ -2,7 +2,7 @@
 	<Info CreatedBy="Unknown" CreatedOn="3/2/2025 10:58:37 PM" Version="4" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="cursor.png" Id="0"/>
+			<Spritesheet Path="legacy_cursor.png" Id="0"/>
 			<Spritesheet Path="cursor_shadow.png" Id="1"/>
 		</Spritesheets>
 		<Layers>

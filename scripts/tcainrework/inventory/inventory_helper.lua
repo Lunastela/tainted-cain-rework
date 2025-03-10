@@ -199,7 +199,11 @@ function inventoryHelper.getItemGraphic(pickup)
                 local localizedName = utility.getLocalizedString(
                     "PocketItems", utility.getCardConfig(pickup.ComponentData[InventoryItemComponentData.CARD_TYPE]).Name
                 )
-                return "gfx/items/cards/" .. string.lower(localizedName):gsub("% ", "_") .. ".png"
+                local soulName = string.lower(localizedName):gsub("% ", "_")
+                if soulName == "soul_of_???" then
+                    soulName = "soul_of_blue_baby"
+                end
+                return "gfx/items/cards/" .. soulName .. ".png"
             end
             if runeList[pickup.ComponentData[InventoryItemComponentData.CARD_TYPE]] then
                 return "gfx/items/cards/" .. runeList[pickup.ComponentData[InventoryItemComponentData.CARD_TYPE]] .. "_rune.png"
@@ -294,12 +298,28 @@ end
 function inventoryHelper.getCollectibleCrafted(setUnlocked)
     local runSave = unlockWrapper()
     if not runSave.collectibleCrafted and setUnlocked then
-        TCainRework:CreateToast(
-            InventoryToastTypes.TUTORIAL, 
-            nil, "gfx/ui/right_click.png", 
-            "Consume a collectible", "Hold §lRMB",
-            240
-        )
+        local player = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+        if player and player.ControllerIndex > 0 then
+            TCainRework:CreateToast(
+                InventoryToastTypes.TUTORIAL, 
+                nil, "gfx/ui/button_alt.png", 
+                "Switch inventory slots", "Hold §lRT§r, press §lLB§r or §lRB§r",
+                640
+            )
+            TCainRework:CreateToast(
+                InventoryToastTypes.TUTORIAL, 
+                nil, "gfx/ui/button_alt_2.png", 
+                "Consume a collectible", "Hold §lRT§r and §lLT",
+                640
+            )
+        else
+            TCainRework:CreateToast(
+                InventoryToastTypes.TUTORIAL, 
+                nil, "gfx/ui/right_click.png", 
+                "Consume a collectible", "Hold §lRMB",
+                240
+            )
+        end
         runSave.collectibleCrafted = setUnlocked
     end
     return runSave.collectibleCrafted

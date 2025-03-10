@@ -1,5 +1,3 @@
-- Nerf Jera
-
 High Priority: 
 - Use beggar pools to create pickups
 - Add proper way to do controller pickup consumption & tutorial
