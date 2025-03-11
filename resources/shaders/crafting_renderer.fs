@@ -159,6 +159,6 @@ void main(void)
 		// Sample the texture using the UV coordinates
 		vec3 lightDir = vec3(.4, 1., .7) * rotateY(rotation);
 		float intensity = max(dot(normal, lightDir), 0.1);
-		fragColor = vec4((textureColor.rgb *  max(intensity, 0.4)), texture(Texture0, uv).a);
+		fragColor = Color0 * vec4((textureColor.rgb *  max(intensity, 0.4)), texture(Texture0, uv).a);
 	}
 }

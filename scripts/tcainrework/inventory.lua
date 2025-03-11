@@ -864,6 +864,8 @@ local function playerAddCollectible(player, collectibleType, configItem, hotbarI
 end
 
 local lastItemName, slotTimer = "", 0
+local HOTBAR_FADE_TIME = 60
+local hotbarFadeTimer, hotbarAlpha = HOTBAR_FADE_TIME, 1
 function mod:RenderInventory()
     if EID then
         EID.CraftingIsHidden = true
@@ -886,6 +888,7 @@ function mod:RenderInventory()
 
         local lmbRelease, rmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_1), inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_2)
 
+        local hideHotbar = ((mod.getModSettings().fadeHotbar == 1) and (Isaac.CountBosses() > 0))
         -- Render Hotbar before everything else
         hotbarInterface:Play("Idle", true)
         local hotbarPosition = screenCenter + Vector(0, Isaac.GetScreenHeight() / 2)
@@ -897,10 +900,13 @@ function mod:RenderInventory()
             for i = 1, 10 do 
                 local hotbarPosition = screenCenter + Vector(CELL_SIZE - 6, (Isaac.GetScreenHeight() / 2)) 
                     - Vector((hotbarCellSize * 5) - ((i - 1) * hotbarCellSize), hotbarCellSize - 1)
-                local hoveringOverHotbar = (inputHelper.hoveringOver(hotbarPosition, hotbarCellSize, hotbarCellSize)
-                    and (inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_1) or inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_2)))
+                local hoveringOverHotbar = (inputHelper.hoveringOver(hotbarPosition, hotbarCellSize, hotbarCellSize))
+                if hoveringOverHotbar then
+                    hotbarFadeTimer = HOTBAR_FADE_TIME
+                end
 
-                if ((i < 10) and hoveringOverHotbar) or (Input.IsButtonPressed(Keyboard.KEY_0 + i, 0)) then
+                if ((i < 10) and (hoveringOverHotbar and (inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_1) 
+                or inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_2)))) or (Input.IsButtonPressed(Keyboard.KEY_0 + i, 0)) then
                     hotbarSlotSelected = i
                     goto continueHotbar
                 end
@@ -923,13 +929,26 @@ function mod:RenderInventory()
                 hotbarSlotSelected = 1
             end
 
+            ::continueHotbar::
             if lastHotbarSlot ~= hotbarSlotSelected then
+                hotbarFadeTimer = HOTBAR_FADE_TIME
                 eatTimer = -1
             end
         end
-        ::continueHotbar::
 
         -- Render Hotbar
+        if (hideHotbar and hotbarFadeTimer <= 0) then
+            hotbarAlpha = math.max(hotbarAlpha - 0.025, 0.5)
+        else
+            if hideHotbar and hotbarFadeTimer > 0 then
+                hotbarFadeTimer = hotbarFadeTimer - 1
+            elseif not hideHotbar then
+                hotbarFadeTimer = HOTBAR_FADE_TIME
+            end
+            hotbarAlpha = math.min(hotbarAlpha + 0.025, 1)
+        end
+
+        hotbarInterface.Color = Color(1, 1, 1, hotbarAlpha)
         hotbarInterface:Play("Selector", true)
         hotbarInterface:Render(screenCenter + Vector((hotbarSlotSelected - 1) * hotbarCellSize, Isaac.GetScreenHeight() / 2))
         local hotbarInventory = inventoryHelper.getInventory(InventoryTypes.HOTBAR)
@@ -943,7 +962,7 @@ function mod:RenderInventory()
                 inventoryHelper.renderItem(
                     hotbarInventory[i], 
                     (hotbarPosition + Vector(8, 16) - (Vector(8, 16) * myScale)), 
-                    myScale
+                    myScale, nil, hotbarAlpha
                 )
                 if hotbarSlot.Count > 1 then
                     local itemCountString = tostring(hotbarSlot.Count)
@@ -962,7 +981,7 @@ function mod:RenderInventory()
                     local colorRarities = InventoryItemRarityColors
                     if lastItemName and lastItemName.Rarity and lastItemName.String then
                         local currentAlpha, currentAlphaShadow = colorRarities[lastItemName.Rarity].Color.Alpha, colorRarities[lastItemName.Rarity].Shadow.Alpha
-                        local myAlpha = math.max(math.min(slotTimer, 100) / 100, 0)
+                        local myAlpha = math.max(math.min(slotTimer, 100) / 100, 0) * hotbarAlpha
                         -- Set colors to our alpha temporarily
                         colorRarities[lastItemName.Rarity].Color.Alpha, colorRarities[lastItemName.Rarity].Shadow.Alpha = myAlpha, myAlpha
                         -- Render text at center of hotbar

@@ -14,6 +14,45 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:gamekid",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {"#tcainrework:key", "tcainrework:pill{\"pill_effect\":36}", "#tcainrework:key", "#tcainrework:key", "tcainrework:battery", "#tcainrework:key", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "The Gamekid"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:gamekid_alt",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {"#tcainrework:key", "tcainrework:pill{\"pill_effect\":37}", "#tcainrework:key", "#tcainrework:key", "tcainrework:battery", "#tcainrework:key", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "The Gamekid"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:how_to_jump",
+            Category = "collectible",
+            RecipeSize = Vector(3, 2),
+            ConditionTable = {"minecraft:red_mushroom", "tcainrework:pill{\"pill_effect\":37}", "minecraft:red_mushroom", "minecraft:red_mushroom", "#book", "minecraft:red_mushroom", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "How to Jump"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:iron_bar",
             Category = "collectible",
             RecipeSize = Vector(3, 2),
@@ -1221,6 +1260,19 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:everything_jar",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"#tcainrework:pickup", "Midas' Touch", "#tcainrework:pickup", "tcainrework:tarot_card{\"card_type\":9}", "The Jar", "tcainrework:tarot_card{\"card_type\":9}", "#tcainrework:pickup", "tcainrework:mega_battery", "#tcainrework:pickup", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Everything Jar"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:giga_bomb",
             Category = "misc",
             RecipeSize = Vector(3, 3),
@@ -1384,6 +1436,32 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Mystery Sack"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:old_bandage",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:half_heart", "minecraft:paper", "tcainrework:half_heart", "minecraft:paper", "tcainrework:pill{\"pill_effect\":7}", "minecraft:paper", "tcainrework:half_heart", "tcainrework:pill{\"pill_effect\":7}", "tcainrework:half_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Old Bandage"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:old_bandage_alt",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"tcainrework:half_heart", "minecraft:paper", "tcainrework:half_heart", "minecraft:paper", "tcainrework:pill{\"pill_effect\":21}", "minecraft:paper", "tcainrework:half_heart", "tcainrework:pill{\"pill_effect\":21}", "tcainrework:half_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Old Bandage"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -2574,6 +2652,19 @@ return {
             DisplayRecipe = true,
             DischargeRecipe = false,
         },
+        {
+            RecipeName = "tcainrework:yum_heart_alt",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "tcainrework:heart", nil, "tcainrework:pill{\"pill_effect\":6}", "tcainrework:heart", "tcainrework:pill{\"pill_effect\":6}", nil, "tcainrework:heart", nil, },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Yum Heart"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
     },
     ["shapeless_085fbabd884e6a20267d051dfd7bf5c6c12ac53a"] = {
         {
@@ -2903,6 +2994,18 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Duality"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:eye_sore_alt",
+            Category = "collectible",
+            ConditionTable = {"Eye Drops", "tcainrework:rune{\"card_type\":33}", "#tcainrework:pill", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Eye Sore"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -3659,6 +3762,19 @@ return {
             DischargeRecipe = false,
         },
         {
+            RecipeName = "tcainrework:eye_sore",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"#tcainrework:heart", nil, "#tcainrework:heart", nil, "tcainrework:pill{\"pill_effect\":27}", nil, "#tcainrework:heart", nil, "#tcainrework:heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Eye Sore"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
             RecipeName = "tcainrework:scissors",
             Category = "collectible",
             RecipeSize = Vector(3, 3),
@@ -3874,6 +3990,32 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Razor Blade"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:super_bandage",
+            Category = "collectible",
+            RecipeSize = Vector(3, 1),
+            ConditionTable = {"tcainrework:half_soul_heart", "Old Bandage", "tcainrework:half_soul_heart", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Super Bandage"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:super_bandage_alt",
+            Category = "collectible",
+            RecipeSize = Vector(3, 1),
+            ConditionTable = {"minecraft:paper", "tcainrework:blended_heart", "minecraft:paper", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Super Bandage"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -4142,21 +4284,6 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Sister Maggy"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-    },
-    ["93ac8946882128457cd9e283b30ca851945e6690"] = {
-        {
-            RecipeName = "tcainrework:super_bandage",
-            Category = "collectible",
-            RecipeSize = Vector(2, 1),
-            ConditionTable = {"Old Bandage", "Old Bandage", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Super Bandage"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,

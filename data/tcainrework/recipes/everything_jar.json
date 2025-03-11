@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "J": "The Jar",
+    "j": "tcainrework:tarot_card{\"card_type\":9}",
+    "G": "Midas' Touch",
+    "B": "tcainrework:mega_battery",
+    "#": "#tcainrework:pickup"
+  },
+  "pattern": [
+    "#G#",
+    "jJj",
+    "#B#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Everything Jar"
+  }
+}

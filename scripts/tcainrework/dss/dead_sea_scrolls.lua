@@ -193,7 +193,8 @@ local stringTable = {
     ["false"] = "OFF",
     ["true"] = "ON",
     ["Fabulous"] = "§oFabulous!",
-    ["do not drop pickups"] = "Keep inventory after death"
+    ["do not drop pickups"] = "Keep inventory after death",
+    ["fade hud"] = "When to fade Hotbar"
 }
 
 if not REPENTOGON then
@@ -768,6 +769,31 @@ local cainCraftingDirectory = {
                     strset = {"Whether to", "display", "pop-ups", "whenever", "they appear."},
                     extraMinecraftDescription = "Serves as a way of shutting off those pesky toasts that appear whenever you unlock a new recipe.",
                 },
+            },
+            {
+                str = "fade hud",
+                choices = {"Boss Fights", "Never"},
+                setting = 1,
+                variable = "fadeHotbar",
+                load = function ()
+                    return getSaveWrapper().fadeHotbar or 1
+                end,
+                store = function (var)
+                    getSaveWrapper().fadeHotbar = var
+                end,
+                tooltip = {
+                    strset = {
+                        "in what",
+                        "scenario",
+                        "should the",
+                        "hud be hidden"
+                    },
+                    extraMinecraftDescription = {
+                        "Currently, the Hotbar will fade unless hovered over during a boss fight.",
+                        "Currently, the Hotbar never fades."
+                    },
+                },
+                
             },
             {str = "", fsize = 2, nosel = true},
             {str = "Gameplay", fsize = 2, nosel = true},

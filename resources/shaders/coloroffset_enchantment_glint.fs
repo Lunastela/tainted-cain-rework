@@ -96,5 +96,5 @@ void main(void)
    	vec3 textureColor = (enchantmentGlint(uv, ColorizeOut.a) * 0.65) + texture(Texture0, adjustUV(uv)).rgb;
   	fragColor = Color0 * vec4(textureColor, texture(Texture0, adjustUV(uv)).a) * texture(Texture0, adjustUV(uv)).a;
 
-	fragColor.rgb = mix(fragColor.rgb, fragColor.rgb - mod(fragColor.rgb, 1.0/16.0) + 1.0/32.0, clamp(PixelationAmountOut, 0.0, 1.0));
+	fragColor.rgb = mix(fragColor.rgb, fragColor.rgb - mod(fragColor.rgb, 1.0 / 16.0) + 1.0 / 32.0, clamp(PixelationAmountOut, 0.0, 1.0));
 }

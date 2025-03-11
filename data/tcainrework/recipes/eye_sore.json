@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "P": "Old Bandage",
-    "p": "tcainrework:half_soul_heart"
+    "H": "#tcainrework:heart",
+    "P": "tcainrework:pill{\"pill_effect\":27}"
   },
   "pattern": [
-    "pPp"
+    "H H",
+    " P ",
+    "H H"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Super Bandage"
+    "collectible": "Eye Sore"
   }
 }

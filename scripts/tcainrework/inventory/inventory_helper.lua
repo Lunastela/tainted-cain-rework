@@ -1262,7 +1262,7 @@ if REPENTOGON then
         0, 0, 0, 1, 
         255 / 255, 219 / 255, 16 / 255
     )
-    function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, elapsedTime)
+    function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, elapsedTime, itemAlpha)
         if not itemToDisplay then
             return
         end
@@ -1283,7 +1283,7 @@ if REPENTOGON then
         local isEnchanted = inventoryHelper.getDefaultEnchanted(itemToDisplay)
         local spriteSize = ((renderType == renderTypes.Collectible) and 32) or 16
         renderSprite.Color = Color(
-            1, 1, 1, 1, 
+            1, 1, 1, itemAlpha or 1, 
             0, 0, 0, 
             (((elapsedTime ~= nil) and elapsedTime) or ((renderType == renderTypes.Default) and TCainRework.elapsedTime)) or 0, 
             spriteSize, spriteSize, isEnchanted and TCainRework.elapsedTime or 0

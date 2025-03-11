@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "K": "#tcainrework:key",
+    "B": "tcainrework:battery",
+    "P": "tcainrework:pill{\"pill_effect\":36}"
+  },
+  "pattern": [
+    "KPK",
+    "KBK"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "The Gamekid"
+  }
+}

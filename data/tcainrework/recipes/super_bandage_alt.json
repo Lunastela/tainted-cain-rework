@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "P": "Old Bandage",
-    "p": "tcainrework:half_soul_heart"
+    "P": "tcainrework:blended_heart",
+    "p": "minecraft:paper"
   },
   "pattern": [
     "pPp"

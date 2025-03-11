@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "collectible",
+  "key": {
+    "P": "tcainrework:pill{\"pill_effect\":21}",
+    "p": "minecraft:paper",
+    "#": "tcainrework:half_heart"
+  },
+  "pattern": [
+    "#p#",
+    "pPp",
+    "#P#"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "Old Bandage"
+  }
+}
