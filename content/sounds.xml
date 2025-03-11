@@ -7,6 +7,10 @@
         <sample weight="1" path="deadseascrolls/whoosh.wav" />
     </sound>
 
+	<sound name="hi_eric">
+        <sample weight="1" path="ui/Peam.wav" />
+    </sound>
+
 	<!-- UI -->
 	<sound name="Toast_InventoryIn">
 		<sample weight="1" path="ui/In.wav" />

@@ -669,6 +669,21 @@ local function panelFrontWrapper(panel, pos, tbl)
     end
 end
 
+local monkeysPaw = Sprite()
+monkeysPaw:Load("gfx/ui/skibidi.anm2")
+monkeysPaw:LoadGraphics()
+monkeysPaw:SetFrame("sheet0", 1)
+monkeysPaw.Scale = (Vector(0.5, 0.30) / 1.65)
+local monkeysPawAlpha, monkeysPawStartTime = 0, 0
+local monkeysPawSound = Isaac.GetSoundIdByName("hi_eric")
+local function resetMonkeysPaw()
+    monkeysPawAlpha = -0.5
+    monkeysPawStartTime = 0
+    if SFXManager():IsPlaying(monkeysPawSound) then
+        SFXManager():Stop(monkeysPawSound)
+    end
+end
+
 local cainCraftingDirectory = {
     main = {
         title = string.lower(displayName),
@@ -918,7 +933,7 @@ local cainCraftingDirectory = {
             creditsWrapper("john snail", "made subworld library", {"oh baby!"}),
             creditsWrapper("mr. headcrab", "the guy", {"can you make", "a non", "repentogon", "version"}),
             creditsWrapper("pread1129", "liminal", {"play tainted", "blue baby"}),
-            creditsWrapper("elitemastereric", "thinking about it", {""}),
+            creditsWrapper("elitemastereric", "thinking about it", {"skibidi", "edge", "rizz"}),
             {str = "", nosel = true},
             {str = "translations", nosel = true},
             creditsWrapper("scribble", "french", {"i like", "flowers", "n bats"}),
@@ -936,6 +951,45 @@ local cainCraftingDirectory = {
             creditsWrapper("benevolusgoat", "goat", {"hmmm", "no wait"}),
             creditsWrapper("wofsauge", "font keming issue", {""}),
             creditsWrapper("you", "playing the mod", {"[          ]", "write your", "quote here!"})
+        },
+        format = {
+            Panels = {
+                {
+                    Panel = deadSeaScrollsMod.panels.tooltip,
+                    Offset = Vector(130, -2),
+                    Draw = function(panel, pos, item, tbl)
+                        if item then
+                            local getDrawButtons = panel.PanelData.GetDrawButtons or panel.Panel.GetDrawButtons
+                            if getDrawButtons then
+                                local drawings = deadSeaScrollsMod.generateMenuDraw(item, getDrawButtons(panel, item, tbl), pos, panel.Panel)
+                                for _, drawing in ipairs(drawings) do
+                                    deadSeaScrollsMod.drawMenu(tbl, drawing)
+                                    if item.strset and item.strset[1] == "skibidi" then
+                                        local frame = ((monkeysPawStartTime > 0) and (math.floor((Isaac.GetTime() - monkeysPawStartTime) / 1000) * 10)) or 0
+                                        monkeysPaw.Color = Color(1, 1, 1, monkeysPawAlpha + (frame / 50))
+                                        if ((monkeysPawAlpha >= 1) and (monkeysPawStartTime <= 0)) then
+                                            monkeysPawStartTime = Isaac.GetTime()
+                                            SFXManager():Play(monkeysPawSound, 1)
+                                        else
+                                            monkeysPawAlpha = math.min(monkeysPawAlpha + (0.0125 / 2), 1)
+                                        end
+                                        monkeysPaw:SetFrame("sheet0", frame)
+                                        monkeysPaw:Render(pos - Vector(49, 55))
+                                    else
+                                        resetMonkeysPaw()
+                                    end
+                                end
+                            end
+                        end
+                    end,
+                    Color = 1
+                },
+                {
+                    Panel = deadSeaScrollsMod.panels.main,
+                    Offset = Vector(-42, 10),
+                    Color = 1,
+                },
+            }
         }
     },
     rgonpopup = {

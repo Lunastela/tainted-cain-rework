@@ -139,9 +139,8 @@ mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, function(_, entity)
     -- only if the player has the bag of crafting
     local inventoryHelper = mod.inventoryHelper
     local player = entity:ToPlayer()
-    if (player and player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+    if (player and (player.Variant == PlayerVariant.PLAYER) and player:HasCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
     and ((inventoryHelper.getUnlockedInventory()) and ((TCainRework.getModSettings().keepInventory or 1) == 1))) then
-        
         -- in the future, check individual player inventories
         local inventoryList = saveManager.GetRunSave().Inventories
         if inventoryList then
