@@ -35,11 +35,16 @@ mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, function(_, player)
         local playerIndex = GetPtrHash(player)
         local bagSprite = bagSprites[playerIndex]
         if bagSprite and bagSprite:GetAnimation():find("Idle") then
-            if player:GetShootingJoystick():LengthSquared() > 0 then
+            local shootingJoystick = player:GetShootingJoystick()
+            if (Options.MouseControl 
+            and (player:GetAimDirection():LengthSquared() > player:GetShootingJoystick():LengthSquared())) then
+                shootingJoystick = player:GetAimDirection()
+            end
+            if shootingJoystick:LengthSquared() > 0 then
                 bagSprite:Play("Swing", true)
                 bagSpritesFrame[playerIndex] = bagSprite:GetFrame()
                 bagSprite.Scale = player.SpriteScale
-                bagSprite.Rotation = ((player:GetShootingJoystick():GetAngleDegrees() - 90) + 360) % 360
+                bagSprite.Rotation = ((shootingJoystick:GetAngleDegrees() - 90) + 360) % 360
                 player:AnimateCollectible(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING, "HideItem")
                 SFXManager():Play(SoundEffect.SOUND_BIRD_FLAP, 1, 2, false, 1 + (math.random(-50, 50) / 1000))
             end
