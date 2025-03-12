@@ -32,8 +32,7 @@ const vec3 _lum = vec3(0.212671, 0.715160, 0.072169);
 
 const vec2 pixelSize = vec2(16.0, 16.0);
 vec2 adjustUV(vec2 uv) {
-    ivec2 textureSize2d = textureSize(Texture0, 0);
-    float myTextureSize = float(textureSize2d.y) / pixelSize.y;
+    float myTextureSize = TextureSizeOut.y / pixelSize.y;
     float texelSize = 1.0 / myTextureSize;
     return (uv) + vec2(0., mod(floor(ColorizeOut.r * 32.), myTextureSize) * texelSize);
 }
@@ -95,6 +94,5 @@ void main(void)
 
    	vec3 textureColor = (enchantmentGlint(uv, ColorizeOut.a) * 0.65) + texture(Texture0, adjustUV(uv)).rgb;
   	fragColor = Color0 * vec4(textureColor, texture(Texture0, adjustUV(uv)).a) * texture(Texture0, adjustUV(uv)).a;
-
 	fragColor.rgb = mix(fragColor.rgb, fragColor.rgb - mod(fragColor.rgb, 1.0 / 16.0) + 1.0 / 32.0, clamp(PixelationAmountOut, 0.0, 1.0));
 }

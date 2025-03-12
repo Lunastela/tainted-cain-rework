@@ -103,7 +103,7 @@ void main(void)
   	vec2 s_pos = PixelationAmountOut > 0.0 ? uv - mod(uv, pa) + pa * .5 : uv; // uv silly
 
 	float rotation = -(ColorizeOut.r);
-	rotation = PixelationAmountOut > 0.0 ? (ceil(rotation * 4 * PixelationAmountOut) / (4 * PixelationAmountOut)) : rotation;
+	rotation = PixelationAmountOut > 0.0 ? (ceil(rotation * 4. * PixelationAmountOut) / (4. * PixelationAmountOut)) : rotation;
 
 	vec3 up = vec3(0.0, 1.0, 0.0);
 	vec3 c_pos = vec3(8.0, 6.0, 8.0) * rotateY(rotation);
@@ -129,27 +129,28 @@ void main(void)
 		pos += dist * r_dir;
 	}
 	
+	fragColor = vec4(0., 0., 0., 0.);
 	if (dist < EPSILON) {
 		vec2 eps = vec2(0.0, EPSILON);
 		vec3 normal = normalize(vec3(
-         box(pos + eps.yxx, cubeSize) - box(pos - eps.yxx, cubeSize),
+			box(pos + eps.yxx, cubeSize) - box(pos - eps.yxx, cubeSize),
 			box(pos + eps.xyx, cubeSize) - box(pos - eps.xyx, cubeSize),
 			box(pos + eps.xxy, cubeSize) - box(pos - eps.xxy, cubeSize)
-      ));
+		));
 		
 		// Determine UV coordinates based on the normal
 		vec2 uv;
 		vec3 lighting = vec3(1.);
 		if (abs(normal.x) > 0.99) {
-			uv = pos.zy / cubeSize.zy * 0.5 + 0.5;
+			uv = pos.zy / cubeSize.zy * vec2(0.5) + vec2(0.5);
 			uv = (vec2(1.) - uv.xy);
             if (sign(normal.x) == -1.)
                 uv.x = 1. - uv.x;
 		} else if (abs(normal.y) > 0.99) {
-			uv = pos.zx / cubeSize.xz * 0.5 + 0.5;
+			uv = pos.zx / cubeSize.xz * vec2(0.5) + vec2(0.5);
             uv.x = 1. - uv.x;
 		} else if (abs(normal.z) > 0.99) {
-			uv = pos.xy / cubeSize.xy * 0.5 + 0.5;
+			uv = pos.xy / cubeSize.xy * vec2(0.5) + vec2(0.5);
 			uv.y = 1. - uv.y;
             if (sign(normal.z) == -1.)
                 uv.x = 1. - uv.x;

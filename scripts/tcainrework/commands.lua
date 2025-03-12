@@ -32,7 +32,7 @@ mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, function(_, command, arguments)
     local itemID = ""
     for i, arg in ipairs(argList) do
         itemID = itemID .. arg
-        if collectibleStorage.fastItemIDByName(itemID) ~= -1 then
+        if itemRegistry[itemID] then
             break
         end
         if i < #argList then

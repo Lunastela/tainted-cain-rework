@@ -98,9 +98,14 @@ vec3 enchantmentGlint(vec2 uv, float time) {
 const vec2 chestScaleFactor = vec2(0.875);
 void main(void)
 {
-  	vec2 s_pos = (vec2(TexCoord0.x, 1. - TexCoord0.y) - vec2(.5)) * (2. * (41.45 / 46.));
+	vec2 pa = vec2(1.0 + PixelationAmountOut, 1.0 + PixelationAmountOut) / (TextureSizeOut * vec2(0.25, 0.5));
+   	vec2 uv = (vec2(TexCoord0.x, 1. - TexCoord0.y) - vec2(.5)) * (2. * (41.45 / 46.));
+
+  	vec2 s_pos = (PixelationAmountOut > 0.) ? (uv - mod(uv, pa) + pa * 0.5) : uv; // uv silly
 
 	float rotation = -(ColorizeOut.r);
+	rotation = PixelationAmountOut > 0.0 ? (ceil(rotation * 4. * PixelationAmountOut) / (4. * PixelationAmountOut)) : rotation;
+
 	vec3 up = vec3(0.0, 1.0, 0.0);
 	vec3 c_pos = vec3(8.0, 6.0, 8.0) * rotateY(rotation);
 	vec3 c_targ = vec3(0.0, 0.0, 0.0);
@@ -131,6 +136,7 @@ void main(void)
         pos += dist * r_dir;
     }
 
+    fragColor = vec4(0., 0., 0., 0.);
     if (dist < EPSILON) {
         vec2 eps = vec2(0.0, EPSILON);
     

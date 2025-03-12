@@ -37,8 +37,7 @@ const float pi = 3.14159;
 
 vec2 pixelSize = vec2(ColorizeOut.g, ColorizeOut.b);
 vec2 adjustUV(vec2 uv) {
-    ivec2 textureSize2d = textureSize(Texture0, 0);
-    float myTextureSize = float(textureSize2d.y) / pixelSize.y;
+    float myTextureSize = TextureSizeOut.y / pixelSize.y;
     float texelSize = 1.0 / myTextureSize;
     return (uv * vec2(1., texelSize)) + vec2(0., mod(floor(ColorizeOut.r * 32.), myTextureSize) * texelSize);
 }
@@ -142,15 +141,13 @@ float castRay(vec3 eye, vec3 ray, out float dist, out vec3 norm) {
 }
 
 void main(void) {
-    ivec2 textureSize2d = textureSize(Texture0, 0);
-    float myTextureSize = float(textureSize2d.y) / pixelSize.y;
-
+    float myTextureSize = TextureSizeOut.y / pixelSize.y;
     vec2 pa = vec2(1.0 + PixelationAmountOut, 1.0 + PixelationAmountOut) / TextureSizeOut;
    	vec2 uv = (vec2(TexCoord0.x, 1. - TexCoord0.y * myTextureSize) - vec2(.5)) * (2. * (41.45 / 46.));
 
   	vec2 s_pos = PixelationAmountOut > 0.0 ? uv - mod(uv, pa) + pa * .5 : uv; // uv silly
 	float rotation = -(ColorizeOut.r);
-    rotation = PixelationAmountOut > 0.0 ? (ceil(rotation * 4 * PixelationAmountOut) / (4 * PixelationAmountOut)) : rotation;
+    rotation = PixelationAmountOut > 0.0 ? (ceil(rotation * 4. * PixelationAmountOut) / (4. * PixelationAmountOut)) : rotation;
 
 	vec3 up = vec3(0.0, 1.0, 0.0);
 	vec3 c_pos = vec3(10., 6., 10.) * rotateY(rotation);
@@ -167,6 +164,7 @@ void main(void) {
 	vec3 norm;
 	
 	float hit = castRay(f_dir, r_dir, dist, norm);
+    fragColor = vec4(0., 0., 0., 0.);
 	if (hit > 0.0) {
 		vec3 p_pos = f_dir + dist * r_dir;
 
@@ -174,6 +172,6 @@ void main(void) {
 		vec3 lightDir = vec3(.4, 1., .7) * rotateY(rotation);
 		float intensity = max(dot(norm, lightDir), 0.1);
 
-		fragColor = vec4((color.rgb * max(intensity, 0.4)), 1.0);
+		fragColor = Color0 * vec4((color.rgb * max(intensity, 0.4)), 1.0);
 	}
 }

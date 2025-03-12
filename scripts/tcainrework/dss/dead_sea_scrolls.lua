@@ -523,6 +523,7 @@ local rotationAngle = Vector.FromAngle(textRotation)
 
 local splashYellow, splashShadow = Color(255 / 255, 255 / 255, 0 / 255, 1), 
     Color(62 / 255, 62 / 255, 0 / 255, 1)
+local modVersion = include("scripts.tcainrework.dss.changelogs")
 local function mainMenuRenderer(panel, pos, item, tbl)
     if minecraftStyledUI() then
         local mousePosition = inputHelper.getMousePosition()
@@ -588,10 +589,15 @@ local function mainMenuRenderer(panel, pos, item, tbl)
         if REPENTOGON then
             mod.inventoryHelper.renderMinecraftText(
                 "REPENTOGON " .. REPENTOGON.Version, 
-                Vector(2, (Isaac.GetScreenHeight() - minecraftFont:GetLineHeight() * 2) - 2), 
+                Vector(2, (Isaac.GetScreenHeight() - minecraftFont:GetLineHeight() * 3) - 2), 
                 InventoryItemRarity.COMMON, true
             )
         end
+        mod.inventoryHelper.renderMinecraftText(
+            "Tainted Cain Rework " .. modVersion, 
+            Vector(2, (Isaac.GetScreenHeight() - minecraftFont:GetLineHeight() * 2) - 2), 
+            InventoryItemRarity.COMMON, true
+        )
         -- 
         local rightHandString = "Minecraft by Mojang Studios"
         mod.inventoryHelper.renderMinecraftText(
@@ -674,7 +680,7 @@ local monkeysPaw = Sprite()
 monkeysPaw:Load("gfx/ui/skibidi.anm2")
 monkeysPaw:LoadGraphics()
 monkeysPaw:SetFrame("sheet0", 1)
-monkeysPaw.Scale = (Vector(0.5, 0.30) / 1.65)
+-- monkeysPaw.Scale = (Vector(0.5, 0.30) / 1.65)
 local monkeysPawAlpha, monkeysPawStartTime = 0, 0
 local monkeysPawSound = Isaac.GetSoundIdByName("hi_eric")
 local function resetMonkeysPaw()
@@ -991,7 +997,7 @@ local cainCraftingDirectory = {
                                 for _, drawing in ipairs(drawings) do
                                     deadSeaScrollsMod.drawMenu(tbl, drawing)
                                     if item.strset and item.strset[1] == "skibidi" then
-                                        local frame = ((monkeysPawStartTime > 0) and (math.floor((Isaac.GetTime() - monkeysPawStartTime) / 1000) * 10)) or 0
+                                        local frame = ((monkeysPawStartTime > 0) and (math.floor((Isaac.GetTime() - monkeysPawStartTime) / 1000) * 24)) or 0
                                         monkeysPaw.Color = Color(1, 1, 1, monkeysPawAlpha + (frame / 50))
                                         if ((monkeysPawAlpha >= 1) and (monkeysPawStartTime <= 0)) then
                                             monkeysPawStartTime = Isaac.GetTime()
@@ -1000,7 +1006,7 @@ local cainCraftingDirectory = {
                                             monkeysPawAlpha = math.min(monkeysPawAlpha + (0.0125 / 2), 1)
                                         end
                                         monkeysPaw:SetFrame("sheet0", frame)
-                                        monkeysPaw:Render(pos - Vector(49, 55))
+                                        monkeysPaw:Render(pos - Vector(24, 40))
                                     else
                                         resetMonkeysPaw()
                                     end
@@ -1082,4 +1088,3 @@ DeadSeaScrollsMenu.AddMenu(displayName, {
     DirectoryKey = cainCraftingDirectoryKey
 })
 
-include("scripts.tcainrework.dss.changelogs")

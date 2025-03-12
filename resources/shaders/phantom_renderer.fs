@@ -269,6 +269,8 @@ void main(void) {
     
     vec3 lightDir = Rotate(vec3(.4, 1., .7), rd);
     float d = RayMarch(ro, rd);
+    
+    fragColor = vec4(0., 0., 0., 0.);
     if (d < MAX_DIST) {
         vec3 p = ro + rd * d;
         for (int i = 0; i < MAX_CUBES; i++) {

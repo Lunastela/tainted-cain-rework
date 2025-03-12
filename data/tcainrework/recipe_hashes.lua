@@ -379,7 +379,7 @@ return {
         {
             RecipeName = "tcainrework:blue_candle_alt",
             Category = "collectible",
-            ConditionTable = {"Red Candle", "tcainrework:heart", },
+            ConditionTable = {"Red Candle", "tcainrework:soul_heart", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
@@ -899,7 +899,7 @@ return {
         {
             RecipeName = "tcainrework:red_candle_alt",
             Category = "collectible",
-            ConditionTable = {"The Candle", "tcainrework:soul_heart", },
+            ConditionTable = {"The Candle", "tcainrework:heart", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,

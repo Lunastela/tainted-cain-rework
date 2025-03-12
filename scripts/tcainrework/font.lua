@@ -1,13 +1,36 @@
-local _, err = pcall(require, "")
-local _, basePathStart = string.find(err, "no file '", 1)
-local _, modPathStart = string.find(err, "no file '", basePathStart)
-local modPathEnd, _ = string.find(err, ".lua'", modPathStart)
-local modPath = string.sub(err, modPathStart + 1, modPathEnd - 1)
-modPath = string.gsub(modPath, "\\", "/")
-modPath = string.gsub(modPath, "//", "/")
-modPath = string.gsub(modPath, ":/", ":\\")
-
+local modFolderName = "cain-crafting_3408837286"
 local minecraftFont = {}
+
+-- Thank you Wofsauge
+function minecraftFont.getCurrentModPath() 
+    if debug then -- luadebug launch parameter is set
+        return string.sub(debug.getinfo(minecraftFont.getCurrentModPath).source, 2) .. "/../../../"
+    end
+    local _, err = pcall(require, "")
+    local _, basePathStart = string.find(err, "no file '", 1)
+    local _, modPathStart = string.find(err, "no file '", basePathStart)
+    local modPathEnd, _ = string.find(err, ".lua'", modPathStart)
+    local modPath = string.sub(err, modPathStart + 1, modPathEnd - 1)
+    modPath = string.gsub(modPath, "\\", "/")
+    modPath = string.gsub(modPath, "//", "/")
+    modPath = string.gsub(modPath, ":/", ":\\")
+    return modPath
+end
+minecraftFont.modPath = minecraftFont.getCurrentModPath()
+
+function minecraftFont.loadFont(fontPath)
+    local font = Font()
+    font:Load(minecraftFont.modPath .. "resources/font/" .. fontPath ..".fnt")
+    if not font:IsLoaded() then
+        font:Load("../mods/" .. modFolderName .. "/resources/font/" .. fontPath .. ".fnt")
+        if font:IsLoaded() then
+            minecraftFont.modPath = "../mods/" .. modFolderName .. "/"
+        end
+    end
+    -- print(minecraftFont.modPath)
+    return font
+end
+
 minecraftFont.FontType = {
     DEFAULT = 1,
     ITALIC = 2,
@@ -17,11 +40,8 @@ minecraftFont.FontType = {
 
 local fontType = minecraftFont.FontType
 -- Create fonts (compatibility with non-repentogon)
-local defaultFont, italicFont, boldFont, galacticFont = Font(), Font(), Font(), Font()
-defaultFont:Load(modPath .. "resources/font/minecraftseven.fnt")
-italicFont:Load(modPath .. "resources/font/minecraftsevenitalic.fnt")
-boldFont:Load(modPath .. "resources/font/minecraftsevenbold.fnt")
-galacticFont:Load(modPath .. "resources/font/standardgalactic.fnt")
+local defaultFont, italicFont, boldFont, galacticFont = minecraftFont.loadFont("minecraftseven"), 
+    minecraftFont.loadFont("minecraftsevenitalic"), minecraftFont.loadFont("minecraftsevenbold"), minecraftFont.loadFont("standardgalactic")
 
 local fontList = {
     [fontType.DEFAULT] = defaultFont,

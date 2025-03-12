@@ -3,7 +3,7 @@
   "category": "collectible",
   "ingredients": [
     "The Candle",
-    "tcainrework:soul_heart"
+    "tcainrework:heart"
   ],
   "result": {
     "id": "tcainrework:collectible",
