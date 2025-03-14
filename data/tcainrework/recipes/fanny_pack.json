@@ -2,15 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "R": "tcainrework:rotten_heart"
+    "L": "minecraft:leather",
+    "S": "IV Bag"
   },
   "pattern": [
-    "RRR",
-    "RRR",
-    "RRR"
+    "LSL",
+    " L "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Yuck Heart"
+    "collectible": "Fanny Pack"
   }
 }

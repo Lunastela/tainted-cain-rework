@@ -7,9 +7,9 @@
     "P": "minecraft:paper"
   },
   "pattern": [
-    "#B#",
+    " # ",
     "BPB",
-    "#B#"
+    " # "
   ],
   "result": {
     "id": "tcainrework:collectible",

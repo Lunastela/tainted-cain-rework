@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "K": "#tcainrework:key",
+    "K": "minecraft:paper",
     "H": "tcainrework:half_heart",
     "#": "tcainrework:half_soul_heart"
   },
   "pattern": [
-    "HK",
+    "K",
     "# ",
     "H "
   ],

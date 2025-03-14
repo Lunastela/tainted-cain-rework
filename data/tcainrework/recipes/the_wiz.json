@@ -7,8 +7,7 @@
   },
   "pattern": [
     " # ",
-    "#P#",
-    "###"
+    "#P#"
   ],
   "result": {
     "id": "tcainrework:collectible",

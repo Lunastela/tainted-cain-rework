@@ -1257,12 +1257,8 @@ if REPENTOGON then
     durabilityBar:LoadGraphics()
     durabilityBar:Play("Idle", true)
 
-    local blackColor = Color(1, 1, 1, 1)
-    local yellowBarColor = Color(
-        0, 0, 0, 1, 
-        255 / 255, 219 / 255, 16 / 255
-    )
     function inventoryHelper.renderItem(itemToDisplay, renderPosition, renderScale, elapsedTime, itemAlpha)
+        local lowQuality = (TCainRework.getModSettings().graphicsSettings == 2)
         if not itemToDisplay then
             return
         end
@@ -1278,16 +1274,32 @@ if REPENTOGON then
             renderType = renderTypes.Collectible
             renderSprite = (elapsedTime and collectibleSprite3d) or defaultCollectibleSprite
         end
-        renderSprite:ReplaceSpritesheet(0, inventoryHelper.getItemGraphic(itemToDisplay))
-        renderSprite:LoadGraphics()
         local isEnchanted = inventoryHelper.getDefaultEnchanted(itemToDisplay)
         local spriteSize = ((renderType == renderTypes.Collectible) and 32) or 16
-        renderSprite.Color = Color(
-            1, 1, 1, itemAlpha or 1, 
-            0, 0, 0, 
-            (((elapsedTime ~= nil) and elapsedTime) or ((renderType == renderTypes.Default) and TCainRework.elapsedTime)) or 0, 
-            spriteSize, spriteSize, isEnchanted and TCainRework.elapsedTime or 0
-        )
+        if lowQuality and ((renderSprite == itemSprite3d)
+        or (renderSprite == collectibleSprite3d)) then
+            renderSprite = itemSprite
+            if renderFallback then
+                renderSprite = defaultCollectibleSprite
+            end
+            renderPosition = renderPosition + Vector(4, 4)
+            renderScale = renderScale * (2 / 3)
+            renderSprite.Color = Color(
+                1, 1, 1, itemAlpha or 1,
+                0, 0, 0,
+                0, 0, 0,
+                isEnchanted and TCainRework.elapsedTime or 0
+            )
+        else
+            renderSprite.Color = Color(
+                1, 1, 1, itemAlpha or 1, 
+                0, 0, 0, 
+                (((elapsedTime ~= nil) and elapsedTime) or ((renderType == renderTypes.Default) and TCainRework.elapsedTime)) or 0, 
+                spriteSize, spriteSize, isEnchanted and TCainRework.elapsedTime or 0
+            )
+        end
+        renderSprite:ReplaceSpritesheet(0, inventoryHelper.getItemGraphic(itemToDisplay))
+        renderSprite:LoadGraphics()
         renderSprite.Scale = renderScale or Vector.One
         if renderFallback then
             renderSprite.Scale = renderSprite.Scale / 2
@@ -1297,6 +1309,11 @@ if REPENTOGON then
         renderSprite:Render(renderPosition)
         local currentCharges = itemToDisplay.ComponentData and itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES]
         if (not elapsedTime) and (currentCharges and utility.getCollectibleConfig(collectibleItem).MaxCharges > 0) then
+            local blackColor = Color(1, 1, 1, itemAlpha)
+            local yellowBarColor = Color(
+                0, 0, 0, itemAlpha, 
+                255 / 255, 219 / 255, 16 / 255
+            )
             local chargeRatio = itemToDisplay.ComponentData[InventoryItemComponentData.COLLECTIBLE_CHARGES] / utility.getCollectibleConfig(collectibleItem).MaxCharges
             if chargeRatio ~= 1 then
                 local firstBarCharge = math.min(chargeRatio, 1)
@@ -1315,7 +1332,7 @@ if REPENTOGON then
                     red = 1
                 end
                 durabilityBar.Color = Color(
-                    0, 0, 0, 1, 
+                    0, 0, 0, itemAlpha, 
                     red, green, 0
                 )
                 durabilityBar:Render(originalRenderPosition + Vector(2, 13))

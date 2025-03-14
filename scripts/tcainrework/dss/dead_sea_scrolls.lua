@@ -181,20 +181,31 @@ local function menuWrapper(panel, pos, item, tbl)
 end
 
 local leftRightPadding = 2
-local function renderButtonSize(position, buttonSize)
+local function renderButtonSize(position, buttonSize, sliderPosition)
     local halfwayResize = Vector(100, 0)
     menuButton:Render(position + halfwayResize - Vector(buttonSize / 2, 0), Vector.Zero, Vector(200 - leftRightPadding, 0))
-    menuButton:Render(position + halfwayResize - Vector(buttonSize / 2, 0), Vector(leftRightPadding, 0), Vector((200 - leftRightPadding) - buttonSize, 0))
+    local maxWidth = ((halfwayResize.X - leftRightPadding) * 2)
+    for i = 1, math.ceil(buttonSize / maxWidth) do
+        menuButton:Render(position + halfwayResize - Vector((buttonSize / 2) - (maxWidth * (i - 1)), 0), Vector(leftRightPadding, 0), 
+            Vector((200 - leftRightPadding) - math.min(buttonSize - (maxWidth * (i - 1)), maxWidth), 0)
+        )
+    end
     menuButton:Render(position - halfwayResize + Vector(buttonSize / 2 + leftRightPadding, 0), Vector(200 - leftRightPadding, 0), Vector.Zero)
+    if sliderPosition then
+        menuButton:SetFrame("Slider", 1)
+        menuButton:Render(position - Vector(((buttonSize / 2) - (leftRightPadding * 2)) - (sliderPosition * (buttonSize - (leftRightPadding * 3))), 0))
+    end
 end
 
 local stringTable = {
     ["Resume Game"] = "Back to Game",
     ["false"] = "OFF",
     ["true"] = "ON",
-    ["Fabulous"] = "§oFabulous!",
+    ["fabulous"] = "§oFabulous!",
     ["do not drop pickups"] = "Keep inventory after death",
-    ["fade hud"] = "When to fade Hotbar"
+    ["fade hud"] = "When to fade Hotbar",
+    ["high"] = "Fancy",
+    ["low"] = "Fast"
 }
 
 if not REPENTOGON then
@@ -209,7 +220,7 @@ if not REPENTOGON then
     }
 end
 
-local selectedOption = nil
+local selectedOption, selectedSlider = nil, nil
 local inputHelper = include("scripts.tcainrework.input_helper")
 local separationDistance = 24
 local scrollAmount, scrollSelected, lastMousePosition = 0, false, Vector.Zero
@@ -243,9 +254,9 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         local anyHoveringOption = nil
         local leftBound = (Isaac.GetScreenWidth() / 2) - (TEXTURE_SIZE / 2)
         local rightBound = (Isaac.GetScreenWidth() / 2) + (TEXTURE_SIZE / 2)
-        local function mouseWrapper(position, length, width)
+        local function mouseWrapper(position, length, width, disableSnapping)
             if mousePosition.Y > (topPosition.Y + 1) and mousePosition.Y < (bottomPosition.Y - 1) then
-                return inputHelper.hoveringOver(position, length, width)
+                return inputHelper.hoveringOver(position, length, width, disableSnapping)
             end
             return false
         end
@@ -258,21 +269,63 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
             if not button.choices then
                 textPosition.X = (Isaac.GetScreenWidth() / 2) - (minecraftFont:GetStringWidth(buttonString) / 2)
             end
-            mod.inventoryHelper.renderMinecraftText(buttonString, 
-                textPosition, 
-                InventoryItemRarity.COMMON
-            )
+
+            local titleColor = InventoryItemRarity.COMMON
+            if button.slider then
+                buttonString = buttonString .. ": " .. tostring(button.setting)
+                local boxSize = (rightBound - leftBound)
+                menuButton:SetFrame("Idle", 3)
+                local sliderPosition = Vector(Isaac.GetScreenWidth() / 2, textPosition.Y + minecraftFont:GetLineHeight() / 2)                
+                local hoveringOverSlider = mouseWrapper(sliderPosition - Vector((boxSize / 2), 10), boxSize + leftRightPadding, 20, true)
+
+                local fakePlayer = PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING)
+                local controllerPress = (fakePlayer and fakePlayer.ControllerIndex > 0) and (Input.IsButtonPressed(Controller.CROSS, fakePlayer.ControllerIndex))
+                local mousePress = controllerPress or ((not (fakePlayer and fakePlayer.ControllerIndex > 0)) and inputHelper.isMouseButtonHeld(Mouse.MOUSE_BUTTON_LEFT))
+                if ((not selectedOption) and hoveringOverSlider) and mousePress then
+                    selectedSlider = button
+                elseif not mousePress then
+                    selectedSlider = nil
+                end
+
+                if selectedSlider == button then
+                    local leftMost = sliderPosition - Vector((boxSize / 2) - (leftRightPadding * 2), 0)
+                    local sliderSize = (boxSize - (leftRightPadding * 3))
+                    local sliderMouse = math.min(math.max((mousePosition.X - leftMost.X) / (sliderSize), 0), 1)
+                    button.setting = math.ceil((((sliderMouse * (button.max - button.min)) + button.min) / button.increment) - 0.5) * button.increment
+                    local directorykey = tbl.DirectoryKey
+                    deadSeaScrollsMod.setOption(button.variable, button.setting, selectedOption, directorykey.Item, directorykey)
+                    if controllerPress then
+                        inputHelper.setMousePosition(Vector(math.min(math.max(mousePosition.X, leftMost.X), leftMost.X + sliderSize), sliderPosition.Y))
+                    end
+                end
+
+                if hoveringOverSlider then
+                    titleColor = InventoryItemRarity.ELEMENT_HOVER
+                end
+                renderButtonSize(sliderPosition, boxSize, ((button.setting - button.min) / (button.max - button.min)))
+                -- menuButton:SetFrame("Slider", 1)
+                -- local buttonSetting = ((button.max - button.min) * math.abs(math.sin(Isaac.GetTime() / 1000))) + button.min
+                -- local sliderAdjustment = ((buttonSetting - button.min) / sliderCeil)
+                -- menuButton:Render(textPosition + Vector(shiftPosition + (boxSize * sliderAdjustment), 5))
+            end
+
             if mouseWrapper(textPosition, 
-                minecraftFont:GetStringWidth(buttonString), minecraftFont:GetLineHeight()) then
+                minecraftFont:GetStringWidth(buttonString), minecraftFont:GetLineHeight(), button.slider) then
                 anyHoveringOption = button
             end
+            mod.inventoryHelper.renderMinecraftText(buttonString, 
+                textPosition, 
+                titleColor
+            )
 
             if button.choices then
                 local boxSize = 90
                 textPosition.X = rightBound - (boxSize / 2)
                 menuButton:SetFrame("Idle", 0)
+                local buttonColor = InventoryItemRarity.COMMON
                 if mouseWrapper(textPosition - Vector(boxSize / 2, 5), boxSize + leftRightPadding, 20) then
                     menuButton:SetFrame("Idle", 1)
+                    buttonColor = InventoryItemRarity.ELEMENT_HOVER
                     anyHoveringOption = button
                     if isLMBPressed then
                         SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
@@ -291,8 +344,8 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                         stringTable[button.choices[button.setting]] or button.choices[button.setting]
                     )
                     mod.inventoryHelper.renderMinecraftText(choiceText, 
-                        textPosition - Vector(minecraftFont:GetStringWidth(choiceText) / 2, (minecraftFont:GetLineHeight() / 2)), 
-                        InventoryItemRarity.COMMON, true, true
+                        textPosition - Vector(minecraftFont:GetStringWidth(choiceText) / 2, 
+                        (minecraftFont:GetLineHeight() / 2)), buttonColor, true, true
                     )
                 end
             end
@@ -327,9 +380,10 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
             sliderSprite:Render(sliderPosition)
 
             if mouseVector and inputHelper.hoveringOver(sliderPosition, 6, screenSpace, true) 
-            and Input.IsButtonPressed(Controller.CROSS, PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING).ControllerIndex) then
+            and (Input.IsButtonPressed(Controller.CROSS, PlayerManager.FirstCollectibleOwner(CollectibleType.COLLECTIBLE_BAG_OF_CRAFTING).ControllerIndex)
+            and (not selectedSlider)) then
                 scrollAmount = scrollAmount + (mouseVector.Y / endScreenDistance)
-                inputHelper.setMousePosition(sliderPosition + Vector(3, topPosition.Y + (scrollAmount * endScreenDistance)))
+                inputHelper.setMousePosition(sliderPosition + Vector(3, sliderSize / 2))
             else
                 if isLMBPressed
                 and inputHelper.hoveringOver(sliderPosition, 6, screenSpace, true) then
@@ -357,8 +411,10 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         -- Done button
         local donePosition = bottomPosition + Vector(Isaac.GetScreenWidth() / 2, 16)
         menuButton:SetFrame("Idle", 0)
+        local buttonColor = InventoryItemRarity.COMMON
         if inputHelper.hoveringOver(donePosition - Vector(100, 10), 200, 20) then
             menuButton:SetFrame("Idle", 1)
+            buttonColor = InventoryItemRarity.ELEMENT_HOVER
             if isLMBPressed then
                 SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
                 deadSeaScrollsMod.back(tbl)
@@ -369,11 +425,12 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
         local doneText = utility.getCustomLocalizedString("gui.done", "Done")
         mod.inventoryHelper.renderMinecraftText(doneText, 
             donePosition - Vector(minecraftFont:GetStringWidth(doneText) / 2, (minecraftFont:GetLineHeight() / 2)), 
-            InventoryItemRarity.COMMON, true
+            buttonColor, true
         )
 
         -- Render tooltips above everything else
-        if anyHoveringOption and (anyHoveringOption.variable or anyHoveringOption.tooltip) then
+        if anyHoveringOption and (not anyHoveringOption.slider) 
+        and (anyHoveringOption.variable or anyHoveringOption.tooltip) then
             local stringTable = {}
             if anyHoveringOption.variable then
                 table.insert(stringTable, {
@@ -406,13 +463,15 @@ local function settingsMenuRenderer(panel, pos, item, tbl)
                     end
                 end
             end
-            table.insert(stringTable, {
-                String = utility.getCustomLocalizedString("editGamerule.default", "Default") .. ": " 
-                    .. utility.getCustomLocalizedString(
-                        "gui.settings.choices." .. anyHoveringOption.choices[1] .. ".name", anyHoveringOption.choices[1]
-                    ), 
-                Rarity = InventoryItemRarity.SUBTEXT
-            })
+            if anyHoveringOption.choices then
+                table.insert(stringTable, {
+                    String = utility.getCustomLocalizedString("editGamerule.default", "Default") .. ": " 
+                        .. utility.getCustomLocalizedString(
+                            "gui.settings.choices." .. anyHoveringOption.choices[1] .. ".name", anyHoveringOption.choices[1]
+                        ), 
+                    Rarity = InventoryItemRarity.SUBTEXT
+                })
+            end
             mod.inventoryHelper.renderTooltip(mousePosition, stringTable)
         end
 
@@ -489,8 +548,10 @@ function rgonNoticeMenu(panel, pos, item, tbl)
         end
 
         local buttonPosition = uiPosition + Vector(-1, (uiSize.Y / 2) - 12)
+        local buttonColor = InventoryItemRarity.COMMON
         menuButton:SetFrame("Idle", 0)
         if inputHelper.hoveringOver(buttonPosition - Vector((uiSize.X - 8) / 2, 10), (uiSize.X - 8) + leftRightPadding, 20) then
+            buttonColor = InventoryItemRarity.ELEMENT_HOVER
             menuButton:SetFrame("Idle", 1)
             if isLMBPressed then
                 SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
@@ -502,9 +563,8 @@ function rgonNoticeMenu(panel, pos, item, tbl)
         local fineText = "Just let me play the game"
         mod.inventoryHelper.renderMinecraftText(fineText, 
             buttonPosition - Vector(minecraftFont:GetStringWidth(fineText) / 2, (minecraftFont:GetLineHeight() / 2)), 
-            InventoryItemRarity.COMMON, true, true
+            buttonColor, true, true
         )
-
         inputHelper.Update()
         return
     end
@@ -558,11 +618,14 @@ local function mainMenuRenderer(panel, pos, item, tbl)
         end
         
         for i, button in ipairs(item.buttons) do
-            if button.str ~= "changelogs" then
+            if button.str ~= "changelogs"
+            and ((not button.displayif) or button.displayif(button, item, tbl)) then
                 local buttonPosition = positionLogo + Vector(0, (Isaac.GetScreenHeight() / 8) + (i * 25))
                 menuButton:SetFrame("Idle", 0)
+                local buttonColor = InventoryItemRarity.COMMON
                 if inputHelper.hoveringOver(buttonPosition - Vector(100, 10), 200, 20) then
                     menuButton:SetFrame("Idle", 1)
+                    buttonColor = InventoryItemRarity.ELEMENT_HOVER
                     -- run submenu when triggered mouse button 
                     if isLMBPressed then
                         SFXManager():Play(Isaac.GetSoundIdByName("Minecraft_Click"), 1, 0, false, 1, 0)
@@ -576,7 +639,7 @@ local function mainMenuRenderer(panel, pos, item, tbl)
                         buttonPosition.X - (minecraftFont:GetStringWidth(buttonName) / 2), 
                         buttonPosition.Y - minecraftFont:GetLineHeight() / 2
                     ), 
-                    InventoryItemRarity.COMMON, true
+                    buttonColor, true
                 )
             end
         end
@@ -698,7 +761,13 @@ local cainCraftingDirectory = {
             { str = 'Resume Game', action = 'resume' },
             { str = 'Settings',    dest = 'settings' },
             { str = 'Credits',    dest = 'credits' },
-            deadSeaScrollsMod.changelogsButton,
+            {
+                str = 'How to Play',
+                displayif = function(btn, item, tbl)
+                    return false
+                    -- return minecraftStyledUI()
+                end
+            },
         },
         tooltip = deadSeaScrollsMod.menuOpenToolTip,
         format = {
@@ -726,6 +795,45 @@ local cainCraftingDirectory = {
     settings = {
         title = 'settings',
         buttons = {
+            {str = "Quality", fsize = 2, nosel = true},
+            {str = "", fsize = 2, nosel = true},
+            {
+                str = "Graphics",
+                choices = {"high", "low"},
+                setting = 1,
+                variable = "graphicsSettings",
+                load = function ()
+                    return getSaveWrapper().graphicsSettings or 1
+                end,
+                store = function (var)
+                    getSaveWrapper().graphicsSettings = var
+                end,
+                tooltip = {
+                    strset = {"changes the", "graphical", "quality of", "items in", "the mod"},
+                    extraMinecraftDescription = {
+                        "Fancy graphics renders items with 3D raymarching shaders. This can cause performance issues on larger Render Scales. A base render scale of 3 is recommended to make Items and Blocks look decent.",
+                        "Fast graphics uses classic Minecraft billboarding for item sprites. Blocks will still be raymarched. It is recommended to lower Render Scale if performance issues persist."
+                    },
+                }
+            },
+            {
+                str = 'Render Scale',
+                increment = 1, max = 4, min = 1,
+                variable = "maxRenderScale",
+                slider = true,
+                setting = Options.MaxRenderScale,
+                load = function()
+                    return Options.MaxRenderScale
+                end,
+                store = function(var)
+                    Options.MaxRenderScale = var
+                    Isaac.TriggerWindowResize()
+                end,
+                tooltip = {
+                    strset = {'the scale', "at which the", "game renders", "at"}
+                }            
+            },
+            {str = "", fsize = 2, nosel = true},
             {str = "Cosmetic", fsize = 2, nosel = true},
             {str = "", fsize = 2, nosel = true},
             {
@@ -778,7 +886,7 @@ local cainCraftingDirectory = {
             },
             {
                 str = "fade hud",
-                choices = {"Boss Fights", "Never"},
+                choices = {"Boss Fights", "Always", "Never"},
                 setting = 1,
                 variable = "fadeHotbar",
                 load = function ()
@@ -795,11 +903,31 @@ local cainCraftingDirectory = {
                         "hud be hidden"
                     },
                     extraMinecraftDescription = {
-                        "Currently, the Hotbar will fade unless hovered over during a boss fight.",
-                        "Currently, the Hotbar never fades."
+                        "Currently, the Hotbar will fade out  unless hovered over during a boss fight.",
+                        "Currently, the Hotbar will always fade out unless hovered over.",
+                        "Currently, the Hotbar never fades out."
                     },
                 },
-                
+            },
+            {
+                str = 'Fade Percent',
+                increment = 5, max = 100, min = 0,
+                variable = "fadePercentage",
+                slider = true,
+                setting = Options.MaxRenderScale,
+                load = function()
+                    return getSaveWrapper().fadePercentage or 50
+                end,
+                store = function(var)
+                    getSaveWrapper().fadePercentage = var
+                end,
+                tooltip = {
+                    strset = {
+                        "percent of",
+                        "what to",
+                        "fade by"
+                    }
+                }            
             },
             {str = "", fsize = 2, nosel = true},
             {str = "Gameplay", fsize = 2, nosel = true},

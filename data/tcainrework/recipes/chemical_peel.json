@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "R": "tcainrework:rotten_heart"
+    "P": "tcainrework:pill",
+    "#": "tcainrework:heart"
   },
   "pattern": [
-    "RRR",
-    "RRR",
-    "RRR"
+    "P#",
+    "P#",
+    "P#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Yuck Heart"
+    "collectible": "Chemical Peel"
   }
 }

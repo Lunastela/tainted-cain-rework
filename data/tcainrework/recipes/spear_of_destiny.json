@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "R": "tcainrework:rotten_heart"
+    "S": "minecraft:stick",
+    "E": "tcainrework:eternal_heart"
   },
   "pattern": [
-    "RRR",
-    "RRR",
-    "RRR"
+    "E",
+    "E",
+    "S"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Yuck Heart"
+    "collectible": "Spear of Destiny"
   }
 }

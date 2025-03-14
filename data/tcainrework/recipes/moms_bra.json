@@ -2,15 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "R": "tcainrework:rotten_heart"
+    "P": "minecraft:paper",
+    "S": "minecraft:stick"
   },
   "pattern": [
-    "RRR",
-    "RRR",
-    "RRR"
+    "PSP"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Yuck Heart"
+    "collectible": "Mom's Bra"
   }
 }

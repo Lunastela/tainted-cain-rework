@@ -68,7 +68,7 @@ function InputHelper.hoveringOver(buttonPosition, buttonWidth, buttonHeight, dis
     and mousePosition.Y >= buttonPosition.Y
     and mousePosition.X < buttonPosition.X + buttonWidth
     and mousePosition.Y < buttonPosition.Y + buttonHeight then
-        if not disableSnapping and (mouseVector and ((mouseVector:LengthSquared() * 100) < 0.5)) then
+        if (not disableSnapping) and (mouseVector and ((mouseVector:LengthSquared() * 100) < 0.5)) then
             InputHelper.setMousePosition(buttonPosition + ((Vector(buttonWidth, buttonHeight) / 2) * Vector.One))
         end
         return true

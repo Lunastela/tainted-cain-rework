@@ -2,12 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "Eye Drops",
-    "tcainrework:rune{\"card_type\":33}",
-    "tcainrework:pill"
+    "Yum Heart",
+    "tcainrework:tarot_card{\"card_type\":4}"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Eye Sore"
+    "collectible": "MEAT!"
   }
 }

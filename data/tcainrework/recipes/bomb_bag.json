@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "minecraft:leather",
-    "O": "tcainrework:giga_bomb"
+    "#": "#tcainrework:bomb",
+    "O": "Mystery Sack"
   },
   "pattern": [
-    "#",
-    "O",
-    "#"
+    " # ",
+    "#O#",
+    " # "
   ],
   "result": {
     "id": "tcainrework:collectible",

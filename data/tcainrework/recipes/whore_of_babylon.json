@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "R": "tcainrework:rotten_heart"
+    "#": "tcainrework:black_heart",
+    "C": "tcainrework:tarot_card{\"card_type\":4}"
   },
   "pattern": [
-    "RRR",
-    "RRR",
-    "RRR"
+    "#  ",
+    " C#",
+    " ##"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Yuck Heart"
+    "collectible": "Whore of Babylon"
   }
 }

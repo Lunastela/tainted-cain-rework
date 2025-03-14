@@ -194,6 +194,34 @@ return {
             DischargeRecipe = false,
         },
     },
+    ["shapeless_cc630251aba90c8217236a47f7db67cf5dae30d4"] = {
+        {
+            RecipeName = "minecraft:iron_bar_from_block",
+            Category = "misc",
+            ConditionTable = {"minecraft:iron_block", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Iron Bar"
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
+    },
+    ["47b9f7adfdb636f43c05c63bbbd32a933e962f4a"] = {
+        {
+            RecipeName = "minecraft:iron_block",
+            Category = "equipment",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {"Iron Bar", "Iron Bar", "Iron Bar", "Iron Bar", "Iron Bar", "Iron Bar", "Iron Bar", "Iron Bar", "Iron Bar", },
+            Results = {
+                Type = "minecraft:iron_block",
+                Count = 1
+            },
+            DisplayRecipe = false,
+            DischargeRecipe = false,
+        },
+    },
     ["0e334c4a17fb8172b566841ae5e0a56ad99a2307"] = {
         {
             RecipeName = "minecraft:ladder",

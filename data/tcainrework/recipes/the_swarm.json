@@ -6,9 +6,9 @@
     "#": "tcainrework:rotten_heart"
   },
   "pattern": [
-    "###",
+    " # ",
     "#b#",
-    "###"
+    " # "
   ],
   "result": {
     "id": "tcainrework:collectible",

@@ -5,6 +5,7 @@ return {
         RenderModel = InventoryItemRenderType.Default,
         ItemTags = {"#tcainrework:small_pickup"},
         ClassicID = BagOfCraftingPickup.BOC_RUNE,
+        UnlockAll = true,
         StackSize = 64,
         Rarity = InventoryItemRarity.COMMON,
         Enchanted = false

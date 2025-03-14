@@ -1,4 +1,5 @@
 High Priority: 
+- Sometimes item recipes don't show up as craftable if the item doesn't have charge
 - Use beggar pools to create pickups
 - Add proper way to do controller pickup consumption & tutorial
 - LB / RB switching recipes in the recipe book

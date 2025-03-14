@@ -14,6 +14,7 @@ return {
         torch
         lever
         ladder
+        iron_block
         iron_sword
         iron_shovel
         iron_axe

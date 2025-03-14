@@ -2,18 +2,18 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "G": "Midas' Touch",
-    "S": "tcainrework:soul_heart",
+    "B": "#book",
+    "W": "Jar of Wisps",
     "E": "tcainrework:eternal_heart",
-    "P": "Spear of Destiny"
+    "#": "#tcainrework:soul_heart"
   },
   "pattern": [
-    " G ",
-    " P ",
-    "ESE"
+    "###",
+    "EWE",
+    " B "
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Spirit Sword"
+    "collectible": "Book of Virtues"
   }
 }

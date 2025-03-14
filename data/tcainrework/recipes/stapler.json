@@ -2,15 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
+    "#": "#tcainrework:key",
     "M": "#tcainrework:metal",
-    "#": "tcainrework:key"
+    "F": "tcainrework:tarot_card{\"card_type\":1}"
   },
   "pattern": [
-    "MM",
-    "##"
+    "MM ",
+    " FM",
+    "###"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Iron Bar"
+    "collectible": "Stapler"
   }
 }

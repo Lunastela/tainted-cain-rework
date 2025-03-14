@@ -4,6 +4,11 @@
     <directory>cain-crafting</directory>
     <id>3408837286</id>
     <description>
+[b]
+[h2]What's new?:[/h2]
+Fixed an issue with Steam Deck and Intel GPUs where rendering was completely broken. Thank you all for the continued support and help debugging these issues. ^^
+[/b]
+
 [h1]This mod requires [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]REPENTOGON[/url]. 
 If you do not yet have it, get it [url=https://repentogon.com]here[/url].[/h1]
 
@@ -35,8 +40,30 @@ Look no further than [b]Tainted Cain Rework![/b] Tainted Cain Rework makes sever
     [*] [b]Only supports one Tainted Cain in co-op.[/b] This may change in the future, sorry!
 [/list]
 
+[h2]Frequently Asked Questions:[/h2]
+[list]
+[*][b]Q: What is this mod?
+A:[/b] It's best experienced blind. :)
+
+[*][b]Q: How do I consume items on controller?
+A:[/b] Everything controller related has to do with RT. Hold RT first. To consume an item, then hold LT after pressing RT.
+
+[*][b]Q: Does the mod have settings?
+A:[/b] There is a Dead Sea Scrolls menu for the mod.
+
+[*][b]Q: Is it / will it be available for Repentance+?
+A:[/b] This mod is developed on the Nightly branch of REPENTOGON, and should work on it. When REPENTOGON releases for Repentance+, it should already work perfectly with it.
+
+[*][b]Q: Is there a wiki for the mod, or a place to view recipes?
+A:[/b] Not yet, but I am working with someone for this. If you wish to always view recipes, there is a setting in the options under Recipe Unlocks.
+
+[*][b]Q: Why is x like this?
+A:[/b] Balancing is hard. I want the character to be playable, but I want it to reward you with the good items you want whenever you know how to be advantageous and use your opportunities. If you find yourself struggling, think outside the box.
+
+That said, the mod is still in beta, and I am receptive to criticism. I am aware of balancing issues, and am attempting to make changes to mitigate them, at least temporarily before I can come up with better solutions. Thank you for your patience!
+[/list]
 </description>
-    <version>1.11</version>
+    <version>1.12</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Items"/>

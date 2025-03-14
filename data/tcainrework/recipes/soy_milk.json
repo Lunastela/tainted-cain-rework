@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "Eye Drops",
-    "tcainrework:rune{\"card_type\":33}",
-    "tcainrework:pill"
+    "Milk!",
+    "tcainrework:mega_battery",
+    "Number One"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Eye Sore"
+    "collectible": "Soy Milk"
   }
 }

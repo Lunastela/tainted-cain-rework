@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "H": "#tcainrework:soul_heart",
-    "#": "#book",
+    "H": "minecraft:leather",
+    "#": "minecraft:paper",
     "C": "tcainrework:tarot_card{\"card_type\":14}"
   },
   "pattern": [

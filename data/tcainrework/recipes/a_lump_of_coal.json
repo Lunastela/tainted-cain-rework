@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "minecraft:oak_planks", "tcainrework:black_heart", "minecraft:oak_planks",
-    "tcainrework:black_heart", "minecraft:oak_planks", "tcainrework:black_heart",
-    "minecraft:oak_planks", "tcainrework:black_heart", "minecraft:oak_planks"
+    "minecraft:stick", "tcainrework:black_heart", "minecraft:stick",
+    "tcainrework:black_heart", "minecraft:stick", "tcainrework:black_heart",
+    "minecraft:stick", "tcainrework:black_heart", "minecraft:stick"
   ],
   "result": {
     "id": "tcainrework:collectible",

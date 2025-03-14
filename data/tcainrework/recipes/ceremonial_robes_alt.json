@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "R": "tcainrework:rotten_heart"
+    "#": "tcainrework:black_heart",
+    "l": "minecraft:leather"
   },
   "pattern": [
-    "RRR",
-    "RRR",
-    "RRR"
+    " # ",
+    "#l#",
+    "l l"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Yuck Heart"
+    "collectible": "Ceremonial Robes"
   }
 }

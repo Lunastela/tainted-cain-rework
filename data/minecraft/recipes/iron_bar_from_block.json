@@ -1,12 +1,12 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "collectible",
+  "category": "misc",
   "ingredients": [
-    "tcainrework:golden_bomb",
-    "Rubber Cement"
+    "minecraft:iron_block"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Ipecac"
-  }
+    "collectible": "Iron Bar"
+  },
+  "show_notification": false
 }

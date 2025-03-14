@@ -2,15 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "R": "tcainrework:rotten_heart"
+    "R": "Sharp Straw",
+    "H": "Yum Heart"
   },
   "pattern": [
-    "RRR",
-    "RRR",
-    "RRR"
+    "R",
+    "H"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Yuck Heart"
+    "collectible": "IV Bag"
   }
 }

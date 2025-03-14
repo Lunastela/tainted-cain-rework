@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "Eye Drops",
-    "tcainrework:rune{\"card_type\":33}",
-    "tcainrework:pill"
+    "The Jar",
+    "tcainrework:soul_stone{\"card_type\":96}",
+    "#tcainrework:battery"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Eye Sore"
+    "collectible": "Jar of Wisps"
   }
 }

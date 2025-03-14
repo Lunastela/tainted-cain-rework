@@ -33,9 +33,6 @@ end
 
 if mod.hasREPENTOGON() then
     -- Render Scale Options
-    if Options.MaxRenderScale <= 3 then
-        Options.MaxRenderScale = 3
-    end
     mod.elapsedTime = 0
 
     -- Load Mod Data

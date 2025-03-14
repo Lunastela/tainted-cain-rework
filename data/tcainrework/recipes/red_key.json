@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "tcainrework:cracked_key",
-    "tcainrework:cracked_key",
+    "Dad's Key",
+    "tcainrework:mega_battery",
     "tcainrework:cracked_key"
   ],
   "result": {

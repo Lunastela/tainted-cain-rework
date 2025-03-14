@@ -25,8 +25,9 @@ InventoryItemRarity = {
     DEBUG_TEXT = 8,
     TUTORIAL_PURPLE = 9,
     INVERT_TEXT = 10,
-    EXPERIENCE = 11,
-    EXPERIENCE_DISABLED = 12
+    ELEMENT_HOVER = 11,
+    EXPERIENCE = 12,
+    EXPERIENCE_DISABLED = 13
 }
 
 InventoryItemRenderType = {
@@ -85,7 +86,10 @@ InventoryItemRarityColors = {
         Color = KColor(0, 0, 0, 1),
         Shadow = KColor(1, 1, 1, 1)
     },
-
+    [InventoryItemRarity.ELEMENT_HOVER] = {
+        Color = KColor(252 / 255, 252 / 255, 126 / 255, 1),
+        Shadow = KColor(63 / 255, 63 / 255, 40 / 255, 1)
+    },
     -- Experience Costs
     [InventoryItemRarity.EXPERIENCE] = {
         Color = KColor(126 / 255, 252 / 255, 32 / 255, 1),

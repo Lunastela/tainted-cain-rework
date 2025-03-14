@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "R": "tcainrework:rotten_heart"
+    "P": "tcainrework:pill",
+    "#": "tcainrework:poop_block"
   },
   "pattern": [
-    "RRR",
-    "RRR",
-    "RRR"
+    "P",
+    "#",
+    "P"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Yuck Heart"
+    "collectible": "Stye"
   }
 }

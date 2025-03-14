@@ -12,7 +12,7 @@ end
 --- @Type KColor
 enchantingUI.MainColor = KColor(103 / 255, 93 / 255, 73 / 255, 1)
 --- @Type KColor
-enchantingUI.SelectedColor = KColor(252 / 255, 252 / 255, 126 / 255, 1)
+enchantingUI.SelectedColor = InventoryItemRarityColors[InventoryItemRarity.ELEMENT_HOVER].Color
 --- @Type KColor
 enchantingUI.SubColor = KColor(51 / 255, 46 / 255, 37 / 255, 1)
 

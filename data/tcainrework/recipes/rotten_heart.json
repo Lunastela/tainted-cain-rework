@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "collectible",
+  "category": "misc",
   "key": {
-    "#": "tcainrework:black_heart",
+    "#": "tcainrework:poop",
     "H": "tcainrework:heart"
   },
   "pattern": [
-    "# #",
+    " # ",
     "#H#",
     " # "
   ],
   "result": {
-    "id": "tcainrework:collectible",
-    "collectible": "Pentagram"
+    "count": 1,
+    "id": "tcainrework:rotten_heart"
   }
 }

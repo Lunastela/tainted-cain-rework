@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "R": "Sharp Straw",
-    "H": "Yum Heart"
+    "P": "minecraft:paper",
+    "H": "tcainrework:heart"
   },
   "pattern": [
-    "R",
+    "P",
+    "P",
     "H"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Blood Bag"
+    "collectible": "Mom's Pad"
   }
 }

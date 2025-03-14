@@ -26,6 +26,13 @@ mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, function(_, pickup)
                     pickup:Remove()
                 end
             end
+            -- Tainted Cain only Coin Nerf
+            if PlayerManager.AnyoneIsPlayerType(PlayerType.PLAYER_CAIN_B) then
+                if spawnerEnemy:GetDropRNG():RandomInt(maxRemoveChance) <= 6 then
+                    print('*eats ur coin*')
+                    pickup:Remove()
+                end
+            end
         end
     end
 end, PickupVariant.PICKUP_COIN)

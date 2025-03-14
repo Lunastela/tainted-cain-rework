@@ -1,14 +1,10 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "collectible",
-  "key": {
-    "#": "minecraft:leather",
-    "O": "#tcainrework:pickup"
-  },
-  "pattern": [
-    "O#O",
-    "OOO",
-    "O#O"
+  "ingredients": [
+    "minecraft:leather", "#tcainrework:battery", "minecraft:leather",
+    "#tcainrework:coin", "#tcainrework:bomb", "#tcainrework:heart",
+    "minecraft:leather", "#tcainrework:key", "minecraft:leather"
   ],
   "result": {
     "id": "tcainrework:collectible",

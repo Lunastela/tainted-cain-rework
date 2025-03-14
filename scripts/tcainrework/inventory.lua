@@ -471,6 +471,7 @@ local function RenderInventorySlot(inventoryPosition, inventory, itemIndex, isLM
                         local pickupData = saveManager.GetRerollPickupSave(minecraftItem)
                         pickupData.Type, pickupData.ComponentData = itemType, componentData
                         pickupData.Count = amountRemoved
+                        inventoryHelper.recipeCraftableDirty = true
                     end
                 end
             end
@@ -603,6 +604,8 @@ end
 
 -- Add Item Logic
 local cellAnimation = {}
+local HOTBAR_FADE_TIME = 60
+local hotbarFadeTimer, hotbarAlpha = HOTBAR_FADE_TIME, 1
 function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
     local addedAny = false
     for i = 1, amount do
@@ -623,6 +626,7 @@ function mod:AddItemToInventory(pickupType, amount, optionalComponentData)
             freeSlotData.Inventory[freeSlotData.Slot] = fakeItem
             if freeSlotData.Inventory == inventoryHelper.getInventory(InventoryTypes.HOTBAR) then
                 cellAnimation[freeSlotData.Slot] = nil
+                hotbarFadeTimer = HOTBAR_FADE_TIME
             end
             addedAny = true
         end
@@ -864,8 +868,6 @@ local function playerAddCollectible(player, collectibleType, configItem, hotbarI
 end
 
 local lastItemName, slotTimer = "", 0
-local HOTBAR_FADE_TIME = 60
-local hotbarFadeTimer, hotbarAlpha = HOTBAR_FADE_TIME, 1
 function mod:RenderInventory()
     if EID then
         EID.CraftingIsHidden = true
@@ -888,7 +890,8 @@ function mod:RenderInventory()
 
         local lmbRelease, rmbRelease = inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_1), inputHelper.isMouseButtonReleased(Mouse.MOUSE_BUTTON_2)
 
-        local hideHotbar = ((mod.getModSettings().fadeHotbar == 1) and (Isaac.CountBosses() > 0))
+        local hideHotbar = ((((mod.getModSettings().fadeHotbar or 1) == 1) and (Isaac.CountBosses() > 0))
+            or ((mod.getModSettings().fadeHotbar or 1) == 2))
         -- Render Hotbar before everything else
         hotbarInterface:Play("Idle", true)
         local hotbarPosition = screenCenter + Vector(0, Isaac.GetScreenHeight() / 2)
@@ -938,7 +941,7 @@ function mod:RenderInventory()
 
         -- Render Hotbar
         if (hideHotbar and hotbarFadeTimer <= 0) then
-            hotbarAlpha = math.max(hotbarAlpha - 0.025, 0.5)
+            hotbarAlpha = math.max(hotbarAlpha - 0.025, ((mod.getModSettings().fadePercentage or 50) / 100))
         else
             if hideHotbar and hotbarFadeTimer > 0 then
                 hotbarFadeTimer = hotbarFadeTimer - 1
@@ -964,11 +967,18 @@ function mod:RenderInventory()
                     (hotbarPosition + Vector(8, 16) - (Vector(8, 16) * myScale)), 
                     myScale, nil, hotbarAlpha
                 )
+                local colorRarities = InventoryItemRarityColors
                 if hotbarSlot.Count > 1 then
                     local itemCountString = tostring(hotbarSlot.Count)
                     local inventoryPositionText = Vector(hotbarPosition.X + (CELL_SIZE - minecraftFont:GetStringWidth(itemCountString)) - 1, 
                         hotbarPosition.Y + CELL_SIZE - (minecraftFont:GetLineHeight() + 1))
+                    local lastAlpha, lastShadowAlpha = colorRarities[InventoryItemRarity.COMMON].Color.Alpha,
+                        colorRarities[InventoryItemRarity.COMMON].Shadow.Alpha
+                    colorRarities[InventoryItemRarity.COMMON].Color.Alpha = hotbarAlpha
+                    colorRarities[InventoryItemRarity.COMMON].Shadow.Alpha = hotbarAlpha
                     inventoryHelper.renderMinecraftText(itemCountString, inventoryPositionText, InventoryItemRarity.COMMON, true)
+                    colorRarities[InventoryItemRarity.COMMON].Color.Alpha = lastAlpha
+                    colorRarities[InventoryItemRarity.COMMON].Shadow.Alpha = lastShadowAlpha
                 end
 
                 if (hotbarSlotSelected == i) then
@@ -978,7 +988,6 @@ function mod:RenderInventory()
                         lastItemName = itemName
                     end
                     -- hacky text color render fix
-                    local colorRarities = InventoryItemRarityColors
                     if lastItemName and lastItemName.Rarity and lastItemName.String then
                         local currentAlpha, currentAlphaShadow = colorRarities[lastItemName.Rarity].Color.Alpha, colorRarities[lastItemName.Rarity].Shadow.Alpha
                         local myAlpha = math.max(math.min(slotTimer, 100) / 100, 0) * hotbarAlpha
@@ -1708,6 +1717,13 @@ mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, function(_)
         toastStorage[i] = nil
     end
     resetInventories()
+
+    -- Load render scale
+    if not (mod.getModSettings() and mod.getModSettings().maxRenderScale) then
+        Options.MaxRenderScale = 3
+        Isaac.TriggerWindowResize()
+        mod.getModSettings().maxRenderScale = Options.MaxRenderScale
+    end
 end)
 mod:AddCallback(ModCallbacks.MC_POST_GLOWING_HOURGLASS_LOAD, resetInventories)
 
@@ -1756,12 +1772,13 @@ mod:AddCallback(ModCallbacks.MC_INPUT_ACTION, function(_, entity, inputHook, but
             end
         elseif player and player.ControllerIndex > 0 then
             if Input.IsActionPressed(ButtonAction.ACTION_DROP, player.ControllerIndex)
-            and ((buttonAction == ButtonAction.ACTION_BOMB) or (buttonAction == ButtonAction.ACTION_PILLCARD)) then
-                rubberBandFrame = false
+            and ((buttonAction == ButtonAction.ACTION_BOMB) or (buttonAction == ButtonAction.ACTION_PILLCARD)
+            or (buttonAction == ButtonAction.ACTION_ITEM)) then
                 return false
             elseif (buttonAction == ButtonAction.ACTION_DROP) 
             and (Input.IsActionPressed(ButtonAction.ACTION_BOMB, player.ControllerIndex)
-            or Input.IsActionPressed(ButtonAction.ACTION_PILLCARD, player.ControllerIndex)) then
+            or Input.IsActionPressed(ButtonAction.ACTION_PILLCARD, player.ControllerIndex)
+            or Input.IsActionPressed(ButtonAction.ACTION_ITEM, player.ControllerIndex)) then
                 return false
             end
         end
