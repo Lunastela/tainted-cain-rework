@@ -6,9 +6,9 @@
     "O": "A Quarter"
   },
   "pattern": [
-    "#",
-    "O",
-    "#"
+    " # ",
+    " O ",
+    "# #"
   ],
   "result": {
     "id": "tcainrework:collectible",

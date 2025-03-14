@@ -3,7 +3,7 @@
   "category": "collectible",
   "key": {
     "M": "Magic Mushroom",
-    "C": "tcainrework:mtg_card{\"card_type\":12}",
+    "C": "tcainrework:mtg_card{\"card_type\":52}",
     "B": "tcainrework:mega_battery",
     "G": "Midas' Touch",
     "#": "tcainrework:bone_heart"

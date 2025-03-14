@@ -2,17 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "G": "Midas' Touch",
-    "S": "tcainrework:soul_heart",
-    "P": "Spear Of Destiny"
+    "#": "minecraft:leather",
+    "O": "tcainrework:rune"
   },
   "pattern": [
-    " G ",
-    " G ",
-    "SPS"
+    "#O#",
+    " O ",
+    "#O#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Spirit Sword"
+    "collectible": "Rune Bag"
   }
 }

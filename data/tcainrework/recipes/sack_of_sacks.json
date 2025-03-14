@@ -2,12 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "collectible",
   "ingredients": [
-    "Ventricle Razor",
-    "Cambion Conception",
-    "False PHD"
+    "Mystery Sack",
+    "tcainrework:tarot_card{\"card_type\":9}"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "C Section"
+    "collectible": "Sack of Sacks"
   }
 }

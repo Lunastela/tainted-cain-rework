@@ -2,16 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "#": "minecraft:leather",
-    "O": "tcainrework:giga_bomb"
+    "G": "Shard of Glass",
+    "A": "tcainrework:rune{\"card_type\":39}",
+    "#": "tcainrework:bone_heart"
   },
   "pattern": [
-    "#",
-    "O",
+    "A",
+    "G",
     "#"
   ],
   "result": {
     "id": "tcainrework:collectible",
-    "collectible": "Bomb Bag"
+    "collectible": "Lost Contact"
   }
 }

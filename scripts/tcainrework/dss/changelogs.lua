@@ -91,7 +91,29 @@ And more!
 DeadSeaScrollsMenu.AddChangelog(modName, "v1.3.1", 
 [[- Fixed Iron Block returning 1 bar
 
-- Fixed A Dollar not being able to make 4 quarters
+- Fixed A Dollar not being able to 
+make 4 quarters
+]])
+
+DeadSeaScrollsMenu.AddChangelog(modName, "v1.3.2", 
+[[- Fixed an issue where pedestals 
+would disappear if the player was 
+not Tainted Cain
+
+- Fixed Sharp Straw
+- Removed Duplicate 
+C Section recipe
+- Fixed Mega Mush recipe 
+requiring Huge Growth
+- Fixed Spear of Destiny 
+adjacent recipes
+
+- Adjusted several recipes:
+Cupid's Arrow
+Spirit Sword
+Bomb Bag
+(NEW) Lost Contact
+(NEW) 3 Dollar Bill
 ]])
 
 -- Return latest version

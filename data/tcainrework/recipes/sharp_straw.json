@@ -8,8 +8,8 @@
   },
   "pattern": [
     "K",
-    "# ",
-    "H "
+    "#",
+    "H"
   ],
   "result": {
     "id": "tcainrework:collectible",

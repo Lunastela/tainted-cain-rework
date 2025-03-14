@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "minecraft:paper",
+    "tcainrework:soul_stone{\"card_type\":90}"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "collectible": "3 Dollar Bill"
+  }
+}

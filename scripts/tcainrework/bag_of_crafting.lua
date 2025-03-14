@@ -271,18 +271,17 @@ mod:AddPriorityCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, CallbackPriority.LAT
         -- local entityList = Isaac.FindInRadius(pickup.Position, 0, EntityPartition.PICKUP)
         local entityList, removedItems = Isaac.FindByType(EntityType.ENTITY_PICKUP), 0
         if #entityList > 0 then
-            print('pickups spawned')
             for i, entity in ipairs(entityList) do
                 local pickupDistances = (pickup.Position - entity.Position):LengthSquared()
-                if pickupDistances <= 0.5 then
+                if (pickupDistances <= 0.5) 
+                and (GetPtrHash(entity) ~= GetPtrHash(pickup)) then
                     entity:Remove()
                     removedItems = removedItems + 1
                 end
             end
-        end
-        print(removedItems)
-        if removedItems >= 2 then
-            salvageCollectible(pickup)
+            if removedItems >= 2 then
+                salvageCollectible(pickup)
+            end
         end
         salvageCheckList[GetPtrHash(pickup)] = true
     elseif pickup.SubType ~= 0 then

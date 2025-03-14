@@ -4,12 +4,12 @@
   "key": {
     "S": "tcainrework:card{\"card_type\":25}",
     "I": "Iron Bar",
-    "C": "tcainrework:tarot_card{\"card_type\":2}"
+    "C": "#tcainrework:card"
   },
   "pattern": [
-    "S",
-    "I",
-    "C"
+    " I ",
+    " S ",
+    "C C"
   ],
   "result": {
     "id": "tcainrework:collectible",
