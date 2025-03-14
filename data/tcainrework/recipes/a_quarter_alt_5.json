@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "collectible",
+  "ingredients": [
+    "A Dollar"
+  ],
+  "result": {
+    "id": "tcainrework:collectible",
+    "count": 4,
+    "collectible": "A Quarter"
+  }
+}

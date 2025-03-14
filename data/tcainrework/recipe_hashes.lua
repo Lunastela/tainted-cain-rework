@@ -3330,6 +3330,122 @@ return {
             DischargeRecipe = false,
         },
     },
+    ["shapeless_cc630251aba90c8217236a47f7db67cf5dae30d4"] = {
+        {
+            RecipeName = "tcainrework:a_quarter_alt_5",
+            Category = "collectible",
+            ConditionTable = {"A Dollar", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 4,
+                Collectible = "A Quarter"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:bomb_from_giga_bomb",
+            Category = "misc",
+            ConditionTable = {"tcainrework:giga_bomb", },
+            Results = {
+                Type = "tcainrework:bomb",
+                Count = 9
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:fruity_plum",
+            Category = "collectible",
+            ConditionTable = {"Plum Flute", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Fruity Plum"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:hierophant",
+            Category = "misc",
+            ConditionTable = {"tcainrework:tarot_card{\"card_type\":6}", },
+            Results = {
+                Type = "tcainrework:soul_heart",
+                Count = 2
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:nickel_from_dime",
+            Category = "misc",
+            ConditionTable = {"tcainrework:dime", },
+            Results = {
+                Type = "tcainrework:nickel",
+                Count = 2
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:nickel_from_quarter",
+            Category = "collectible",
+            ConditionTable = {"A Quarter", },
+            Results = {
+                Type = "tcainrework:nickel",
+                Count = 5
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:penny_from_nickel",
+            Category = "misc",
+            ConditionTable = {"tcainrework:nickel", },
+            Results = {
+                Type = "tcainrework:penny",
+                Count = 5
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:poop_from_block",
+            Category = "misc",
+            ConditionTable = {"tcainrework:poop_block", },
+            Results = {
+                Type = "tcainrework:poop",
+                Count = 9
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:robo_baby_2",
+            Category = "collectible",
+            ConditionTable = {"Robo-Baby", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Robo-Baby 2.0"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:robo_baby_alt",
+            Category = "collectible",
+            ConditionTable = {"Robo-Baby 2.0", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "Robo-Baby"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+    },
     ["87d12c5a4ede0dc54b2552cd180f7c3f49266148"] = {
         {
             RecipeName = "tcainrework:bag_of_crafting",
@@ -3654,110 +3770,6 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Brother Bobby"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-    },
-    ["shapeless_cc630251aba90c8217236a47f7db67cf5dae30d4"] = {
-        {
-            RecipeName = "tcainrework:bomb_from_giga_bomb",
-            Category = "misc",
-            ConditionTable = {"tcainrework:giga_bomb", },
-            Results = {
-                Type = "tcainrework:bomb",
-                Count = 9
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:fruity_plum",
-            Category = "collectible",
-            ConditionTable = {"Plum Flute", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Fruity Plum"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:hierophant",
-            Category = "misc",
-            ConditionTable = {"tcainrework:tarot_card{\"card_type\":6}", },
-            Results = {
-                Type = "tcainrework:soul_heart",
-                Count = 2
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:nickel_from_dime",
-            Category = "misc",
-            ConditionTable = {"tcainrework:dime", },
-            Results = {
-                Type = "tcainrework:nickel",
-                Count = 2
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:nickel_from_quarter",
-            Category = "collectible",
-            ConditionTable = {"A Quarter", },
-            Results = {
-                Type = "tcainrework:nickel",
-                Count = 5
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:penny_from_nickel",
-            Category = "misc",
-            ConditionTable = {"tcainrework:nickel", },
-            Results = {
-                Type = "tcainrework:penny",
-                Count = 5
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:poop_from_block",
-            Category = "misc",
-            ConditionTable = {"tcainrework:poop_block", },
-            Results = {
-                Type = "tcainrework:poop",
-                Count = 9
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:robo_baby_2",
-            Category = "collectible",
-            ConditionTable = {"Robo-Baby", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Robo-Baby 2.0"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
-        {
-            RecipeName = "tcainrework:robo_baby_alt",
-            Category = "collectible",
-            ConditionTable = {"Robo-Baby 2.0", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "Robo-Baby"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,

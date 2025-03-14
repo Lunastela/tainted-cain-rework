@@ -46,7 +46,9 @@ Steam Deck and Linux
 ]])
 
 DeadSeaScrollsMenu.AddChangelog(modName, "v1.3", 
-[[- Added Graphics settings in 
+[[Update 1.3: Render and Splendor
+
+- Added Graphics settings in 
 the Dead Sea Scrolls menu
 
 - Redistributed salvage item weights
@@ -63,6 +65,12 @@ where the text wasn't
 highlighting when hovering
 over it
 
+- Added several options related 
+to fading the hud at all times 
+unless hovered over, as well as 
+the opacity of the hud itself
+while faded
+
 - New Recipes for the following:
 
 Ceremonial Robes
@@ -78,6 +86,12 @@ And more!
 - Removed Herobrine
 
 - Does anyone actually read these?
+]])
+
+DeadSeaScrollsMenu.AddChangelog(modName, "v1.3.1", 
+[[- Fixed Iron Block returning 1 bar
+
+- Fixed A Dollar not being able to make 4 quarters
 ]])
 
 -- Return latest version

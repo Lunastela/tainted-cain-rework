@@ -6,7 +6,9 @@
     <description>
 [b]
 [h2]What's new?:[/h2]
-Fixed an issue with Steam Deck and Intel GPUs where rendering was completely broken. Thank you all for the continued support and help debugging these issues. ^^
+RELEASE 1.3
+Added several new performance modes for the mod, as well as simple quality of life and recipe balance changes. 
+Item weights were adjusted, alt recipes added, and core recipes changed.
 [/b]
 
 [h1]This mod requires [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]REPENTOGON[/url]. 
@@ -19,7 +21,7 @@ Look no further than [b]Tainted Cain Rework![/b] Tainted Cain Rework makes sever
 [b]
 [h2]Features:[/h2]
 [list]
-    [*] 340+ New Recipes!
+    [*] 380+ New Recipes!
     [*] New (and Consistent) Bag of Crafting Mechanics!
     [*] Involved Build-crafting and Item Synergizing / Strategizing!
     [*] Reworked Salvaging and gave the Bag of Crafting the ability to Salvage items.

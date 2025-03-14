@@ -201,7 +201,7 @@ return {
             ConditionTable = {"minecraft:iron_block", },
             Results = {
                 Type = "tcainrework:collectible",
-                Count = 1,
+                Count = 9,
                 Collectible = "Iron Bar"
             },
             DisplayRecipe = false,

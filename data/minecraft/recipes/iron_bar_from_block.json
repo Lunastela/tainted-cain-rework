@@ -6,6 +6,7 @@
   ],
   "result": {
     "id": "tcainrework:collectible",
+    "count": 9,
     "collectible": "Iron Bar"
   },
   "show_notification": false
