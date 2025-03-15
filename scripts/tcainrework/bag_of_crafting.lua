@@ -149,7 +149,7 @@ local function canSalvageItem(collectibleType)
 end
 
 local salvageOutcomes = WeightedOutcomePicker()
-salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_HEART, 200)
+salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_HEART, 100)
 salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_KEY, 100)
 salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_BOMB, 90)
 salvageOutcomes:AddOutcomeWeight(PickupVariant.PICKUP_COIN, 80)
@@ -255,7 +255,7 @@ function(_, pickup)
         for i, playerCollisions in pairs(bagCollisions) do
             for collisionHash in pairs(playerCollisions) do
                 if removedEntities[positionHash] and positionHash == collisionHash then
-                    print('removing', pickup.Type, pickup.Variant, pickup.SubType, 'of position hash', positionHash)
+                    -- print('removing', pickup.Type, pickup.Variant, pickup.SubType, 'of position hash', positionHash)
                     pickup:Remove()
                     playerCollisions[positionHash], removedEntities[positionHash] = nil, nil
                 end
@@ -264,28 +264,41 @@ function(_, pickup)
     end
 end)
 
-mod:AddPriorityCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, CallbackPriority.LATE, function(_, pickup)
-    if ((pickup.SubType <= 0) 
-    and (not salvageCheckList[GetPtrHash(pickup)])
-    and lastCollectiblePedestal[GetPtrHash(pickup)]) then
-        -- local entityList = Isaac.FindInRadius(pickup.Position, 0, EntityPartition.PICKUP)
-        local entityList, removedItems = Isaac.FindByType(EntityType.ENTITY_PICKUP), 0
-        if #entityList > 0 then
-            for i, entity in ipairs(entityList) do
-                local pickupDistances = (pickup.Position - entity.Position):LengthSquared()
-                if (pickupDistances <= 0.5) 
-                and (GetPtrHash(entity) ~= GetPtrHash(pickup)) then
-                    entity:Remove()
-                    removedItems = removedItems + 1
-                end
-            end
-            if removedItems >= 2 then
-                salvageCollectible(pickup)
+local function checkSalvaging(pickup)
+    local entityList, removedItems = Isaac.FindByType(EntityType.ENTITY_PICKUP), 0
+    if #entityList > 0 then
+        for i, entity in ipairs(entityList) do
+            local pickupDistances = (pickup.Position - entity.Position):LengthSquared()
+            if (pickupDistances <= 0.5) 
+            and (GetPtrHash(entity) ~= GetPtrHash(pickup)) then
+                entity:Remove()
+                removedItems = removedItems + 1
             end
         end
-        salvageCheckList[GetPtrHash(pickup)] = true
-    elseif pickup.SubType ~= 0 then
-        lastCollectiblePedestal[GetPtrHash(pickup)] = pickup.SubType
+    end
+    return (removedItems > 1)
+end
+
+mod:AddPriorityCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, CallbackPriority.LATE, function(_, pickup)
+    if (pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE
+    or pickup.Variant == PickupVariant.PICKUP_SHOPITEM) then
+        if (pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE
+        and (pickup.SubType <= 0) 
+        and (not salvageCheckList[GetPtrHash(pickup)])
+        and lastCollectiblePedestal[GetPtrHash(pickup)]) then
+            if checkSalvaging(pickup) then
+                salvageCollectible(pickup)
+            end
+            salvageCheckList[GetPtrHash(pickup)] = true
+        elseif (pickup.SubType ~= 0) or (pickup.Variant == PickupVariant.PICKUP_SHOPITEM) then
+            lastCollectiblePedestal[GetPtrHash(pickup)] = pickup.SubType
+        end
+    end
+end)
+
+mod:AddPriorityCallback(ModCallbacks.MC_POST_PICKUP_SHOP_PURCHASE, CallbackPriority.LATE, function(_, pickup)
+    if checkSalvaging(pickup) then
+        salvageCollectible(pickup)
     end
 end, PickupVariant.PICKUP_COLLECTIBLE)
 

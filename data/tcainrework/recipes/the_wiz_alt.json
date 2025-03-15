@@ -2,12 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "collectible",
   "key": {
-    "P": "tcainrework:pill{\"pill_effect\":27}",
+    "F": "tcainrework:tarot_card{\"card_type\":1}",
     "#": "minecraft:paper"
   },
   "pattern": [
-    "#",
-    "P"
+    " # ",
+    "###",
+    "#F#"
   ],
   "result": {
     "id": "tcainrework:collectible",

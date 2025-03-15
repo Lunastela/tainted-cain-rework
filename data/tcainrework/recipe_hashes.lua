@@ -184,19 +184,6 @@ return {
             DisplayRecipe = true,
             DischargeRecipe = false,
         },
-        {
-            RecipeName = "tcainrework:the_wiz",
-            Category = "collectible",
-            RecipeSize = Vector(3, 2),
-            ConditionTable = {nil, "minecraft:paper", nil, "minecraft:paper", "tcainrework:pill{\"pill_effect\":27}", "minecraft:paper", },
-            Results = {
-                Type = "tcainrework:collectible",
-                Count = 1,
-                Collectible = "The Wiz"
-            },
-            DisplayRecipe = true,
-            DischargeRecipe = false,
-        },
     },
     ["1750d7f41f6d582bb32ad15a3c76c121fd1eee86"] = {
         {
@@ -2296,7 +2283,7 @@ return {
             RecipeName = "tcainrework:anarchist_cookbook_alt",
             Category = "collectible",
             RecipeSize = Vector(1, 3),
-            ConditionTable = {"tcainrework:giga_bomb", "#book", "tcainrework:battery", },
+            ConditionTable = {"tcainrework:giga_bomb", "#book", "tcainrework:tarot_card{\"card_type\":17}", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
@@ -2792,7 +2779,7 @@ return {
             RecipeName = "tcainrework:chemical_peel",
             Category = "collectible",
             RecipeSize = Vector(2, 3),
-            ConditionTable = {"tcainrework:pill", "tcainrework:heart", "tcainrework:pill", "tcainrework:heart", "tcainrework:pill", "tcainrework:heart", },
+            ConditionTable = {"#tcainrework:pill", "tcainrework:heart", "#tcainrework:pill", "tcainrework:heart", "#tcainrework:pill", "tcainrework:heart", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
@@ -3149,7 +3136,7 @@ return {
         {
             RecipeName = "tcainrework:eye_sore_alt",
             Category = "collectible",
-            ConditionTable = {"Eye Drops", "tcainrework:rune{\"card_type\":33}", "tcainrework:pill", },
+            ConditionTable = {"Eye Drops", "tcainrework:rune{\"card_type\":33}", "#tcainrework:pill", },
             Results = {
                 Type = "tcainrework:collectible",
                 Count = 1,
@@ -3546,6 +3533,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "The Jar"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:the_wiz_alt",
+            Category = "collectible",
+            RecipeSize = Vector(3, 3),
+            ConditionTable = {nil, "minecraft:paper", nil, "minecraft:paper", "minecraft:paper", "minecraft:paper", "minecraft:paper", "tcainrework:tarot_card{\"card_type\":1}", "minecraft:paper", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "The Wiz"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,
@@ -4266,6 +4266,19 @@ return {
                 Type = "tcainrework:collectible",
                 Count = 1,
                 Collectible = "Telepathy For Dummies"
+            },
+            DisplayRecipe = true,
+            DischargeRecipe = false,
+        },
+        {
+            RecipeName = "tcainrework:the_wiz",
+            Category = "collectible",
+            RecipeSize = Vector(1, 2),
+            ConditionTable = {"minecraft:paper", "tcainrework:pill{\"pill_effect\":27}", },
+            Results = {
+                Type = "tcainrework:collectible",
+                Count = 1,
+                Collectible = "The Wiz"
             },
             DisplayRecipe = true,
             DischargeRecipe = false,

@@ -399,19 +399,6 @@ function inventoryHelper.createItem(itemString, count)
     }
 end
 
---- Creates a unique hash for an item based on its components.
---- Should replace conditional item lookups in new system.
-function inventoryHelper.createHashedItem(item)
-    local itemHash = ""
-    itemHash = itemHash .. item.Type
-    if item.ComponentData then
-        for i, component in pairs(item.ComponentData) do
-            itemHash = itemHash .. "_" .. i .. tostring(component)
-        end
-    end
-    return itemHash -- utility.sha1(itemHash)
-end
-
 --[[
     Side tangent, to document my development:
 
@@ -438,6 +425,19 @@ function inventoryHelper.getInternalStorageName(item)
         itemName = collectibleStorage.IDToNameLookup[item.ComponentData[InventoryItemComponentData.COLLECTIBLE_ITEM]]
     end
     return itemName
+end
+
+--- Creates a unique hash for an item based on its components.
+--- Should replace conditional item lookups in new system.
+function inventoryHelper.createHashedItem(item)
+    local itemHash = ""
+    itemHash = inventoryHelper.getInternalStorageName(item)
+    if item.ComponentData then
+        for i, component in pairs(item.ComponentData) do
+            itemHash = itemHash .. "_" .. i .. tostring(component)
+        end
+    end
+    return itemHash -- utility.sha1(itemHash)
 end
 
 --- Sorts a table by 

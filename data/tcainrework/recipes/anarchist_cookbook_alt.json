@@ -4,7 +4,7 @@
   "key": {
     "#": "#book",
     "B": "tcainrework:giga_bomb",
-    "b": "tcainrework:battery"
+    "b": "tcainrework:tarot_card{\"card_type\":17}"
   },
   "pattern": [
     "B",

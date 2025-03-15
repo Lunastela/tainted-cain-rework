@@ -100,11 +100,18 @@ DeadSeaScrollsMenu.AddChangelog(modName, "v1.3.2",
 would disappear if the player was 
 not Tainted Cain
 
+- Fixed an issue where shapeless
+collectible recipes would sometimes
+not be craftable
+
+- Fixed an oversight where devil
+deals and shop items were not
+affected by salvage overhaul
+
 - Fixed Sharp Straw
 - Removed Duplicate 
 C Section recipe
 - Fixed Mega Mush recipe 
-requiring Huge Growth
 - Fixed Spear of Destiny 
 adjacent recipes
 
